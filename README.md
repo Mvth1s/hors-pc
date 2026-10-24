@@ -105,8 +105,10 @@ Marchands admis (`MERCHANTS` dans `src/horspc/models.py`), le domaine de `url` d
 
 | Format | Identifiants |
 |---|---|
-| physical | `amazon`, `fnac`, `cdiscount`, `leclerc`, `auchan`, `carrefour`, `cultura`, `micromania`, `boulanger` |
-| digital (officiel uniquement) | `playstation-store`, `nintendo-eshop` |
+| physical | `amazon`, `cdiscount` (ecommerce) ; `fnac`, `darty`, `boulanger`, `cultura` (culture_tech) ; `micromania` (specialiste) ; `leclerc`, `auchan`, `carrefour`, `intermarche` (intermarche.com), `superu` (coursesu.com) (grande_distribution) |
+| digital (officiel uniquement) | `playstation-store`, `nintendo-eshop` (ecommerce) |
+
+Chaque marchand a une `category` (`grande_distribution`, `specialiste`, `culture_tech`, `ecommerce`). Lidl n'est pas admis : aucune fiche de jeu PS5/Switch trouvée sur lidl.fr.
 
 Sont refusés à la validation, avec un message explicite : les marketplaces (`rakuten`, `ebay`), les revendeurs de clés (Instant Gaming, Eneba, G2A, Kinguin, CDKeys, Gamivo, K4G, HRK, etc.), toute observation avec `sold_by_merchant: false`, un marchand inconnu, une URL hors du domaine du marchand, et une date future.
 

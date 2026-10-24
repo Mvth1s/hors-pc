@@ -28,6 +28,7 @@ ReleaseDateSource = Literal["igdb", "manual"]
 OfferFormat = Literal["physical", "digital"]
 Condition = Literal["new"]
 
+MerchantCategory = Literal["grande_distribution", "specialiste", "culture_tech", "ecommerce"]
 Slug = Annotated[str, Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$")]
 Euros = Annotated[Decimal, Field(gt=0, max_digits=7, decimal_places=2)]
 EurosOrZero = Annotated[Decimal, Field(ge=0, max_digits=7, decimal_places=2)]
@@ -68,28 +69,37 @@ def _host_matches(host: str, domains: tuple[str, ...]) -> bool:
 
 @dataclass(frozen=True)
 class Merchant:
-    """Enseigne autorisée : nom affiché, domaines acceptés et formats vendus."""
+    """Enseigne autorisée : nom affiché, domaines acceptés, formats vendus et catégorie."""
 
     name: str
     domains: tuple[str, ...]
     formats: frozenset[str]
+    category: MerchantCategory
 
 
 _PHYSICAL = frozenset({"physical"})
 _DIGITAL = frozenset({"digital"})
 
 MERCHANTS: dict[str, Merchant] = {
-    "amazon": Merchant("Amazon", ("amazon.fr",), _PHYSICAL),
-    "fnac": Merchant("Fnac", ("fnac.com",), _PHYSICAL),
-    "cdiscount": Merchant("Cdiscount", ("cdiscount.com",), _PHYSICAL),
-    "leclerc": Merchant("E.Leclerc", ("e.leclerc",), _PHYSICAL),
-    "auchan": Merchant("Auchan", ("auchan.fr",), _PHYSICAL),
-    "carrefour": Merchant("Carrefour", ("carrefour.fr",), _PHYSICAL),
-    "cultura": Merchant("Cultura", ("cultura.com",), _PHYSICAL),
-    "micromania": Merchant("Micromania", ("micromania.fr",), _PHYSICAL),
-    "boulanger": Merchant("Boulanger", ("boulanger.com",), _PHYSICAL),
-    "playstation-store": Merchant("PlayStation Store", ("store.playstation.com",), _DIGITAL),
-    "nintendo-eshop": Merchant("Nintendo eShop", ("nintendo.com", "nintendo.fr"), _DIGITAL),
+    "amazon": Merchant("Amazon", ("amazon.fr",), _PHYSICAL, "ecommerce"),
+    "cdiscount": Merchant("Cdiscount", ("cdiscount.com",), _PHYSICAL, "ecommerce"),
+    "fnac": Merchant("Fnac", ("fnac.com",), _PHYSICAL, "culture_tech"),
+    "darty": Merchant("Darty", ("darty.com",), _PHYSICAL, "culture_tech"),
+    "boulanger": Merchant("Boulanger", ("boulanger.com",), _PHYSICAL, "culture_tech"),
+    "cultura": Merchant("Cultura", ("cultura.com",), _PHYSICAL, "culture_tech"),
+    "micromania": Merchant("Micromania", ("micromania.fr",), _PHYSICAL, "specialiste"),
+    "leclerc": Merchant("E.Leclerc", ("e.leclerc",), _PHYSICAL, "grande_distribution"),
+    "auchan": Merchant("Auchan", ("auchan.fr",), _PHYSICAL, "grande_distribution"),
+    "carrefour": Merchant("Carrefour", ("carrefour.fr",), _PHYSICAL, "grande_distribution"),
+    "intermarche": Merchant("Intermarché", ("intermarche.com",), _PHYSICAL, "grande_distribution"),
+    "superu": Merchant("Super U", ("coursesu.com",), _PHYSICAL, "grande_distribution"),
+    # Boutiques officielles de démat, rangées en e-commerce faute de catégorie dédiée.
+    "playstation-store": Merchant(
+        "PlayStation Store", ("store.playstation.com",), _DIGITAL, "ecommerce"
+    ),
+    "nintendo-eshop": Merchant(
+        "Nintendo eShop", ("nintendo.com", "nintendo.fr"), _DIGITAL, "ecommerce"
+    ),
 }
 
 _MARKETPLACE = "marketplace de vendeurs tiers"
