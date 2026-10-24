@@ -32,6 +32,8 @@ jobs:
           enable-cache: true
       - name: Installe les dépendances
         run: uv sync --frozen
+      - name: Navigateur headless pour les tests de consentement
+        run: uv run playwright install --with-deps --only-shell chromium
       # Lint et tests avant tout build : s'ils échouent, rien n'est commité ni déployé.
       - name: Ruff (lint)
         run: uv run ruff check .

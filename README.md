@@ -237,6 +237,16 @@ Le build (complet ou `--offline`) écrit le catalogue en HTML : le site est **en
 
 En attendant, déclarer `https://mvth1s.github.io/hors-pc/sitemap.xml` directement dans Search Console.
 
+## Mesure d'audience (GA4, conforme CNIL)
+
+`site/consent.js`, chargé sur toutes les pages, gère Google Analytics 4 (`G-TMFL6HQ430`) **sans le snippet standard de Google** :
+
+- Aucun script ni requête Google avant un clic sur « Accepter » (pas de Consent Mode) : `gtag.js` est alors injecté dynamiquement, puis `gtag('config', …)` avec `allow_google_signals: false`, `allow_ad_personalization_signals: false` et des cookies `_ga` limités à 13 mois.
+- Bandeau à la première visite : finalité, destinataire (Google, transferts hors UE), boutons « Refuser » et « Accepter » identiques, aucune case pré-cochée ; fermer (× ou Échap) vaut refus.
+- Choix stocké en `localStorage` (`horspc-consent`, avec sa date), redemandé au bout de 6 mois.
+- Lien « Gérer les cookies » (pied de page, FAQ, confidentialité) : rouvre le bandeau ; un retrait supprime les cookies `_ga*` et recharge la page sans GA.
+- `tests/test_consent.py` (Playwright, Chromium headless, requêtes Google simulées) : aucune requête externe avant consentement ni après refus sur toutes les pages, `gtag.js` chargé après acceptation et aucun autre domaine, boutons de même taille, nouvelle demande après 6 mois, retrait. En local : `uv run playwright install --only-shell chromium` une fois.
+
 ## Pages légales
 
 `site/faq.html` (questions en `<details>`, JSON-LD `FAQPage`), `site/mentions-legales.html`, `site/confidentialite.html` et `site/methodologie.html` sont statiques et liées depuis le pied de page de toutes les pages. `tests/test_site.py` vérifie qu'aucune page ne charge de ressource externe, que le pied de page lie les trois pages et qu'elles sont datées. **TODO bloquant** : `test_adresse_de_contact_renseignee` échoue tant que l'adresse de contact de l'éditeur n'est pas renseignée dans `mentions-legales.html`.

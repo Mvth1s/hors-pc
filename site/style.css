@@ -224,3 +224,14 @@ html:not(.js) .hp .toolbar,html:not(.js) .hp #theme-toggle{display:none}
 .hp .game .cover{max-width:220px}
 .hp .game-body h1{font-size:30px}
 }
+/* --- Bandeau de consentement (mesure d'audience) --- */
+.hp .consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:50;display:flex;justify-content:center;pointer-events:none}
+.hp .consent-inner{pointer-events:auto;position:relative;max-width:640px;width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.25);padding:20px 22px 18px}
+.hp .consent h2{margin:0 0 8px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.01em}
+.hp .consent p{margin:0 0 8px;font-size:14px;line-height:1.55;color:var(--muted)}
+.hp .consent-more a{color:var(--ink);font-weight:500}
+.hp .consent-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.hp .consent-btn{height:44px;border-radius:10px;border:1px solid var(--ink);background:var(--surface);color:var(--ink);font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.hp .consent-btn:hover{background:var(--surface-2)}
+.hp .consent-close{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:8px;border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
+.hp .consent-close:hover{background:var(--surface-2);color:var(--ink)}

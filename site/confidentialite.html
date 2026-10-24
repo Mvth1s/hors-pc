@@ -4,21 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Confidentialité · HorsPC</title>
-<meta name="description" content="Politique de confidentialité de HorsPC : aucune collecte de données, préférence de thème locale, journaux de l'hébergeur.">
+<meta name="description" content="Politique de confidentialité de HorsPC : mesure d'audience Google Analytics 4 avec consentement, cookies, stockage local, journaux de l'hébergeur.">
 <!--horspc:head-->
 <link rel="canonical" href="https://mvth1s.github.io/hors-pc/confidentialite.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="HorsPC">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:title" content="Confidentialité · HorsPC">
-<meta property="og:description" content="Politique de confidentialité de HorsPC : aucune collecte de données, préférence de thème locale, journaux de l&#x27;hébergeur.">
+<meta property="og:description" content="Politique de confidentialité de HorsPC : mesure d&#x27;audience Google Analytics 4 avec consentement, cookies, stockage local, journaux de l&#x27;hébergeur.">
 <meta property="og:url" content="https://mvth1s.github.io/hors-pc/confidentialite.html">
 <meta property="og:image" content="https://mvth1s.github.io/hors-pc/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Confidentialité · HorsPC">
-<meta name="twitter:description" content="Politique de confidentialité de HorsPC : aucune collecte de données, préférence de thème locale, journaux de l&#x27;hébergeur.">
+<meta name="twitter:description" content="Politique de confidentialité de HorsPC : mesure d&#x27;audience Google Analytics 4 avec consentement, cookies, stockage local, journaux de l&#x27;hébergeur.">
 <meta name="twitter:image" content="https://mvth1s.github.io/hors-pc/og-image.png">
 <!--/horspc:head-->
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -26,6 +26,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
 <script src="theme.js" defer></script>
+<script src="consent.js" defer></script>
 </head>
 <body class="hp" id="top">
 <script>
@@ -53,11 +54,24 @@
 <h1>Confidentialité</h1>
 <p class="legal-updated">Dernière mise à jour : 24/10/2026</p>
 
-<h2 id="cookies">Aucune collecte par HorsPC</h2>
-<p>HorsPC ne collecte aucune donnée personnelle : pas de formulaire, pas de compte, pas de mesure d'audience, pas de publicité, pas de cookie. Les polices et les jaquettes sont servies depuis le site lui-même ; aucune page ne charge de ressource depuis un autre domaine.</p>
+<h2 id="cookies">Mesure d'audience et cookies</h2>
+<p>HorsPC n'a ni formulaire, ni compte, ni publicité. La seule collecte est une mesure d'audience avec <strong>Google Analytics 4</strong>, <strong>uniquement si vous l'acceptez</strong> dans le bandeau affiché à votre première visite.</p>
+<ul>
+  <li><strong>Finalité</strong> : mesurer la fréquentation du site (pages vues, durée de visite, provenance, type d'appareil et de navigateur, pays et ville approximatifs) pour l'améliorer. Aucune publicité, aucune personnalisation, signaux Google désactivés.</li>
+  <li><strong>Base légale</strong> : votre consentement (article 82 de la loi Informatique et Libertés, article 6.1.a du RGPD).</li>
+  <li><strong>Responsable</strong> : l'éditeur du site (voir les <a href="mentions-legales.html">mentions légales</a>). <strong>Destinataire</strong> : Google Ireland Limited et Google LLC, sous-traitant.</li>
+  <li><strong>Cookies déposés après acceptation</strong> : <code>_ga</code> (identifiant de visiteur) et <code>_ga_TMFL6HQ430</code> (état de la session), pour 13 mois au plus.</li>
+  <li><strong>Transfert hors UE</strong> : les données peuvent être transférées aux États-Unis. Google LLC est certifiée au titre du cadre de protection des données UE–États-Unis (Data Privacy Framework).</li>
+  <li><strong>Durée de conservation</strong> des données dans Google Analytics : 2 mois.</li>
+</ul>
+<p>Tant que vous n'avez pas cliqué sur « Accepter », aucun script Google n'est chargé et aucune requête n'est envoyée à Google. Refuser, ou fermer le bandeau, n'a aucune conséquence sur l'utilisation du site. Votre choix est redemandé au bout de 6 mois.</p>
+<p><strong>Retirer votre consentement</strong> à tout moment : <a href="confidentialite.html#cookies" data-consent-open>Gérer les cookies</a>, puis « Refuser ». Les cookies <code>_ga</code> sont alors supprimés et la page est rechargée sans Google Analytics.</p>
 
-<h2>Préférence de thème</h2>
-<p>Si vous choisissez le thème clair ou sombre avec le bouton prévu, ce choix est enregistré dans le stockage local de votre navigateur (<code>localStorage</code>, clé <code>horspc-theme</code>). Il ne quitte pas votre appareil et n'est transmis à personne. Ce traceur, qui conserve un choix de personnalisation de l'interface demandé par l'utilisateur, est exempté de consentement au sens des lignes directrices de la CNIL sur les cookies et autres traceurs. Vous pouvez le supprimer en effaçant les données de ce site dans les réglages de votre navigateur.</p>
+<h2>Stockage local</h2>
+<p>Deux informations sont enregistrées dans le stockage local de votre navigateur (<code>localStorage</code>) et ne sont transmises à personne : votre choix de thème (clé <code>horspc-theme</code>), traceur de personnalisation de l'interface exempté de consentement au sens des lignes directrices de la CNIL, et votre choix sur la mesure d'audience avec sa date (clé <code>horspc-consent</code>), nécessaire pour le respecter. Vous pouvez les supprimer en effaçant les données de ce site dans les réglages de votre navigateur.</p>
+
+<h2>Vos droits</h2>
+<p>Vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition et de limitation sur les données vous concernant, à exercer auprès de l'éditeur (voir les <a href="mentions-legales.html">mentions légales</a>). Google Analytics ne permettant pas d'identifier un visiteur, l'éditeur peut avoir besoin de l'identifiant du cookie <code>_ga</code> pour traiter une demande. Vous pouvez aussi adresser une réclamation à la CNIL.</p>
 
 <h2>Hébergement par GitHub Pages</h2>
 <p>Le site est hébergé par GitHub Pages. GitHub indique que « lorsqu'un site GitHub Pages est consulté, l'adresse IP du visiteur est journalisée et conservée à des fins de sécurité, que le visiteur soit connecté à GitHub ou non » (<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#data-collection" rel="noopener">documentation GitHub Pages, section « Data collection »</a>). Ce traitement relève de GitHub, Inc. : voir le <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub General Privacy Statement</a>.</p>
@@ -105,14 +119,14 @@
           <ul>
             <li><a href="mentions-legales.html">Mentions légales</a></li>
             <li><a href="confidentialite.html">Confidentialité</a></li>
-            <li><a href="confidentialite.html#cookies">Cookies : aucun</a></li>
+            <li><a href="confidentialite.html#cookies" data-consent-open>Gérer les cookies</a></li>
           </ul>
         </nav>
       </div>
       <div class="foot-legal">
         <p><strong>Éditeur.</strong> Mathis Aguado, particulier ; projet personnel non commercial. Contact : <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;">&#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;</a>.</p>
         <p><strong>Hébergeur.</strong> GitHub, Inc. (service GitHub Pages), 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, États-Unis.</p>
-        <p><strong>Données personnelles.</strong> Aucun cookie ni traceur. Le thème choisi reste dans le stockage local de votre navigateur. L'hébergeur journalise les adresses IP des visiteurs pour la sécurité du service.</p>
+        <p><strong>Données personnelles.</strong> Mesure d'audience Google Analytics 4 uniquement avec votre accord (cookies _ga, 13 mois au plus ; transfert vers les États-Unis) ; refuser est sans conséquence et révocable via « Gérer les cookies ». Le thème et votre choix restent dans le stockage local de votre navigateur. L'hébergeur journalise les adresses IP des visiteurs pour la sécurité du service.</p>
       </div>
       <div class="foot-bottom">
         <span>© 2026 Mathis Aguado<span data-foot-updated> · catalogue généré le <span data-foot-date>24/10/2026</span></span></span>

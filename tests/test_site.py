@@ -139,3 +139,16 @@ def test_faq_jsonld_coherent_avec_les_questions() -> None:
         assert question["@type"] == "Question"
         assert question["acceptedAnswer"]["@type"] == "Answer"
         assert question["acceptedAnswer"]["text"].strip()
+
+
+@pytest.mark.parametrize("page", PAGES, ids=lambda p: p.name)
+def test_consentement_sur_chaque_page_sans_snippet_google(page: Path) -> None:
+    text = page.read_text(encoding="utf-8")
+    assert '<script src="consent.js" defer></script>' in text
+    # Le snippet standard charge gtag.js au chargement : interdit, seul consent.js l'injecte.
+    assert "googletagmanager" not in text and "gtag(" not in text
+    assert "Gérer les cookies" in footer_of(page)
+
+
+def footer_of(page: Path) -> str:
+    return re.search(r"<footer\b.*?</footer>", page.read_text(encoding="utf-8"), re.S).group(0)
