@@ -1,0 +1,26 @@
+# Relevés de prix manuels. Plusieurs observations par slug sont permises :
+# elles forment l'historique, et le build choisit la meilleure (cf. README).
+#
+# Champs (tous obligatoires) :
+#   slug              slug existant dans games.yaml
+#   price             prix de l'article en € TTC, hors frais de port
+#   shipping          frais de port en € (0 = offerts, null = inconnus)
+#   format            physical | digital
+#   condition         new
+#   merchant          identifiant de la liste blanche (src/horspc/models.py, MERCHANTS)
+#   sold_by_merchant  true si vendu par l'enseigne elle-même (pas un vendeur tiers)
+#   url               page produit, sur un domaine du marchand
+#   observed_at       date du relevé (AAAA-MM-JJ)
+#
+# Exemple :
+# - slug: astro-bot
+#   price: 53.30
+#   shipping: null
+#   format: physical
+#   condition: new
+#   merchant: amazon
+#   sold_by_merchant: true
+#   url: https://www.amazon.fr/dp/XXXXXXXXXX
+#   observed_at: 2026-10-20
+
+[]

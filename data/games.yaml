@@ -1,0 +1,60 @@
+# Liste curée des exclusivités console absentes sur PC.
+# Règle : une entrée = une référence achetable = un prix.
+#
+# Champs :
+#   slug                 identifiant kebab-case unique
+#   title                titre affiché
+#   platforms            liste parmi ps5 | switch | switch2
+#   igdb_id              optionnel ; sinon recherche IGDB par titre et plateforme
+#   launch_price         prix de lancement conseillé en € TTC, ou null
+#   launch_price_source  URL de la source (obligatoire si launch_price est renseigné)
+#   pc_override          optionnel, prioritaire sur IGDB :
+#                          {status: none|announced|released, source_url, checked_at}
+
+- slug: astro-bot
+  title: Astro Bot
+  platforms: [ps5]
+  launch_price: 69.99
+  launch_price_source: https://www.actugaming.net/astro-bot-precommandes-editions-649057/
+
+- slug: ghost-of-yotei
+  title: Ghost of Yōtei
+  platforms: [ps5]
+  launch_price: 79.99
+  launch_price_source: https://www.gameblog.fr/jeu-video/ed/news/ghost-of-yotei-precommandes-physique-meilleur-prix-694705
+
+- slug: saros
+  title: Saros
+  platforms: [ps5]
+  # Sources contradictoires (69,99 € ou 79,99 €) : à confirmer.
+  launch_price: null
+
+- slug: gran-turismo-7
+  title: Gran Turismo 7
+  platforms: [ps5]
+  launch_price: 79.99
+  launch_price_source: https://www.phonandroid.com/gran-turismo-7-ps5-et-ps4-comparatif-meilleur-prix.html
+
+- slug: mario-kart-world
+  title: Mario Kart World
+  platforms: [switch2]
+  launch_price: 89.99
+  launch_price_source: https://www.phonandroid.com/mario-kart-world-switch-2-prix-jeu-precommande-moins-cher-leclerc.html
+
+- slug: donkey-kong-bananza
+  title: Donkey Kong Bananza
+  platforms: [switch2]
+  # Pas de source officielle trouvée pour le prix conseillé : à confirmer.
+  launch_price: null
+
+- slug: zelda-tears-of-the-kingdom
+  title: "The Legend of Zelda: Tears of the Kingdom"
+  platforms: [switch]
+  launch_price: 69.99
+  launch_price_source: https://www.tomsguide.fr/zelda-tears-of-the-kingdom-il-serait-vendu-7999-e-une-premiere-pour-la-nintendo-switch/
+
+- slug: pokemon-ecarlate
+  title: Pokémon Écarlate
+  platforms: [switch]
+  launch_price: 59.99
+  launch_price_source: https://www.phonandroid.com/pokemon-ecarlate-et-pokemon-violet-ou-les-acheter-au-meilleur-prix.html
