@@ -1,5 +1,6 @@
 """Contrôles statiques du site : pages légales, pied de page, aucune ressource externe."""
 
+import html
 import re
 from html.parser import HTMLParser
 from pathlib import Path
@@ -85,3 +86,11 @@ def test_adresse_de_contact_renseignee() -> None:
     text = (SITE / "mentions-legales.html").read_text(encoding="utf-8")
     assert "TODO-CONTACT" not in text, "adresse de contact à renseigner dans mentions-legales.html"
     assert "[adresse de contact à renseigner]" not in text
+
+
+def test_contact_encode_en_entites() -> None:
+    text = (SITE / "mentions-legales.html").read_text(encoding="utf-8")
+    assert "mag.d3v+github@pm.me" not in text  # pas en clair dans la source
+    assert "mag.d3v+github@pm.me" in html.unescape(text)
+    assert "mailto:mag.d3v+github@pm.me" in html.unescape(text)
+    assert "https://support.github.com/contact" in text
