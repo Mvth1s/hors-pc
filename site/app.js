@@ -8,6 +8,11 @@ const STALE_BANNER_DAYS = 14;
 const THEME_KEY = "horspc-theme";
 const DAY_MS = 86400000;
 
+// Filtres console : « Switch 2 » couvre aussi les jeux Switch (rétrocompatibles).
+const PLATFORM_FILTERS = {
+  ps5: { label: "PS5", platforms: ["ps5"] },
+  switch2: { label: "Switch 2", platforms: ["switch", "switch2"] },
+};
 const CONSOLES = {
   ps5: { label: "PS5", cls: "ps" },
   switch: { label: "Switch", cls: "nin" },
@@ -92,7 +97,11 @@ const SORTS = {
 
 function visibleGames() {
   return games
-    .filter((g) => state.platform === "all" || g.platforms.includes(state.platform))
+    .filter(
+      (g) =>
+        state.platform === "all" ||
+        g.platforms.some((p) => PLATFORM_FILTERS[state.platform].platforms.includes(p)),
+    )
     .filter((g) => state.status === "all" || g.pc_status === state.status)
     .sort(SORTS[state.sort]);
 }
@@ -152,7 +161,7 @@ function cardHtml(g) {
 
 function emptyHtml() {
   const pills = [];
-  if (state.platform !== "all") pills.push(CONSOLES[state.platform].label);
+  if (state.platform !== "all") pills.push(PLATFORM_FILTERS[state.platform].label);
   if (state.status !== "all") pills.push(STATUSES[state.status].filter);
   return `
     <div class="empty">
