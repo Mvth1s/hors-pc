@@ -145,7 +145,21 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 
 ## Mise à jour automatique et seuils de fraîcheur
 
-`.github/workflows/update.yml` tourne le **lundi à 06:17 UTC**, à la demande (`workflow_dispatch`), et à chaque push sur `main` touchant `site/`, `src/` ou `data/`. Il régénère `data.json`, le commite s'il a changé, puis déploie `site/` sur GitHub Pages. Si la validation échoue, rien n'est commité ni déployé.
+`.github/workflows/update.yml` se comporte différemment selon l'événement :
+
+| Événement | Build | Commit de `data.json` | Déploiement Pages | Job `freshness` |
+|---|---|---|---|---|
+| `schedule` (**lundi 06:17 UTC**) et `workflow_dispatch` | complet, avec IGDB (secrets) | oui, s'il a changé | oui | oui |
+| `push` sur `main` touchant `site/`, `src/` ou `data/` | `--offline` (sans IGDB ni secrets) | **jamais** | oui, avec le `data.json` ainsi généré | non |
+
+Sur un push, le site est donc redéployé avec les prix et le code à jour, mais les champs IGDB viennent du `data.json` versionné. Ce `data.json` régénéré n'existe que dans l'artefact déployé : le dépôt n'est modifié que par le build planifié ou manuel. Conséquence à connaître : le `generated_at` affiché sur le site est alors celui du push, tandis que le job `freshness` lit celui du dépôt.
+
+Deux garde-fous vérifient qu'un push ne produit aucun commit du bot :
+
+- `tests/test_workflows.py` évalue les conditions `if:` de `update.yml` pour chaque événement. Il vérifie que, sur un push, aucune étape exécutée ne contient `git commit` ou `git push`, que le seul build lancé est `--offline` sans secret, et que `freshness` ne tourne pas.
+- Dans le workflow, l'étape « Vérifie qu'un push ne produit aucun commit » échoue si `HEAD` diffère du commit poussé.
+
+Si la validation échoue, rien n'est commité ni déployé.
 
 Deux seuils, volontairement distincts :
 
@@ -154,7 +168,7 @@ Deux seuils, volontairement distincts :
 | `STALE_ISSUE_DAYS` | **8 jours** | `env` de `.github/workflows/update.yml` | ouvre une issue « Données obsolètes » (label `stale-data`, une seule à la fois) |
 | `STALE_BANNER_DAYS` | **14 jours** | en tête de `site/app.js` | affiche une bannière d'alerte sous l'en-tête du site |
 
-Le job d'alerte tourne même quand le build échoue. Il ne peut pas, en revanche, détecter un cron désactivé par GitHub (après 60 jours sans activité sur le dépôt) : le commit hebdomadaire de `data.json` maintient normalement le dépôt actif, et la bannière du site reste le garde-fou indépendant d'Actions.
+Le job d'alerte tourne même quand le build échoue (sur `schedule` et `workflow_dispatch` uniquement). Il ne peut pas, en revanche, détecter un cron désactivé par GitHub (après 60 jours sans activité sur le dépôt) : le commit hebdomadaire de `data.json` maintient normalement le dépôt actif, et la bannière du site reste le garde-fou indépendant d'Actions.
 
 ### Configuration du dépôt GitHub
 
