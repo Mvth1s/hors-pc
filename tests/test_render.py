@@ -1,5 +1,6 @@
 """Rendu statique : catalogue lisible sans JS, pages de jeux, JSON-LD, sitemap."""
 
+import html
 import json
 import re
 import shutil
@@ -10,7 +11,7 @@ from typing import Any
 import pytest
 
 from horspc.models import DataFile
-from horspc.render import GAMES_DIR, SITE_URL, render_site
+from horspc.render import GAMES_DIR, SITE_URL, external_links, render_site
 
 SITE = Path(__file__).parents[1] / "site"
 VERIFICATION = (
@@ -243,3 +244,63 @@ def test_rendu_idempotent(site: Path) -> None:
     first = {p: p.read_text(encoding="utf-8") for p in site.rglob("*.html")}
     render(site, games)
     assert {p: p.read_text(encoding="utf-8") for p in site.rglob("*.html")} == first
+
+
+# --- Liens externes -----------------------------------------------------------------------
+
+LINK = re.compile(r"<a\b([^>]*)>(.*?)</a>", re.S)
+
+
+def all_pages() -> list[Path]:
+    return root_pages() + game_pages()
+
+
+@pytest.mark.parametrize("page", all_pages(), ids=lambda p: str(p.relative_to(SITE)))
+def test_liens_externes_nouvel_onglet(page: Path) -> None:
+    text = page.read_text(encoding="utf-8")
+    checked = 0
+    for attrs, inner in LINK.findall(text):
+        href = re.search(r'href="([^"]*)"', attrs).group(1)
+        if href.startswith("mailto:") or html_entity_mailto(href):
+            assert "target=" not in attrs, href
+            continue
+        if not re.match(r"https?://", href):
+            continue
+        checked += 1
+        assert 'target="_blank"' in attrs, href
+        rel = re.search(r'rel="([^"]*)"', attrs).group(1).split()
+        assert {"noopener", "noreferrer"} <= set(rel), href
+        label = re.search(r'aria-label="([^"]*)"', attrs)
+        if label:
+            assert label.group(1).endswith("(nouvel onglet)"), href
+        else:
+            assert '<span class="visually-hidden"> (nouvel onglet)</span>' in inner, href
+            assert "↗" in inner or "<svg" in inner, href
+    assert checked > 0
+
+
+def html_entity_mailto(href: str) -> bool:
+    return html.unescape(href).startswith("mailto:")
+
+
+def test_external_links_unitaire() -> None:
+    source = (
+        '<a href="https://x.fr/a" rel="noopener">Code source ↗</a>'
+        '<a class="cta" href="https://shop.fr" rel="noopener nofollow" target="_blank">Voir'
+        '<svg aria-hidden="true"></svg></a>'
+        '<a href="mailto:a@b.fr">a@b.fr</a>'
+        '<a href="faq.html">FAQ</a>'
+        '<a href="https://gh.com" aria-label="GitHub"><svg></svg></a>'
+    )
+    out = external_links(source)
+    assert external_links(out) == out  # idempotent
+    assert (
+        '<a href="https://x.fr/a" target="_blank" rel="noopener noreferrer">Code source'
+        '<span class="ext-icon" aria-hidden="true">↗</span>'
+        '<span class="visually-hidden"> (nouvel onglet)</span></a>'
+    ) in out
+    assert 'rel="nofollow noopener noreferrer"' in out
+    assert out.count('class="ext-icon"') == 1  # le CTA garde sa propre icône SVG
+    assert '<a href="mailto:a@b.fr">a@b.fr</a>' in out
+    assert '<a href="faq.html">FAQ</a>' in out
+    assert 'aria-label="GitHub (nouvel onglet)"' in out

@@ -70,14 +70,14 @@ def render_site(data: DataFile, site_dir: Path) -> None:
         else:
             text = _replace(text, "head", _page_head(text, url))
             lastmod[url] = _visible_update(text) or generated
-        page.write_text(text, encoding="utf-8")
+        page.write_text(external_links(text), encoding="utf-8")
 
     template = _game_template(site_dir)
     games_root = site_dir / GAMES_DIR
     for game in games:
         url = f"{SITE_URL}{GAMES_DIR}/{game.slug}/"
         path = games_root / game.slug / "index.html"
-        page = _game_page(template, game, url, generated)
+        page = external_links(_game_page(template, game, url, generated))
         unchanged = path.exists() and _main(path.read_text(encoding="utf-8")) == _main(page)
         lastmod[url] = previous_lastmod.get(url, generated) if unchanged else generated
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -89,6 +89,44 @@ def render_site(data: DataFile, site_dir: Path) -> None:
                 shutil.rmtree(directory)
 
     (site_dir / "sitemap.xml").write_text(_sitemap(lastmod), encoding="utf-8")
+
+
+# --- Liens externes ---------------------------------------------------------------
+
+NEW_TAB = '<span class="visually-hidden"> (nouvel onglet)</span>'
+EXT_ICON = '<span class="ext-icon" aria-hidden="true">\u2197</span>'
+_LINK = re.compile(r"<a\b([^>]*)>(.*?)</a>", re.S)
+
+
+def external_links(text: str) -> str:
+    """Liens http(s) : nouvel onglet, rel noopener noreferrer, icône ↗ et mention pour lecteurs
+    d'écran. Idempotent ; les liens mailto: et internes ne sont pas modifiés."""
+
+    def fix(match: re.Match[str]) -> str:
+        attrs, inner = match.group(1), match.group(2)
+        href = re.search(r'href="([^"]*)"', attrs)
+        if not href or not re.match(r"https?://", href.group(1)):
+            return match.group(0)
+        rel = re.search(r'rel="([^"]*)"', attrs)
+        tokens = [
+            t for t in (rel.group(1).split() if rel else []) if t not in ("noopener", "noreferrer")
+        ]
+        attrs = re.sub(r'\s(?:target|rel)="[^"]*"', "", attrs)
+        attrs += f' target="_blank" rel="{" ".join([*tokens, "noopener", "noreferrer"])}"'
+        label = re.search(r'aria-label="([^"]*)"', attrs)
+        if label:  # lien-icône : la mention passe dans l'aria-label
+            if not label.group(1).endswith("(nouvel onglet)"):
+                attrs = attrs.replace(
+                    label.group(0), f'aria-label="{label.group(1)} (nouvel onglet)"'
+                )
+            return f"<a{attrs}>{inner}</a>"
+        if NEW_TAB not in inner:
+            inner = re.sub(r"\s*\u2197\s*$", "", inner)  # flèche texte remplacée par l'icône
+            has_icon = "<svg" in inner or EXT_ICON in inner
+            inner = inner + ("" if has_icon else EXT_ICON) + NEW_TAB
+        return f"<a{attrs}>{inner}</a>"
+
+    return _LINK.sub(fix, text)
 
 
 # --- Zones balisées -------------------------------------------------------------
