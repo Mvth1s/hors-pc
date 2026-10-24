@@ -1,0 +1,14 @@
+# Sources de prix automatiques. Une source se désactive en une ligne (enabled: false).
+# Analyse et preuves : docs/sources.md (relevés du 25/10/2026).
+#
+# Champs : enabled (true/false), reason (pourquoi elle est active ou non).
+
+leclerc:
+  enabled: true
+  reason: "Aucune opposition (robots.txt, TDMRep, CGV art. 16) ; JSON-LD avec vendeur et gtin."
+boulanger:
+  enabled: true
+  reason: "CGV art. 9 vise la reproduction du site : seuls des faits sont publiés (interprétation, docs/sources.md)."
+pixmania:
+  enabled: true
+  reason: "Place de marché de vendeurs pros, PIXMANIA GROUP SAS (Paris) ; aucune clause d'opposition."
