@@ -148,7 +148,6 @@ color-scheme:light;container-type:inline-size;background:var(--bg);color:var(--i
 .hp .cv-7{background:#A16207;color:#FFFFFF}
 .hp .warn-dot{width:8px;height:8px;border-radius:50%;background:var(--warn-line);flex:none;margin-top:5px}
 .hp .no-price{font-size:14px;color:var(--muted);margin:0}
-.hp .foot p+p{margin-top:6px}
 .hp .error{grid-column:1/-1;padding:48px 24px;text-align:center;color:var(--muted)}
 @container (max-width:640px){
 .hp .covers{top:6px;left:6px}
@@ -166,20 +165,34 @@ color-scheme:light;container-type:inline-size;background:var(--bg);color:var(--i
 .hp .legal{padding-top:20px}
 .hp .legal h1{font-size:28px}
 }
-/* --- Pied de page commun : trois colonnes, barre basse --- */
-.hp .foot{background:var(--surface)}
-.hp .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1.3fr;gap:32px;padding:8px 0 24px}
-.hp .foot-col{min-width:0}
-.hp .foot-col p{margin:0 0 8px}
-.hp .foot-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-.hp .foot-title{margin:0 0 10px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.hp .foot .foot-title a{color:var(--ink);text-decoration:none;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.02em;text-transform:none}
-.hp .foot-col a{color:var(--ink);font-weight:500}
-.hp .foot-updated strong{color:var(--ink);font-weight:600}
-.hp .foot-bottom{display:flex;align-items:baseline;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}
-.hp .foot-bottom p{margin:0}
+/* --- Pied de page commun (modèle hwbench) : carte, 4 colonnes, bandeau légal, barre basse --- */
+.hp .foot{border-top:0;padding:24px 0 32px;background:transparent}
+.hp .foot-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.hp .foot-main{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:32px;padding:32px 40px}
+.hp .foot-brand p{margin:12px 0 16px;font-size:14px;line-height:1.55;color:var(--muted);max-width:300px}
+.hp .foot-logo{display:inline-flex;align-items:center;gap:2px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.03em;color:var(--ink);text-decoration:none}
+.hp .foot-logo .logo-pc{padding:0 6px 2px;border-radius:6px}
+.hp .foot-logo .logo-pc::after{height:2.5px;left:4px;right:4px}
+.hp .foot-social{list-style:none;margin:0;padding:0;display:flex;gap:8px}
+.hp .foot-social a{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink)}
+.hp .foot-social a:hover{background:var(--surface-2)}
+.hp .foot-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.hp .foot-col a{color:var(--ink);text-decoration:none}
+.hp .foot-col a:hover{text-decoration:underline}
+.hp .foot-title{margin:4px 0 14px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.hp .foot-legal{display:grid;grid-template-columns:repeat(3,1fr);gap:24px 40px;padding:20px 40px;border-top:1px solid var(--line);font-size:12px;line-height:1.6;color:var(--muted)}
+.hp .foot-legal p{margin:0}
+.hp .foot-legal strong{color:var(--ink)}
+.hp .foot-legal a{color:var(--ink)}
+.hp .foot-bottom{display:flex;align-items:baseline;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;padding:16px 40px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 .hp .foot-bottom a{color:var(--ink);font-weight:600}
+@container (max-width:1000px){
+.hp .foot-main{grid-template-columns:1fr 1fr}
+.hp .foot-brand{grid-column:1/-1}
+}
 @container (max-width:640px){
-.hp .foot-grid{grid-template-columns:1fr;gap:20px}
-.hp .foot-bottom{flex-direction:column}
+.hp .foot{padding:16px 0 24px}
+.hp .foot-main{grid-template-columns:1fr;gap:24px;padding:24px 20px}
+.hp .foot-legal{grid-template-columns:1fr;gap:12px;padding:16px 20px}
+.hp .foot-bottom{flex-direction:column;padding:16px 20px}
 }

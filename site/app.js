@@ -247,6 +247,9 @@ function bindEvents() {
 }
 
 async function init() {
+  // Liens du pied de page : ./?console=ps5 ou ./?console=switch2 activent le filtre.
+  const consoleParam = new URLSearchParams(window.location.search).get("console");
+  if (Object.hasOwn(PLATFORM_FILTERS, consoleParam ?? "")) state.platform = consoleParam;
   bindEvents();
   try {
     const response = await fetch("data.json", { cache: "no-cache" });

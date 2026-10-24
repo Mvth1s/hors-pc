@@ -12,7 +12,7 @@
 <script src="theme.js" defer></script>
 <script src="footer.js" defer></script>
 </head>
-<body class="hp">
+<body class="hp" id="top">
 <script>
   // Thème appliqué avant le premier rendu pour éviter un flash.
   try { var t = localStorage.getItem("horspc-theme"); if (t === "light" || t === "dark") document.body.classList.add(t); } catch (e) {}
@@ -37,7 +37,7 @@
 <h1>Confidentialité</h1>
 <p class="legal-updated">Dernière mise à jour : 24/10/2026</p>
 
-<h2>Aucune collecte par HorsPC</h2>
+<h2 id="cookies">Aucune collecte par HorsPC</h2>
 <p>HorsPC ne collecte aucune donnée personnelle : pas de formulaire, pas de compte, pas de mesure d'audience, pas de publicité, pas de cookie. Les polices et les jaquettes sont servies depuis le site lui-même ; aucune page ne charge de ressource depuis un autre domaine.</p>
 
 <h2>Préférence de thème</h2>
@@ -55,32 +55,54 @@
 
 <footer class="foot">
   <div class="wrap">
-    <div class="foot-grid">
-      <section class="foot-col" aria-labelledby="foot-horspc">
-        <h2 class="foot-title" id="foot-horspc"><a href="./">HorsPC</a></h2>
-        <p>Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix.</p>
-        <p>Projet personnel non commercial.</p>
-        <p><a href="https://github.com/Mvth1s/hors-pc" rel="noopener">Code source sur GitHub</a></p>
-        <p class="foot-updated" data-foot-updated hidden>Catalogue mis à jour le <strong data-foot-date></strong></p>
-      </section>
-      <nav class="foot-col" aria-labelledby="foot-infos">
-        <h2 class="foot-title" id="foot-infos">Informations</h2>
-        <ul>
-          <li><a href="methodologie.html">Méthodologie des prix</a></li>
-          <li><a href="mentions-legales.html">Mentions légales</a></li>
-          <li><a href="confidentialite.html">Confidentialité</a></li>
-        </ul>
-      </nav>
-      <section class="foot-col" aria-labelledby="foot-credits">
-        <h2 class="foot-title" id="foot-credits">Crédits</h2>
-        <p>Dates de sortie, statut PC et jaquettes via <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>. Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs.</p>
-        <p>Polices Bricolage Grotesque et IBM Plex Sans, sous licence SIL Open Font License 1.1.</p>
-        <p>Demande de retrait : <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait" rel="noopener">ouvrir une issue GitHub</a>.</p>
-      </section>
-    </div>
-    <div class="foot-bottom">
-      <p>Prix TTC relevés manuellement chez des marchands français. HorsPC n'est affilié à aucun constructeur, éditeur ni marchand et ne touche aucune commission.</p>
-      <p>Fait par <a href="https://mathisaguado.vercel.app" rel="noopener">Mathis Aguado</a></p>
+    <div class="foot-card">
+      <div class="foot-main">
+        <div class="foot-brand">
+          <a class="foot-logo" href="./">Hors<span class="logo-pc">PC</span></a>
+          <p>Les exclus PS5, Switch et Switch 2 jamais sorties sur PC, au meilleur prix relevé en France.</p>
+          <ul class="foot-social">
+            <li><a href="https://github.com/Mvth1s/hors-pc" rel="noopener" aria-label="Dépôt GitHub de HorsPC" title="Dépôt GitHub"><svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/in/mathis-aguado" rel="noopener" aria-label="LinkedIn de Mathis Aguado" title="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a></li>
+            <li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;" aria-label="Écrire à &#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;" title="E-mail"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></a></li>
+          </ul>
+        </div>
+        <nav class="foot-col" aria-labelledby="foot-catalogue">
+          <h2 class="foot-title" id="foot-catalogue">Catalogue</h2>
+          <ul>
+            <li><a href="./">Tous les jeux</a></li>
+            <li><a href="./?console=ps5">PS5</a></li>
+            <li><a href="./?console=switch2">Switch 2</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="methodologie.html">Méthodologie des prix</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-col" aria-labelledby="foot-projet">
+          <h2 class="foot-title" id="foot-projet">Projet</h2>
+          <ul>
+            <li><a href="https://github.com/Mvth1s/hors-pc" rel="noopener">Code source ↗</a></li>
+            <li><a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Erreur%20%3A%20&body=Page%20concern%C3%A9e%20%3A%0A%0AErreur%20constat%C3%A9e%20%3A%0A%0ACorrection%20propos%C3%A9e%20%28avec%20source%29%20%3A%0A" rel="noopener">Signaler une erreur ↗</a></li>
+            <li><a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait" rel="noopener">Demande de retrait ↗</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-col" aria-labelledby="foot-legal">
+          <h2 class="foot-title" id="foot-legal">Informations légales</h2>
+          <ul>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="confidentialite.html">Confidentialité</a></li>
+            <li><a href="confidentialite.html#cookies">Cookies : aucun</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="foot-legal">
+        <p><strong>Éditeur.</strong> Mathis Aguado, particulier ; projet personnel non commercial. Contact : <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;">&#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;</a>.</p>
+        <p><strong>Hébergeur.</strong> GitHub, Inc. (service GitHub Pages), 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, États-Unis.</p>
+        <p><strong>Données personnelles.</strong> Aucun cookie ni traceur. Le thème choisi reste dans le stockage local de votre navigateur. L'hébergeur journalise les adresses IP des visiteurs pour la sécurité du service.</p>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 Mathis Aguado<span data-foot-updated hidden> · catalogue généré le <span data-foot-date></span></span></span>
+        <span>HorsPC n'est affilié à aucun constructeur, éditeur ni marchand ; les marques citées appartiennent à leurs propriétaires.</span>
+        <a href="#top">Haut de page ↑</a>
+      </div>
     </div>
   </div>
 </footer>
