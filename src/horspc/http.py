@@ -52,7 +52,9 @@ class HttpClient:
 
     def request(self, method: str, url: str, **kwargs: Any) -> httpx.Response:
         """Envoie la requête avec retries ; lève httpx.HTTPError en cas d'échec définitif."""
-        host = httpx.URL(url).host
+        parsed = httpx.URL(url)
+        host = parsed.host
+        safe_url = parsed.copy_with(query=None)  # pour les logs, sans paramètres
         for attempt in range(self._max_retries + 1):
             self._throttle(host)
             try:
@@ -61,7 +63,7 @@ class HttpClient:
                 if attempt == self._max_retries:
                     raise
                 delay = self._backoff * 2**attempt
-                log.warning("%s %s : %s, nouvel essai dans %.0f s", method, url, exc, delay)
+                log.warning("%s %s : %s, nouvel essai dans %.0f s", method, safe_url, exc, delay)
                 self._sleep(delay)
                 continue
             if response.status_code in RETRY_STATUSES and attempt < self._max_retries:
@@ -69,7 +71,7 @@ class HttpClient:
                 log.warning(
                     "%s %s : HTTP %d, nouvel essai dans %.0f s",
                     method,
-                    url,
+                    safe_url,
                     response.status_code,
                     delay,
                 )

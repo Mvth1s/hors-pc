@@ -100,3 +100,10 @@ def test_igdb_injoignable(igdb: IgdbClient, api: respx.MockRouter) -> None:
     api.post(TOKEN_URL).mock(side_effect=httpx.ConnectError("hors ligne"))
     with pytest.raises(IgdbError):
         igdb.fetch_games([entry("astro-bot", "Astro Bot", ["ps5"])], NOW)
+
+
+def test_secret_dans_le_corps_pas_dans_l_url(igdb: IgdbClient, api: respx.MockRouter) -> None:
+    igdb.platform_ids()
+    request = api.routes[0].calls.last.request
+    assert "secret-test" not in str(request.url)
+    assert b"client_secret=secret-test" in request.content

@@ -130,7 +130,8 @@ class IgdbClient:
         if self._token is None or self._clock() >= self._token_expires_at:
             response = self._http.post(
                 TOKEN_URL,
-                params={
+                # Dans le corps et non dans l'URL : le secret ne doit pas fuiter dans les logs.
+                data={
                     "client_id": self._client_id,
                     "client_secret": self._client_secret,
                     "grant_type": "client_credentials",
