@@ -1,0 +1,29 @@
+[
+  {
+    "id": 255340,
+    "name": "Astro Bot",
+    "url": "https://www.igdb.com/games/astro-bot",
+    "platforms": [167],
+    "release_dates": [{"id": 1, "platform": 167, "date": 1725580800}]
+  },
+  {
+    "id": 250634,
+    "name": "Ghost of Yōtei",
+    "url": "https://www.igdb.com/games/ghost-of-yotei",
+    "platforms": [6, 167],
+    "release_dates": [
+      {"id": 2, "platform": 167, "date": 1759363200},
+      {"id": 3, "platform": 6}
+    ]
+  },
+  {
+    "id": 152063,
+    "name": "Death Stranding 2: On the Beach",
+    "url": "https://www.igdb.com/games/death-stranding-2-on-the-beach",
+    "platforms": [6, 167],
+    "release_dates": [
+      {"id": 4, "platform": 167, "date": 1750377600},
+      {"id": 5, "platform": 6, "date": 1773878400}
+    ]
+  }
+]
