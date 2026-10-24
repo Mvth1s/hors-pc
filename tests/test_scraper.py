@@ -11,7 +11,7 @@ import respx
 
 from horspc.http import HttpClient
 from horspc.models import GameEntry, PriceObservation, ScrapedObservation
-from horspc.prices import ManualPriceProvider
+from horspc.prices import ManualPriceProvider, probe
 from horspc.prices import sources as src
 from horspc.prices.fetch import SERVER_ERRORS, Fetcher
 from horspc.prices.scraper import (
@@ -461,3 +461,63 @@ def test_precommande_sans_offre_ecartee_sans_alerte(fetcher: Fetcher) -> None:
     assert ("rejected", "aucune offre (pas encore en vente ?)") in {
         (e["kind"], e["detail"]) for e in report.events
     }
+
+
+# --- Bilan et diagnostic -------------------------------------------------------------------------
+
+
+def test_bilan_markdown_et_discord() -> None:
+    report = Report(
+        5,
+        {"leclerc": "page de défi (geo.captcha-delivery.com)"},
+        ["boulanger : https://www.boulanger.com/ref/1"],
+        [{"source": "pixmania", "kind": "rejected", "url": "u", "detail": "d"}],
+    )
+    again = Report.from_json(report.to_json())
+    assert again == report
+    text = report.markdown()
+    assert "- Prix relevés : 5" in text
+    assert "leclerc (page de défi (geo.captcha-delivery.com))" in text
+    assert "écartées (règle de confiance, autre produit, sans offre) : 1" in text
+    message = report.discord("https://run/1")
+    assert message.startswith("⚠️ HorsPC : relevé des prix incomplet (5 prix relevés")
+    assert message.endswith(" https://run/1")
+    assert Report(5).discord("https://run/1") is None
+    long = Report(0, {}, [f"boulanger : https://www.boulanger.com/ref/{i}" for i in range(200)])
+    assert len(long.discord("https://run/1")) <= 1900
+    assert long.discord("https://run/1").endswith("… https://run/1")
+
+
+@respx.mock
+def test_diagnostic_par_source(fetcher: Fetcher) -> None:
+    mock_robots(**{"www.pixmania.com": "User-agent: *\nDisallow: /fr/\n"})
+    respx.get(LECLERC_FP).respond(text=page("leclerc.html"))
+    respx.route(host="www.boulanger.com", path="/c/jeu-playstation-5").respond(403)
+    respx.get(src.PIXMANIA_SITEMAP).respond(text=page("pixmania_sitemap_index.xml"))
+    discovered = {"schema": 1, "games": {"mkw": {
+        "eans": [EAN_LECLERC], "checked": {},
+        "sources": {"leclerc": LECLERC_FP, "boulanger": BOULANGER_REF, "pixmania": PIXMANIA_FP},
+    }}}  # fmt: skip
+    rows = probe.probe(fetcher, ["leclerc", "boulanger", "pixmania"], discovered)
+    table = {(r.source, r.kind): (r.result, r.detail) for r in rows}
+    assert table[("leclerc", "fiche")] == ("HTTP 200", "JSON-LD OK : 66.25 €, vendeur E.Leclerc")
+    assert table[("boulanger", "catégorie")] == ("bloqué", "HTTP 403")
+    # Source bloquée : la fiche n'est plus demandée.
+    assert table[("boulanger", "fiche")][0] == "bloqué"
+    assert table[("pixmania", "sitemap")] == ("HTTP 200", "2 sitemaps listés")
+    assert table[("pixmania", "fiche")] == ("interdit par robots.txt", "Disallow: /fr/")
+    assert table[("leclerc", "robots.txt")][0] == "lu (1 règles pour HorsPC)"
+    text = probe.markdown(rows, "HorsPC/test")
+    assert (
+        "| boulanger | catégorie | https://www.boulanger.com/c/jeu-playstation-5 | bloqué |" in text
+    )
+    assert "User-Agent : `HorsPC/test`" in text
+
+
+def test_diagnostic_sans_fiche_connue_utilise_la_fiche_temoin() -> None:
+    assert probe.probe_urls("leclerc", {"games": {}}) == [
+        ("fiche", src.leclerc_url(probe.FALLBACK_EAN))
+    ]
+    assert probe.probe_urls("boulanger", {"games": {}}) == [
+        ("catégorie", "https://www.boulanger.com/c/jeu-playstation-5")
+    ]

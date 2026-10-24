@@ -101,6 +101,44 @@ class Report:
             indent=2,
         )
 
+    @classmethod
+    def from_json(cls, text: str) -> "Report":
+        raw = json.loads(text)
+        return cls(raw["ok"], raw["blocked"], raw["broken"], raw["events"])
+
+    def markdown(self) -> str:
+        """Résumé pour $GITHUB_STEP_SUMMARY."""
+        kinds = Counter(e["kind"] for e in self.events)
+        lines = [
+            "## Relevé automatique des prix",
+            "",
+            f"- Prix relevés : {self.ok}",
+            f"- Offres écartées (règle de confiance, autre produit, sans offre) : "
+            f"{kinds['rejected']}",
+            f"- Fiches retirées (404), recherchées à nouveau : {kinds['gone']}",
+            f"- URL interdites par robots.txt (non demandées) : {kinds['disallowed']}",
+            "- Sources bloquées : "
+            + (", ".join(f"{s} ({r})" for s, r in self.blocked.items()) or "aucune"),
+            "- Fiches sans données structurées : " + (", ".join(self.broken) or "aucune"),
+        ]
+        return "\n".join(lines) + "\n"
+
+    def discord(self, run_url: str, limit: int = 1900) -> str | None:
+        """Message Discord si une source est bloquée ou une fiche cassée, sinon None."""
+        if not self.needs_attention:
+            return None
+        parts = [f"⚠️ HorsPC : relevé des prix incomplet ({self.ok} prix relevés, build réussi)."]
+        if self.blocked:
+            blocked = ", ".join(f"{s} ({r})" for s, r in self.blocked.items())
+            parts.append(f"Sources bloquées pour ce run : {blocked}.")
+        if self.broken:
+            parts.append(f"Fiches sans JSON-LD exploitable : {', '.join(self.broken)}.")
+        tail = f" {run_url}"
+        text = " ".join(parts)
+        if len(text) + len(tail) > limit:
+            text = text[: limit - len(tail) - 1] + "…"
+        return text + tail
+
 
 class Scraper:
     def __init__(self, enabled: dict[str, bool], fetcher: Fetcher) -> None:

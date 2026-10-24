@@ -9,6 +9,10 @@ on:
         description: "Faire échouer le build volontairement pour tester la notification Discord"
         type: boolean
         default: false
+      scrape_dry_run:
+        description: "Diagnostic des sources de prix vues depuis GitHub Actions (aucun build, commit ni déploiement)"
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths: ["site/**", "src/**", "data/**"]
@@ -27,6 +31,8 @@ permissions:
 
 jobs:
   build:
+    # Le diagnostic scrape_dry_run remplace le build : rien n'est commité ni déployé.
+    if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.scrape_dry_run) }}
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -62,6 +68,33 @@ jobs:
           IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
         # Relève aussi les prix sur les sources activées (data/sources.config.yaml).
         run: uv run python -m horspc build --scrape-report "$RUNNER_TEMP/scrape-report.json"
+      - name: Bilan du relevé des prix
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: uv run python -m horspc scrape-report "$RUNNER_TEMP/scrape-report.json" >> "$GITHUB_STEP_SUMMARY"
+      # Source bloquée (403, 429, captcha) ou fiche sans JSON-LD : alerte Discord, sans faire
+      # échouer le build (les autres sources et le site restent à jour).
+      - name: Alerte Discord si une source est bloquée ou cassée
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          message=$(uv run python -m horspc scrape-report "$RUNNER_TEMP/scrape-report.json" \
+            --format discord --run-url "$RUN_URL")
+          if [ -z "$message" ]; then
+            echo "Relevé complet : pas d'alerte"
+            exit 0
+          fi
+          echo "::warning::$message"
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "Secret DISCORD_WEBHOOK_URL absent : pas de notification"
+            exit 0
+          fi
+          payload=$(jq -n --arg content "$message" '{content: $content, allowed_mentions: {parse: []}}')
+          curl --fail --silent --show-error --max-time 20 \
+            -H "Content-Type: application/json" -d "$payload" "$DISCORD_WEBHOOK_URL" \
+            || echo "::warning::notification Discord non envoyée"
       - name: Génère site/data.json (hors ligne, sans commit)
         if: github.event_name == 'push'
         run: uv run python -m horspc build --offline
@@ -91,6 +124,23 @@ jobs:
         with:
           path: site
 
+  probe:
+    # workflow_dispatch avec scrape_dry_run : ce que voient les IP de GitHub Actions pour chaque
+    # source (robots.txt, code HTTP, défi anti-bot, JSON-LD), dans le résumé du run.
+    if: github.event_name == 'workflow_dispatch' && inputs.scrape_dry_run
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+        with:
+          enable-cache: true
+      - name: Installe les dépendances
+        run: uv sync --frozen
+      - name: Diagnostic des sources
+        run: uv run python -m horspc scrape-probe >> "$GITHUB_STEP_SUMMARY"
+
   deploy:
     needs: build
     runs-on: ubuntu-24.04
@@ -108,7 +158,7 @@ jobs:
     # Tourne même si le build échoue (c'est précisément le cas à signaler), mais pas sur
     # push : seul le build planifié ou manuel fait foi pour la fraîcheur.
     needs: build
-    if: always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && !inputs.scrape_dry_run))
     runs-on: ubuntu-24.04
     permissions:
       contents: read

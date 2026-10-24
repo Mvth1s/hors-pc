@@ -14,20 +14,28 @@ WORKFLOW = Path(__file__).parents[1] / ".github" / "workflows" / "update.yml"
 FULL_EVENTS = ["schedule", "workflow_dispatch"]
 
 
-def runs(condition: str | None, event: str, test_notification: bool = False) -> bool:
-    """Évalue une condition `if:` limitée à github.event_name, ==, ||, && et always()."""
+def runs(
+    condition: str | None, event: str, test_notification: bool = False, dry_run: bool = False
+) -> bool:
+    """Évalue une condition `if:` limitée à github.event_name, ==, !, ||, && et always()."""
     if condition is None:
         return True
-    # Chemin nominal : aucune étape précédente en échec.
+    # Chemin nominal : aucune étape précédente en échec. Les inputs n'existent que sur dispatch.
+    dispatch = event == "workflow_dispatch"
+    expr = condition.strip().removeprefix("${{").removesuffix("}}").strip()
     expr = (
-        condition.replace("always()", "True")
+        expr.replace("always()", "True")
         .replace("failure()", "False")
         .replace("||", " or ")
         .replace("&&", " and ")
+        .replace("!=", "≠")
+        .replace("!", " not ")
+        .replace("≠", "!=")
     )
     expr = expr.replace("github.event_name", repr(event))
-    expr = expr.replace("inputs.test_notification", repr(test_notification))
-    return _evaluate(ast.parse(expr, mode="eval").body, condition)
+    expr = expr.replace("inputs.test_notification", repr(dispatch and test_notification))
+    expr = expr.replace("inputs.scrape_dry_run", repr(dispatch and dry_run))
+    return _evaluate(ast.parse(expr.strip(), mode="eval").body, condition)
 
 
 def _evaluate(node: ast.expr, condition: str) -> bool:
@@ -39,6 +47,8 @@ def _evaluate(node: ast.expr, condition: str) -> bool:
             return any(_evaluate(v, condition) for v in values)
         case ast.BoolOp(op=ast.And(), values=values):
             return all(_evaluate(v, condition) for v in values)
+        case ast.UnaryOp(op=ast.Not(), operand=operand):
+            return not _evaluate(operand, condition)
         case ast.Compare(
             left=ast.Constant(value=left), ops=[ast.Eq()], comparators=[ast.Constant(value=right)]
         ):
@@ -50,11 +60,22 @@ def workflow() -> dict[str, Any]:
     return yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))
 
 
-def executed_steps(event: str, test_notification: bool = False) -> list[dict[str, Any]]:
+def executed_steps(
+    event: str, test_notification: bool = False, dry_run: bool = False
+) -> list[dict[str, Any]]:
     steps = []
-    for job in workflow()["jobs"].values():
-        if runs(job.get("if"), event, test_notification):
-            steps += [s for s in job["steps"] if runs(s.get("if"), event, test_notification)]
+    ran: set[str] = set()
+    for name, job in workflow()["jobs"].items():
+        needs = job.get("needs", [])
+        needs = [needs] if isinstance(needs, str) else needs
+        # Un job dont une dépendance est sautée l'est aussi, sauf condition avec always().
+        if not set(needs) <= ran and "always()" not in str(job.get("if")):
+            continue
+        if runs(job.get("if"), event, test_notification, dry_run):
+            ran.add(name)
+            steps += [
+                s for s in job["steps"] if runs(s.get("if"), event, test_notification, dry_run)
+            ]
     return steps
 
 
@@ -275,3 +296,83 @@ def test_echec_volontaire_avant_build_commit_et_deploiement() -> None:
     jobs = workflow()["jobs"]
     assert "build" in jobs["deploy"]["needs"]
     assert "build" in jobs["notify"]["needs"]
+
+
+# --- Relevé des prix : alerte non bloquante et diagnostic scrape_dry_run -------------------
+
+ALERT_STEP = "Alerte Discord si une source est bloquée ou cassée"
+
+
+def build_step(name: str) -> dict[str, Any]:
+    return next(s for s in workflow()["jobs"]["build"]["steps"] if s.get("name") == name)
+
+
+def test_option_scrape_dry_run() -> None:
+    option = workflow()[True]["workflow_dispatch"]["inputs"]["scrape_dry_run"]
+    assert option["type"] == "boolean" and option["default"] is False
+
+
+def test_dry_run_ni_build_ni_commit_ni_deploiement() -> None:
+    steps = executed_steps("workflow_dispatch", dry_run=True)
+    script = commands(steps)
+    assert "horspc build" not in script and "git commit" not in script
+    assert not any(s.get("uses", "").startswith("actions/deploy-pages") for s in steps)
+    assert 'uv run python -m horspc scrape-probe >> "$GITHUB_STEP_SUMMARY"' in script
+    jobs = workflow()["jobs"]
+    assert jobs["probe"]["permissions"] == {"contents": "read"}
+    assert not runs(jobs["freshness"]["if"], "workflow_dispatch", dry_run=True)
+
+
+@pytest.mark.parametrize("event", ["push", *FULL_EVENTS])
+def test_pas_de_diagnostic_hors_dry_run(event: str) -> None:
+    assert not runs(workflow()["jobs"]["probe"]["if"], event)
+    assert "scrape-probe" not in commands(executed_steps(event))
+
+
+@pytest.mark.parametrize("event", FULL_EVENTS)
+def test_alerte_releve_apres_build_avant_commit_sans_echec(event: str) -> None:
+    names = [s.get("name") for s in executed_steps(event)]
+    assert ALERT_STEP in names and "Bilan du relevé des prix" in names
+    build = next(i for i, n in enumerate(names) if n and n.startswith("Génère site/data.json"))
+    commit = names.index("Commite le site et les relevés s'ils ont changé")
+    assert build < names.index(ALERT_STEP) < commit
+    step = build_step(ALERT_STEP)
+    assert step["continue-on-error"] is True
+    assert "${{" not in step["run"] and "allowed_mentions: {parse: []}" in step["run"]
+    assert step["env"]["DISCORD_WEBHOOK_URL"] == "${{ secrets.DISCORD_WEBHOOK_URL }}"
+
+
+def test_pas_d_alerte_releve_sur_push() -> None:
+    assert ALERT_STEP not in [s.get("name") for s in executed_steps("push")]
+
+
+@pytest.mark.skipif(shutil.which("jq") is None, reason="jq absent")
+@pytest.mark.parametrize(
+    ("blocked", "expected"),
+    [({"leclerc": "HTTP 403"}, "::warning::⚠️ HorsPC"), ({}, "Relevé complet : pas d'alerte")],
+)
+def test_script_alerte_releve(tmp_path: Path, blocked: dict[str, str], expected: str) -> None:
+    import sys
+
+    report = {"ok": 3, "blocked": blocked, "broken": [], "counts": {}, "events": []}
+    (tmp_path / "scrape-report.json").write_text(json.dumps(report), encoding="utf-8")
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    # « uv run python … » → l'interpréteur des tests.
+    (bin_dir / "uv").write_text(f'#!/bin/sh\nshift 2\nexec {sys.executable} "$@"\n')
+    (bin_dir / "uv").chmod(0o755)
+    env = {
+        "PATH": f"{bin_dir}:/usr/bin:/bin",
+        "RUNNER_TEMP": str(tmp_path),
+        "RUN_URL": "https://github.com/Mvth1s/hors-pc/actions/runs/1",
+        "PYTHONPATH": str(Path(__file__).parents[1] / "src"),
+    }  # pas de DISCORD_WEBHOOK_URL : rien n'est envoyé
+    result = subprocess.run(
+        ["bash", "-c", build_step(ALERT_STEP)["run"]], env=env, capture_output=True, text=True
+    )
+    assert result.returncode == 0, result.stderr
+    assert expected in result.stdout
+    if blocked:
+        assert (
+            "leclerc (HTTP 403)" in result.stdout and "Secret DISCORD_WEBHOOK_URL" in result.stdout
+        )

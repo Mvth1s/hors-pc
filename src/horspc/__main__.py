@@ -11,8 +11,9 @@ import yaml
 from pydantic import ValidationError
 
 from horspc import build, candidates, price_add, stale
-from horspc.http import HttpClient
+from horspc.http import USER_AGENT, HttpClient
 from horspc.igdb import IgdbClient
+from horspc.prices import probe, scraper
 from horspc.prices.fetch import Fetcher
 
 
@@ -76,6 +77,32 @@ def cmd_build(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_scrape_report(args: argparse.Namespace) -> int:
+    """Résumé d'un bilan de relevé : Markdown (Step Summary) ou message Discord (vide si RAS)."""
+    if not args.report.exists():
+        print("Pas de bilan de relevé (relevé non lancé ou build interrompu).")
+        return 0
+    report = scraper.Report.from_json(args.report.read_text(encoding="utf-8"))
+    if args.format == "markdown":
+        print(report.markdown(), end="")
+    else:
+        print(report.discord(args.run_url) or "", end="")
+    return 0
+
+
+def cmd_scrape_probe(args: argparse.Namespace) -> int:
+    """Teste chaque source activée depuis la machine courante, sans rien écrire dans data/."""
+    enabled = [s for s, on in scraper.load_config(build.SOURCES_PATH).items() if on]
+    discovered = scraper.load_discovered(build.DISCOVERED_PATH)
+    fetcher = Fetcher.create()
+    try:
+        rows = probe.probe(fetcher, enabled, discovered)
+    finally:
+        fetcher.close()
+    print(probe.markdown(rows, USER_AGENT), end="")
+    return 0
+
+
 def cmd_stale(args: argparse.Namespace) -> int:
     today = date.today()
     try:
@@ -133,6 +160,15 @@ def main(argv: list[str] | None = None) -> int:
     cmd.add_argument("--scrape-report", type=Path, help="écrit le bilan du relevé (JSON)")
     cmd.add_argument("--output", type=Path, default=build.OUTPUT_PATH)
     cmd.set_defaults(func=cmd_build)
+
+    cmd = sub.add_parser("scrape-report", help="résume un bilan de relevé (--scrape-report)")
+    cmd.add_argument("report", type=Path)
+    cmd.add_argument("--format", choices=["markdown", "discord"], default="markdown")
+    cmd.add_argument("--run-url", default="", help="lien du run, ajouté au message Discord")
+    cmd.set_defaults(func=cmd_scrape_report)
+
+    cmd = sub.add_parser("scrape-probe", help="diagnostic des sources, sans rien écrire")
+    cmd.set_defaults(func=cmd_scrape_probe)
 
     cmd = sub.add_parser("stale", help="liste les jeux sans prix ou au relevé trop ancien")
     cmd.set_defaults(func=cmd_stale)
