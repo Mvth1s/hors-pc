@@ -1,0 +1,108 @@
+name: Mise à jour
+
+on:
+  schedule:
+    - cron: "17 6 * * 1" # lundi 06:17 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["site/**", "src/**", "data/**"]
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  # Ancienneté de generated_at (en jours) au-delà de laquelle une issue « Données obsolètes »
+  # est ouverte. Distinct de STALE_BANNER_DAYS (14 j) dans site/app.js.
+  STALE_ISSUE_DAYS: 8
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - name: Installe les dépendances
+        run: uv sync --frozen
+      - name: Génère site/data.json
+        # Échoue (code non nul) si la validation échoue : rien n'est commité ni déployé.
+        env:
+          IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
+          IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
+        run: uv run python -m horspc build
+      - name: Commite data.json s'il a changé
+        run: |
+          if git diff --quiet -- site/data.json; then
+            echo "data.json inchangé"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data.json
+          git commit -m "chore(data): mise à jour du catalogue"
+          git pull --rebase
+          git push
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
+
+  freshness:
+    # Tourne même si le build échoue : c'est précisément le cas à signaler.
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Ouvre une issue si generated_at est trop ancien
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          age=$(python3 -c '
+          import json, datetime as dt
+          g = json.load(open("site/data.json"))["generated_at"]
+          print((dt.datetime.now(dt.UTC) - dt.datetime.fromisoformat(g.replace("Z", "+00:00"))).days)
+          ')
+          echo "data.json généré il y a ${age} jour(s), seuil ${STALE_ISSUE_DAYS}"
+          if [ "$age" -le "$STALE_ISSUE_DAYS" ]; then
+            exit 0
+          fi
+          open=$(gh issue list --label stale-data --state open --json number --jq length)
+          if [ "$open" != "0" ]; then
+            echo "Une issue stale-data est déjà ouverte"
+            exit 0
+          fi
+          gh label create stale-data --color E2AE3F \
+            --description "data.json n'est plus mis à jour" --force
+          gh issue create --label stale-data --title "Données obsolètes" --body "\
+          site/data.json a été généré il y a ${age} jours (seuil : ${STALE_ISSUE_DAYS} jours).
+
+          Pistes : workflow « Mise à jour » en échec (voir ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions), \
+          secrets IGDB expirés, ou cron désactivé par GitHub après 60 jours sans activité \
+          (Actions > Mise à jour > Enable workflow)."
