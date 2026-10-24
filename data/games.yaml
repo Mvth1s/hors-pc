@@ -11,6 +11,7 @@
 #   pc_override          optionnel, prioritaire sur IGDB :
 #                          {status: none|announced|released, source_url, checked_at}
 #   release_date_override optionnel, prioritaire sur IGDB : {date, source_url}
+#   description_fr       optionnel : résumé en français, prioritaire sur le résumé IGDB (anglais)
 
 - slug: astro-bot
   title: Astro Bot

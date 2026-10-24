@@ -70,15 +70,18 @@ def build_data(
     now: datetime,
     generated_at: datetime | None = None,
     cover_ids: dict[str, str | None] | None = None,
+    screen_ids: dict[str, tuple[str, ...]] | None = None,
 ) -> DataFile:
     """Assemble et valide le contenu de data.json.
 
     `igdb_results` vaut None quand IGDB est injoignable : les champs IGDB sont alors repris
     du data.json précédent. `generated_at` vaut `now` par défaut ; `now` sert toujours au
     calcul de `offer.stale`. `cover_ids` donne, par slug, l'image_id de la jaquette présente
-    dans site/covers/ (absent ou None : pas de jaquette).
+    dans site/covers/ (absent ou None : pas de jaquette) ; `screen_ids`, les image_id des
+    captures présentes dans site/screens/<slug>/.
     """
     cover_ids = cover_ids or {}
+    screen_ids = screen_ids or {}
     games = []
     for game in catalog.games:
         info = None if igdb_results is None else igdb_results.get(game.slug)
@@ -89,7 +92,14 @@ def build_data(
             "launch_price_cents": _cents(game.launch_price),
             **_cover_fields(game.slug, cover_ids.get(game.slug)),
             **_igdb_fields(info, previous.get(game.slug), now),
+            "screenshots": [
+                {"image_id": i, "url": covers.screen_url(game.slug, i)}
+                for i in screen_ids.get(game.slug, ())
+            ],
         }
+        if game.description_fr is not None:
+            entry["summary"] = game.description_fr
+            entry["summary_source"] = "manual"
         if game.pc_override is not None:
             entry["pc_status"] = game.pc_override.status
             entry["pc_status_source"] = "manual"
@@ -146,15 +156,21 @@ def run(
             log.warning("%s ; champs IGDB repris du data.json précédent", exc)
     site_dir = output_path.parent
     updates = []
+    screen_updates = []
     for game in catalog.games:
         prev = previous.get(game.slug)
         prev_id = None if prev is None else prev.cover_image_id
+        prev_screens = () if prev is None else tuple(s.image_id for s in prev.screenshots)
         info = None if igdb_results is None else igdb_results.get(game.slug)
         if info is None or http is None:
             updates.append(covers.keep_local(site_dir, game.slug, prev_id))
+            screen_updates.append(covers.keep_local_screens(site_dir, game.slug, prev_screens))
         else:
             updates.append(
                 covers.fetch_cover(http, site_dir, game.slug, info.cover_image_id, prev_id)
+            )
+            screen_updates.append(
+                covers.fetch_screens(http, site_dir, game.slug, info.screenshot_ids)
             )
     data = build_data(
         catalog,
@@ -164,11 +180,13 @@ def run(
         now,
         generated_at,
         {u.slug: u.image_id for u in updates},
+        {u.slug: u.image_ids for u in screen_updates},
     )
     write_data(data, output_path)
     if igdb_results is not None and http is not None:
         # Hors ligne ou IGDB indisponible : les fichiers présents sont réutilisés tels quels.
         covers.apply_updates(site_dir, updates)
+        covers.apply_screens(site_dir, screen_updates)
     if render_html and (site_dir / "index.html").exists():
         render.render_site(data, site_dir)
     elif render_html:
@@ -195,6 +213,11 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
             "igdb_fetched_at": now,
             "pc_status": info.pc_status,
             "pc_status_source": "igdb",
+            "developers": list(info.developers),
+            "publishers": list(info.publishers),
+            "summary": info.summary,
+            "summary_source": None if info.summary is None else "igdb",
+            "trailer_youtube_id": info.trailer_id,
         }
     if prev is not None:
         # Une valeur manuelle retirée de games.yaml ne doit pas survivre au build suivant.
@@ -207,6 +230,11 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
             "igdb_fetched_at": prev.igdb_fetched_at,
             "pc_status": prev.pc_status if prev.pc_status_source == "igdb" else "none",
             "pc_status_source": "igdb",
+            "developers": prev.developers,
+            "publishers": prev.publishers,
+            "summary": prev.summary if prev.summary_source == "igdb" else None,
+            "summary_source": "igdb" if prev.summary_source == "igdb" else None,
+            "trailer_youtube_id": prev.trailer_youtube_id,
         }
     return {
         "release_date": None,
@@ -216,6 +244,11 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
         "igdb_fetched_at": None,
         "pc_status": "none",
         "pc_status_source": "igdb",
+        "developers": [],
+        "publishers": [],
+        "summary": None,
+        "summary_source": None,
+        "trailer_youtube_id": None,
     }
 
 

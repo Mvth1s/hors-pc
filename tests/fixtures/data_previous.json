@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "generated_at": "2026-10-19T06:17:40Z",
   "currency": "EUR",
   "games": [
@@ -19,6 +19,12 @@
       "cover_image_id": "coba3k",
       "pc_status": "announced",
       "pc_status_source": "igdb",
+      "developers": [],
+      "publishers": [],
+      "summary": null,
+      "summary_source": null,
+      "screenshots": [],
+      "trailer_youtube_id": null,
       "offer": null
     },
     {
@@ -37,6 +43,12 @@
       "cover_image_id": null,
       "pc_status": "released",
       "pc_status_source": "manual",
+      "developers": [],
+      "publishers": [],
+      "summary": null,
+      "summary_source": null,
+      "screenshots": [],
+      "trailer_youtube_id": null,
       "offer": null
     }
   ]

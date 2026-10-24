@@ -25,8 +25,11 @@ PLATFORM_SLUGS: dict[Platform, str] = {"ps5": "ps5", "switch": "switch", "switch
 
 GAME_FIELDS = (
     "name,url,platforms,release_dates.platform,release_dates.date,"
-    "release_dates.release_region,release_dates.status,cover.image_id"
+    "release_dates.release_region,release_dates.status,cover.image_id,summary,"
+    "involved_companies.developer,involved_companies.publisher,involved_companies.company.name,"
+    "screenshots.image_id,videos.video_id,videos.name"
 )
+MAX_SCREENSHOTS = 4
 
 # release_date console : seules ces régions et ces statuts (ou un statut absent) comptent.
 RELEASE_REGIONS = ("europe", "worldwide")
@@ -34,6 +37,9 @@ FULL_RELEASE = "Full Release"
 # pc_status : une ligne PC à l'un de ces statuts (ou sans statut) et datée du passé = released.
 PC_RELEASED_STATUSES = (FULL_RELEASE, "Early Access", "Advanced Access", "Offline")
 CANCELLED = "Cancelled"
+
+
+YOUTUBE_ID = re.compile(r"[A-Za-z0-9_-]{11}")
 
 
 class IgdbError(Exception):
@@ -47,6 +53,11 @@ class IgdbGame:
     release_date: date | None
     pc_status: PcStatus
     cover_image_id: str | None = None
+    summary: str | None = None
+    developers: tuple[str, ...] = ()
+    publishers: tuple[str, ...] = ()
+    screenshot_ids: tuple[str, ...] = ()
+    trailer_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -115,6 +126,13 @@ class IgdbClient:
                 release_date=release,
                 pc_status=pc_status(row, platform_ids[PC_SLUG], refs, now),
                 cover_image_id=(row.get("cover") or {}).get("image_id"),
+                summary=(row.get("summary") or "").strip() or None,
+                developers=_companies(row, "developer"),
+                publishers=_companies(row, "publisher"),
+                screenshot_ids=tuple(
+                    s["image_id"] for s in (row.get("screenshots") or [])[:MAX_SCREENSHOTS]
+                ),
+                trailer_id=_trailer(row),
             )
             if game.igdb_id is None:
                 log.info("IGDB : %s → %d (%s)", game.slug, row["id"], row.get("name"))
@@ -213,6 +231,24 @@ class IgdbClient:
                 rows[0].get("name"),
             )
         return (exact or rows)[0]
+
+
+def _companies(row: dict[str, Any], role: str) -> tuple[str, ...]:
+    """Noms des sociétés ayant le rôle donné (developer ou publisher), sans doublon."""
+    names = [
+        ic["company"]["name"]
+        for ic in row.get("involved_companies") or []
+        if ic.get(role) and (ic.get("company") or {}).get("name")
+    ]
+    return tuple(dict.fromkeys(names))
+
+
+def _trailer(row: dict[str, Any]) -> str | None:
+    """Identifiant YouTube de la première vidéo nommée « trailer », sinon de la première vidéo."""
+    videos = [v for v in row.get("videos") or [] if YOUTUBE_ID.fullmatch(v.get("video_id", ""))]
+    trailers = [v for v in videos if "trailer" in (v.get("name") or "").lower()]
+    chosen = (trailers or videos or [None])[0]
+    return None if chosen is None else chosen["video_id"]
 
 
 def _normalize(text: str) -> str:

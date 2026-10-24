@@ -1,6 +1,6 @@
 {
-  "schema_version": 3,
-  "generated_at": "2026-10-24T11:22:41Z",
+  "schema_version": 4,
+  "generated_at": "2026-10-24T19:45:51Z",
   "currency": "EUR",
   "games": [
     {
@@ -14,11 +14,38 @@
       "launch_price_cents": 6999,
       "igdb_id": 303811,
       "igdb_url": "https://www.igdb.com/games/astro-bot",
-      "igdb_fetched_at": "2026-10-24T11:22:41Z",
+      "igdb_fetched_at": "2026-10-24T19:45:51Z",
       "cover_url": "covers/astro-bot.webp",
       "cover_image_id": "coba3k",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": [
+        "Team Asobi"
+      ],
+      "publishers": [
+        "Sony Interactive Entertainment"
+      ],
+      "summary": "Buckle up for some epic PlayStation camaraderie, join forces with your favourite PlayStation icons and show the universe that small is mighty in this fresh new Astro adventure, exclusive to PS5 consoles!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scsiqf",
+          "url": "screens/astro-bot/scsiqf.webp"
+        },
+        {
+          "image_id": "scsiqk",
+          "url": "screens/astro-bot/scsiqk.webp"
+        },
+        {
+          "image_id": "scsiqh",
+          "url": "screens/astro-bot/scsiqh.webp"
+        },
+        {
+          "image_id": "scsiqg",
+          "url": "screens/astro-bot/scsiqg.webp"
+        }
+      ],
+      "trailer_youtube_id": "wHMNQzLG_Jg",
       "offer": null
     },
     {
@@ -32,11 +59,38 @@
       "launch_price_cents": 7999,
       "igdb_id": 317627,
       "igdb_url": "https://www.igdb.com/games/ghost-of-yotei",
-      "igdb_fetched_at": "2026-10-24T11:22:41Z",
+      "igdb_fetched_at": "2026-10-24T19:45:51Z",
       "cover_url": "covers/ghost-of-yotei.webp",
       "cover_image_id": "co9coo",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": [
+        "Sucker Punch Productions"
+      ],
+      "publishers": [
+        "Sony Interactive Entertainment"
+      ],
+      "summary": "The game takes place 300 years after Ghost of Tsushima. Set in the lands surrounding Mount Yōtei, a towering peak in the heart of Ezo, an area of Japan known as Hokkaido in present day.\n\nThe area is outside the rule of Japan, and filled with sprawling grasslands, snowy tundras, and unexpected dangers.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sctzwq",
+          "url": "screens/ghost-of-yotei/sctzwq.webp"
+        },
+        {
+          "image_id": "sctzwr",
+          "url": "screens/ghost-of-yotei/sctzwr.webp"
+        },
+        {
+          "image_id": "sctzws",
+          "url": "screens/ghost-of-yotei/sctzws.webp"
+        },
+        {
+          "image_id": "sctzwt",
+          "url": "screens/ghost-of-yotei/sctzwt.webp"
+        }
+      ],
+      "trailer_youtube_id": "7z7kqwuf0a8",
       "offer": null
     },
     {
@@ -50,11 +104,38 @@
       "launch_price_cents": null,
       "igdb_id": 331215,
       "igdb_url": "https://www.igdb.com/games/saros",
-      "igdb_fetched_at": "2026-10-24T11:22:41Z",
+      "igdb_fetched_at": "2026-10-24T19:45:51Z",
       "cover_url": "covers/saros.webp",
       "cover_image_id": "coajye",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": [
+        "Housemarque"
+      ],
+      "publishers": [
+        "Sony Interactive Entertainment"
+      ],
+      "summary": "Saros is an action game developed by Housemarque and published by Sony Interactive Entertainment. Players control Arjun Devraj, a Soltari Enforcer investigating a lost off-world colony on Carcosa. The game features fast-paced third-person combat, boss encounters, and progression across repeated attempts.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc104fl",
+          "url": "screens/saros/sc104fl.webp"
+        },
+        {
+          "image_id": "sc104fk",
+          "url": "screens/saros/sc104fk.webp"
+        },
+        {
+          "image_id": "sc104fm",
+          "url": "screens/saros/sc104fm.webp"
+        },
+        {
+          "image_id": "sc104fq",
+          "url": "screens/saros/sc104fq.webp"
+        }
+      ],
+      "trailer_youtube_id": "rK4W-hBrSZs",
       "offer": null
     },
     {
@@ -68,11 +149,38 @@
       "launch_price_cents": 7999,
       "igdb_id": 101006,
       "igdb_url": "https://www.igdb.com/games/gran-turismo-7",
-      "igdb_fetched_at": "2026-10-24T11:22:41Z",
+      "igdb_fetched_at": "2026-10-24T19:45:51Z",
       "cover_url": "covers/gran-turismo-7.webp",
       "cover_image_id": "co2g84",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": [
+        "Polyphony Digital"
+      ],
+      "publishers": [
+        "Sony Interactive Entertainment"
+      ],
+      "summary": "Gran Turismo 7 brings together the very best features of the Real Driving Simulator. Whether you’re a competitive or casual racer, collector, tuner, livery designer or photographer – find your line with a staggering collection of game modes including fan-favorites like GT Campaign, Arcade and Driving School. With the reintroduction of the legendary GT Simulation Mode, buy, tune, race and sell your way through a rewarding solo campaign as you unlock new cars and challenges. And if you love going head-to-head with others, hone your skills and compete in the GT Sport Mode.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc8bjc",
+          "url": "screens/gran-turismo-7/sc8bjc.webp"
+        },
+        {
+          "image_id": "sc8bjb",
+          "url": "screens/gran-turismo-7/sc8bjb.webp"
+        },
+        {
+          "image_id": "sc8bje",
+          "url": "screens/gran-turismo-7/sc8bje.webp"
+        },
+        {
+          "image_id": "sc8bjd",
+          "url": "screens/gran-turismo-7/sc8bjd.webp"
+        }
+      ],
+      "trailer_youtube_id": "OyAbx6S_VCA",
       "offer": null
     },
     {
@@ -86,11 +194,38 @@
       "launch_price_cents": 8999,
       "igdb_id": 338067,
       "igdb_url": "https://www.igdb.com/games/mario-kart-world",
-      "igdb_fetched_at": "2026-10-24T11:22:41Z",
+      "igdb_fetched_at": "2026-10-24T19:45:51Z",
       "cover_url": "covers/mario-kart-world.webp",
       "cover_image_id": "cob9s9",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 9"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Mario Kart World is a kart racing game for the Nintendo Switch 2, featuring characters from the Mario franchise. It introduces an open-world design to the series, allowing players to drive freely between courses rather than selecting them from a menu. Races support up to 24 players and include new mechanics such as off-roading, boat racing, rail grinding, and wall riding. The game features a Knockout Tour elimination mode where racers compete across connected courses with periodic eliminations at checkpoints, as well as a Free Roam mode for open exploration and collectible-finding.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scz96m",
+          "url": "screens/mario-kart-world/scz96m.webp"
+        },
+        {
+          "image_id": "scz96h",
+          "url": "screens/mario-kart-world/scz96h.webp"
+        },
+        {
+          "image_id": "scw2xo",
+          "url": "screens/mario-kart-world/scw2xo.webp"
+        },
+        {
+          "image_id": "scz96i",
+          "url": "screens/mario-kart-world/scz96i.webp"
+        }
+      ],
+      "trailer_youtube_id": "3pE23YTYEZM",
       "offer": null
     },
     {
@@ -104,11 +239,38 @@
       "launch_price_cents": null,
       "igdb_id": 338106,
       "igdb_url": "https://www.igdb.com/games/donkey-kong-bananza",
-      "igdb_fetched_at": "2026-10-24T11:22:41Z",
+      "igdb_fetched_at": "2026-10-24T19:45:51Z",
       "cover_url": "covers/donkey-kong-bananza.webp",
       "cover_image_id": "cobd1q",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 8"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Donkey Kong Bananza is exclusively on Nintendo Switch 2! Explore a vast underground world—by smashing your way through it! Bash, throw, and climb through just about anything in DK’s brand-new 3D platforming action-adventure game!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scw2wn",
+          "url": "screens/donkey-kong-bananza/scw2wn.webp"
+        },
+        {
+          "image_id": "scw2wo",
+          "url": "screens/donkey-kong-bananza/scw2wo.webp"
+        },
+        {
+          "image_id": "scw2wp",
+          "url": "screens/donkey-kong-bananza/scw2wp.webp"
+        },
+        {
+          "image_id": "scw2wq",
+          "url": "screens/donkey-kong-bananza/scw2wq.webp"
+        }
+      ],
+      "trailer_youtube_id": "mIddsPkdX9U",
       "offer": null
     },
     {
@@ -122,11 +284,38 @@
       "launch_price_cents": 6999,
       "igdb_id": 119388,
       "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-tears-of-the-kingdom",
-      "igdb_fetched_at": "2026-10-24T11:22:41Z",
+      "igdb_fetched_at": "2026-10-24T19:45:51Z",
       "cover_url": "covers/zelda-tears-of-the-kingdom.webp",
       "cover_image_id": "co5vmg",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 3"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "An epic adventure across the land and skies of Hyrule awaits in The Legend of Zelda: Tears of the Kingdom for Nintendo Switch. The adventure is yours to create in a world fueled by your imagination.\n\nIn this sequel to The Legend of Zelda: Breath of the Wild, you'll decide your own path through the sprawling landscapes of Hyrule and the mysterious islands floating in the vast skies above. Can you harness the power of Link's new abilities to fight back against the malevolent forces that threaten the kingdom?",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scaoj8",
+          "url": "screens/zelda-tears-of-the-kingdom/scaoj8.webp"
+        },
+        {
+          "image_id": "scaoj9",
+          "url": "screens/zelda-tears-of-the-kingdom/scaoj9.webp"
+        },
+        {
+          "image_id": "scaoj7",
+          "url": "screens/zelda-tears-of-the-kingdom/scaoj7.webp"
+        },
+        {
+          "image_id": "scaoj6",
+          "url": "screens/zelda-tears-of-the-kingdom/scaoj6.webp"
+        }
+      ],
+      "trailer_youtube_id": "3fr1Z07AV00",
       "offer": null
     },
     {
@@ -140,11 +329,38 @@
       "launch_price_cents": 5999,
       "igdb_id": 191931,
       "igdb_url": "https://www.igdb.com/games/pokemon-scarlet",
-      "igdb_fetched_at": "2026-10-24T11:22:41Z",
+      "igdb_fetched_at": "2026-10-24T19:45:51Z",
       "cover_url": "covers/pokemon-ecarlate.webp",
       "cover_image_id": "co5sfi",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": [
+        "Game Freak"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "The Pokémon Scarlet and Pokémon Violet games, the newest chapters in the Pokémon series, are coming to Nintendo Switch later this year. With these new titles, the Pokémon series takes a new evolutionary step, allowing you to explore freely in a richly expressed open world.\n\nVarious towns blend seamlessly into the wilderness with no borders. You’ll be able to see the Pokémon of this region in the skies, in the seas, in the forests, on the streets—all over! You’ll be able to experience the true joy of the Pokémon series—battling against wild Pokémon in order to catch them—now in an open-world game that players of any age can enjoy.​",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scg8ud",
+          "url": "screens/pokemon-ecarlate/scg8ud.webp"
+        },
+        {
+          "image_id": "scg8ue",
+          "url": "screens/pokemon-ecarlate/scg8ue.webp"
+        },
+        {
+          "image_id": "scg8ug",
+          "url": "screens/pokemon-ecarlate/scg8ug.webp"
+        },
+        {
+          "image_id": "scg8uf",
+          "url": "screens/pokemon-ecarlate/scg8uf.webp"
+        }
+      ],
+      "trailer_youtube_id": "1VTsaSNRVbY",
       "offer": null
     }
   ]

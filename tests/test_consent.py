@@ -175,3 +175,29 @@ def test_retrait_supprime_les_cookies_et_recharge_sans_ga(nav: Recorder, base_ur
     assert [c["name"] for c in nav.context.cookies() if c["name"].startswith("_ga")] == []
     assert nav.google() == []
     assert nav.page.evaluate("() => typeof window.gtag") == "undefined"
+
+
+# --- Bande-annonce : aucune requête YouTube avant le clic --------------------------------
+
+YOUTUBE_HOSTS = ("youtube.com", "youtube-nocookie.com", "ytimg.com", "googlevideo.com")
+
+
+def youtube(nav: Recorder) -> list[str]:
+    return [u for u in nav.requests if any(h in u for h in YOUTUBE_HOSTS)]
+
+
+def test_bande_annonce_chargee_seulement_au_clic(nav: Recorder) -> None:
+    nav.goto("jeux/astro-bot/")
+    nav.page.get_by_role("button", name="Refuser", exact=True).click()
+    facade = nav.page.locator(".trailer[data-youtube-id]")
+    assert facade.count() == 1
+    assert nav.page.locator("iframe").count() == 0
+    assert youtube(nav) == [] and nav.external() == []
+    video_id = facade.get_attribute("data-youtube-id")
+    nav.page.locator(".trailer-play").click()
+    nav.page.wait_for_selector(".trailer iframe")
+    src = nav.page.locator(".trailer iframe").get_attribute("src")
+    assert src.startswith(f"https://www.youtube-nocookie.com/embed/{video_id}")
+    assert any("youtube-nocookie.com/embed/" in u for u in youtube(nav))
+    # Seuls des domaines YouTube après le clic, aucune requête Google Analytics (refusé).
+    assert set(nav.external()) <= set(youtube(nav))

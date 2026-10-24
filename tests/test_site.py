@@ -152,3 +152,14 @@ def test_consentement_sur_chaque_page_sans_snippet_google(page: Path) -> None:
 
 def footer_of(page: Path) -> str:
     return re.search(r"<footer\b.*?</footer>", page.read_text(encoding="utf-8"), re.S).group(0)
+
+
+def test_pages_de_jeux_sans_iframe_ni_ressource_youtube() -> None:
+    pages = sorted(SITE.glob("jeux/*/index.html"))
+    assert pages
+    for page in pages:
+        text = page.read_text(encoding="utf-8")
+        assert "<iframe" not in text, page.parent.name
+        external = [u for u in parse(page).loaded if is_external(u)]
+        assert external == [], page.parent.name
+        assert '<script src="../../game.js" defer></script>' in text

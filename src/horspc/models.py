@@ -24,6 +24,7 @@ from pydantic import (
 Platform = Literal["ps5", "switch", "switch2"]
 PcStatus = Literal["none", "announced", "released"]
 PcStatusSource = Literal["igdb", "manual"]
+SummarySource = Literal["igdb", "manual"]
 ReleaseDateSource = Literal["igdb", "manual"]
 OfferFormat = Literal["physical", "digital"]
 Condition = Literal["new"]
@@ -173,6 +174,7 @@ class GameEntry(_Input):
     launch_price_source: HttpUrl | None = None
     pc_override: PcOverride | None = None
     release_date_override: ReleaseDateOverride | None = None
+    description_fr: str | None = Field(default=None, min_length=1)
 
     @field_validator("platforms")
     @classmethod
@@ -277,6 +279,11 @@ class OfferOut(_Output):
     stale: bool
 
 
+class ScreenshotOut(_Output):
+    image_id: str = Field(min_length=1)
+    url: str = Field(pattern=r"^screens/[a-z0-9-]+/[A-Za-z0-9_-]+\.webp$")
+
+
 class GameOut(_Output):
     slug: Slug
     title: str
@@ -291,12 +298,27 @@ class GameOut(_Output):
     cover_image_id: str | None = Field(min_length=1)
     pc_status: PcStatus
     pc_status_source: PcStatusSource
+    developers: list[str]
+    publishers: list[str]
+    summary: str | None
+    summary_source: SummarySource | None
+    screenshots: list[ScreenshotOut] = Field(max_length=4)
+    trailer_youtube_id: str | None = Field(pattern=r"^[A-Za-z0-9_-]{11}$")
     offer: OfferOut | None
 
     @model_validator(mode="after")
     def _release_source(self) -> "GameOut":
         if (self.release_date is None) != (self.release_date_source is None):
             raise ValueError("release_date_source est null si et seulement si release_date l'est")
+        return self
+
+    @model_validator(mode="after")
+    def _summary_and_screens(self) -> "GameOut":
+        if (self.summary is None) != (self.summary_source is None):
+            raise ValueError("summary_source est null si et seulement si summary l'est")
+        for shot in self.screenshots:
+            if shot.url != f"screens/{self.slug}/{shot.image_id}.webp":
+                raise ValueError(f"url de capture inattendue : {shot.url}")
         return self
 
     @model_validator(mode="after")
@@ -308,9 +330,9 @@ class GameOut(_Output):
 
 
 class DataFile(_Output):
-    """Contenu de site/data.json (schéma v3)."""
+    """Contenu de site/data.json (schéma v4)."""
 
-    schema_version: Literal[3] = 3
+    schema_version: Literal[4] = 4
     generated_at: UtcDatetime
     currency: Literal["EUR"] = "EUR"
     games: list[GameOut]

@@ -153,6 +153,12 @@ def game(slug: str, **kw: Any) -> dict[str, Any]:
         "cover_image_id": None,
         "pc_status": "none",
         "pc_status_source": "igdb",
+        "developers": [],
+        "publishers": [],
+        "summary": None,
+        "summary_source": None,
+        "screenshots": [],
+        "trailer_youtube_id": None,
         "offer": None,
     } | kw
 
@@ -304,3 +310,53 @@ def test_external_links_unitaire() -> None:
     assert '<a href="mailto:a@b.fr">a@b.fr</a>' in out
     assert '<a href="faq.html">FAQ</a>' in out
     assert 'aria-label="GitHub (nouvel onglet)"' in out
+
+
+# --- Page de jeu enrichie -------------------------------------------------------------------
+
+
+def rich(**kw: Any) -> dict[str, Any]:
+    return game(
+        "riche",
+        developers=["Team Asobi"],
+        publishers=["Sony Interactive Entertainment"],
+        summary="First line.\nSecond line.",
+        summary_source="igdb",
+        screenshots=[
+            {"image_id": "scaaa1", "url": "screens/riche/scaaa1.webp"},
+            {"image_id": "scaaa2", "url": "screens/riche/scaaa2.webp"},
+        ],
+        trailer_youtube_id="wHMNQzLG_Jg",
+        **kw,
+    )
+
+
+def test_page_jeu_enrichie(site: Path) -> None:
+    render(site, [rich()])
+    text = (site / GAMES_DIR / "riche" / "index.html").read_text(encoding="utf-8")
+    assert "<dt>Studio</dt><dd>Team Asobi</dd>" in text
+    assert "<dt>Éditeur</dt><dd>Sony Interactive Entertainment</dd>" in text
+    assert '<div lang="en"><p>First line.</p><p>Second line.</p></div>' in text
+    assert "Résumé IGDB (en anglais)" in text
+    assert text.count('loading="lazy" decoding="async" alt="Capture de') == 2
+    assert 'src="../../screens/riche/scaaa1.webp" width="940" height="529"' in text
+    assert 'data-youtube-id="wHMNQzLG_Jg"' in text
+    assert "La lecture charge YouTube (Google), qui peut déposer des cookies." in text
+    assert "<iframe" not in text
+    (data,) = jsonld(text)
+    assert data["author"] == [{"@type": "Organization", "name": "Team Asobi"}]
+    assert data["publisher"][0]["name"] == "Sony Interactive Entertainment"
+    assert data["description"] == "First line.\nSecond line."
+
+
+def test_description_fr_sans_mention_igdb(site: Path) -> None:
+    render(site, [rich() | {"summary": "Résumé en français.", "summary_source": "manual"}])
+    text = (site / GAMES_DIR / "riche" / "index.html").read_text(encoding="utf-8")
+    assert "<p>Résumé en français.</p>" in text
+    assert "Résumé IGDB" not in text and 'lang="en"' not in text.split("<main", 1)[1]
+
+
+def test_capture_hors_dossier_du_jeu_refusee() -> None:
+    bad = rich() | {"screenshots": [{"image_id": "x", "url": "screens/autre/x.webp"}]}
+    with pytest.raises(ValueError, match="capture"):
+        DataFile.model_validate({"generated_at": NOW, "games": [bad]})

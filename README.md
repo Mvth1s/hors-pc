@@ -125,13 +125,13 @@ Sont refusés à la validation, avec un message explicite : les marketplaces (`r
 
 `discount_pct` = `round(100 × (1 − price / launch_price))`, port exclu ; `null` sans prix de lancement. Le badge n'est affiché que si la réduction est positive.
 
-## Schéma de `site/data.json` (v3)
+## Schéma de `site/data.json` (v4)
 
 Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le formatage (`53,30 €`, `JJ/MM/AAAA`) est fait par le front. Le modèle de référence est `DataFile` dans `src/horspc/models.py`.
 
 ```json
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "generated_at": "2026-10-26T06:17:42Z",
   "currency": "EUR",
   "games": [
@@ -149,6 +149,12 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
       "cover_image_id": "coba3k",
       "pc_status": "none",
       "pc_status_source": "igdb",
+      "developers": ["Team Asobi"],
+      "publishers": ["Sony Interactive Entertainment"],
+      "summary": "Buckle up for some epic PlayStation camaraderie…",
+      "summary_source": "igdb",
+      "screenshots": [{"image_id": "scsiqf", "url": "screens/astro-bot/scsiqf.webp"}],
+      "trailer_youtube_id": "wHMNQzLG_Jg",
       "offer": {
         "price_cents": 5330,
         "shipping_cents": null,
@@ -225,6 +231,8 @@ Le build (complet ou `--offline`) écrit le catalogue en HTML : le site est **en
 
 - `index.html` reste le gabarit : le build ne remplace que les zones `<!--horspc:head-->`, `updated`, `count` et `grid`. Les pages racine reçoivent leur zone `head` et la date du catalogue dans le pied de page.
 - Une page par jeu : `site/jeux/<slug>/index.html` (titre, plateformes, date, statut PC, offre retenue et date de relevé, jaquette, lien vers le catalogue), construite sur le gabarit des pages légales. Les pages des jeux retirés sont supprimées.
+- Page de jeu enrichie au build complet depuis IGDB : studio(s) et éditeur(s) (`involved_companies`), résumé (`summary`, affiché en anglais avec la mention « Résumé IGDB (en anglais) », ou `description_fr` de `games.yaml` s'il est renseigné), jusqu'à 4 captures officielles (`t_screenshot_big`, WebP dans `site/screens/<slug>/<image_id>.webp`, retéléchargées seulement si l'`image_id` change, réutilisées hors ligne) et la bande-annonce (première vidéo IGDB dont le nom contient « trailer »). La bande-annonce est une façade (image + bouton, `game.js`) : l'iframe `youtube-nocookie.com` n'est créée qu'au clic, aucune requête vers YouTube avant (test Playwright). `data.json` passe en `schema_version` 4 (`developers`, `publishers`, `summary`, `summary_source`, `screenshots`, `trailer_youtube_id`).
+- Cartes du catalogue entièrement cliquables (lien du titre étendu à toute la carte, « Voir l'offre » reste au-dessus), légère élévation au survol et au focus, désactivée avec `prefers-reduced-motion`.
 - Sur chaque page : `<link rel="canonical">` absolu, meta description, Open Graph et Twitter card (jaquette, ou `site/og-image.png` en 1200 × 630), `lang="fr"`, un seul `h1`.
 - JSON-LD : `WebSite`, `Person` et `ItemList` sur l'accueil ; `VideoGame` sur chaque page de jeu, avec une `Offer` (prix, EUR, `priceValidUntil` = date du relevé + 30 jours, `InStock`, `NewCondition`) seulement si l'offre n'est pas `stale` : au-delà de 30 jours, le prix n'est plus garanti et n'est plus publié. Le stock n'est pas suivi : `InStock` signifie « offre disponible au moment du relevé ».
 - `site/sitemap.xml` : accueil, pages racine et pages de jeux. `lastmod` réel : date du catalogue pour l'accueil, date « Dernière mise à jour » affichée pour les pages statiques, et pour une page de jeu la date du build où son contenu (`<main>`) a changé pour la dernière fois.

@@ -20,6 +20,12 @@ SITE_URL = "https://mvth1s.github.io/hors-pc/"
 OG_IMAGE = "og-image.png"  # 1200 x 630, image de partage générique
 OG_IMAGE_SIZE = (1200, 630)
 COVER_SIZE = (264, 352)  # t_cover_big IGDB
+SCREEN_SIZE = (940, 529)  # t_screenshot_big IGDB (dimensions constatées des fichiers servis)
+PLAY_ICON = (
+    '<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+    '<path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/>'
+    "</svg>"
+)
 GAMES_DIR = "jeux"
 AUTHOR = {
     "@type": "Person",
@@ -389,12 +395,21 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
         + _social(title, description, url, cover, "website")
         + "\n"
         + _jsonld(_videogame(game, url))
+        + '\n<script src="../../game.js" defer></script>'
     )
     facts = [
         ("Plateformes", platforms),
         ("Sortie", _fr(game.release_date) if game.release_date else "inconnue"),
         ("Statut PC", label),
     ]
+    if game.developers:
+        facts.append(
+            ("Studio" + ("s" if len(game.developers) > 1 else ""), _e(", ".join(game.developers)))
+        )
+    if game.publishers:
+        facts.append(
+            ("Éditeur" + ("s" if len(game.publishers) > 1 else ""), _e(", ".join(game.publishers)))
+        )
     if game.launch_price_cents:
         facts.append(("Prix de lancement", _euros(game.launch_price_cents)))
     if game.igdb_url:
@@ -418,10 +433,74 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
     <p><a class="back" href="../../">← Retour au catalogue</a></p>
   </div>
 </article>
-</main>"""
+{_summary_section(game)}{_trailer_section(game)}{_gallery_section(game)}</main>"""
     page = template.replace("<!--horspc:game-head-->", head)
     page = page.replace("<!--horspc:game-main-->", main)
     return _set_footer_date(page, generated)
+
+
+def _summary_section(game: GameOut) -> str:
+    if not game.summary:
+        return ""
+    paragraphs = "".join(f"<p>{_e(p.strip())}</p>" for p in game.summary.split("\n") if p.strip())
+    if game.summary_source == "igdb":
+        body = f'<div lang="en">{paragraphs}</div><p class="game-note">Résumé IGDB (en anglais)</p>'
+    else:
+        body = paragraphs
+    return (
+        '<section class="game-section" aria-labelledby="resume">'
+        f'<h2 id="resume">Résumé</h2>{body}</section>\n'
+    )
+
+
+def _trailer_section(game: GameOut) -> str:
+    """Façade : image et bouton ; l'iframe youtube-nocookie.com n'est créée qu'au clic."""
+    if not game.trailer_youtube_id:
+        return ""
+    if game.screenshots:
+        poster = f"../../{game.screenshots[0].url}"
+        width, height = SCREEN_SIZE
+    elif game.cover_url:
+        poster = f"../../{game.cover_url}"
+        width, height = COVER_SIZE
+    else:
+        poster = None
+    image = (
+        f'<img src="{_a(poster)}" width="{width}" height="{height}" loading="lazy" '
+        'decoding="async" alt="">'
+        if poster
+        else ""
+    )
+    video = game.trailer_youtube_id
+    return (
+        '<section class="game-section" aria-labelledby="bande-annonce">'
+        '<h2 id="bande-annonce">Bande-annonce</h2>'
+        f'<div class="trailer" data-youtube-id="{_a(video)}" data-title="{_a(game.title)}">'
+        f"{image}"
+        f'<button type="button" class="trailer-play" aria-label="Lire la bande-annonce de '
+        f'{_a(game.title)} (charge YouTube)">{PLAY_ICON}</button>'
+        "</div>"
+        '<p class="game-note">La lecture charge YouTube (Google), qui peut déposer des cookies.</p>'
+        f'<noscript><p><a href="https://www.youtube.com/watch?v={_a(video)}">'
+        "Voir la bande-annonce sur YouTube</a></p></noscript>"
+        "</section>\n"
+    )
+
+
+def _gallery_section(game: GameOut) -> str:
+    if not game.screenshots:
+        return ""
+    width, height = SCREEN_SIZE
+    figures = "".join(
+        f'<figure><img src="../../{_a(shot.url)}" width="{width}" height="{height}" '
+        f'loading="lazy" decoding="async" alt="Capture de {_a(game.title)} ({i})"></figure>'
+        for i, shot in enumerate(game.screenshots, 1)
+    )
+    return (
+        '<section class="game-section" aria-labelledby="captures">'
+        f'<h2 id="captures">Captures</h2><div class="gallery">{figures}</div>'
+        '<p class="game-note">Captures officielles via IGDB.com.</p></section>\n'
+    )
 
 
 def _videogame(game: GameOut, url: str) -> dict[str, Any]:
@@ -438,6 +517,12 @@ def _videogame(game: GameOut, url: str) -> dict[str, Any]:
         data["datePublished"] = game.release_date.isoformat()
     if game.igdb_url:
         data["sameAs"] = str(game.igdb_url)
+    if game.summary:
+        data["description"] = game.summary
+    if game.developers:
+        data["author"] = [{"@type": "Organization", "name": n} for n in game.developers]
+    if game.publishers:
+        data["publisher"] = [{"@type": "Organization", "name": n} for n in game.publishers]
     offer = game.offer
     # Une offre non vérifiée depuis 30 jours n'est plus publiée : son prix n'est plus garanti.
     if offer and not offer.stale:

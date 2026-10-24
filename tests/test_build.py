@@ -68,7 +68,7 @@ ASTRO = IgdbGame(255340, "https://www.igdb.com/games/astro-bot", date(2024, 9, 6
 def test_schema_complet_et_offre() -> None:
     data = make(catalog(), {"astro-bot": ASTRO, "saros": None})
     dumped = data.model_dump(mode="json")
-    assert dumped["schema_version"] == 3
+    assert dumped["schema_version"] == 4
     assert dumped["generated_at"] == "2026-10-26T06:17:42Z"
     assert dumped["currency"] == "EUR"
     astro = dumped["games"][0]
@@ -341,7 +341,7 @@ def test_release_date_manuelle_precedente_non_reprise() -> None:
     assert (saros.release_date, saros.release_date_source) == (None, None)
 
 
-@pytest.mark.parametrize("version", [2, None, 4])
+@pytest.mark.parametrize("version", [3, None, 5])
 def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: int | None) -> None:
     raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
     if version is None:
@@ -349,7 +349,7 @@ def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: 
     else:
         raw["schema_version"] = version
     (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
-    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 3 attendu"):
+    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 4 attendu"):
         run(workdir, None)
 
 
@@ -371,7 +371,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
         ]
     )
     assert code == 1
-    assert "schema_version 2, 3 attendu" in capsys.readouterr().err
+    assert "schema_version 2, 4 attendu" in capsys.readouterr().err
     assert (workdir / "data.json").read_bytes() == before
 
 
@@ -380,7 +380,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
     [
         ("{pas du json", "n'est pas un JSON valide"),
         (
-            '{"schema_version": 3, "generated_at": "hier", "currency": "EUR", "games": []}',
+            '{"schema_version": 4, "generated_at": "hier", "currency": "EUR", "games": []}',
             "refusé par le modèle",
         ),
     ],
@@ -396,3 +396,18 @@ def test_data_json_precedent_mal_forme_refuse(workdir: Path, content: str, messa
 def test_enseignes_sans_prix_national_refusees(merchant: str) -> None:
     with pytest.raises(ValidationError, match="marchand inconnu"):
         catalog(observations=[OBSERVATION | {"merchant": merchant}])
+
+
+def test_description_fr_prioritaire_sur_le_resume_igdb() -> None:
+    from horspc.igdb import IgdbGame
+
+    info = IgdbGame(
+        255340, None, None, "none", summary="English summary", developers=("Team Asobi",)
+    )
+    games = [GAMES[0] | {"description_fr": "Résumé français."}]
+    data = make(catalog(games, observations=[]), {"astro-bot": info})
+    astro = data.games[0]
+    assert (astro.summary, astro.summary_source) == ("Résumé français.", "manual")
+    assert astro.developers == ["Team Asobi"]
+    data = make(catalog(observations=[]), {"astro-bot": info, "saros": None})
+    assert (data.games[0].summary, data.games[0].summary_source) == ("English summary", "igdb")

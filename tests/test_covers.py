@@ -81,7 +81,7 @@ def test_premier_build_telecharge_en_webp(workdir: Path, http: HttpClient, api) 
     route = api.get(ASTRO_URL).respond(content=WEBP, headers={"Content-Type": "image/webp"})
     data = full_build(workdir, http)
     astro, saros = data["games"]
-    assert data["schema_version"] == 3
+    assert data["schema_version"] == 4
     assert (astro["cover_url"], astro["cover_image_id"]) == ("covers/astro-bot.webp", "coba3k")
     assert (saros["cover_url"], saros["cover_image_id"]) == (None, None)
     assert cover_file(workdir).read_bytes() == WEBP
@@ -195,3 +195,24 @@ def test_cover_url_coherente_avec_l_image_id() -> None:
 
 def test_fixture_previous_valide() -> None:
     DataFile.model_validate_json((FIXTURES / "data_previous.json").read_bytes())
+
+
+# --- Captures d'écran ------------------------------------------------------------------------
+
+
+def test_captures_seulement_les_nouvelles(tmp_path: Path, http: HttpClient) -> None:
+    from horspc.covers import SCREEN_URL, apply_screens, fetch_screens
+
+    shots = tmp_path / "screens" / "astro-bot"
+    shots.mkdir(parents=True)
+    (shots / "ancienne.webp").write_bytes(OLD_WEBP)
+    (shots / "gardee.webp").write_bytes(OLD_WEBP)
+    with respx.mock:
+        new = respx.get(SCREEN_URL.format(image_id="nouvelle")).respond(content=WEBP)
+        kept = respx.get(SCREEN_URL.format(image_id="gardee")).respond(content=WEBP)
+        update = fetch_screens(http, tmp_path, "astro-bot", ["gardee", "nouvelle"])
+    assert update.image_ids == ("gardee", "nouvelle")
+    assert (new.call_count, kept.call_count) == (1, 0)
+    apply_screens(tmp_path, [update])
+    assert sorted(p.name for p in shots.iterdir()) == ["gardee.webp", "nouvelle.webp"]
+    assert (shots / "gardee.webp").read_bytes() == OLD_WEBP
