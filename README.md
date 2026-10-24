@@ -74,6 +74,8 @@ Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot →
 
 Ajouter une observation à `data/prices.manual.yaml`. Les anciennes observations restent : elles forment l'historique.
 
+`uv run python -m horspc stale` liste les jeux à relever : sans aucun relevé, ou dont l'offre retenue est `stale` (aucun relevé de moins de 30 jours). Ils sont triés du plus ancien dernier relevé au plus récent (sans relevé en tête), avec la date et l'URL du dernier relevé et le dernier relevé de chaque marchand.
+
 ```yaml
 - slug: astro-bot
   price: 53.30              # € TTC, article seul
