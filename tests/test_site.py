@@ -94,3 +94,11 @@ def test_contact_encode_en_entites() -> None:
     assert "mag.d3v+github@pm.me" in html.unescape(text)
     assert "mailto:mag.d3v+github@pm.me" in html.unescape(text)
     assert "https://support.github.com/contact" in text
+
+
+@pytest.mark.parametrize("page", PAGES, ids=lambda p: p.name)
+def test_favicons_lies_et_presents(page: Path) -> None:
+    text = page.read_text(encoding="utf-8")
+    for name in ("favicon.svg", "favicon-32.png", "apple-touch-icon.png"):
+        assert f'href="{name}"' in text
+        assert (SITE / name).is_file()
