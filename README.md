@@ -105,10 +105,12 @@ Marchands admis (`MERCHANTS` dans `src/horspc/models.py`), le domaine de `url` d
 
 | Format | Identifiants |
 |---|---|
-| physical | `amazon`, `cdiscount` (ecommerce) ; `fnac`, `darty`, `boulanger`, `cultura` (culture_tech) ; `micromania` (specialiste) ; `leclerc`, `auchan`, `carrefour`, `intermarche` (intermarche.com), `superu` (coursesu.com) (grande_distribution) |
-| digital (officiel uniquement) | `playstation-store`, `nintendo-eshop` (ecommerce) |
+| physical | `amazon`, `cdiscount` (ecommerce) ; `fnac`, `darty`, `boulanger`, `cultura` (culture_tech) ; `micromania` (specialiste) ; `leclerc`, `auchan` (grande_distribution) |
+| digital (officiel uniquement) | `playstation-store`, `nintendo-eshop` (store_officiel) |
 
-Chaque marchand a une `category` (`grande_distribution`, `specialiste`, `culture_tech`, `ecommerce`). Lidl n'est pas admis : aucune fiche de jeu PS5/Switch trouvée sur lidl.fr.
+Chaque marchand a une `category` (`grande_distribution`, `specialiste`, `culture_tech`, `ecommerce`, `store_officiel`).
+
+**Règle : un relevé n'est valable que si le prix est accessible partout en France en livraison à domicile** (pas de prix de drive, de retrait ou de magasin). Enseignes écartées : Intermarché et Super U (prix du magasin choisi, livraison selon le magasin), Carrefour (aucune fiche de jeu vendue par Carrefour lui-même trouvée), Lidl (pas de jeux PS5/Switch en ligne).
 
 Sont refusés à la validation, avec un message explicite : les marketplaces (`rakuten`, `ebay`), les revendeurs de clés (Instant Gaming, Eneba, G2A, Kinguin, CDKeys, Gamivo, K4G, HRK, etc.), toute observation avec `sold_by_merchant: false`, un marchand inconnu, une URL hors du domaine du marchand, et une date future.
 

@@ -390,3 +390,9 @@ def test_data_json_precedent_mal_forme_refuse(workdir: Path, content: str, messa
     with pytest.raises(build.PreviousDataError, match=message):
         run(workdir, None)
     assert (workdir / "data.json").read_text(encoding="utf-8") == content
+
+
+@pytest.mark.parametrize("merchant", ["carrefour", "intermarche", "superu", "lidl"])
+def test_enseignes_sans_prix_national_refusees(merchant: str) -> None:
+    with pytest.raises(ValidationError, match="marchand inconnu"):
+        catalog(observations=[OBSERVATION | {"merchant": merchant}])

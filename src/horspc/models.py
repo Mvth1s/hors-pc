@@ -28,7 +28,9 @@ ReleaseDateSource = Literal["igdb", "manual"]
 OfferFormat = Literal["physical", "digital"]
 Condition = Literal["new"]
 
-MerchantCategory = Literal["grande_distribution", "specialiste", "culture_tech", "ecommerce"]
+MerchantCategory = Literal[
+    "grande_distribution", "specialiste", "culture_tech", "ecommerce", "store_officiel"
+]
 Slug = Annotated[str, Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$")]
 Euros = Annotated[Decimal, Field(gt=0, max_digits=7, decimal_places=2)]
 EurosOrZero = Annotated[Decimal, Field(ge=0, max_digits=7, decimal_places=2)]
@@ -69,7 +71,11 @@ def _host_matches(host: str, domains: tuple[str, ...]) -> bool:
 
 @dataclass(frozen=True)
 class Merchant:
-    """Enseigne autorisée : nom affiché, domaines acceptés, formats vendus et catégorie."""
+    """Enseigne autorisée : nom affiché, domaines acceptés, formats vendus et catégorie.
+
+    N'y figurent que des enseignes dont le prix en ligne est national et livrable à domicile
+    partout en France (pas de prix de drive ou de magasin).
+    """
 
     name: str
     domains: tuple[str, ...]
@@ -90,15 +96,13 @@ MERCHANTS: dict[str, Merchant] = {
     "micromania": Merchant("Micromania", ("micromania.fr",), _PHYSICAL, "specialiste"),
     "leclerc": Merchant("E.Leclerc", ("e.leclerc",), _PHYSICAL, "grande_distribution"),
     "auchan": Merchant("Auchan", ("auchan.fr",), _PHYSICAL, "grande_distribution"),
-    "carrefour": Merchant("Carrefour", ("carrefour.fr",), _PHYSICAL, "grande_distribution"),
-    "intermarche": Merchant("Intermarché", ("intermarche.com",), _PHYSICAL, "grande_distribution"),
-    "superu": Merchant("Super U", ("coursesu.com",), _PHYSICAL, "grande_distribution"),
-    # Boutiques officielles de démat, rangées en e-commerce faute de catégorie dédiée.
+    # Écartés : Intermarché et Super U (prix du magasin choisi, livraison selon le magasin),
+    # Carrefour (aucune fiche de jeu vendue par Carrefour trouvée), Lidl (pas de jeux en ligne).
     "playstation-store": Merchant(
-        "PlayStation Store", ("store.playstation.com",), _DIGITAL, "ecommerce"
+        "PlayStation Store", ("store.playstation.com",), _DIGITAL, "store_officiel"
     ),
     "nintendo-eshop": Merchant(
-        "Nintendo eShop", ("nintendo.com", "nintendo.fr"), _DIGITAL, "ecommerce"
+        "Nintendo eShop", ("nintendo.com", "nintendo.fr"), _DIGITAL, "store_officiel"
     ),
 }
 

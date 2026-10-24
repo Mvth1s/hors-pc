@@ -1,6 +1,10 @@
 # Relevés de prix manuels. Plusieurs observations par slug sont permises :
 # elles forment l'historique, et le build choisit la meilleure (cf. README).
 #
+# Règle : un relevé n'est valable que si le prix est accessible partout en France en
+# livraison à domicile. Pas de prix de drive, de retrait ou de magasin (ils varient selon
+# le point de vente), et uniquement des offres vendues par l'enseigne elle-même.
+#
 # Champs (tous obligatoires) :
 #   slug              slug existant dans games.yaml
 #   price             prix de l'article en € TTC, hors frais de port
