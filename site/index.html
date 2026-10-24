@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HorsPC, les exclus console jamais sorties sur PC</title>
+<meta name="description" content="Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix en France.">
+<link rel="preload" href="fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body class="hp">
+<script>
+  // Thème appliqué avant le premier rendu pour éviter un flash.
+  try { var t = localStorage.getItem("horspc-theme"); if (t === "light" || t === "dark") document.body.classList.add(t); } catch (e) {}
+</script>
+<header class="top">
+  <div class="wrap">
+    <div class="top-inner">
+      <div class="brand">
+        <h1 class="logo">Hors<span class="logo-pc">PC</span></h1>
+        <p class="tagline">Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix.</p>
+        <p class="updated" id="updated" hidden><span class="live" id="live"></span><span>Catalogue mis à jour le <strong id="updated-date"></strong></span></p>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" type="button" id="theme-toggle" aria-label="Passer en thème sombre">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="stale" role="status" id="stale-banner" hidden>
+  <div class="wrap">
+    <div class="stale-inner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4M12 17h.01"></path></svg>
+      <p id="stale-text"></p>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="toolbar">
+    <div class="group" role="group" aria-labelledby="lbl-console">
+      <span class="group-label" id="lbl-console">Console</span>
+      <div class="chips" id="platform-chips">
+        <button class="chip" type="button" data-platform="all" aria-pressed="true"><span>Toutes</span></button>
+        <button class="chip" type="button" data-platform="ps5" aria-pressed="false"><span class="cdot ps"></span><span>PS5</span></button>
+        <button class="chip" type="button" data-platform="switch" aria-pressed="false"><span class="cdot nin"></span><span>Switch</span></button>
+        <button class="chip" type="button" data-platform="switch2" aria-pressed="false"><span class="cdot nin"></span><span>Switch 2</span></button>
+      </div>
+    </div>
+    <div class="group" role="group" aria-labelledby="lbl-status">
+      <span class="group-label" id="lbl-status">Statut PC</span>
+      <div class="chips" id="status-chips">
+        <button class="chip" type="button" data-status="all" aria-pressed="true">Tous</button>
+        <button class="chip" type="button" data-status="none" aria-pressed="false">Exclusif</button>
+        <button class="chip" type="button" data-status="announced" aria-pressed="false">Portage annoncé</button>
+      </div>
+    </div>
+    <div class="toolbar-end">
+      <div class="group">
+        <label class="group-label" for="sort">Trier par</label>
+        <div class="select-box">
+          <select id="sort">
+            <option value="price">Prix le plus bas</option>
+            <option value="discount">Plus grosse réduction</option>
+            <option value="release">Sortie la plus récente</option>
+          </select>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="results">
+    <span aria-live="polite"><strong id="count">…</strong> sans version PC</span>
+    <span>Prix TTC, en euros</span>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Prix TTC relevés manuellement chez des marchands français. HorsPC n'est affilié à aucun constructeur, éditeur ni marchand et ne touche aucune commission ; les noms de jeux et de consoles appartiennent à leurs propriétaires.</p>
+    <p>Dates de sortie et statut PC : données fournies par <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>.</p>
+  </div>
+</footer>
+</body>
+</html>
