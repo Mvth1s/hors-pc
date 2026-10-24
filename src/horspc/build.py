@@ -15,7 +15,8 @@ from horspc import covers, render
 from horspc.http import HttpClient
 from horspc.igdb import IgdbClient, IgdbError, IgdbGame
 from horspc.models import Catalog, DataFile, GameOut, to_cents
-from horspc.prices import ManualPriceProvider, Offer, PriceProvider
+from horspc.prices import ManualPriceProvider, Offer, PriceProvider, scraper
+from horspc.prices.fetch import Fetcher
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +24,9 @@ ROOT = Path(__file__).resolve().parents[2]
 GAMES_PATH = ROOT / "data" / "games.yaml"
 PRICES_PATH = ROOT / "data" / "prices.manual.yaml"
 OUTPUT_PATH = ROOT / "site" / "data.json"
+SCRAPED_PATH = ROOT / "data" / "prices.scraped.jsonl"
+DISCOVERED_PATH = ROOT / "data" / "discovered.json"
+SOURCES_PATH = ROOT / "data" / "sources.config.yaml"
 
 
 def load_catalog(games_path: Path, prices_path: Path, now: datetime) -> Catalog:
@@ -132,12 +136,19 @@ def run(
     output_path: Path = OUTPUT_PATH,
     http: HttpClient | None = None,
     render_html: bool = True,
+    fetcher: Fetcher | None = None,
+    scraped_path: Path = SCRAPED_PATH,
+    discovered_path: Path = DISCOVERED_PATH,
+    sources_path: Path = SOURCES_PATH,
+    report_path: Path | None = None,
 ) -> DataFile:
     """Build complet.
 
     Les jaquettes sont téléchargées avec `http` (build complet uniquement) et écrites dans
-    site/covers/ seulement après data.json. Lève ValidationError si les entrées ou la sortie
-    sont invalides, PreviousDataError si le data.json précédent est mal formé.
+    site/covers/ seulement après data.json. Avec `fetcher`, les prix sont relevés sur les
+    sources activées ; sinon seul l'historique de prices.scraped.jsonl est lu. Lève
+    ValidationError si les entrées ou la sortie sont invalides, PreviousDataError si le
+    data.json précédent est mal formé.
     """
     catalog = load_catalog(games_path, prices_path, now)
     previous_file = load_previous(output_path)
@@ -154,6 +165,20 @@ def run(
             igdb_results = igdb.fetch_games(catalog.games, now)
         except IgdbError as exc:
             log.warning("%s ; champs IGDB repris du data.json précédent", exc)
+    history = scraper.load_history(scraped_path)
+    discovered = None
+    report = None
+    if fetcher is not None:
+        names = {
+            slug: list(info.alternative_names)
+            for slug, info in (igdb_results or {}).items()
+            if info is not None
+        }
+        discovered = scraper.load_discovered(discovered_path)
+        bot = scraper.Scraper(scraper.load_config(sources_path), fetcher)
+        new, report = bot.run(catalog.games, names, discovered, now.date())
+        history += new
+        log.info("Relevé automatique : %d prix, sources bloquées : %s", report.ok, report.blocked)
     site_dir = output_path.parent
     updates = []
     screen_updates = []
@@ -174,7 +199,7 @@ def run(
             )
     data = build_data(
         catalog,
-        ManualPriceProvider(catalog.observations),
+        ManualPriceProvider(catalog.observations, history),
         igdb_results,
         previous,
         now,
@@ -183,6 +208,11 @@ def run(
         {u.slug: u.image_ids for u in screen_updates},
     )
     write_data(data, output_path)
+    if discovered is not None:
+        scraper.write_history(scraped_path, history)
+        scraper.write_discovered(discovered_path, discovered)
+    if report is not None and report_path is not None:
+        report_path.write_text(report.to_json() + "\n", encoding="utf-8")
     if igdb_results is not None and http is not None:
         # Hors ligne ou IGDB indisponible : les fichiers présents sont réutilisés tels quels.
         covers.apply_updates(site_dir, updates)
@@ -267,6 +297,7 @@ def _offer_fields(offer: Offer, launch_price_cents: int | None) -> dict[str, Any
         "format": offer.format,
         "condition": offer.condition,
         "merchant": offer.merchant,
+        "seller": offer.seller,
         "url": offer.url,
         "observed_at": offer.observed_at,
         "source": offer.source,

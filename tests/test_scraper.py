@@ -1,0 +1,437 @@
+"""Relevé automatique : fiches figées par enseigne, aucune requête réseau réelle."""
+
+import json
+from datetime import date
+from decimal import Decimal
+from pathlib import Path
+
+import httpx
+import pytest
+import respx
+
+from horspc.http import HttpClient
+from horspc.models import GameEntry, PriceObservation, ScrapedObservation
+from horspc.prices import ManualPriceProvider
+from horspc.prices import sources as src
+from horspc.prices.fetch import SERVER_ERRORS, Fetcher
+from horspc.prices.scraper import (
+    RETRY_DAYS,
+    Report,
+    Scraper,
+    load_history,
+    write_history,
+)
+from horspc.render import merchant_label
+from horspc.robots import RobotsCache
+from tests.conftest import FIXTURES, TODAY
+
+PAGES = FIXTURES / "sources"
+EAN_LECLERC = "0045496312336"  # même EAN chez Boulanger
+EAN_PIXMANIA = "0045496312329"
+LECLERC_FP = "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336"
+BOULANGER_REF = "https://www.boulanger.com/ref/1220885"
+PIXMANIA_FP = "https://www.pixmania.com/fr/fr/mario-kart-world-switch-2-397665.html"
+ALL = {"leclerc": True, "boulanger": True, "pixmania": True}
+MKW = GameEntry(slug="mario-kart-world", title="Mario Kart World", platforms=["switch2"])
+DATADOME = '<html><script src="https://geo.captcha-delivery.com/captcha/"></script></html>'
+
+
+def page(name: str) -> str:
+    return (PAGES / name).read_text(encoding="utf-8")
+
+
+def without_seller(html: str) -> str:
+    return html.replace('"seller"', '"vendeur"').replace("Vendu par", "Vendu")
+
+
+@pytest.fixture
+def fetcher():
+    http = HttpClient(sleep=lambda _: None, clock=lambda: 0.0, retry_statuses=SERVER_ERRORS)
+    yield Fetcher(http, RobotsCache(http))
+    http.close()
+
+
+def mock_robots(**overrides: str) -> None:
+    for host in ("www.e.leclerc", "www.boulanger.com", "www.pixmania.com", "feeds.pixmania.com"):
+        text = overrides.get(host, "User-agent: *\nDisallow: /panier\n")
+        respx.get(f"https://{host}/robots.txt").respond(text=text)
+
+
+def mock_sites(leclerc: str | None = None, boulanger: str | None = None) -> dict[str, respx.Route]:
+    routes = {
+        "listing": respx.route(host="www.boulanger.com", path="/c/jeu-switch").respond(
+            text=page("boulanger_listing.html")
+        ),
+        "boulanger": respx.get(BOULANGER_REF).respond(text=boulanger or page("boulanger.html")),
+        "collector": respx.get("https://www.boulanger.com/ref/1220999").respond(404),
+        "leclerc_ean": respx.get(src.leclerc_url(EAN_LECLERC)).respond(
+            301, headers={"Location": LECLERC_FP}
+        ),
+        "leclerc": respx.get(LECLERC_FP).respond(text=leclerc or page("leclerc.html")),
+        "leclerc_other": respx.get(src.leclerc_url(EAN_PIXMANIA)).respond(404),
+        "index": respx.get(src.PIXMANIA_SITEMAP).respond(text=page("pixmania_sitemap_index.xml")),
+        "products": respx.get(
+            "https://feeds.pixmania.com/sitemap/FR/sitemap-products-1.xml"
+        ).respond(text=page("pixmania_sitemap_products.xml")),
+        "pixmania": respx.get(PIXMANIA_FP).respond(text=page("pixmania.html")),
+    }
+    return routes
+
+
+def empty() -> dict:
+    return {"schema": 1, "games": {}}
+
+
+# --- Lecture des fiches ----------------------------------------------------------------------
+
+
+def test_fiches_figees_par_enseigne() -> None:
+    leclerc = src.parse_leclerc(page("leclerc.html"))
+    assert (leclerc.price, leclerc.seller, leclerc.eans) == (
+        Decimal("66.25"),
+        "E.Leclerc",
+        {EAN_LECLERC},
+    )
+    assert (leclerc.condition, leclerc.available, leclerc.currency) == ("new", True, "EUR")
+    boulanger = src.parse_boulanger(page("boulanger.html"))
+    assert (boulanger.price, boulanger.seller, boulanger.eans) == (
+        Decimal("89.99"),
+        "boulanger",
+        {EAN_LECLERC},
+    )
+    pixmania = src.parse_pixmania(page("pixmania.html"))
+    # Le JSON-LD nomme « Pixmania » ; le vrai vendeur est le marchand pro de la fiche.
+    assert (pixmania.price, pixmania.seller, pixmania.shipping) == (
+        Decimal("90.89"),
+        "ShopVite",
+        Decimal("0.00"),
+    )
+    assert pixmania.eans == {EAN_PIXMANIA}
+
+
+def test_json_ld_absent_signale_une_fiche_cassee() -> None:
+    with pytest.raises(src.MissingData):
+        src.parse_boulanger("<html><body>Plus de données structurées</body></html>")
+
+
+def test_page_categorie_boulanger_ecarte_le_reconditionne() -> None:
+    items = src.boulanger_listing(page("boulanger_listing.html"))
+    assert [(i.url, i.ean) for i in items] == [
+        (BOULANGER_REF, EAN_LECLERC),
+        ("https://www.boulanger.com/ref/1220999", "0045496313111"),
+    ]
+    assert items[0].name == "jeu switch 2 nintendo mario kart world"
+
+
+# --- Run complet -------------------------------------------------------------------------------
+
+
+@respx.mock
+def test_decouverte_puis_releve_sur_les_trois_sources(fetcher: Fetcher) -> None:
+    mock_robots()
+    routes = mock_sites()
+    discovered = empty()
+    observations, report = Scraper(ALL, fetcher).run([MKW], {}, discovered, TODAY)
+
+    entry = discovered["games"]["mario-kart-world"]
+    assert entry["eans"] == [EAN_PIXMANIA, EAN_LECLERC]  # un ensemble d'EAN par jeu
+    assert entry["sources"] == {
+        "boulanger": BOULANGER_REF,
+        "pixmania": PIXMANIA_FP,
+        "leclerc": LECLERC_FP,  # URL canonique après redirection
+    }
+    assert not routes["collector"].called  # l'édition collector ne correspond pas au titre
+    by_source = {o.merchant: o for o in observations}
+    assert by_source["leclerc"].price == Decimal("66.25")
+    assert by_source["boulanger"].seller == "boulanger"
+    assert (by_source["pixmania"].seller, by_source["pixmania"].ean) == ("ShopVite", EAN_PIXMANIA)
+    assert report.ok == 3 and not report.needs_attention
+
+
+@respx.mock
+def test_run_suivant_reutilise_le_cache_sans_rechercher(fetcher: Fetcher) -> None:
+    mock_robots()
+    routes = mock_sites()
+    discovered = empty()
+    Scraper(ALL, fetcher).run([MKW], {}, discovered, TODAY)
+    for route in routes.values():
+        route.reset()
+    Scraper(ALL, fetcher).run([MKW], {}, discovered, TODAY)
+    assert not routes["listing"].called and not routes["index"].called
+    assert routes["boulanger"].call_count == 1 and routes["pixmania"].call_count == 1
+
+
+@respx.mock
+def test_recherche_infructueuse_relancee_apres_quelques_jours(fetcher: Fetcher) -> None:
+    mock_robots()
+    routes = mock_sites()
+    other = GameEntry(slug="astro-bot", title="Astro Bot", platforms=["ps5"])
+    respx.route(host="www.boulanger.com", path="/c/jeu-playstation-5").respond(text="<html/>")
+    discovered = empty()
+    Scraper({"boulanger": True}, fetcher).run([other], {}, discovered, TODAY)
+    assert discovered["games"]["astro-bot"]["checked"] == {"boulanger": TODAY.isoformat()}
+
+    routes["listing"].reset()
+    fresh = Scraper({"boulanger": True}, fetcher)
+    fresh.run([other], {}, discovered, date.fromordinal(TODAY.toordinal() + 1))
+    assert fresh._listings == {}  # pas de nouvelle recherche le lendemain
+    fresh.run([other], {}, discovered, date.fromordinal(TODAY.toordinal() + RETRY_DAYS))
+    assert "/c/jeu-playstation-5" in fresh._listings
+
+
+@respx.mock
+def test_nom_alternatif_igdb_pour_la_correspondance(fetcher: Fetcher) -> None:
+    mock_robots()
+    mock_sites()
+    game = GameEntry(slug="mkw", title="Mario Kart Monde", platforms=["switch2"])
+    discovered = empty()
+    Scraper({"boulanger": True}, fetcher).run(
+        [game], {"mkw": ["Mario Kart World"]}, discovered, TODAY
+    )
+    assert discovered["games"]["mkw"]["sources"] == {"boulanger": BOULANGER_REF}
+
+
+@respx.mock
+def test_robots_interdit_le_chemin_aucune_requete(fetcher: Fetcher) -> None:
+    mock_robots(**{"www.boulanger.com": "User-agent: *\nDisallow: /c/\nDisallow: /ref/\n"})
+    routes = mock_sites()
+    discovered = empty()
+    _, report = Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert not routes["listing"].called
+    assert any(e["kind"] == "disallowed" and e["detail"] == "Disallow: /c/" for e in report.events)
+
+
+@respx.mock
+def test_robots_specifique_horspc_prioritaire(fetcher: Fetcher) -> None:
+    robots = "User-agent: *\nAllow: /\n\nUser-agent: HorsPC\nDisallow: /fp/\n"
+    mock_robots(**{"www.e.leclerc": robots})
+    routes = mock_sites()
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"leclerc": LECLERC_FP}, "checked": {}
+    }}}  # fmt: skip
+    observations, _ = Scraper({"leclerc": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert observations == [] and not routes["leclerc"].called
+
+
+@respx.mock
+def test_page_de_defi_bloque_la_source_pour_le_run(fetcher: Fetcher) -> None:
+    mock_robots()
+    routes = mock_sites(leclerc=DATADOME)
+    discovered = {"schema": 1, "games": {}}
+    games = [MKW, MKW.model_copy(update={"slug": "mkw-bis"})]
+    for slug in ("mario-kart-world", "mkw-bis"):
+        discovered["games"][slug] = {
+            "eans": [EAN_LECLERC],
+            "sources": {"leclerc": LECLERC_FP},
+            "checked": {},
+        }
+    observations, report = Scraper({"leclerc": True}, fetcher).run(games, {}, discovered, TODAY)
+    assert observations == []
+    assert report.blocked == {"leclerc": "page de défi (geo.captcha-delivery.com)"}
+    assert routes["leclerc"].call_count == 1  # plus aucune requête après le blocage
+    assert report.needs_attention
+
+
+@respx.mock
+def test_403_bloque_sans_nouvel_essai(fetcher: Fetcher) -> None:
+    mock_robots()
+    route = respx.get(BOULANGER_REF).respond(403)
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"boulanger": BOULANGER_REF}, "checked": {}
+    }}}  # fmt: skip
+    _, report = Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert route.call_count == 1
+    assert report.blocked == {"boulanger": "HTTP 403"}
+
+
+@respx.mock
+def test_5xx_nouvel_essai_puis_releve(fetcher: Fetcher) -> None:
+    mock_robots()
+    route = respx.get(BOULANGER_REF)
+    route.side_effect = [httpx.Response(503), httpx.Response(200, text=page("boulanger.html"))]
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"boulanger": BOULANGER_REF}, "checked": {}
+    }}}  # fmt: skip
+    observations, _ = Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert route.call_count == 2 and len(observations) == 1
+
+
+@respx.mock
+def test_json_ld_sans_vendeur_refuse(fetcher: Fetcher) -> None:
+    mock_robots()
+    mock_sites(leclerc=without_seller(page("leclerc.html")))
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"leclerc": LECLERC_FP}, "checked": {}
+    }}}  # fmt: skip
+    observations, report = Scraper({"leclerc": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert observations == []
+    assert ("rejected", "vendeur non identifié") in {
+        (e["kind"], e["detail"]) for e in report.events
+    }
+
+
+@respx.mock
+def test_json_ld_absent_remonte_dans_le_bilan(fetcher: Fetcher) -> None:
+    mock_robots()
+    mock_sites(boulanger="<html><body>Nouvelle maquette</body></html>")
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"boulanger": BOULANGER_REF}, "checked": {}
+    }}}  # fmt: skip
+    _, report = Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert report.broken == [f"boulanger : {BOULANGER_REF}"]
+    assert json.loads(report.to_json())["counts"] == {"broken": 1}
+
+
+@respx.mock
+def test_vendeur_tiers_refuse_hors_place_de_marche_pro(fetcher: Fetcher) -> None:
+    mock_robots()
+    third = page("boulanger.html").replace(
+        'data-analytics_product_seller="boulanger"', 'data-analytics_product_seller="GameShop"'
+    )
+    mock_sites(boulanger=third)
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"boulanger": BOULANGER_REF}, "checked": {}
+    }}}  # fmt: skip
+    observations, report = Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert observations == []
+    assert any("vendeur tiers (GameShop)" in e["detail"] for e in report.events)
+
+
+@respx.mock
+def test_autre_produit_derriere_l_url_refuse(fetcher: Fetcher) -> None:
+    mock_robots()
+    other = (
+        page("boulanger.html")
+        .replace(EAN_LECLERC, "0045496999999")
+        .replace("Mario Kart World", "Mario Kart World Edition Collector")
+    )
+    mock_sites(boulanger=other)
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"boulanger": BOULANGER_REF}, "checked": {}
+    }}}  # fmt: skip
+    observations, report = Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert observations == []
+    assert any(e["detail"].startswith("autre produit") for e in report.events)
+
+
+@respx.mock
+def test_fiche_retiree_rechercher_a_nouveau(fetcher: Fetcher) -> None:
+    mock_robots()
+    respx.get(BOULANGER_REF).respond(404)
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"boulanger": BOULANGER_REF},
+        "checked": {"boulanger": TODAY.isoformat()},
+    }}}  # fmt: skip
+    Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert discovered["games"]["mario-kart-world"]["sources"] == {}
+    assert discovered["games"]["mario-kart-world"]["checked"] == {}
+
+
+def test_source_desactivee_jamais_sollicitee(fetcher: Fetcher) -> None:
+    with respx.mock(assert_all_called=False) as mock:
+        observations, _ = Scraper({"leclerc": False}, fetcher).run([MKW], {}, empty(), TODAY)
+    assert observations == [] and not mock.calls
+
+
+# --- Historique et fusion ------------------------------------------------------------------------
+
+
+def scraped(**kw) -> ScrapedObservation:
+    base = {
+        "slug": "mario-kart-world",
+        "merchant": "leclerc",
+        "seller": "E.Leclerc",
+        "price": "66.25",
+        "shipping": None,
+        "format": "physical",
+        "condition": "new",
+        "url": LECLERC_FP,
+        "ean": EAN_LECLERC,
+        "observed_at": TODAY,
+    }
+    return ScrapedObservation.model_validate(base | kw)
+
+
+def test_historique_une_ligne_par_jeu_marchand_et_jour(tmp_path: Path) -> None:
+    path = tmp_path / "prices.scraped.jsonl"
+    write_history(
+        path, [scraped(price="70.00"), scraped(), scraped(observed_at=date(2026, 10, 19))]
+    )
+    lines = path.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 2
+    assert [o.price for o in load_history(path)] == [Decimal("66.25"), Decimal("66.25")]
+    assert json.loads(lines[1])["observed_at"] == "2026-10-26"
+
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        ({"url": "https://www.boulanger.com/ref/1"}, "ne correspond pas à la source"),
+        ({"seller": "Instant Gaming", "merchant": "pixmania", "url": PIXMANIA_FP}, "clés"),
+        ({"seller": "GameShop"}, "vendeur tiers"),
+    ],
+)
+def test_releve_automatique_soumis_a_la_regle_de_confiance(change: dict, message: str) -> None:
+    with pytest.raises(ValueError, match=message):
+        scraped(**change)
+
+
+def test_releve_manuel_prioritaire_meme_marchand_meme_jour() -> None:
+    manual = PriceObservation.model_validate(
+        {
+            "slug": "mario-kart-world",
+            "price": "69.99",
+            "shipping": None,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "leclerc",
+            "sold_by_merchant": True,
+            "url": LECLERC_FP,
+            "observed_at": TODAY,
+        },
+        context={"today": TODAY},
+    )
+    offer = ManualPriceProvider([manual], [scraped()]).get_best_offer(MKW, TODAY)
+    assert (offer.price_cents, offer.source) == (6999, "manual")
+    # Un autre jour, le relevé automatique moins cher l'emporte.
+    later = date.fromordinal(TODAY.toordinal() + 1)
+    offer = ManualPriceProvider([manual], [scraped(observed_at=later)]).get_best_offer(MKW, later)
+    assert (offer.price_cents, offer.source, offer.seller) == (6625, "scraped", None)
+
+
+def test_vendeur_de_place_de_marche_affiche() -> None:
+    obs = scraped(merchant="pixmania", seller="ShopVite", url=PIXMANIA_FP, price="90.89")
+    offer = ManualPriceProvider([], [obs]).get_best_offer(MKW, TODAY)
+    assert (offer.merchant, offer.seller) == ("Pixmania", "ShopVite")
+
+    class Out:
+        merchant = "Pixmania"
+        seller = "ShopVite"
+
+    assert merchant_label(Out()) == "ShopVite via Pixmania"
+
+
+def test_bilan_vide() -> None:
+    assert not Report().needs_attention
+
+
+@pytest.mark.parametrize(
+    ("raw", "ean"),
+    [
+        ("45496510732", "0045496510732"),  # zéros de tête perdus
+        ("045496510732", "0045496510732"),  # UPC-A
+        ("00045496510732", "0045496510732"),  # GTIN-14
+        ("0045496510732", "0045496510732"),
+        ("12345670", "12345670"),  # EAN-8
+    ],
+)
+def test_ean_normalise(raw: str, ean: str) -> None:
+    assert src.normalize_ean(raw) == ean
+
+
+@respx.mock
+def test_fiche_lue_une_seule_fois_par_run(fetcher: Fetcher) -> None:
+    mock_robots()
+    routes = mock_sites()
+    Scraper(ALL, fetcher).run([MKW], {}, empty(), TODAY)
+    assert routes["pixmania"].call_count == 1 and routes["boulanger"].call_count == 1

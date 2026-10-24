@@ -43,7 +43,13 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
 - **Données** : JSON-LD `Product` avec `gtin`, `Offer` (prix, `EUR`, `InStock`, `NewCondition`,
   `seller: E.Leclerc`) et `AggregateOffer` pour la place de marché.
 - **Découverte** : la recherche interne est interdite (L3), mais `/fp/<slug>-<EAN>` redirige vers la
-  fiche quel que soit le slug ; les sitemaps produits (82 fichiers) donnent titre et EAN dans l'URL.
+  fiche quel que soit le slug : la fiche s'ouvre par l'EAN (`/fp/x-<EAN>`).
+  **Correction (25/10/2026)** : une première version de ce document indiquait que les sitemaps
+  produits donnaient titre et EAN. C'est faux : les 78 sitemaps produits (environ 9 Mo chacun) ne
+  contiennent que des URL `/fp/<EAN>`, sans titre. Ils ne permettent donc pas de trouver un jeu par
+  son titre. L'EAN vient de Boulanger (pages catégories, EAN confirmé par le `gtin13` de la fiche)
+  ou de Pixmania (fiche trouvée par les sitemaps, `gtin13`), puis la fiche Leclerc est ouverte par
+  cet EAN et son `gtin13` est vérifié.
 
 ### Boulanger (`www.boulanger.com`) : retenu par interprétation
 
@@ -62,8 +68,11 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
 - **Réponse** : 200, fiche réelle.
 - **Données** : JSON-LD `Offer` (prix, `EUR`, disponibilité, état) et `gtin13` ; vendeur absent du
   JSON-LD mais affiché dans le HTML (« vendu par boulanger » ou vendeur de la place de marché).
-- **Découverte** : pages catégories `/c/...` rendues côté serveur (liens `/ref/` et noms), puis EAN
-  vérifié par le `gtin13` de la fiche.
+- **Découverte** : pages catégories `/c/jeu-playstation-5`, `/c/jeu-switch` (Switch et Switch 2) et
+  `/c/jeu-xbox-one` (Xbox, dont Series), paginées par `?numPage=N` (40 produits par page), rendues
+  côté serveur. Chaque carte donne le nom, l'éditeur, l'état (`neuf`, reconditionné…) et l'EAN
+  (dans l'URL de l'image `/Boulanger/<EAN>_h_f_l_…`), puis l'EAN est vérifié par le `gtin13` de la
+  fiche. C'est la source principale des EAN du catalogue.
 
 ### Pixmania (`www.pixmania.com`)
 

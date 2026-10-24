@@ -7,14 +7,19 @@ Catalogue web des exclusivités **PS5, Switch et Switch 2 jamais sorties sur PC*
 ```
 data/
   games.yaml            liste curée des jeux (source de vérité)
-  prices.manual.yaml    relevés de prix manuels (historique)
+  sources.config.yaml   sources de prix automatiques activées (enabled + motif)
+  prices.scraped.jsonl  relevés automatiques, une ligne par relevé (généré, versionné)
+  discovered.json       EAN et fiches trouvés par jeu et par source (généré, versionné)
+  prices.manual.yaml    corrections d'urgence (relevés manuels, prioritaires)
 src/horspc/
   __main__.py           CLI : uv run python -m horspc build [--offline]
   models.py             modèles Pydantic v2 (entrées YAML, sortie data.json, liste des marchands)
   http.py               client HTTP : User-Agent, timeouts, retries, 1 requête/s max par hôte
   igdb.py               client IGDB v4 : date de sortie, fiche IGDB, statut PC, id de jaquette
   covers.py             jaquettes IGDB téléchargées en WebP dans site/covers/
-  prices/               Protocol PriceProvider, provider manuel, règle de sélection
+  robots.py             robots.txt (RFC 9309 : jokers * et $, règle la plus longue)
+  prices/               relevé automatique (fetch, sources, matching, scraper), règle de
+                        plateforme de confiance (trust), provider et règle de sélection
   build.py              fusion, validation, écriture de site/data.json
   render.py             rendu statique : fiches dans index.html, pages de jeux, SEO, sitemap.xml
 site/                   index.html, mentions-legales.html, confidentialite.html, methodologie.html,
@@ -25,7 +30,7 @@ docs/maquette/          maquette de référence du front (non publiée)
 .github/workflows/      ci.yml (ruff + pytest), update.yml (build hebdo + Pages)
 ```
 
-Flux de données : `games.yaml` + `prices.manual.yaml` + IGDB → `build.py` → validation Pydantic → `site/data.json` → `app.js`.
+Flux de données : `games.yaml` + IGDB + relevé automatique (`prices.scraped.jsonl`) + `prices.manual.yaml` → `build.py` → validation Pydantic → `site/data.json` → `app.js`.
 
 ## Lancer en local
 
@@ -80,11 +85,23 @@ Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot →
 - Première sortie sur PS5, Switch ou Switch 2 (les originaux PS4, Wii U, GBA… ressortis sur ces consoles sont écartés, sauf `--include-legacy`). `platforms` reprend les consoles de cette première sortie.
 - Deux sections : les plus notés (`total_rating_count`, seuil `--min-ratings`), puis « Sorties récentes » des 365 derniers jours triées par `hypes`, sans seuil (le champ `follows` n'est plus renseigné par IGDB).
 
-## Ajouter un prix
+## Prix : relevé automatique
 
-**Pourquoi les prix sont manuels.** Aucune extraction automatique : les comparateurs (leDénicheur) et les stores officiels (PlayStation, Nintendo) l'interdisent dans leurs CGU ou leur robots.txt, et idealo bloque les automates. Pas d'affiliation non plus : les commissions rendraient le projet commercial, ce qui sort du cadre gratuit non commercial de l'API IGDB et contredirait la mention « ne touche aucune commission » du site.
+Chaque build complet (cron du lundi et `workflow_dispatch`, jamais sur push ni `--offline`) relève les prix sur les sources activées dans `data/sources.config.yaml` : **E.Leclerc, Boulanger, Pixmania**. Cadre légal, preuves et sources exclues : [docs/sources.md](docs/sources.md). Aucune saisie : ni prix, ni URL, ni EAN.
 
-Ajouter une observation à `data/prices.manual.yaml`. Les anciennes observations restent : elles forment l'historique.
+- **Découverte** (sans URL saisie, uniquement par des chemins autorisés par robots.txt) : pages catégories Boulanger (nom, éditeur et EAN de chaque produit, EAN confirmé par le `gtin13` de la fiche), sitemaps produits de Pixmania (slugs lisibles), puis fiche E.Leclerc ouverte directement par l'EAN (`/fp/x-<EAN>`, le site redirige vers la fiche). La recherche interne de Leclerc est interdite par son robots.txt et ses sitemaps ne contiennent que des URL `/fp/<EAN>`, sans titre : c'est pourquoi l'EAN vient de Boulanger ou de Pixmania. Les EAN (un ensemble par jeu : Mario Kart World en a deux selon les enseignes) et les URL sont mis en cache dans `data/discovered.json` ; une recherche infructueuse n'est relancée qu'après 14 jours, une fiche disparue (404) est recherchée à nouveau.
+- **Correspondance stricte** : même EAN, ou titre + plateforme + édition standard (aucun mot en trop hors liste blanche : « deluxe », « collector », « pack », « steelbook »… rejettent l'offre). Les noms alternatifs IGDB (`alternative_names`) sont acceptés comme titres (« GTA VI »).
+- **Lecture** : JSON-LD `Product`/`Offer` (prix, devise, état, disponibilité, `gtin13`) ; vendeur dans le JSON-LD (Leclerc) ou le HTML (Boulanger, Pixmania).
+- **Règle de plateforme de confiance** (`prices/trust.py`) : neuf, livrable en France, vendeur professionnel (l'enseigne, ou un vendeur de la place de marché de Pixmania, réservée aux pros), plateforme établie dans l'UE, jamais de revendeur de clés. Offre refusée sinon, ou sans vendeur identifié, ou indisponible.
+- **Politesse** : User-Agent `HorsPC/<version> (+https://github.com/Mvth1s/hors-pc)`, robots.txt relu à chaque run (y compris après une redirection), 1 requête par seconde au plus par hôte, timeouts, nouvel essai sur 5xx uniquement. Une réponse 401, 403, 429 ou une page de défi (captcha, anti-bot) marque la source **bloquée pour le run** : plus aucune requête, pas de nouvel essai, aucun contournement (ni proxy, ni changement d'User-Agent, ni navigateur headless, ni résolution de captcha).
+- **Historique** : chaque relevé est ajouté à `data/prices.scraped.jsonl` (une ligne par jeu, source et jour), versionné avec le site.
+- **Bilan** : `--scrape-report <fichier>` écrit le bilan du run (relevés, sources bloquées, fiches sans JSON-LD, événements). `--no-scrape` fait un build complet sans relevé.
+
+Dans `data.json`, `offer.source` vaut `scraped` ou `manual`, et `offer.seller` nomme le vendeur pro d'une place de marché (`null` quand c'est l'enseigne) : le site affiche alors « ShopVite via Pixmania ».
+
+## Correction d'urgence : prix manuel
+
+`data/prices.manual.yaml` ne sert qu'à corriger un relevé automatique erroné ; rien sur le site n'en dépend. Un relevé manuel est **prioritaire** sur un relevé automatique du même marchand et du même jour. Les anciennes observations restent : elles forment l'historique.
 
 `uv run python -m horspc price add` guide la saisie : jeu (liste numérotée ou slug, complétion avec Tab), marchand (liste blanche), format (déduit du marchand), prix, port (vide = inconnu), vente par l'enseigne (refus explicite sinon) et URL. `observed_at` vaut la date du jour. Le relevé est validé avec les mêmes modèles que le build et ajouté en fin de fichier, commentaires et ordre préservés (ruamel.yaml) ; rien n'est écrit si la validation échoue.
 
@@ -125,13 +142,13 @@ Sont refusés à la validation, avec un message explicite : les marketplaces (`r
 
 `discount_pct` = `round(100 × (1 − price / launch_price))`, port exclu ; `null` sans prix de lancement. Le badge n'est affiché que si la réduction est positive.
 
-## Schéma de `site/data.json` (v4)
+## Schéma de `site/data.json` (v5)
 
 Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le formatage (`53,30 €`, `JJ/MM/AAAA`) est fait par le front. Le modèle de référence est `DataFile` dans `src/horspc/models.py`.
 
 ```json
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "generated_at": "2026-10-26T06:17:42Z",
   "currency": "EUR",
   "games": [
@@ -161,10 +178,11 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
         "discount_pct": 24,
         "format": "physical",
         "condition": "new",
-        "merchant": "Amazon",
-        "url": "https://www.amazon.fr/dp/…",
+        "merchant": "Pixmania",
+        "seller": "ShopVite",
+        "url": "https://www.pixmania.com/fr/fr/…",
         "observed_at": "2026-07-18",
-        "source": "manual",
+        "source": "scraped",
         "stale": true
       }
     }
@@ -177,6 +195,7 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 - `pc_status` : déduit des `release_dates` PC d'IGDB (toutes régions), les lignes au statut Cancelled étant ignorées. `released` si une ligne Full Release, Early Access, Advanced Access, Offline ou sans statut a une date passée ; `announced` pour toute autre ligne retenue (date future ou absente, ou statut Alpha, Beta…) ; `none` si aucune ligne PC n'est retenue, même si le PC figure dans les plateformes du jeu. `pc_status_source` vaut `manual` quand `pc_override` est utilisé.
 - L'identifiant de la plateforme PC n'est pas codé en dur : il est lu via l'endpoint `platforms` d'IGDB (slug `win`).
 - Si IGDB est injoignable, les champs IGDB (dont `igdb_fetched_at`) sont repris du `data.json` précédent ; le build n'échoue pas.
+- `offer.seller` : vendeur professionnel d'une place de marché (« ShopVite » sur Pixmania), `null` quand l'enseigne vend elle-même ; `offer.source` : `scraped` (relevé automatique) ou `manual` (correction d'urgence). Ajoutés en v5.
 - `cover_url` : chemin relatif `covers/<slug>.webp`, ou `null` sans jaquette ; `cover_image_id` : `image_id` IGDB de la jaquette présente sur disque. Ajoutés en v3. Le site ne charge jamais d'image depuis `images.igdb.com`.
 
 ### Jaquettes

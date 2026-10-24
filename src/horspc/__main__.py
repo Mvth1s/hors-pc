@@ -13,6 +13,7 @@ from pydantic import ValidationError
 from horspc import build, candidates, price_add, stale
 from horspc.http import HttpClient
 from horspc.igdb import IgdbClient
+from horspc.prices.fetch import Fetcher
 
 
 def load_dotenv(path: Path) -> None:
@@ -50,6 +51,8 @@ def cmd_build(args: argparse.Namespace) -> int:
                 )
                 return 2
             igdb = IgdbClient(*credentials, http)
+        # Relevé automatique des prix : build complet seulement, jamais hors ligne.
+        fetcher = None if args.offline or args.no_scrape else Fetcher.create()
         try:
             build.run(
                 now=now,
@@ -58,6 +61,8 @@ def cmd_build(args: argparse.Namespace) -> int:
                 prices_path=args.prices,
                 output_path=args.output,
                 http=None if igdb is None else http,
+                fetcher=fetcher,
+                report_path=args.scrape_report,
             )
         except ValidationError as exc:
             print(f"Validation refusée, data.json non écrit :\n{exc}", file=sys.stderr)
@@ -65,6 +70,9 @@ def cmd_build(args: argparse.Namespace) -> int:
         except build.PreviousDataError as exc:
             print(f"data.json précédent refusé, rien n'est écrit : {exc}", file=sys.stderr)
             return 1
+        finally:
+            if fetcher is not None:
+                fetcher.close()
     return 0
 
 
@@ -121,6 +129,8 @@ def main(argv: list[str] | None = None) -> int:
 
     cmd = sub.add_parser("build", help="génère site/data.json")
     cmd.add_argument("--offline", action="store_true", help="sans IGDB : reprend data.json")
+    cmd.add_argument("--no-scrape", action="store_true", help="sans relevé automatique des prix")
+    cmd.add_argument("--scrape-report", type=Path, help="écrit le bilan du relevé (JSON)")
     cmd.add_argument("--output", type=Path, default=build.OUTPUT_PATH)
     cmd.set_defaults(func=cmd_build)
 

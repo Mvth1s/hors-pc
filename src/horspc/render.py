@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 from xml.sax.saxutils import escape as xml_escape
 
-from horspc.models import DataFile, GameOut
+from horspc.models import DataFile, GameOut, OfferOut
 from horspc.prices.selection import RECENT_DAYS
 
 SITE_URL = "https://mvth1s.github.io/hors-pc/"
@@ -303,7 +303,7 @@ def _price_block(game: GameOut, with_cta: bool) -> str:
         shipping = " · port offert"
     else:
         shipping = f" · + {_euros(offer.shipping_cents)} de port"
-    where = f"{_e(offer.merchant)}, relevé le {_fr(offer.observed_at)}{shipping}"
+    where = f"{_e(merchant_label(offer))}, relevé le {_fr(offer.observed_at)}{shipping}"
     source = (
         f'<p class="source old"><span class="warn-dot" aria-hidden="true"></span>'
         f"<span>{where}. Prix à vérifier.</span></p>"
@@ -322,6 +322,11 @@ def _price_block(game: GameOut, with_cta: bool) -> str:
         f'<div class="price-block">{launch}<div class="price-row">'
         f'<span class="price">{big}</span>{discount}</div></div>{source}{cta}'
     )
+
+
+def merchant_label(offer: OfferOut) -> str:
+    """« Boulanger », ou « ShopVite via Pixmania » pour un vendeur pro d'une place de marché."""
+    return offer.merchant if offer.seller is None else f"{offer.seller} via {offer.merchant}"
 
 
 def _sort_attrs(game: GameOut) -> str:
@@ -384,7 +389,7 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
     if game.offer:
         description += (
             f". Meilleur prix relevé : {_euros(game.offer.price_cents)} chez "
-            f"{game.offer.merchant} le {_fr(game.offer.observed_at)}."
+            f"{merchant_label(game.offer)} le {_fr(game.offer.observed_at)}."
         )
     else:
         description += ". Prix pas encore relevé."
@@ -531,11 +536,11 @@ def _videogame(game: GameOut, url: str) -> dict[str, Any]:
             "price": f"{offer.price_cents / 100:.2f}",
             "priceCurrency": "EUR",
             "priceValidUntil": (offer.observed_at + timedelta(days=RECENT_DAYS)).isoformat(),
-            # Relevé manuel d'une offre disponible ; le stock n'est pas suivi au-delà.
+            # Offre disponible au relevé ; le stock n'est pas suivi au-delà.
             "availability": "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition",
             "url": str(offer.url),
-            "seller": {"@type": "Organization", "name": offer.merchant},
+            "seller": {"@type": "Organization", "name": offer.seller or offer.merchant},
         }
     return data
 

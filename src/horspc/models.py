@@ -239,6 +239,36 @@ class PriceObservation(_Input):
         return self
 
 
+ScrapedSource = Literal["leclerc", "boulanger", "pixmania"]
+
+
+class ScrapedObservation(_Input):
+    """Un relevé automatique (une ligne de data/prices.scraped.jsonl)."""
+
+    slug: Slug
+    merchant: ScrapedSource
+    seller: str = Field(min_length=1)
+    price: Euros
+    shipping: EurosOrZero | None
+    format: Literal["physical"]
+    condition: Condition
+    url: HttpUrl
+    ean: str | None = Field(default=None, pattern=r"^\d{8,14}$")
+    observed_at: date
+
+    @model_validator(mode="after")
+    def _trusted(self) -> "ScrapedObservation":
+        from horspc.prices.trust import PLATFORMS, rejection  # import tardif (cycle)
+
+        host = (urlsplit(str(self.url)).hostname or "").lower()
+        if not _host_matches(host, PLATFORMS[self.merchant].domains):
+            raise ValueError(f"l'URL ({host}) ne correspond pas à la source {self.merchant}")
+        reason = rejection(self.merchant, self.seller, self.condition, self.format)
+        if reason:
+            raise ValueError(reason)
+        return self
+
+
 class Catalog(_Input):
     """Jeux et observations, avec les contrôles croisés entre les deux fichiers."""
 
@@ -273,9 +303,10 @@ class OfferOut(_Output):
     format: OfferFormat
     condition: Condition
     merchant: str = Field(min_length=1)
+    seller: str | None = Field(min_length=1)  # vendeur pro de la place de marché, sinon null
     url: HttpUrl
     observed_at: date
-    source: Literal["manual"]
+    source: Literal["manual", "scraped"]
     stale: bool
 
 
@@ -330,9 +361,9 @@ class GameOut(_Output):
 
 
 class DataFile(_Output):
-    """Contenu de site/data.json (schéma v4)."""
+    """Contenu de site/data.json (schéma v5)."""
 
-    schema_version: Literal[4] = 4
+    schema_version: Literal[5] = 5
     generated_at: UtcDatetime
     currency: Literal["EUR"] = "EUR"
     games: list[GameOut]

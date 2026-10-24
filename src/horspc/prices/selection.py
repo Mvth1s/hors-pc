@@ -4,8 +4,18 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
+from typing import Protocol
 
-from horspc.models import PriceObservation
+
+class PriceObservation(Protocol):
+    """Ce que la sélection lit d'un relevé (manuel ou automatique)."""
+
+    merchant: str
+    format: str
+    price: Decimal
+    shipping: Decimal | None
+    observed_at: date
+
 
 RECENT_DAYS = 30
 _FORMAT_RANK = {"physical": 0, "digital": 1}

@@ -20,6 +20,7 @@ class Offer:
     observed_at: date
     source: str
     stale: bool
+    seller: str | None = None  # vendeur de la place de marché quand ce n'est pas l'enseigne
 
 
 class PriceProvider(Protocol):

@@ -171,6 +171,7 @@ def offer(observed: date, stale: bool, price: int = 5330) -> dict[str, Any]:
         "format": "physical",
         "condition": "new",
         "merchant": "Amazon",
+        "seller": None,
         "url": "https://www.amazon.fr/dp/X",
         "observed_at": observed.isoformat(),
         "source": "manual",

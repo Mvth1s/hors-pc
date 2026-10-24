@@ -81,7 +81,7 @@ def test_premier_build_telecharge_en_webp(workdir: Path, http: HttpClient, api) 
     route = api.get(ASTRO_URL).respond(content=WEBP, headers={"Content-Type": "image/webp"})
     data = full_build(workdir, http)
     astro, saros = data["games"]
-    assert data["schema_version"] == 4
+    assert data["schema_version"] == 5
     assert (astro["cover_url"], astro["cover_image_id"]) == ("covers/astro-bot.webp", "coba3k")
     assert (saros["cover_url"], saros["cover_image_id"]) == (None, None)
     assert cover_file(workdir).read_bytes() == WEBP

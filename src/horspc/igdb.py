@@ -27,7 +27,7 @@ GAME_FIELDS = (
     "name,url,platforms,release_dates.platform,release_dates.date,"
     "release_dates.release_region,release_dates.status,cover.image_id,summary,"
     "involved_companies.developer,involved_companies.publisher,involved_companies.company.name,"
-    "screenshots.image_id,videos.video_id,videos.name"
+    "screenshots.image_id,videos.video_id,videos.name,alternative_names.name"
 )
 MAX_SCREENSHOTS = 4
 
@@ -58,6 +58,7 @@ class IgdbGame:
     publishers: tuple[str, ...] = ()
     screenshot_ids: tuple[str, ...] = ()
     trailer_id: str | None = None
+    alternative_names: tuple[str, ...] = ()  # pour reconnaître les fiches marchandes
 
 
 @dataclass(frozen=True)
@@ -133,6 +134,9 @@ class IgdbClient:
                     s["image_id"] for s in (row.get("screenshots") or [])[:MAX_SCREENSHOTS]
                 ),
                 trailer_id=_trailer(row),
+                alternative_names=tuple(
+                    a["name"] for a in (row.get("alternative_names") or []) if a.get("name")
+                ),
             )
             if game.igdb_id is None:
                 log.info("IGDB : %s → %d (%s)", game.slug, row["id"], row.get("name"))

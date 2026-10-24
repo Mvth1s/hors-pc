@@ -28,6 +28,7 @@ class HttpClient:
         min_interval: float = 1.0,
         sleep: Callable[[float], None] = time.sleep,
         clock: Callable[[], float] = time.monotonic,
+        retry_statuses: frozenset[int] = RETRY_STATUSES,
     ) -> None:
         self._client = httpx.Client(
             timeout=httpx.Timeout(timeout),
@@ -40,6 +41,7 @@ class HttpClient:
         self._sleep = sleep
         self._clock = clock
         self._last_request: dict[str, float] = {}
+        self._retry_statuses = retry_statuses
 
     def __enter__(self) -> "HttpClient":
         return self
@@ -66,7 +68,7 @@ class HttpClient:
                 log.warning("%s %s : %s, nouvel essai dans %.0f s", method, safe_url, exc, delay)
                 self._sleep(delay)
                 continue
-            if response.status_code in RETRY_STATUSES and attempt < self._max_retries:
+            if response.status_code in self._retry_statuses and attempt < self._max_retries:
                 delay = _retry_after(response) or self._backoff * 2**attempt
                 log.warning(
                     "%s %s : HTTP %d, nouvel essai dans %.0f s",

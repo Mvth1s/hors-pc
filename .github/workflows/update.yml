@@ -60,20 +60,22 @@ jobs:
         env:
           IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
           IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
-        run: uv run python -m horspc build
+        # Relève aussi les prix sur les sources activées (data/sources.config.yaml).
+        run: uv run python -m horspc build --scrape-report "$RUNNER_TEMP/scrape-report.json"
       - name: Génère site/data.json (hors ligne, sans commit)
         if: github.event_name == 'push'
         run: uv run python -m horspc build --offline
-      - name: Commite le site généré s'il a changé
+      - name: Commite le site et les relevés s'ils ont changé
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
-          if [ -z "$(git status --porcelain -- site)" ]; then
-            echo "site généré inchangé"
+          generated="site data/discovered.json data/prices.scraped.jsonl"
+          if [ -z "$(git status --porcelain -- $generated)" ]; then
+            echo "site généré et relevés inchangés"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A -- site
+          git add -A -- $generated
           git commit -m "chore(data): mise à jour du catalogue"
           git pull --rebase
           git push

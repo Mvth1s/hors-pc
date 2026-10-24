@@ -68,7 +68,7 @@ ASTRO = IgdbGame(255340, "https://www.igdb.com/games/astro-bot", date(2024, 9, 6
 def test_schema_complet_et_offre() -> None:
     data = make(catalog(), {"astro-bot": ASTRO, "saros": None})
     dumped = data.model_dump(mode="json")
-    assert dumped["schema_version"] == 4
+    assert dumped["schema_version"] == 5
     assert dumped["generated_at"] == "2026-10-26T06:17:42Z"
     assert dumped["currency"] == "EUR"
     astro = dumped["games"][0]
@@ -85,6 +85,7 @@ def test_schema_complet_et_offre() -> None:
         "format": "physical",
         "condition": "new",
         "merchant": "Amazon",
+        "seller": None,
         "url": "https://www.amazon.fr/dp/B0D1",
         "observed_at": "2026-07-18",
         "source": "manual",
@@ -218,6 +219,7 @@ def run(workdir: Path, igdb: IgdbClient | None) -> DataFile:
         games_path=workdir / "games.yaml",
         prices_path=workdir / "prices.yaml",
         output_path=workdir / "data.json",
+        scraped_path=workdir / "prices.scraped.jsonl",
     )
 
 
@@ -341,7 +343,7 @@ def test_release_date_manuelle_precedente_non_reprise() -> None:
     assert (saros.release_date, saros.release_date_source) == (None, None)
 
 
-@pytest.mark.parametrize("version", [3, None, 5])
+@pytest.mark.parametrize("version", [4, None, 6])
 def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: int | None) -> None:
     raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
     if version is None:
@@ -349,7 +351,7 @@ def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: 
     else:
         raw["schema_version"] = version
     (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
-    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 4 attendu"):
+    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 5 attendu"):
         run(workdir, None)
 
 
@@ -371,7 +373,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
         ]
     )
     assert code == 1
-    assert "schema_version 2, 4 attendu" in capsys.readouterr().err
+    assert "schema_version 2, 5 attendu" in capsys.readouterr().err
     assert (workdir / "data.json").read_bytes() == before
 
 
@@ -380,7 +382,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
     [
         ("{pas du json", "n'est pas un JSON valide"),
         (
-            '{"schema_version": 4, "generated_at": "hier", "currency": "EUR", "games": []}',
+            '{"schema_version": 5, "generated_at": "hier", "currency": "EUR", "games": []}',
             "refusé par le modèle",
         ),
     ],

@@ -1,0 +1,128 @@
+{
+  "games": {
+    "astro-bot": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "0711719591818"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/1208516",
+        "leclerc": "https://www.e.leclerc/fp/astro-bot-ps5-0711719591818",
+        "pixmania": "https://www.pixmania.com/fr/fr/astro-bot-ps5-305180.html"
+      }
+    },
+    "donkey-kong-bananza": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "0045496312770"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/1220888",
+        "leclerc": "https://www.e.leclerc/fp/donkey-kong-bananza-nintendo-switch-2-0045496312770",
+        "pixmania": "https://www.pixmania.com/fr/fr/donkey-kong-bananza-switch-2-397688.html"
+      }
+    },
+    "ghost-of-yotei": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "0711719020240"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/1222380",
+        "leclerc": "https://www.e.leclerc/fp/ghost-of-yotei-ps5-0711719020240",
+        "pixmania": "https://www.pixmania.com/fr/fr/ghost-of-yotei-ps5-443902.html"
+      }
+    },
+    "gran-turismo-7": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "0711719765592"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/1170721",
+        "leclerc": "https://www.e.leclerc/fp/sony-interactive-entertainment-gran-turismo-7-0711719765592",
+        "pixmania": "https://www.pixmania.com/fr/fr/sony-gran-turismo-7-standard-playstation-5-106722.html"
+      }
+    },
+    "mario-kart-world": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "0045496312329",
+        "0045496312336"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/1220885",
+        "leclerc": "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336",
+        "pixmania": "https://www.pixmania.com/fr/fr/mario-kart-world-switch-2-397665.html"
+      }
+    },
+    "pokemon-ecarlate": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "0045496510732"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/1180504",
+        "leclerc": "https://www.e.leclerc/fp/pokemon-ecarlate-switch-0045496510732",
+        "pixmania": "https://www.pixmania.com/fr/fr/pokemon-ecarlate-jeu-nintendo-switch-664079.html"
+      }
+    },
+    "saros": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "0711719026990"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/9000965678",
+        "leclerc": "https://www.e.leclerc/fp/saros-ps5-0711719026990",
+        "pixmania": "https://www.pixmania.com/fr/fr/saros-ps5-528089.html"
+      }
+    },
+    "zelda-tears-of-the-kingdom": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "0045496478711",
+        "0045496478735",
+        "0045496479176"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/1188673",
+        "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-switch-0045496478735",
+        "pixmania": "https://www.pixmania.com/fr/fr/the-legend-of-zelda-tears-of-the-kingdom-nintendo-switch-165573.html"
+      }
+    }
+  },
+  "schema": 1
+}

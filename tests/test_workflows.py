@@ -83,7 +83,11 @@ def test_build_complet_et_commit_hors_push(event: str) -> None:
     script = commands(executed_steps(event))
     assert "git commit" in script
     builds = [line for line in script.splitlines() if "horspc build" in line]
-    assert builds == ["uv run python -m horspc build"]
+    # Build complet : relevé automatique des prix (pas de --no-scrape) et bilan écrit.
+    assert builds == [
+        'uv run python -m horspc build --scrape-report "$RUNNER_TEMP/scrape-report.json"'
+    ]
+    assert "data/prices.scraped.jsonl" in script and "data/discovered.json" in script
     assert runs(workflow()["jobs"]["freshness"].get("if"), event)
 
 
