@@ -136,14 +136,15 @@ class IgdbClient:
     def release_refs(self) -> ReleaseRefs:
         """Régions et statuts de sortie, via /release_date_regions et /release_date_statuses."""
         if self._release_refs is None:
-            regions = self._ids_by_name("release_date_regions", "region", RELEASE_REGIONS)
-            statuses = self._ids_by_name(
+            regions = self.ids_by_name("release_date_regions", "region", RELEASE_REGIONS)
+            statuses = self.ids_by_name(
                 "release_date_statuses", "name", (*PC_RELEASED_STATUSES, CANCELLED)
             )
             self._release_refs = ReleaseRefs(frozenset(regions.values()), statuses)
         return self._release_refs
 
-    def _ids_by_name(self, endpoint: str, field: str, names: Sequence[str]) -> dict[str, int]:
+    def ids_by_name(self, endpoint: str, field: str, names: Sequence[str]) -> dict[str, int]:
+        """Identifiants des entrées de `endpoint` dont `field` vaut l'un des `names`."""
         quoted = ",".join(f'"{n}"' for n in names)
         rows = self.query(endpoint, f"fields id,{field}; where {field} = ({quoted}); limit 50;")
         found = {row[field]: row["id"] for row in rows}

@@ -68,6 +68,15 @@ uv run ruff check . && uv run ruff format --check .
 
 Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot → 255340`) et signale les correspondances approximatives : il est conseillé d'épingler alors l'`igdb_id`. Un jeu dont le `pc_status` passe à `released` reste dans `data.json` mais n'est plus affiché ; on peut ensuite le retirer de `games.yaml`.
 
+### Trouver des candidats
+
+`uv run python -m horspc candidates [--limit 50] [--min-ratings 20] [--recent-limit 20] [--include-legacy] [--output data/candidates.yaml]` interroge IGDB et écrit un YAML au format de `games.yaml`, **à curer à la main** (le fichier est ignoré par git ; la commande refuse d'écrire dans `games.yaml`).
+
+- Jeux sur PS5, Switch ou Switch 2, de type Main Game, Remake ou Remaster (ids lus via `/game_types`), hors éditions (`version_parent`), absents de `games.yaml`.
+- Exclusion PC avec la même logique que `pc_status`, appliquée à la fiche, à ses fiches liées (`remasters`, `remakes`, `ports`, `expanded_games`, `standalone_expansions`) et à ses éditions : seul un jeu **released** sur PC est écarté ; un portage annoncé reste candidat, signalé en commentaire.
+- Première sortie sur PS5, Switch ou Switch 2 (les originaux PS4, Wii U, GBA… ressortis sur ces consoles sont écartés, sauf `--include-legacy`). `platforms` reprend les consoles de cette première sortie.
+- Deux sections : les plus notés (`total_rating_count`, seuil `--min-ratings`), puis « Sorties récentes » des 365 derniers jours triées par `hypes`, sans seuil (le champ `follows` n'est plus renseigné par IGDB).
+
 ## Ajouter un prix
 
 **Pourquoi les prix sont manuels.** Aucune extraction automatique : les comparateurs (leDénicheur) et les stores officiels (PlayStation, Nintendo) l'interdisent dans leurs CGU ou leur robots.txt, et idealo bloque les automates. Pas d'affiliation non plus : les commissions rendraient le projet commercial, ce qui sort du cadre gratuit non commercial de l'API IGDB et contredirait la mention « ne touche aucune commission » du site.

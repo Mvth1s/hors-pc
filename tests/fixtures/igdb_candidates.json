@@ -1,0 +1,276 @@
+{
+ "popular": [
+  {
+   "id": 1001,
+   "name": "Exclu PS5",
+   "slug": "exclu-ps5--1",
+   "platforms": [
+    167
+   ],
+   "total_rating_count": 900,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 167345,
+     "platform": 167,
+     "date": 1700000000,
+     "status": 6
+    }
+   ]
+  },
+  {
+   "id": 1002,
+   "name": "Sorti sur PC",
+   "slug": "sorti-sur-pc",
+   "platforms": [
+    6,
+    167
+   ],
+   "total_rating_count": 800,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 167345,
+     "platform": 167,
+     "date": 1700000000
+    },
+    {
+     "id": 6345,
+     "platform": 6,
+     "date": 1700000000
+    }
+   ]
+  },
+  {
+   "id": 1003,
+   "name": "Remaster PC",
+   "slug": "remaster-pc",
+   "platforms": [
+    167
+   ],
+   "total_rating_count": 700,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 167345,
+     "platform": 167,
+     "date": 1700000000
+    }
+   ],
+   "remasters": [
+    {
+     "id": 2003,
+     "name": "Remaster PC Remastered",
+     "platforms": [
+      6,
+      167
+     ],
+     "release_dates": [
+      {
+       "id": 6345,
+       "platform": 6,
+       "date": 1700000000,
+       "status": 6
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 1004,
+   "name": "Portage annoncé",
+   "slug": "portage-annonce",
+   "platforms": [
+    130
+   ],
+   "total_rating_count": 600,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 130345,
+     "platform": 130,
+     "date": 1700000000
+    }
+   ],
+   "expanded_games": [
+    {
+     "id": 2004,
+     "name": "Portage annoncé Deluxe",
+     "platforms": [
+      6,
+      130
+     ],
+     "release_dates": [
+      {
+       "id": 6151,
+       "platform": 6,
+       "date": 1900000000
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 1005,
+   "name": "Édition PC",
+   "slug": "edition-pc",
+   "platforms": [
+    167
+   ],
+   "total_rating_count": 500,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 167345,
+     "platform": 167,
+     "date": 1700000000
+    }
+   ]
+  },
+  {
+   "id": 1006,
+   "name": "Jeu PS4 d'origine",
+   "slug": "jeu-ps4",
+   "platforms": [
+    48,
+    167
+   ],
+   "total_rating_count": 400,
+   "game_type": {
+    "id": 8,
+    "type": "Remake"
+   },
+   "release_dates": [
+    {
+     "id": 48442,
+     "platform": 48,
+     "date": 1600000000
+    },
+    {
+     "id": 167345,
+     "platform": 167,
+     "date": 1700000000
+    }
+   ]
+  },
+  {
+   "id": 119388,
+   "name": "Déjà au catalogue",
+   "slug": "deja",
+   "platforms": [
+    130
+   ],
+   "total_rating_count": 300,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 130345,
+     "platform": 130,
+     "date": 1700000000
+    }
+   ]
+  },
+  {
+   "id": 1008,
+   "name": "Portage annulé",
+   "slug": "portage-annule",
+   "platforms": [
+    6,
+    508
+   ],
+   "total_rating_count": 200,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 508345,
+     "platform": 508,
+     "date": 1700000000
+    },
+    {
+     "id": 6345,
+     "platform": 6,
+     "date": 1700000000,
+     "status": 5
+    }
+   ]
+  }
+ ],
+ "recent": [
+  {
+   "id": 1001,
+   "name": "Exclu PS5",
+   "slug": "exclu-ps5--1",
+   "platforms": [
+    167
+   ],
+   "hypes": 99,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 167345,
+     "platform": 167,
+     "date": 1700000000,
+     "status": 6
+    }
+   ]
+  },
+  {
+   "id": 1101,
+   "name": "Nouveauté \"Switch 2\"",
+   "slug": "nouveaute",
+   "platforms": [
+    508
+   ],
+   "hypes": 50,
+   "game_type": {
+    "id": 0,
+    "type": "Main Game"
+   },
+   "release_dates": [
+    {
+     "id": 508345,
+     "platform": 508,
+     "date": 1700000000
+    }
+   ]
+  }
+ ],
+ "editions": [
+  {
+   "id": 3005,
+   "name": "Édition PC GOTY",
+   "version_parent": 1005,
+   "release_dates": [
+    {
+     "id": 6345,
+     "platform": 6,
+     "date": 1700000000
+    }
+   ]
+  }
+ ]
+}

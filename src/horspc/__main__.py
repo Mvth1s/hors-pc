@@ -1,4 +1,4 @@
-"""CLI : `uv run python -m horspc build [--offline] | stale | price add`."""
+"""CLI : `uv run python -m horspc build [--offline] | stale | price add | candidates`."""
 
 import argparse
 import logging
@@ -7,9 +7,10 @@ import sys
 from datetime import UTC, date, datetime
 from pathlib import Path
 
+import yaml
 from pydantic import ValidationError
 
-from horspc import build, price_add, stale
+from horspc import build, candidates, price_add, stale
 from horspc.http import HttpClient
 from horspc.igdb import IgdbClient
 
@@ -82,6 +83,38 @@ def cmd_price_add(args: argparse.Namespace) -> int:
     return price_add.price_add(args.games, args.prices, date.today())
 
 
+def cmd_candidates(args: argparse.Namespace) -> int:
+    if args.output.resolve() == args.games.resolve():
+        print("--output ne doit pas être games.yaml : les candidats sont à curer.", file=sys.stderr)
+        return 2
+    credentials = igdb_credentials()
+    if credentials is None:
+        print("IGDB_CLIENT_ID et IGDB_CLIENT_SECRET sont requis.", file=sys.stderr)
+        return 2
+    games = yaml.safe_load(args.games.read_text(encoding="utf-8")) or []
+    known = {g["igdb_id"] for g in games if g.get("igdb_id")}
+    now = datetime.now(UTC).replace(microsecond=0)
+    with HttpClient() as http:
+        popular, recent = candidates.find_candidates(
+            IgdbClient(*credentials, http),
+            known,
+            now,
+            limit=args.limit,
+            min_ratings=args.min_ratings,
+            recent_limit=args.recent_limit,
+            include_legacy=args.include_legacy,
+        )
+    text = candidates.render_yaml(popular, recent, now.date(), args.min_ratings)
+    try:
+        candidates.validate_entries(yaml.safe_load(text) or [])
+    except ValidationError as exc:
+        print(f"Candidats invalides, fichier non écrit :\n{exc}", file=sys.stderr)
+        return 1
+    args.output.write_text(text, encoding="utf-8")
+    print(f"{len(popular)} candidats et {len(recent)} sorties récentes écrits dans {args.output}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="horspc", description="Outils du catalogue HorsPC.")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -100,7 +133,19 @@ def main(argv: list[str] | None = None) -> int:
     price_cmd = price.add_parser("add", help="ajoute un relevé de façon interactive")
     price_cmd.set_defaults(func=cmd_price_add)
 
-    for cmd in (sub.choices["build"], sub.choices["stale"], price_cmd):
+    cmd = sub.add_parser("candidates", help="propose des jeux IGDB à ajouter au catalogue")
+    cmd.add_argument("--limit", type=int, default=50, help="nombre de candidats les plus notés")
+    cmd.add_argument("--min-ratings", type=int, default=20, help="total_rating_count minimal")
+    cmd.add_argument("--recent-limit", type=int, default=20, help="sorties récentes (hypes)")
+    cmd.add_argument(
+        "--include-legacy",
+        action="store_true",
+        help="garde les jeux sortis d'abord sur une autre console",
+    )
+    cmd.add_argument("--output", type=Path, default=build.ROOT / "data" / "candidates.yaml")
+    cmd.set_defaults(func=cmd_candidates)
+
+    for cmd in (sub.choices["build"], sub.choices["stale"], price_cmd, sub.choices["candidates"]):
         cmd.add_argument("--games", type=Path, default=build.GAMES_PATH)
         cmd.add_argument("--prices", type=Path, default=build.PRICES_PATH)
 
