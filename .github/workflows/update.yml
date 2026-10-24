@@ -32,6 +32,13 @@ jobs:
           enable-cache: true
       - name: Installe les dépendances
         run: uv sync --frozen
+      # Lint et tests avant tout build : s'ils échouent, rien n'est commité ni déployé.
+      - name: Ruff (lint)
+        run: uv run ruff check .
+      - name: Ruff (format)
+        run: uv run ruff format --check .
+      - name: Pytest
+        run: uv run pytest
       # Les deux builds échouent (code non nul) si la validation échoue : rien n'est
       # commité ni déployé.
       - name: Génère site/data.json (complet, avec IGDB)

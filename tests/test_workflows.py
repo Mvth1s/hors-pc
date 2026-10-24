@@ -75,3 +75,13 @@ def test_build_complet_et_commit_hors_push(event: str) -> None:
     builds = [line for line in script.splitlines() if "horspc build" in line]
     assert builds == ["uv run python -m horspc build"]
     assert runs(workflow()["jobs"]["freshness"].get("if"), event)
+
+
+@pytest.mark.parametrize("event", ["push", *FULL_EVENTS])
+def test_lint_et_tests_avant_le_build(event: str) -> None:
+    script = commands(executed_steps(event)).splitlines()
+    position = {cmd: i for i, cmd in enumerate(script)}
+    build = next(i for i, line in enumerate(script) if "horspc build" in line)
+    for cmd in ("uv run ruff check .", "uv run ruff format --check .", "uv run pytest"):
+        assert cmd in position, cmd
+        assert position[cmd] < build
