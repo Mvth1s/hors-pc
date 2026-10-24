@@ -91,6 +91,10 @@ def test_jsonld_accueil() -> None:
     types = {node["@type"]: node for node in graph["@graph"]}
     assert set(types) == {"WebSite", "Person", "ItemList"}
     assert types["WebSite"]["url"] == SITE_URL
+    assert (types["Person"]["name"], types["Person"]["alternateName"]) == (
+        "Mvth1s",
+        "Mathis Aguado",
+    )
     items = types["ItemList"]["itemListElement"]
     assert [i["position"] for i in items] == list(range(1, 9))
     assert all(i["url"].startswith(f"{SITE_URL}{GAMES_DIR}/") for i in items)

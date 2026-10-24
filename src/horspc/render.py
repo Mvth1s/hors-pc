@@ -23,7 +23,8 @@ COVER_SIZE = (264, 352)  # t_cover_big IGDB
 GAMES_DIR = "jeux"
 AUTHOR = {
     "@type": "Person",
-    "name": "Mathis Aguado",
+    "name": "Mvth1s",
+    "alternateName": "Mathis Aguado",
     "url": "https://mathisaguado.vercel.app",
     "sameAs": [
         "https://www.linkedin.com/in/mathis-aguado",
