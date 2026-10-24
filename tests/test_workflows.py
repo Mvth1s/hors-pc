@@ -1,6 +1,9 @@
 """Vérifie, par événement, quels jobs et étapes de update.yml s'exécutent."""
 
 import ast
+import json
+import shutil
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -105,3 +108,125 @@ def test_notification_discord_seulement_en_cas_d_echec(event: str) -> None:
     assert 'if [ -z "$DISCORD_WEBHOOK_URL" ]' in step["run"]  # secret absent : rien
     for var in ("WORKFLOW", "EVENT", "RUN_URL"):
         assert f"${var}" in step["run"]
+
+
+# --- discord.yml -------------------------------------------------------------------------
+
+DISCORD = WORKFLOW.parent / "discord.yml"
+
+
+def discord() -> dict[str, Any]:
+    return yaml.safe_load(DISCORD.read_text(encoding="utf-8"))
+
+
+def discord_steps() -> list[dict[str, Any]]:
+    return [s for job in discord()["jobs"].values() for s in job["steps"]]
+
+
+def test_discord_evenements() -> None:
+    on = discord()[True]  # PyYAML lit la clé « on » comme le booléen True
+    assert on == {
+        "issues": {"types": ["opened", "closed", "reopened"]},
+        "issue_comment": {"types": ["created"]},
+        "pull_request_target": {"types": ["opened", "closed", "reopened"]},
+        "release": {"types": ["published"]},
+    }
+
+
+def test_discord_permissions_vides_et_sans_checkout() -> None:
+    wf = discord()
+    assert wf["permissions"] == {}
+    for job in wf["jobs"].values():
+        assert job.get("permissions", {}) == {}
+    assert not any("checkout" in s.get("uses", "") for s in discord_steps())
+    assert "actions/checkout" not in DISCORD.read_text(encoding="utf-8")
+
+
+def test_discord_aucune_expression_dans_les_run() -> None:
+    for step in discord_steps():
+        assert "${{" not in step.get("run", ""), step.get("name")
+    assert "${{ github.event" not in "".join(s.get("run", "") for s in discord_steps())
+
+
+def test_discord_sans_mention_ni_username_et_secret_facultatif() -> None:
+    (step,) = discord_steps()
+    script = step["run"]
+    assert "allowed_mentions: {parse: []}" in script
+    assert "username" not in script
+    assert step["env"] == {"DISCORD_WEBHOOK_URL": "${{ secrets.DISCORD_WEBHOOK_URL }}"}
+    assert 'if [ -z "${DISCORD_WEBHOOK_URL:-}" ]' in script
+    assert "trunc(256)" in script and "trunc(300)" in script
+
+
+def test_discord_ignore_le_bot() -> None:
+    condition = discord()["jobs"]["notify"]["if"]
+    assert "github.event.issue.user.login == 'github-actions[bot]'" in condition
+    assert "github.event.comment.user.login == 'github-actions[bot]'" in condition
+
+
+def test_update_notify_sans_mention() -> None:
+    script = workflow()["jobs"]["notify"]["steps"][0]["run"]
+    assert "allowed_mentions: {parse: []}" in script
+    assert "${{" not in script
+
+
+@pytest.mark.skipif(shutil.which("jq") is None, reason="jq absent")
+@pytest.mark.parametrize(
+    ("event", "payload", "expected_title", "color"),
+    [
+        (
+            "issues",
+            {
+                "action": "opened",
+                "issue": {
+                    "number": 12,
+                    "title": "T" * 400,
+                    "html_url": "https://github.com/i/12",
+                    "user": {"login": "alice"},
+                    "body": "@everyone " + "x" * 400,
+                },
+            },
+            "[Issue ouverte] #12 TTT",
+            3066993,
+        ),
+        (
+            "pull_request_target",
+            {
+                "action": "closed",
+                "pull_request": {
+                    "number": 7,
+                    "title": "feat",
+                    "html_url": "https://github.com/p/7",
+                    "user": {"login": "carol"},
+                    "body": None,
+                    "merged": True,
+                },
+            },
+            "[PR fusionnée] #7 feat",
+            9001445,
+        ),
+    ],
+)
+def test_discord_payload(
+    tmp_path: Path, event: str, payload: dict[str, Any], expected_title: str, color: int
+) -> None:
+    (step,) = discord_steps()
+    (tmp_path / "event.json").write_text(json.dumps(payload), encoding="utf-8")
+    env = {
+        "PATH": "/usr/bin:/bin",
+        "GITHUB_EVENT_NAME": event,
+        "GITHUB_REPOSITORY": "Mvth1s/hors-pc",
+        "GITHUB_EVENT_PATH": str(tmp_path / "event.json"),
+    }  # pas de DISCORD_WEBHOOK_URL : rien n'est envoyé
+    result = subprocess.run(
+        ["bash", "-c", step["run"]], cwd=tmp_path, env=env, capture_output=True, text=True
+    )
+    assert result.returncode == 0, result.stderr
+    assert "rien n'est envoyé" in result.stdout
+    data = json.loads((tmp_path / "payload.json").read_text(encoding="utf-8"))
+    assert data["allowed_mentions"] == {"parse": []}
+    (embed,) = data["embeds"]
+    assert embed["title"].startswith(expected_title)
+    assert len(embed["title"]) <= 256 and len(embed["description"]) <= 300
+    assert embed["color"] == color
+    assert "username" not in data

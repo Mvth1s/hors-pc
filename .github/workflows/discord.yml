@@ -1,0 +1,78 @@
+name: Discord
+
+# Activité du dépôt postée sur Discord au format natif (embed), via le webhook du secret
+# DISCORD_WEBHOOK_URL. Sans champ username : le nom configuré côté Discord est utilisé.
+on:
+  issues:
+    types: [opened, closed, reopened]
+  issue_comment:
+    types: [created]
+  # pull_request_target pour disposer du secret sur les PR de forks : aucun checkout, le code
+  # de la PR n'est jamais exécuté.
+  pull_request_target:
+    types: [opened, closed, reopened]
+  release:
+    types: [published]
+
+permissions: {}
+
+jobs:
+  notify:
+    runs-on: ubuntu-24.04
+    # Issues et commentaires créés par le bot (alerte de fraîcheur, etc.) ignorés.
+    if: >-
+      !((github.event_name == 'issues' && github.event.issue.user.login == 'github-actions[bot]') ||
+        (github.event_name == 'issue_comment' && github.event.comment.user.login == 'github-actions[bot]'))
+    permissions: {}
+    steps:
+      - name: Envoi sur Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        # Aucune donnée de l'événement n'est interpolée dans le script : tout est lu par jq
+        # dans $GITHUB_EVENT_PATH et sérialisé par jq (pas d'injection possible).
+        run: |
+          set -euo pipefail
+          jq --arg event "$GITHUB_EVENT_NAME" --arg repo "$GITHUB_REPOSITORY" '
+            def trunc($n): (. // "") | if length > $n then .[0:$n - 1] + "…" else . end;
+            def colors: {open: 3066993, closed: 15158332, reopened: 15105570, merged: 9001445, info: 3447003};
+            (if $event == "issues" then
+               {kind: ({opened: "Issue ouverte", closed: "Issue fermée", reopened: "Issue rouverte"}[.action]),
+                number: .issue.number, title: .issue.title, url: .issue.html_url,
+                author: .issue.user.login, body: .issue.body,
+                color: ({opened: "open", closed: "closed", reopened: "reopened"}[.action])}
+             elif $event == "issue_comment" then
+               {kind: (if .issue.pull_request then "Commentaire sur la PR" else "Commentaire sur l’issue" end),
+                number: .issue.number, title: .issue.title, url: .comment.html_url,
+                author: .comment.user.login, body: .comment.body, color: "info"}
+             elif $event == "pull_request_target" then
+               (if .action == "closed" and .pull_request.merged then {kind: "PR fusionnée", color: "merged"}
+                elif .action == "closed" then {kind: "PR fermée", color: "closed"}
+                elif .action == "reopened" then {kind: "PR rouverte", color: "reopened"}
+                else {kind: "PR ouverte", color: "open"} end)
+               + {number: .pull_request.number, title: .pull_request.title,
+                  url: .pull_request.html_url, author: .pull_request.user.login,
+                  body: .pull_request.body}
+             elif $event == "release" then
+               {kind: "Version publiée", number: null,
+                title: (.release.name // .release.tag_name), url: .release.html_url,
+                author: .release.author.login, body: .release.body, color: "open"}
+             else error("événement non géré : " + $event) end) as $e
+            | {
+                allowed_mentions: {parse: []},
+                embeds: [{
+                  title: ("[" + $e.kind + "] " + (if $e.number then "#\($e.number) " else "" end)
+                          + ($e.title // "")) | trunc(256),
+                  url: $e.url,
+                  description: ($e.body | trunc(300)),
+                  color: colors[$e.color],
+                  author: {name: ($e.author // "inconnu") | trunc(256)},
+                  footer: {text: $repo}
+                }]
+              }
+          ' "$GITHUB_EVENT_PATH" > payload.json
+          if [ -z "${DISCORD_WEBHOOK_URL:-}" ]; then
+            echo "Secret DISCORD_WEBHOOK_URL absent : rien n'est envoyé"
+            exit 0
+          fi
+          curl --fail --silent --show-error --max-time 20 \
+            -H "Content-Type: application/json" --data @payload.json "$DISCORD_WEBHOOK_URL"

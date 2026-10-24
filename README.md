@@ -249,10 +249,12 @@ En attendant, déclarer `https://mvth1s.github.io/hors-pc/sitemap.xml` directeme
 
 ## Notifications Discord
 
-Deux canaux complémentaires, configurés hors du code :
+Tout passe par GitHub Actions et le secret `DISCORD_WEBHOOK_URL` (plus de webhook GitHub → Discord, qui s'affichait sous le nom « GitHub »). Aucun champ `username` n'est envoyé : c'est le nom du webhook configuré côté Discord qui apparaît. Si le secret est absent, rien n'est envoyé.
 
-- **Échec du build planifié ou manuel** : le job `notify` d'`update.yml` (`if: failure()`, événements `schedule` et `workflow_dispatch` seulement) envoie un message au webhook Discord du secret `DISCORD_WEBHOOK_URL` : nom du workflow, événement et lien du run. Si le secret est absent, l'étape ne fait rien. Un échec sur un simple push n'envoie rien : la CI le signale déjà sur le commit.
-- **Activité du dépôt** : un webhook GitHub (Settings › Webhooks) pointe vers l'URL du webhook Discord **suffixée par `/github`**, format que Discord comprend nativement, avec les événements `issues`, `issue_comment`, `pull_request` et `release`. Les demandes de retrait et les signalements d'erreur, qui arrivent en issues, sont ainsi notifiés.
+- **Activité du dépôt** (`.github/workflows/discord.yml`) : issues ouvertes, fermées ou rouvertes, nouveaux commentaires, PR ouvertes, fermées, fusionnées ou rouvertes (`pull_request_target`), versions publiées. Message en embed : type d'événement, numéro et titre, auteur, lien, extrait du corps ; couleur selon l'action (vert ouverture, rouge fermeture, orange réouverture, violet fusion). Les issues et commentaires créés par `github-actions[bot]` (alerte de fraîcheur) sont ignorés.
+- **Échec du build planifié ou manuel** : le job `notify` d'`update.yml` (`if: failure()`, événements `schedule` et `workflow_dispatch`) poste le nom du workflow, l'événement et le lien du run. Un échec sur un simple push n'envoie rien : la CI le signale déjà sur le commit.
+
+Sécurité de `discord.yml` : `permissions: {}`, aucun checkout (le code d'une PR, même venant d'un fork, n'est jamais exécuté avec `pull_request_target`), aucune expression `${{ github.event.* }}` dans les scripts (l'événement est lu par `jq` dans `$GITHUB_EVENT_PATH` et le JSON construit par `jq`), `allowed_mentions: {parse: []}`, titres tronqués à 256 caractères et extraits à 300. `tests/test_workflows.py` vérifie ces règles et le contenu des embeds.
 
 ## Pages légales
 
