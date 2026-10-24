@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confidentialité · HorsPC</title>
+<meta name="description" content="Politique de confidentialité de HorsPC : aucune collecte de données, préférence de thème locale, journaux de l'hébergeur.">
+<link rel="stylesheet" href="style.css">
+<script src="theme.js" defer></script>
+</head>
+<body class="hp">
+<script>
+  // Thème appliqué avant le premier rendu pour éviter un flash.
+  try { var t = localStorage.getItem("horspc-theme"); if (t === "light" || t === "dark") document.body.classList.add(t); } catch (e) {}
+</script>
+<header class="top">
+  <div class="wrap">
+    <div class="top-inner">
+      <div class="brand">
+        <p class="logo"><a href="./" aria-label="HorsPC, retour au catalogue">Hors<span class="logo-pc">PC</span></a></p>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" type="button" id="theme-toggle" aria-label="Passer en thème sombre">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap legal">
+<h1>Confidentialité</h1>
+<p class="legal-updated">Dernière mise à jour : 24/10/2026</p>
+
+<h2>Aucune collecte par HorsPC</h2>
+<p>HorsPC ne collecte aucune donnée personnelle : pas de formulaire, pas de compte, pas de mesure d'audience, pas de publicité, pas de cookie. Les polices et les jaquettes sont servies depuis le site lui-même ; aucune page ne charge de ressource depuis un autre domaine.</p>
+
+<h2>Préférence de thème</h2>
+<p>Si vous choisissez le thème clair ou sombre avec le bouton prévu, ce choix est enregistré dans le stockage local de votre navigateur (<code>localStorage</code>, clé <code>horspc-theme</code>). Il ne quitte pas votre appareil et n'est transmis à personne. Ce traceur, qui conserve un choix de personnalisation de l'interface demandé par l'utilisateur, est exempté de consentement au sens des lignes directrices de la CNIL sur les cookies et autres traceurs. Vous pouvez le supprimer en effaçant les données de ce site dans les réglages de votre navigateur.</p>
+
+<h2>Hébergement par GitHub Pages</h2>
+<p>Le site est hébergé par GitHub Pages. GitHub indique que « lorsqu'un site GitHub Pages est consulté, l'adresse IP du visiteur est journalisée et conservée à des fins de sécurité, que le visiteur soit connecté à GitHub ou non » (<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#data-collection" rel="noopener">documentation GitHub Pages, section « Data collection »</a>). Ce traitement relève de GitHub, Inc. : voir le <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub General Privacy Statement</a>.</p>
+
+<h2>Liens vers GitHub</h2>
+<p>Le lien de demande de retrait ouvre un formulaire de GitHub Issues : il faut un compte GitHub, et la demande est publique. Les données saisies sont alors traitées par GitHub selon sa propre politique de confidentialité.</p>
+
+<h2>Contact</h2>
+<p>Pour toute question, voir les <a href="mentions-legales.html">mentions légales</a>.</p>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Prix TTC relevés manuellement chez des marchands français. HorsPC n'est affilié à aucun constructeur, éditeur ni marchand et ne touche aucune commission ; les noms de jeux et de consoles appartiennent à leurs propriétaires.</p>
+    <p>Dates de sortie et statut PC : données fournies par <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>.</p>
+    <p>Jaquettes via <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>. Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs. Demande de retrait : <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait%20de%20jaquette" rel="noopener">ouvrir une issue GitHub</a>.</p>
+    <nav class="foot-links" aria-label="Informations">
+      <a href="./">Catalogue</a>
+      <a href="methodologie.html">Méthodologie des prix</a>
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

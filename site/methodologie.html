@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Méthodologie des prix · HorsPC</title>
+<meta name="description" content="Comment HorsPC choisit et relève les prix : règle de sélection, relevés manuels, absence d'affiliation.">
+<link rel="stylesheet" href="style.css">
+<script src="theme.js" defer></script>
+</head>
+<body class="hp">
+<script>
+  // Thème appliqué avant le premier rendu pour éviter un flash.
+  try { var t = localStorage.getItem("horspc-theme"); if (t === "light" || t === "dark") document.body.classList.add(t); } catch (e) {}
+</script>
+<header class="top">
+  <div class="wrap">
+    <div class="top-inner">
+      <div class="brand">
+        <p class="logo"><a href="./" aria-label="HorsPC, retour au catalogue">Hors<span class="logo-pc">PC</span></a></p>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" type="button" id="theme-toggle" aria-label="Passer en thème sombre">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap legal">
+<h1>Méthodologie des prix</h1>
+<p class="legal-updated">Dernière mise à jour : 24/10/2026</p>
+
+<h2>Un catalogue curé, non exhaustif</h2>
+<p>HorsPC liste une sélection de jeux PS5, Switch et Switch 2 qui ne sont pas sortis sur PC. La liste est choisie à la main : elle n'est pas exhaustive. Le statut PC et les dates de sortie viennent d'IGDB.com et sont vérifiés chaque semaine ; un jeu sorti entre-temps sur PC disparaît du catalogue.</p>
+
+<h2>Quel prix est affiché</h2>
+<ol>
+  <li>Seuls comptent les relevés de moins de 30 jours. Pour chaque marchand, seul son relevé le plus récent est pris en compte.</li>
+  <li>Le prix retenu est celui de l'<strong>édition physique neuve</strong> la moins chère, <strong>vendue par l'enseigne elle-même</strong> (pas par un vendeur tiers de sa marketplace).</li>
+  <li>À défaut, c'est le prix <strong>dématérialisé officiel</strong> le moins cher (PlayStation Store, Nintendo eShop).</li>
+  <li>Les frais de port sont ajoutés pour comparer les offres quand ils sont connus ; sinon la comparaison porte sur le prix seul.</li>
+  <li>Sans relevé récent, le dernier relevé connu est affiché avec la mention « Prix à vérifier ».</li>
+</ol>
+<p>Les revendeurs de clés et les marketplaces de vendeurs tiers sont exclus. La réduction affichée est calculée par rapport au prix de lancement conseillé, quand une source fiable le donne.</p>
+
+<h2>Des relevés manuels et datés</h2>
+<p>Chaque prix est relevé à la main sur la page du marchand ; la fiche indique le marchand et la date du relevé. Les prix changent souvent : vérifiez toujours chez le marchand avant d'acheter.</p>
+
+<h2>Aucune rémunération</h2>
+<p>HorsPC ne perçoit aucune commission et n'utilise aucun lien d'affiliation. Les liens « Voir l'offre » mènent directement aux pages des marchands.</p>
+
+<h2>Pourquoi pas d'automatisation</h2>
+<ul>
+  <li>Les comparateurs de prix et les boutiques officielles interdisent l'extraction automatique de leurs pages dans leurs conditions d'utilisation ou leur fichier robots.txt, ou bloquent les robots.</li>
+  <li>Des liens d'affiliation rendraient le projet commercial, ce qui sortirait du cadre gratuit et non commercial de l'API IGDB utilisée pour les données de jeux.</li>
+</ul>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Prix TTC relevés manuellement chez des marchands français. HorsPC n'est affilié à aucun constructeur, éditeur ni marchand et ne touche aucune commission ; les noms de jeux et de consoles appartiennent à leurs propriétaires.</p>
+    <p>Dates de sortie et statut PC : données fournies par <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>.</p>
+    <p>Jaquettes via <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>. Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs. Demande de retrait : <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait%20de%20jaquette" rel="noopener">ouvrir une issue GitHub</a>.</p>
+    <nav class="foot-links" aria-label="Informations">
+      <a href="./">Catalogue</a>
+      <a href="methodologie.html">Méthodologie des prix</a>
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

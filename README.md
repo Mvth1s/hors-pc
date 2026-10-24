@@ -16,7 +16,9 @@ src/horspc/
   covers.py             jaquettes IGDB téléchargées en WebP dans site/covers/
   prices/               Protocol PriceProvider, provider manuel, règle de sélection
   build.py              fusion, validation, écriture de site/data.json
-site/                   index.html, style.css, app.js, fonts/, data.json et covers/ (générés, versionnés)
+site/                   index.html, mentions-legales.html, confidentialite.html, methodologie.html,
+                        style.css, theme.js (thème, toutes pages), app.js (catalogue), fonts/,
+                        data.json et covers/ (générés, versionnés)
 tests/                  pytest, appels réseau mockés avec respx (fixtures IGDB figées)
 docs/maquette/          maquette de référence du front (non publiée)
 .github/workflows/      ci.yml (ruff + pytest), update.yml (build hebdo + Pages)
@@ -211,6 +213,10 @@ Le job d'alerte tourne même quand le build échoue (sur `schedule` et `workflow
    # si Pages est déjà activé avec une autre source :
    gh api -X PUT repos/Mvth1s/hors-pc/pages -f build_type=workflow
    ```
+
+## Pages légales
+
+`site/mentions-legales.html`, `site/confidentialite.html` et `site/methodologie.html` sont statiques et liées depuis le pied de page de toutes les pages. `tests/test_site.py` vérifie qu'aucune page ne charge de ressource externe, que le pied de page lie les trois pages et qu'elles sont datées. **TODO bloquant** : `test_adresse_de_contact_renseignee` échoue tant que l'adresse de contact de l'éditeur n'est pas renseignée dans `mentions-legales.html`.
 
 ## Crédits
 

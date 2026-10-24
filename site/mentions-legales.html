@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mentions légales · HorsPC</title>
+<meta name="description" content="Mentions légales du site HorsPC : éditeur, hébergeur, propriété intellectuelle.">
+<link rel="stylesheet" href="style.css">
+<script src="theme.js" defer></script>
+</head>
+<body class="hp">
+<script>
+  // Thème appliqué avant le premier rendu pour éviter un flash.
+  try { var t = localStorage.getItem("horspc-theme"); if (t === "light" || t === "dark") document.body.classList.add(t); } catch (e) {}
+</script>
+<header class="top">
+  <div class="wrap">
+    <div class="top-inner">
+      <div class="brand">
+        <p class="logo"><a href="./" aria-label="HorsPC, retour au catalogue">Hors<span class="logo-pc">PC</span></a></p>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" type="button" id="theme-toggle" aria-label="Passer en thème sombre">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap legal">
+<h1>Mentions légales</h1>
+<p class="legal-updated">Dernière mise à jour : 24/10/2026</p>
+
+<p>Informations fournies en application de l'article 1-1 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique (LCEN).</p>
+
+<h2>Éditeur</h2>
+<p>Le site HorsPC est édité par Mathis Aguado, à titre de particulier, dans le cadre d'un projet personnel non commercial : il ne vend rien, n'affiche aucune publicité et ne perçoit aucune commission.</p>
+<p>Contact : <!-- TODO-CONTACT : adresse de contact à renseigner (un test échoue tant qu'elle manque). --><span class="todo">[adresse de contact à renseigner]</span></p>
+
+<h2>Directeur de la publication</h2>
+<p>Mathis Aguado.</p>
+
+<h2>Hébergeur</h2>
+<!-- Source : GitHub General Privacy Statement, section « Contact Us »,
+     https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement
+     (consultée le 24/10/2026, version du 27/04/2026).
+     Aucun numéro de téléphone n'y figure ; aucun n'est indiqué ici plutôt que d'en reprendre
+     un d'un annuaire tiers. -->
+<p>GitHub, Inc. (service GitHub Pages)<br>
+88 Colin P. Kelly Jr. St.<br>
+San Francisco, CA 94107<br>
+États-Unis</p>
+
+<h2>Propriété intellectuelle</h2>
+<ul>
+  <li>Les noms de jeux, de consoles et les marques citées appartiennent à leurs propriétaires respectifs. HorsPC n'est affilié à aucun constructeur, éditeur ni marchand.</li>
+  <li>Les jaquettes, dates de sortie et informations sur les plateformes proviennent d'<a href="https://www.igdb.com" rel="noopener">IGDB.com</a>. Les jaquettes appartiennent à leurs éditeurs respectifs ; elles sont copiées sur ce site et ne sont pas chargées depuis IGDB.</li>
+  <li>Les polices Bricolage Grotesque et IBM Plex Sans sont distribuées sous licence SIL Open Font License 1.1.</li>
+  <li>Demande de retrait d'un contenu (jaquette, nom, information) : <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait" rel="noopener">ouvrir une issue GitHub</a>.</li>
+</ul>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Prix TTC relevés manuellement chez des marchands français. HorsPC n'est affilié à aucun constructeur, éditeur ni marchand et ne touche aucune commission ; les noms de jeux et de consoles appartiennent à leurs propriétaires.</p>
+    <p>Dates de sortie et statut PC : données fournies par <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>.</p>
+    <p>Jaquettes via <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>. Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs. Demande de retrait : <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait%20de%20jaquette" rel="noopener">ouvrir une issue GitHub</a>.</p>
+    <nav class="foot-links" aria-label="Informations">
+      <a href="./">Catalogue</a>
+      <a href="methodologie.html">Méthodologie des prix</a>
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

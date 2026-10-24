@@ -1,11 +1,11 @@
 // HorsPC : rendu du catalogue à partir de data.json (vanilla, sans dépendance).
+// Le thème clair/sombre est géré par theme.js, commun à toutes les pages.
 "use strict";
 
 // Au-delà de ce nombre de jours depuis generated_at, une bannière d'alerte s'affiche.
 // Seuil distinct de STALE_ISSUE_DAYS (8 j) dans .github/workflows/update.yml.
 const STALE_BANNER_DAYS = 14;
 
-const THEME_KEY = "horspc-theme";
 const DAY_MS = 86400000;
 
 // Filtres console : « Switch 2 » couvre aussi les jeux Switch (rétrocompatibles).
@@ -218,45 +218,6 @@ function renderFreshness(generatedAt) {
   }
 }
 
-// --- Thème ---------------------------------------------------------------------
-
-const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-function storedTheme() {
-  try {
-    const t = localStorage.getItem(THEME_KEY);
-    return t === "light" || t === "dark" ? t : null;
-  } catch {
-    return null;
-  }
-}
-
-function applyTheme() {
-  const theme = storedTheme() || (darkQuery.matches ? "dark" : "light");
-  const body = document.body;
-  body.classList.toggle("dark", theme === "dark" && storedTheme() === "dark");
-  body.classList.toggle("light", theme === "light" && storedTheme() === "light");
-  body.classList.toggle("is-dark", theme === "dark");
-  $("theme-toggle").setAttribute(
-    "aria-label",
-    theme === "dark" ? "Passer en thème clair" : "Passer en thème sombre",
-  );
-}
-
-function toggleTheme() {
-  const next = document.body.classList.contains("is-dark") ? "light" : "dark";
-  try {
-    localStorage.setItem(THEME_KEY, next);
-  } catch {
-    // Stockage indisponible (navigation privée) : le choix ne vaut que pour cette page.
-    document.body.classList.toggle("dark", next === "dark");
-    document.body.classList.toggle("light", next === "light");
-    document.body.classList.toggle("is-dark", next === "dark");
-    return;
-  }
-  applyTheme();
-}
-
 // --- Initialisation --------------------------------------------------------------
 
 function bindEvents() {
@@ -276,12 +237,9 @@ function bindEvents() {
       render();
     }
   });
-  $("theme-toggle").addEventListener("click", toggleTheme);
-  darkQuery.addEventListener("change", applyTheme);
 }
 
 async function init() {
-  applyTheme();
   bindEvents();
   try {
     const response = await fetch("data.json", { cache: "no-cache" });
