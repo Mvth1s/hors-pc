@@ -1,8 +1,14 @@
-// HorsPC : bande-annonce des pages de jeu. Aucune requête vers YouTube avant le clic :
-// la façade (image + bouton) est remplacée par l'iframe youtube-nocookie.com au clic seulement.
+// HorsPC : pages de jeu. Badge « À venir » expiré côté client ; bande-annonce sans requête vers
+// YouTube avant le clic : la façade (image + bouton) est remplacée par l'iframe youtube-nocookie.com.
 "use strict";
 
 (() => {
+  // Badge « À venir » retiré si la date est passée depuis le dernier build.
+  const today = new Date().toLocaleDateString("sv"); // AAAA-MM-JJ
+  for (const badge of document.querySelectorAll(".status.soon[data-release]")) {
+    if (badge.dataset.release <= today) badge.remove();
+  }
+
   const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
 
   for (const facade of document.querySelectorAll(".trailer[data-youtube-id]")) {

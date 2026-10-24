@@ -12,6 +12,7 @@ const DAY_MS = 86400000;
 const PLATFORM_FILTERS = {
   ps5: { label: "PS5", platforms: ["ps5"] },
   switch2: { label: "Switch 2", platforms: ["switch", "switch2"] },
+  xbox_series: { label: "Xbox Series", platforms: ["xbox_series"] },
 };
 const STATUSES = {
   none: { filter: "Exclusif" },
@@ -113,6 +114,18 @@ function renderFreshness() {
   }
 }
 
+/** Retire « À venir » des jeux sortis depuis le dernier build (date locale du visiteur). */
+function expireUpcoming() {
+  const today = new Date().toLocaleDateString("sv"); // AAAA-MM-JJ
+  for (const badge of document.querySelectorAll(".status.soon[data-release]")) {
+    const release = badge.dataset.release;
+    if (release > today) continue;
+    const sub = badge.closest("article")?.querySelector(".sub span");
+    if (sub) sub.textContent = `Sortie le ${release.split("-").reverse().join("/")}`;
+    badge.remove();
+  }
+}
+
 function bindEvents() {
   $("platform-chips").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-platform]");
@@ -133,10 +146,11 @@ function bindEvents() {
 }
 
 function init() {
-  // Liens du pied de page : ./?console=ps5 ou ./?console=switch2 activent le filtre.
+  // Liens du pied de page : ./?console=ps5, switch2 ou xbox_series activent le filtre.
   const consoleParam = new URLSearchParams(window.location.search).get("console");
   if (Object.hasOwn(PLATFORM_FILTERS, consoleParam ?? "")) state.platform = consoleParam;
   bindEvents();
+  expireUpcoming();
   renderFreshness();
   render();
 }

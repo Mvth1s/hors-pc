@@ -21,7 +21,12 @@ TOKEN_URL = "https://id.twitch.tv/oauth2/token"
 API_URL = "https://api.igdb.com/v4"
 
 PC_SLUG = "win"
-PLATFORM_SLUGS: dict[Platform, str] = {"ps5": "ps5", "switch": "switch", "switch2": "switch-2"}
+PLATFORM_SLUGS: dict[Platform, str] = {
+    "ps5": "ps5",
+    "switch": "switch",
+    "switch2": "switch-2",
+    "xbox_series": "series-x-s",
+}
 
 GAME_FIELDS = (
     "name,url,platforms,release_dates.platform,release_dates.date,"

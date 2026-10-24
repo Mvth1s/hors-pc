@@ -38,11 +38,17 @@ AUTHOR = {
     ],
 }
 
-CONSOLES = {"ps5": ("PS5", "ps"), "switch": ("Switch", "nin"), "switch2": ("Switch 2", "nin")}
+CONSOLES = {
+    "ps5": ("PS5", "ps"),
+    "switch": ("Switch", "nin"),
+    "switch2": ("Switch 2", "nin"),
+    "xbox_series": ("Xbox Series", "xb"),
+}
 SCHEMA_PLATFORMS = {
     "ps5": "PlayStation 5",
     "switch": "Nintendo Switch",
     "switch2": "Nintendo Switch 2",
+    "xbox_series": "Xbox Series X|S",
 }
 STATUSES = {
     "none": ("Exclusif console", "status ex"),
@@ -72,7 +78,8 @@ def render_site(data: DataFile, site_dir: Path) -> None:
             text = _replace(text, "head", _index_head(text, games))
             text = _replace(text, "updated", _updated_line(data))
             text = _replace(text, "count", _count(len(games)))
-            text = _replace(text, "grid", "\n".join(_card(g, i) for i, g in enumerate(games)))
+            cards = (_card(g, i, generated) for i, g in enumerate(games))
+            text = _replace(text, "grid", "\n".join(cards))
         else:
             text = _replace(text, "head", _page_head(text, url))
             lastmod[url] = _visible_update(text) or generated
@@ -218,7 +225,7 @@ def _index_head(text: str, games: list[GameOut]) -> str:
             {**AUTHOR, "@id": SITE_URL + "#editeur"},
             {
                 "@type": "ItemList",
-                "name": "Exclusivités console absentes sur PC",
+                "name": "Jeux console absents du PC",
                 "numberOfItems": len(games),
                 "itemListElement": [
                     {
@@ -341,16 +348,39 @@ def _sort_attrs(game: GameOut) -> str:
     )
 
 
-def _card(game: GameOut, index: int) -> str:
+def is_upcoming(game: GameOut, today: date) -> bool:
+    """« À venir » : date de sortie future (s'ajoute au statut PC, ne le remplace pas)."""
+    return game.release_date is not None and game.release_date > today
+
+
+def _badges(game: GameOut, today: date) -> str:
+    """Statut PC, plus « Sortie le JJ/MM/AAAA » pour un jeu à venir.
+
+    `data-release` permet à app.js de retirer le badge une fois la date passée, entre deux builds.
+    """
     label, cls = STATUSES[game.pc_status]
-    release = (
-        f"Sortie le {_fr(game.release_date)}" if game.release_date else "Date de sortie inconnue"
-    )
+    badges = f'<span class="{cls}">{label}</span>'
+    if is_upcoming(game, today):
+        badges += (
+            f'<span class="status soon" data-release="{game.release_date.isoformat()}">'
+            f'<span class="visually-hidden">À venir : </span>'
+            f"Sortie le {_fr(game.release_date)}</span>"
+        )
+    return f'<div class="badges">{badges}</div>'
+
+
+def _card(game: GameOut, index: int, today: date) -> str:
+    if game.release_date is None:
+        release = "Date de sortie inconnue"
+    elif is_upcoming(game, today):
+        release = "À venir"
+    else:
+        release = f"Sortie le {_fr(game.release_date)}"
     fmt = FORMATS[game.offer.format] if game.offer else ""
     return (
         f'<article class="card" {_sort_attrs(game)}>'
         f"{_cover(game, index, '', lazy=index >= 4)}"
-        f'<div class="body"><span class="{cls}">{label}</span>'
+        f'<div class="body">{_badges(game, today)}'
         f'<h2 class="title"><a href="{GAMES_DIR}/{game.slug}/">{_e(game.title)}</a></h2>'
         f'<p class="sub"><span>{release}</span><span>{fmt}</span></p>'
         f"{_price_block(game, with_cta=True)}</div></article>"
@@ -378,7 +408,7 @@ def _game_template(site_dir: Path) -> str:
 
 
 def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
-    label, cls = STATUSES[game.pc_status]
+    label = STATUSES[game.pc_status][0]
     platforms = ", ".join(CONSOLES[p][0] for p in game.platforms)
     title = f"{game.title} ({platforms}) : prix et statut PC · HorsPC"
     description = f"{game.title} sur {platforms}, " + (
@@ -404,7 +434,7 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
     )
     facts = [
         ("Plateformes", platforms),
-        ("Sortie", _fr(game.release_date) if game.release_date else "inconnue"),
+        ("Sortie", _release_fact(game, generated)),
         ("Statut PC", label),
     ]
     if game.developers:
@@ -429,7 +459,7 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
 <article class="game">
   {_cover(game, 0, "../../", lazy=False)}
   <div class="game-body">
-    <span class="{cls}">{label}</span>
+    {_badges(game, generated)}
     <h1>{_e(game.title)}</h1>
     <h2>Offre retenue</h2>
     {_price_block(game, with_cta=True)}
@@ -442,6 +472,12 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
     page = template.replace("<!--horspc:game-head-->", head)
     page = page.replace("<!--horspc:game-main-->", main)
     return _set_footer_date(page, generated)
+
+
+def _release_fact(game: GameOut, today: date) -> str:
+    if game.release_date is None:
+        return "inconnue"
+    return _fr(game.release_date) + (" (à venir)" if is_upcoming(game, today) else "")
 
 
 def _summary_section(game: GameOut) -> str:

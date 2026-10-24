@@ -11,7 +11,7 @@ from typing import Any
 import pytest
 
 from horspc.models import DataFile
-from horspc.render import GAMES_DIR, SITE_URL, external_links, render_site
+from horspc.render import GAMES_DIR, SCHEMA_PLATFORMS, SITE_URL, external_links, render_site
 
 SITE = Path(__file__).parents[1] / "site"
 VERIFICATION = (
@@ -52,9 +52,9 @@ def test_catalogue_lisible_sans_js() -> None:
     text = (SITE / "index.html").read_text(encoding="utf-8")
     titles = re.findall(r'<h2 class="title"><a href="jeux/[^"]+/">([^<]+)</a></h2>', text)
     expected = [g["title"] for g in visible_games()]
-    assert len(titles) == len(expected) == 8
+    assert len(titles) == len(expected) >= 8
     assert sorted(t.replace("&#x27;", "'") for t in titles) == sorted(expected)
-    assert re.search(r'<strong id="count">8 jeux</strong>', text)
+    assert f'<strong id="count">{len(expected)} jeux</strong>' in text
     assert "fetch(" not in (SITE / "app.js").read_text(encoding="utf-8")
 
 
@@ -97,7 +97,7 @@ def test_jsonld_accueil() -> None:
         "Mathis Aguado",
     )
     items = types["ItemList"]["itemListElement"]
-    assert [i["position"] for i in items] == list(range(1, 9))
+    assert [i["position"] for i in items] == list(range(1, len(visible_games()) + 1))
     assert all(i["url"].startswith(f"{SITE_URL}{GAMES_DIR}/") for i in items)
 
 
@@ -110,7 +110,7 @@ def test_page_jeu(page: Path) -> None:
     assert game["@type"] == "VideoGame"
     assert game["url"] == canonical(text)
     assert game["image"].startswith(SITE_URL)
-    assert set(game["gamePlatform"]) <= {"PlayStation 5", "Nintendo Switch", "Nintendo Switch 2"}
+    assert set(game["gamePlatform"]) <= set(SCHEMA_PLATFORMS.values())
     assert 'href="../../"' in text  # lien vers le catalogue
 
 
@@ -361,3 +361,51 @@ def test_capture_hors_dossier_du_jeu_refusee() -> None:
     bad = rich() | {"screenshots": [{"image_id": "x", "url": "screens/autre/x.webp"}]}
     with pytest.raises(ValueError, match="capture"):
         DataFile.model_validate({"generated_at": NOW, "games": [bad]})
+
+
+def test_jeu_a_venir_badge_date_et_statut_pc(site: Path) -> None:
+    render(
+        site,
+        [
+            game("gta", platforms=["ps5"], release_date="2026-11-19", release_date_source="igdb"),
+            game("sorti", release_date="2026-10-26", release_date_source="igdb"),
+        ],
+    )
+    index = (site / "index.html").read_text(encoding="utf-8")
+    gta = re.search(r'<article class="card"[^>]*data-title="Gta".*?</article>', index).group(0)
+    # « À venir » s'ajoute au statut PC sans le remplacer.
+    assert '<span class="status ex">Exclusif console</span>' in gta
+    assert (
+        '<span class="status soon" data-release="2026-11-19">'
+        '<span class="visually-hidden">À venir : </span>Sortie le 19/11/2026</span>'
+    ) in gta
+    assert "<span>À venir</span>" in gta
+    sorti = re.search(r'<article class="card"[^>]*data-title="Sorti".*?</article>', index)
+    assert "status soon" not in sorti.group(0)  # sorti le jour du build : plus à venir
+    page = (site / GAMES_DIR / "gta" / "index.html").read_text(encoding="utf-8")
+    assert "Sortie le 19/11/2026" in page and "<dd>19/11/2026 (à venir)</dd>" in page
+
+
+def test_xbox_series_badge_et_jsonld(site: Path) -> None:
+    render(site, [game("halo", platforms=["xbox_series"])])
+    index = (site / "index.html").read_text(encoding="utf-8")
+    assert '<span class="console xb">Xbox Series</span>' in index
+    (data,) = jsonld((site / GAMES_DIR / "halo" / "index.html").read_text(encoding="utf-8"))
+    assert data["gamePlatform"] == ["Xbox Series X|S"]
+
+
+def test_filtre_xbox_series_et_lien_de_pied_de_page() -> None:
+    app = (SITE / "app.js").read_text(encoding="utf-8")
+    assert 'xbox_series: { label: "Xbox Series", platforms: ["xbox_series"] }' in app
+    index = (SITE / "index.html").read_text(encoding="utf-8")
+    assert 'data-platform="xbox_series"' in index
+    for page in root_pages():
+        assert '<a href="./?console=xbox_series">Xbox Series</a>' in page.read_text(
+            encoding="utf-8"
+        )
+
+
+def test_positionnement_jeux_console_absents_du_pc() -> None:
+    index = (SITE / "index.html").read_text(encoding="utf-8")
+    assert "<title>HorsPC, les jeux console absents du PC</title>" in index
+    assert "Xbox Series" in re.search(r'<p class="tagline">(.*?)</p>', index).group(1)

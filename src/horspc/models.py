@@ -21,7 +21,7 @@ from pydantic import (
     model_validator,
 )
 
-Platform = Literal["ps5", "switch", "switch2"]
+Platform = Literal["ps5", "switch", "switch2", "xbox_series"]
 PcStatus = Literal["none", "announced", "released"]
 PcStatusSource = Literal["igdb", "manual"]
 SummarySource = Literal["igdb", "manual"]

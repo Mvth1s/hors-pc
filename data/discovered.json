@@ -60,6 +60,20 @@
         "pixmania": "https://www.pixmania.com/fr/fr/sony-gran-turismo-7-standard-playstation-5-106722.html"
       }
     },
+    "grand-theft-auto-vi": {
+      "checked": {
+        "boulanger": "2026-10-24",
+        "leclerc": "2026-10-24",
+        "pixmania": "2026-10-24"
+      },
+      "eans": [
+        "5026555439824"
+      ],
+      "sources": {
+        "boulanger": "https://www.boulanger.com/ref/1243150",
+        "leclerc": "https://www.e.leclerc/fp/grand-theft-auto-vi-code-in-a-box-ps5-5026555439824"
+      }
+    },
     "mario-kart-world": {
       "checked": {
         "boulanger": "2026-10-24",

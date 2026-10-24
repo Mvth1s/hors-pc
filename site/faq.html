@@ -37,7 +37,7 @@
       "name": "Pourquoi tel jeu n'est-il pas listé ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Le catalogue est choisi à la main et n'est pas exhaustif. Un jeu n'y figure que s'il est sorti sur PS5, Switch ou Switch 2 et n'est pas sorti sur PC. Il peut aussi manquer simplement parce qu'il n'a pas encore été ajouté : vous pouvez le suggérer en ouvrant une issue GitHub."
+        "text": "Le catalogue est choisi à la main et n'est pas exhaustif. Un jeu n'y figure que s'il est sorti ou annoncé sur PS5, Switch, Switch 2 ou Xbox Series et n'est pas sorti sur PC. Il peut aussi manquer simplement parce qu'il n'a pas encore été ajouté : vous pouvez le suggérer en ouvrant une issue GitHub."
       }
     },
     {
@@ -58,6 +58,22 @@
     },
     {
       "@type": "Question",
+      "name": "Pourquoi des jeux Xbox ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "HorsPC liste les jeux console absents du PC, quel que soit le constructeur. La plupart des jeux Xbox sortent aussi sur PC et ne figurent donc pas au catalogue ; seuls ceux sans version PC y sont, comme Grand Theft Auto VI à sa sortie."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Que signifie le badge « Sortie le … » ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Le jeu n'est pas encore sorti : il est à venir, à la date indiquée par IGDB.com. Il reste au catalogue tant qu'aucune version PC n'est sortie ; les prix affichés sont alors ceux des précommandes."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "D'où viennent les prix, et à quelle fréquence sont-ils mis à jour ?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -66,10 +82,10 @@
     },
     {
       "@type": "Question",
-      "name": "Pourquoi pas de liens affiliés ni de prix automatiques ?",
+      "name": "Pourquoi certains sites ne sont-ils pas relevés, et pourquoi pas de liens affiliés ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Les comparateurs de prix et les boutiques officielles interdisent l'extraction automatique de leurs pages dans leurs conditions d'utilisation ou leur robots.txt. Et des liens affiliés rendraient le projet commercial, ce qui sortirait du cadre gratuit et non commercial de l'API IGDB utilisée pour les données de jeux."
+        "text": "Les prix sont collectés automatiquement : les sites qui s'y opposent dans leurs conditions d'utilisation ou leur robots.txt (Amazon, Fnac, Cdiscount, les comparateurs, les boutiques officielles…), ou qui bloquent les robots, ne sont jamais interrogés. Et des liens affiliés rendraient le projet commercial, ce qui sortirait du cadre gratuit et non commercial de l'API IGDB utilisée pour les données de jeux."
       }
     },
     {
@@ -136,7 +152,7 @@
 <div class="faq">
 <details class="faq-item">
   <summary>Pourquoi tel jeu n'est-il pas listé ?</summary>
-  <p>Le catalogue est choisi à la main et n'est pas exhaustif. Un jeu n'y figure que s'il est sorti sur PS5, Switch ou Switch 2 et n'est pas sorti sur PC. Il peut aussi manquer simplement parce qu'il n'a pas encore été ajouté : vous pouvez le suggérer en <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Erreur%20%3A%20&body=Page%20concern%C3%A9e%20%3A%0A%0AErreur%20constat%C3%A9e%20%3A%0A%0ACorrection%20propos%C3%A9e%20%28avec%20source%29%20%3A%0A" target="_blank" rel="noopener noreferrer">ouvrant une issue GitHub<span class="ext-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (nouvel onglet)</span></a>.</p>
+  <p>Le catalogue est choisi à la main et n'est pas exhaustif. Un jeu n'y figure que s'il est sorti ou annoncé sur PS5, Switch, Switch 2 ou Xbox Series et n'est pas sorti sur PC. Il peut aussi manquer simplement parce qu'il n'a pas encore été ajouté : vous pouvez le suggérer en <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Erreur%20%3A%20&body=Page%20concern%C3%A9e%20%3A%0A%0AErreur%20constat%C3%A9e%20%3A%0A%0ACorrection%20propos%C3%A9e%20%28avec%20source%29%20%3A%0A" target="_blank" rel="noopener noreferrer">ouvrant une issue GitHub<span class="ext-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (nouvel onglet)</span></a>.</p>
 </details>
 <details class="faq-item">
   <summary>Que veut dire « Portage PC annoncé » ?</summary>
@@ -147,12 +163,20 @@
   <p>La Switch 2 fait tourner la plupart des jeux Switch. Le filtre « Switch 2 » montre donc tout ce qui se joue sur Switch 2, y compris les jeux Switch ; le badge de chaque fiche indique la console de la version vendue.</p>
 </details>
 <details class="faq-item">
+  <summary>Pourquoi des jeux Xbox ?</summary>
+  <p>HorsPC liste les jeux console absents du PC, quel que soit le constructeur. La plupart des jeux Xbox sortent aussi sur PC et ne figurent donc pas au catalogue ; seuls ceux sans version PC y sont, comme Grand Theft Auto VI à sa sortie.</p>
+</details>
+<details class="faq-item">
+  <summary>Que signifie le badge « Sortie le … » ?</summary>
+  <p>Le jeu n'est pas encore sorti : il est à venir, à la date indiquée par IGDB.com. Il reste au catalogue tant qu'aucune version PC n'est sortie ; les prix affichés sont alors ceux des précommandes.</p>
+</details>
+<details class="faq-item">
   <summary>D'où viennent les prix, et à quelle fréquence sont-ils mis à jour ?</summary>
   <p>Les prix sont collectés automatiquement chaque semaine sur les pages produit d'E.Leclerc, Boulanger et Pixmania, pour une offre neuve, livrable partout en France et vendue par un professionnel. Chaque fiche affiche le site, le vendeur s'il n'est pas l'enseigne, et la date du relevé ; un relevé de plus de 30 jours est signalé « Prix à vérifier ». Les données de jeux (dates, statut PC, jaquettes) sont actualisées chaque semaine. Le détail est dans la <a href="methodologie.html">méthodologie des prix</a>.</p>
 </details>
 <details class="faq-item">
-  <summary>Pourquoi pas de liens affiliés ni de prix automatiques ?</summary>
-  <p>Les comparateurs de prix et les boutiques officielles interdisent l'extraction automatique de leurs pages dans leurs conditions d'utilisation ou leur robots.txt. Et des liens affiliés rendraient le projet commercial, ce qui sortirait du cadre gratuit et non commercial de l'API IGDB utilisée pour les données de jeux.</p>
+  <summary>Pourquoi certains sites ne sont-ils pas relevés, et pourquoi pas de liens affiliés ?</summary>
+  <p>Les prix sont collectés automatiquement : les sites qui s'y opposent dans leurs conditions d'utilisation ou leur robots.txt (Amazon, Fnac, Cdiscount, les comparateurs, les boutiques officielles…), ou qui bloquent les robots, ne sont jamais interrogés. Et des liens affiliés rendraient le projet commercial, ce qui sortirait du cadre gratuit et non commercial de l'API IGDB utilisée pour les données de jeux.</p>
 </details>
 <details class="faq-item">
   <summary>Pourquoi un jeu disparaît-il quand il sort sur PC ?</summary>
@@ -179,7 +203,7 @@
       <div class="foot-main">
         <div class="foot-brand">
           <a class="foot-logo" href="./">Hors<span class="logo-pc">PC</span></a>
-          <p>Les exclus PS5, Switch et Switch 2 jamais sorties sur PC, au meilleur prix relevé en France. Un projet de <a href="https://github.com/Mvth1s" target="_blank" rel="noopener noreferrer">Mvth1s<span class="ext-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (nouvel onglet)</span></a>.</p>
+          <p>Les jeux console absents du PC (PS5, Switch 2, Xbox Series), au meilleur prix relevé en France. Un projet de <a href="https://github.com/Mvth1s" target="_blank" rel="noopener noreferrer">Mvth1s<span class="ext-icon" aria-hidden="true">↗</span><span class="visually-hidden"> (nouvel onglet)</span></a>.</p>
           <ul class="foot-social">
             <li><a href="https://github.com/Mvth1s/hors-pc" aria-label="Dépôt GitHub de HorsPC (nouvel onglet)" title="Dépôt GitHub" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></li>
             <li><a href="https://www.linkedin.com/in/mathis-aguado" aria-label="LinkedIn de Mathis Aguado (nouvel onglet)" title="LinkedIn" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a></li>
@@ -192,6 +216,7 @@
             <li><a href="./">Tous les jeux</a></li>
             <li><a href="./?console=ps5">PS5</a></li>
             <li><a href="./?console=switch2">Switch 2</a></li>
+            <li><a href="./?console=xbox_series">Xbox Series</a></li>
             <li><a href="faq.html">FAQ</a></li>
             <li><a href="methodologie.html">Méthodologie des prix</a></li>
           </ul>

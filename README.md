@@ -1,6 +1,6 @@
 # HorsPC
 
-Catalogue web des exclusivités **PS5, Switch et Switch 2 jamais sorties sur PC**, avec le prix le plus bas relevé en France. Le site est statique (HTML, CSS, JS vanilla) et lit un unique `site/data.json`, régénéré chaque semaine par GitHub Actions puis publié sur GitHub Pages.
+Catalogue web des **jeux console absents du PC** (PS5, Switch, Switch 2, Xbox Series), sortis ou à venir, avec le prix le plus bas relevé en France. Le site est statique (HTML, CSS, JS vanilla) et lit un unique `site/data.json`, régénéré chaque semaine par GitHub Actions puis publié sur GitHub Pages.
 
 ## Architecture
 
@@ -61,7 +61,7 @@ uv run ruff check . && uv run ruff format --check .
 ```yaml
 - slug: astro-bot                 # kebab-case, unique
   title: Astro Bot
-  platforms: [ps5]                # ps5 | switch | switch2
+  platforms: [ps5]                # ps5 | switch | switch2 | xbox_series
   igdb_id: 255340                 # optionnel : sinon recherche IGDB par titre et plateforme
   launch_price: 69.99             # € TTC, ou null
   launch_price_source: https://…  # obligatoire si launch_price est renseigné
@@ -84,6 +84,10 @@ Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot →
 - Exclusion PC avec la même logique que `pc_status`, appliquée à la fiche, à ses fiches liées (`remasters`, `remakes`, `ports`, `expanded_games`, `standalone_expansions`) et à ses éditions, ainsi qu'au jeu d'origine (`parent_game`) pour un Remaster ou un Port (même jeu), mais pas pour un Remake (autre jeu) : seul un jeu **released** sur PC est écarté ; un portage annoncé reste candidat, signalé en commentaire.
 - Première sortie sur PS5, Switch ou Switch 2 (les originaux PS4, Wii U, GBA… ressortis sur ces consoles sont écartés, sauf `--include-legacy`). `platforms` reprend les consoles de cette première sortie.
 - Deux sections : les plus notés (`total_rating_count`, seuil `--min-ratings`), puis « Sorties récentes » des 365 derniers jours triées par `hypes`, sans seuil (le champ `follows` n'est plus renseigné par IGDB).
+
+## Jeux à venir
+
+Un jeu dont `release_date` est future reste au catalogue (tant qu'aucune version PC n'est sortie) avec un badge « Sortie le JJ/MM/AAAA », en plus de son statut PC. La date de référence est celle du build ; entre deux builds, `app.js` et `game.js` retirent le badge dès que la date est passée (date locale du visiteur). Grand Theft Auto VI (19/11/2026) est référencé dans son édition PS5 ; l'édition Xbox Series ferait une seconde entrée (une entrée = une référence achetable).
 
 ## Prix : relevé automatique
 

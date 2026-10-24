@@ -190,7 +190,7 @@ def _evaluate(
         platforms = sorted(
             {ctx.console_ids[p] for p in row.get("platforms", []) if p in ctx.console_ids}
         )
-        notes.append("première sortie hors PS5/Switch/Switch 2")
+        notes.append("première sortie hors PS5/Switch/Switch 2/Xbox Series")
     return Candidate(
         igdb_id=row["id"],
         name=row["name"],
@@ -243,9 +243,9 @@ def render_yaml(
         "# À curer à la main avant de copier dans data/games.yaml : titre français,",
         "# plateforme (une entrée = une référence achetable), absence réelle de version PC,",
         "# prix de lancement.",
-        "# Critères : sur PS5, Switch ou Switch 2 ; Main Game, Remake ou Remaster ; hors éditions",
-        "# (version_parent) ; pas sorti sur PC (fiche, fiches liées, éditions) ; première sortie",
-        "# sur PS5, Switch ou Switch 2 ; absents de games.yaml.",
+        "# Critères : sur PS5, Switch, Switch 2 ou Xbox Series ; Main Game, Remake ou Remaster ;",
+        "# hors éditions (version_parent) ; pas sorti sur PC (fiche, fiches liées, éditions) ;",
+        "# première sortie sur l'une de ces consoles ; absents de games.yaml.",
         "",
         f"# --- Les plus notés (total_rating_count >= {min_ratings}) ---",
         "",

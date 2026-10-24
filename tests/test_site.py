@@ -134,7 +134,7 @@ def test_faq_jsonld_coherent_avec_les_questions() -> None:
     assert data["@context"] == "https://schema.org" and data["@type"] == "FAQPage"
     summaries = [html.unescape(q) for q in re.findall(r"<summary>(.*?)</summary>", text)]
     assert [q["name"] for q in data["mainEntity"]] == summaries
-    assert len(summaries) == 9
+    assert len(summaries) == 11
     for question in data["mainEntity"]:
         assert question["@type"] == "Question"
         assert question["acceptedAnswer"]["@type"] == "Answer"

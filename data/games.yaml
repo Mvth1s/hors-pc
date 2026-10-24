@@ -1,10 +1,10 @@
-# Liste curée des exclusivités console absentes sur PC.
+# Liste curée des jeux console absents du PC (sortis ou à venir).
 # Règle : une entrée = une référence achetable = un prix.
 #
 # Champs :
 #   slug                 identifiant kebab-case unique
 #   title                titre affiché
-#   platforms            liste parmi ps5 | switch | switch2
+#   platforms            liste parmi ps5 | switch | switch2 | xbox_series
 #   igdb_id              optionnel ; sinon recherche IGDB par titre et plateforme
 #   launch_price         prix de lancement conseillé en € TTC, ou null
 #   launch_price_source  URL de la source (obligatoire si launch_price est renseigné)
@@ -68,3 +68,11 @@
   igdb_id: 191931
   launch_price: 59.99
   launch_price_source: https://www.phonandroid.com/pokemon-ecarlate-et-pokemon-violet-ou-les-acheter-au-meilleur-prix.html
+
+# Sortie le 19/11/2026 sur PS5 et Xbox Series (IGDB 52189). Une entrée = une référence :
+# l'édition PS5 est retenue ; l'édition Xbox Series serait une seconde entrée.
+- slug: grand-theft-auto-vi
+  title: Grand Theft Auto VI
+  platforms: [ps5]
+  igdb_id: 52189
+  launch_price: null

@@ -74,7 +74,7 @@ def test_jeu_d_origine_ps4_garde_avec_include_legacy(igdb: IgdbClient) -> None:
     popular, _ = run(igdb, include_legacy=True)
     legacy = next(c for c in popular if c.slug == "jeu-ps4")
     assert legacy.platforms == ["ps5"]
-    assert legacy.notes == ["première sortie hors PS5/Switch/Switch 2"]
+    assert legacy.notes == ["première sortie hors PS5/Switch/Switch 2/Xbox Series"]
 
 
 def test_limite_respectee(igdb: IgdbClient) -> None:
