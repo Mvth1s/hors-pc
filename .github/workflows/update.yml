@@ -50,16 +50,16 @@ jobs:
       - name: Génère site/data.json (hors ligne, sans commit)
         if: github.event_name == 'push'
         run: uv run python -m horspc build --offline
-      - name: Commite data.json et les jaquettes s'ils ont changé
+      - name: Commite le site généré s'il a changé
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
-          if [ -z "$(git status --porcelain -- site/data.json site/covers)" ]; then
-            echo "data.json et jaquettes inchangés"
+          if [ -z "$(git status --porcelain -- site)" ]; then
+            echo "site généré inchangé"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A -- site/data.json site/covers
+          git add -A -- site
           git commit -m "chore(data): mise à jour du catalogue"
           git pull --rebase
           git push

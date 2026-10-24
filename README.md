@@ -16,6 +16,7 @@ src/horspc/
   covers.py             jaquettes IGDB téléchargées en WebP dans site/covers/
   prices/               Protocol PriceProvider, provider manuel, règle de sélection
   build.py              fusion, validation, écriture de site/data.json
+  render.py             rendu statique : fiches dans index.html, pages de jeux, SEO, sitemap.xml
 site/                   index.html, mentions-legales.html, confidentialite.html, methodologie.html,
                         style.css, theme.js (thème, toutes pages), app.js (catalogue), fonts/,
                         data.json et covers/ (générés, versionnés)
@@ -217,6 +218,24 @@ Le job d'alerte tourne même quand le build échoue (sur `schedule` et `workflow
    # si Pages est déjà activé avec une autre source :
    gh api -X PUT repos/Mvth1s/hors-pc/pages -f build_type=workflow
    ```
+
+## SEO et rendu statique
+
+Le build (complet ou `--offline`) écrit le catalogue en HTML : le site est **entièrement lisible sans JavaScript** ; `app.js` ne gère plus que les filtres, les tris et la bannière d'ancienneté sur les fiches déjà présentes, et plus aucune page ne charge `data.json`.
+
+- `index.html` reste le gabarit : le build ne remplace que les zones `<!--horspc:head-->`, `updated`, `count` et `grid`. Les pages racine reçoivent leur zone `head` et la date du catalogue dans le pied de page.
+- Une page par jeu : `site/jeux/<slug>/index.html` (titre, plateformes, date, statut PC, offre retenue et date de relevé, jaquette, lien vers le catalogue), construite sur le gabarit des pages légales. Les pages des jeux retirés sont supprimées.
+- Sur chaque page : `<link rel="canonical">` absolu, meta description, Open Graph et Twitter card (jaquette, ou `site/og-image.png` en 1200 × 630), `lang="fr"`, un seul `h1`.
+- JSON-LD : `WebSite`, `Person` et `ItemList` sur l'accueil ; `VideoGame` sur chaque page de jeu, avec une `Offer` (prix, EUR, `priceValidUntil` = date du relevé + 30 jours, `InStock`, `NewCondition`) seulement si l'offre n'est pas `stale` : au-delà de 30 jours, le prix n'est plus garanti et n'est plus publié. Le stock n'est pas suivi : `InStock` signifie « offre disponible au moment du relevé ».
+- `site/sitemap.xml` : accueil, pages racine et pages de jeux. `lastmod` réel : date du catalogue pour l'accueil, date « Dernière mise à jour » affichée pour les pages statiques, et pour une page de jeu la date du build où son contenu (`<main>`) a changé pour la dernière fois.
+- Vérification Google Search Console : balise `google-site-verification` dans le `<head>` d'`index.html` uniquement (un test garantit qu'elle ne disparaît pas).
+
+**Pas de `robots.txt` dans `site/`.** Les robots ne lisent `robots.txt` qu'à la racine du domaine (`https://mvth1s.github.io/robots.txt`), jamais dans un sous-chemin comme `/hors-pc/`. Deux options pour en avoir un :
+
+1. **Domaine personnel** : configurer un domaine pour GitHub Pages ; le site est alors servi à la racine, `site/robots.txt` y serait lu (avec `Sitemap: https://<domaine>/sitemap.xml`). Les URL absolues (`SITE_URL` dans `src/horspc/render.py`) sont à mettre à jour.
+2. **Dépôt `Mvth1s.github.io`** : il sert la racine `https://mvth1s.github.io/` ; y placer un `robots.txt` contenant `Sitemap: https://mvth1s.github.io/hors-pc/sitemap.xml`.
+
+En attendant, déclarer `https://mvth1s.github.io/hors-pc/sitemap.xml` directement dans Search Console.
 
 ## Pages légales
 

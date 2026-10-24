@@ -1,5 +1,5 @@
-// HorsPC : rendu du catalogue à partir de data.json (vanilla, sans dépendance).
-// Le thème clair/sombre est géré par theme.js, commun à toutes les pages.
+// HorsPC : filtres, tris et bannière d'ancienneté sur le catalogue rendu au build (index.html).
+// Sans JS, toutes les fiches restent lisibles ; le thème est géré par theme.js.
 "use strict";
 
 // Au-delà de ce nombre de jours depuis generated_at, une bannière d'alerte s'affiche.
@@ -13,22 +13,15 @@ const PLATFORM_FILTERS = {
   ps5: { label: "PS5", platforms: ["ps5"] },
   switch2: { label: "Switch 2", platforms: ["switch", "switch2"] },
 };
-const CONSOLES = {
-  ps5: { label: "PS5", cls: "ps" },
-  switch: { label: "Switch", cls: "nin" },
-  switch2: { label: "Switch 2", cls: "nin" },
-};
 const STATUSES = {
-  none: { label: "Exclusif console", filter: "Exclusif", cls: "status ex" },
-  announced: { label: "Portage PC annoncé", filter: "Portage annoncé", cls: "status port" },
+  none: { filter: "Exclusif" },
+  announced: { filter: "Portage annoncé" },
 };
-const FORMATS = { physical: "Physique", digital: "Démat" };
-const STOPWORDS = new Set(["the", "of", "a", "an", "le", "la", "les", "de", "du", "des", "et"]);
 
 const state = { platform: "all", status: "all", sort: "price" };
-let games = [];
 
 const $ = (id) => document.getElementById(id);
+const cards = () => [...$("grid").querySelectorAll("article.card")];
 
 function esc(value) {
   return String(value).replace(/[&<>"']/g, (c) => ({
@@ -36,144 +29,38 @@ function esc(value) {
   })[c]);
 }
 
-function safeUrl(url) {
-  return /^https?:\/\//i.test(url) ? url : "#";
+/** Valeur de tri d'une fiche, null si absente (placée en fin de liste). */
+function sortValue(card, key) {
+  const raw = card.dataset[key];
+  if (!raw) return null;
+  return key === "release" ? raw : Number(raw);
 }
 
-/** "2026-07-18" -> "18/07/2026", sans passer par Date (pas de décalage de fuseau). */
-function frDate(iso) {
-  const [y, m, d] = iso.slice(0, 10).split("-");
-  return `${d}/${m}/${y}`;
-}
-
-function frDateTime(iso) {
-  return new Date(iso).toLocaleDateString("fr-FR", { timeZone: "Europe/Paris" });
-}
-
-const euroFmt = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
-const intFmt = new Intl.NumberFormat("fr-FR");
-
-function euros(cents) {
-  return euroFmt.format(cents / 100);
-}
-
-/** Prix mis en avant : euros en grand, centimes réduits. */
-function bigPrice(cents) {
-  const whole = intFmt.format(Math.floor(cents / 100));
-  const rest = String(cents % 100).padStart(2, "0");
-  return `${whole}<small>,${rest}&nbsp;€</small>`;
-}
-
-function initials(title) {
-  const main = title.includes(":") ? title.split(":").pop() : title;
-  const words = main.split(/[\s\-]+/).filter((w) => w && !STOPWORDS.has(w.toLowerCase()));
-  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
-  return words.slice(0, 2).map((w) => w[0]).join("").toUpperCase();
-}
-
-function comparePrice(g) {
-  const o = g.offer;
-  return o ? o.price_cents + (o.shipping_cents || 0) : null;
-}
-
-/** Tri avec les valeurs absentes toujours en fin de liste. */
 function byKey(key, desc) {
   return (a, b) => {
-    const ka = key(a);
-    const kb = key(b);
-    if (ka === null && kb === null) return a.title.localeCompare(b.title, "fr");
+    const ka = sortValue(a, key);
+    const kb = sortValue(b, key);
+    const titles = a.dataset.title.localeCompare(b.dataset.title, "fr");
+    if (ka === null && kb === null) return titles;
     if (ka === null) return 1;
     if (kb === null) return -1;
-    if (ka === kb) return a.title.localeCompare(b.title, "fr");
+    if (ka === kb) return titles;
     return (ka < kb ? -1 : 1) * (desc ? -1 : 1);
   };
 }
 
 const SORTS = {
-  price: byKey(comparePrice, false),
-  discount: byKey((g) => (g.offer ? g.offer.discount_pct : null), true),
-  release: byKey((g) => g.release_date, true),
+  price: byKey("price", false),
+  discount: byKey("discount", true),
+  release: byKey("release", true),
 };
 
-function visibleGames() {
-  return games
-    .filter(
-      (g) =>
-        state.platform === "all" ||
-        g.platforms.some((p) => PLATFORM_FILTERS[state.platform].platforms.includes(p)),
-    )
-    .filter((g) => state.status === "all" || g.pc_status === state.status)
-    .sort(SORTS[state.sort]);
-}
-
-function shippingText(offer) {
-  if (offer.shipping_cents === null) return "";
-  return offer.shipping_cents === 0 ? " · port offert" : ` · + ${euros(offer.shipping_cents)} de port`;
-}
-
-// Dimensions de t_cover_big (IGDB), pour réserver la place avant le chargement.
-const COVER_WIDTH = 264;
-const COVER_HEIGHT = 352;
-
-/** Jaquette locale si disponible, sinon visuel provisoire à initiales. */
-function coverHtml(g, consoles) {
-  if (g.cover_url && /^covers\/[a-z0-9-]+\.webp$/.test(g.cover_url)) {
-    return `
-      <div class="cover has-img">
-        <img src="${esc(g.cover_url)}" width="${COVER_WIDTH}" height="${COVER_HEIGHT}" loading="lazy" decoding="async" alt="Jaquette de ${esc(g.title)}">
-        <span class="covers">${consoles}</span>
-      </div>`;
-  }
-  return `
-      <div class="cover cv-${g._color}" role="img" aria-label="Visuel provisoire de ${esc(g.title)}">
-        <span class="covers">${consoles}</span>
-        <span class="initials" aria-hidden="true">${esc(initials(g.title))}</span>
-        <span class="cover-tag">Visuel provisoire</span>
-      </div>`;
-}
-
-function cardHtml(g) {
-  const status = STATUSES[g.pc_status];
-  const consoles = g.platforms
-    .map((p) => `<span class="console ${CONSOLES[p].cls}">${CONSOLES[p].label}</span>`)
-    .join("");
-  const release = g.release_date ? `Sortie le ${esc(frDate(g.release_date))}` : "Date de sortie inconnue";
-  const o = g.offer;
-
-  let price;
-  if (o) {
-    const launch = g.launch_price_cents
-      ? `<span class="was">Lancement <s>${euros(g.launch_price_cents)}</s></span>`
-      : "";
-    const discount = o.discount_pct > 0 ? `<span class="discount">-${o.discount_pct}&nbsp;%</span>` : "";
-    const where = `${esc(o.merchant)}, relevé le ${esc(frDate(o.observed_at))}${shippingText(o)}`;
-    const source = o.stale
-      ? `<p class="source old"><span class="warn-dot" aria-hidden="true"></span><span>${where}. Prix à vérifier.</span></p>`
-      : `<p class="source">${where}</p>`;
-    price = `
-      <div class="price-block">
-        ${launch}
-        <div class="price-row">
-          <span class="price">${bigPrice(o.price_cents)}</span>
-          ${discount}
-        </div>
-      </div>
-      ${source}
-      <a class="cta" href="${esc(safeUrl(o.url))}" rel="noopener nofollow" target="_blank">Voir l'offre<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg></a>`;
-  } else {
-    price = `<div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div>`;
-  }
-
-  return `
-    <article class="card">
-      ${coverHtml(g, consoles)}
-      <div class="body">
-        <span class="${status.cls}">${status.label}</span>
-        <h2 class="title">${esc(g.title)}</h2>
-        <p class="sub"><span>${release}</span><span>${o ? FORMATS[o.format] : ""}</span></p>
-        ${price}
-      </div>
-    </article>`;
+function matches(card) {
+  const platforms = card.dataset.platforms.split(" ");
+  const platformOk =
+    state.platform === "all" ||
+    platforms.some((p) => PLATFORM_FILTERS[state.platform].platforms.includes(p));
+  return platformOk && (state.status === "all" || card.dataset.status === state.status);
 }
 
 function emptyHtml() {
@@ -191,9 +78,17 @@ function emptyHtml() {
 }
 
 function render() {
-  const list = visibleGames();
-  $("count").textContent = `${list.length} ${list.length > 1 ? "jeux" : "jeu"}`;
-  $("grid").innerHTML = list.length ? list.map(cardHtml).join("") : emptyHtml();
+  const grid = $("grid");
+  const all = cards().sort(SORTS[state.sort]);
+  let visible = 0;
+  for (const card of all) {
+    card.hidden = !matches(card);
+    if (!card.hidden) visible += 1;
+    grid.appendChild(card); // réordonne sans recréer les fiches
+  }
+  grid.querySelector(".empty")?.remove();
+  if (visible === 0) grid.insertAdjacentHTML("beforeend", emptyHtml());
+  $("count").textContent = `${visible} ${visible > 1 ? "jeux" : "jeu"}`;
   for (const btn of document.querySelectorAll("[data-platform]")) {
     btn.setAttribute("aria-pressed", String(btn.dataset.platform === state.platform));
   }
@@ -203,29 +98,20 @@ function render() {
   $("sort").value = state.sort;
 }
 
-function renderFreshness(generatedAt) {
+function renderFreshness() {
+  const generatedAt = $("updated")?.dataset.generatedAt;
+  if (!generatedAt) return;
   const days = Math.floor((Date.now() - Date.parse(generatedAt)) / DAY_MS);
-  const date = frDateTime(generatedAt);
-  $("updated-date").textContent = date;
-  $("updated").hidden = false;
-  // Pied de page commun : sur le catalogue, c'est app.js qui le renseigne (footer.js absent),
-  // pour ne charger data.json qu'une fois.
-  const footLine = document.querySelector("[data-foot-updated]");
-  if (footLine) {
-    footLine.querySelector("[data-foot-date]").textContent = date;
-    footLine.hidden = false;
-  }
   const stale = days > STALE_BANNER_DAYS;
   $("live").classList.toggle("old", stale);
   $("stale-banner").hidden = !stale;
   if (stale) {
+    const date = $("updated-date").textContent;
     $("stale-text").innerHTML =
       `<strong>Données anciennes : dernière mise à jour le ${esc(date)}, il y a ${days} jours.</strong> ` +
       "Les prix et les stocks ont pu changer, vérifie chez le marchand avant d'acheter.";
   }
 }
-
-// --- Initialisation --------------------------------------------------------------
 
 function bindEvents() {
   $("platform-chips").addEventListener("click", (e) => {
@@ -246,25 +132,13 @@ function bindEvents() {
   });
 }
 
-async function init() {
+function init() {
   // Liens du pied de page : ./?console=ps5 ou ./?console=switch2 activent le filtre.
   const consoleParam = new URLSearchParams(window.location.search).get("console");
   if (Object.hasOwn(PLATFORM_FILTERS, consoleParam ?? "")) state.platform = consoleParam;
   bindEvents();
-  try {
-    const response = await fetch("data.json", { cache: "no-cache" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    // Les jeux déjà sortis sur PC ne sont pas affichés.
-    games = data.games
-      .map((g, i) => ({ ...g, _color: i % 8 }))
-      .filter((g) => g.pc_status !== "released");
-    renderFreshness(data.generated_at);
-    render();
-  } catch (err) {
-    $("count").textContent = "0 jeu";
-    $("grid").innerHTML = `<p class="error">Impossible de charger le catalogue (${esc(err.message)}).</p>`;
-  }
+  renderFreshness();
+  render();
 }
 
 init();

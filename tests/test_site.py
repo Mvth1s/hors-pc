@@ -10,6 +10,8 @@ import pytest
 
 SITE = Path(__file__).parents[1] / "site"
 PAGES = sorted(SITE.glob("*.html"))
+# rel de <link> qui déclenchent un téléchargement (canonical, alternate… n'en déclenchent pas).
+LOADED_RELS = {"stylesheet", "preload", "icon", "apple-touch-icon", "modulepreload", "manifest"}
 LEGAL_LINKS = {"methodologie.html", "mentions-legales.html", "confidentialite.html"}
 
 
@@ -27,7 +29,7 @@ class Resources(HTMLParser):
             self.links.append(a.get("href", ""))
         elif tag in ("script", "img", "iframe", "source", "audio", "video", "embed"):
             self.loaded += [a[k] for k in ("src", "srcset") if a.get(k)]
-        elif tag == "link":
+        elif tag == "link" and set(a.get("rel", "").split()) & LOADED_RELS:
             self.loaded.append(a.get("href", ""))
         if "style" in a:
             self.loaded += re.findall(r"url\(([^)]+)\)", a["style"])
@@ -117,12 +119,11 @@ def test_footer_identique_dans_toutes_les_pages() -> None:
     assert not divergent, f"pied de page différent de index.html dans : {', '.join(divergent)}"
 
 
-@pytest.mark.parametrize("page", PAGES, ids=lambda p: p.name)
-def test_un_seul_chargement_de_data_json(page: Path) -> None:
-    scripts = [u for u in parse(page).loaded if u.endswith(".js")]
-    loaders = [s for s in scripts if s in ("app.js", "footer.js")]
-    expected = ["app.js"] if page.name == "index.html" else ["footer.js"]
-    assert loaders == expected, f"{page.name} charge {loaders}"
+def test_aucune_page_ne_charge_data_json() -> None:
+    """Le catalogue et les dates sont rendus au build : data.json n'est plus lu par le site."""
+    for script in SITE.glob("*.js"):
+        assert "data.json" not in script.read_text(encoding="utf-8"), script.name
+    assert not (SITE / "footer.js").exists()
 
 
 def test_faq_jsonld_coherent_avec_les_questions() -> None:

@@ -11,7 +11,7 @@ from typing import Any
 import yaml
 from pydantic import ValidationError
 
-from horspc import covers
+from horspc import covers, render
 from horspc.http import HttpClient
 from horspc.igdb import IgdbClient, IgdbError, IgdbGame
 from horspc.models import Catalog, DataFile, GameOut, to_cents
@@ -121,6 +121,7 @@ def run(
     prices_path: Path = PRICES_PATH,
     output_path: Path = OUTPUT_PATH,
     http: HttpClient | None = None,
+    render_html: bool = True,
 ) -> DataFile:
     """Build complet.
 
@@ -168,6 +169,10 @@ def run(
     if igdb_results is not None and http is not None:
         # Hors ligne ou IGDB indisponible : les fichiers présents sont réutilisés tels quels.
         covers.apply_updates(site_dir, updates)
+    if render_html and (site_dir / "index.html").exists():
+        render.render_site(data, site_dir)
+    elif render_html:
+        log.warning("Pas de gabarit index.html dans %s : rendu HTML ignoré", site_dir)
     log.info("%s écrit : %d jeux", output_path, len(data.games))
     return data
 

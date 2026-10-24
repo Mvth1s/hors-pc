@@ -5,6 +5,106 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HorsPC, les exclus console jamais sorties sur PC</title>
 <meta name="description" content="Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix en France.">
+<meta name="google-site-verification" content="Ab9vPVa0ebMxdxThZr2DukWFs8mVU9BNoJDm-ucitxA">
+<!--horspc:head-->
+<link rel="canonical" href="https://mvth1s.github.io/hors-pc/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HorsPC">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="HorsPC, les exclus console jamais sorties sur PC">
+<meta property="og:description" content="Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix en France.">
+<meta property="og:url" content="https://mvth1s.github.io/hors-pc/">
+<meta property="og:image" content="https://mvth1s.github.io/hors-pc/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HorsPC, les exclus console jamais sorties sur PC">
+<meta name="twitter:description" content="Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix en France.">
+<meta name="twitter:image" content="https://mvth1s.github.io/hors-pc/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mvth1s.github.io/hors-pc/#site",
+      "name": "HorsPC",
+      "url": "https://mvth1s.github.io/hors-pc/",
+      "description": "Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix en France.",
+      "inLanguage": "fr-FR",
+      "publisher": {
+        "@id": "https://mvth1s.github.io/hors-pc/#editeur"
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Mathis Aguado",
+      "url": "https://mathisaguado.vercel.app",
+      "sameAs": [
+        "https://www.linkedin.com/in/mathis-aguado",
+        "https://github.com/Mvth1s"
+      ],
+      "@id": "https://mvth1s.github.io/hors-pc/#editeur"
+    },
+    {
+      "@type": "ItemList",
+      "name": "Exclusivités console absentes sur PC",
+      "numberOfItems": 8,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "url": "https://mvth1s.github.io/hors-pc/jeux/astro-bot/",
+          "name": "Astro Bot"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "url": "https://mvth1s.github.io/hors-pc/jeux/ghost-of-yotei/",
+          "name": "Ghost of Yōtei"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "url": "https://mvth1s.github.io/hors-pc/jeux/saros/",
+          "name": "Saros"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "url": "https://mvth1s.github.io/hors-pc/jeux/gran-turismo-7/",
+          "name": "Gran Turismo 7"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "url": "https://mvth1s.github.io/hors-pc/jeux/mario-kart-world/",
+          "name": "Mario Kart World"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "url": "https://mvth1s.github.io/hors-pc/jeux/donkey-kong-bananza/",
+          "name": "Donkey Kong Bananza"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "url": "https://mvth1s.github.io/hors-pc/jeux/zelda-tears-of-the-kingdom/",
+          "name": "The Legend of Zelda: Tears of the Kingdom"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "url": "https://mvth1s.github.io/hors-pc/jeux/pokemon-ecarlate/",
+          "name": "Pokémon Écarlate"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!--/horspc:head-->
 <link rel="preload" href="fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -16,7 +116,8 @@
 </head>
 <body class="hp" id="top">
 <script>
-  // Thème appliqué avant le premier rendu pour éviter un flash.
+  // Thème appliqué avant le premier rendu pour éviter un flash ; classe "js" si JS actif.
+  document.documentElement.classList.add("js");
   try { var t = localStorage.getItem("horspc-theme"); if (t === "light" || t === "dark") document.body.classList.add(t); } catch (e) {}
 </script>
 <header class="top">
@@ -25,7 +126,9 @@
       <div class="brand">
         <h1 class="logo">Hors<span class="logo-pc">PC</span></h1>
         <p class="tagline">Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix.</p>
-        <p class="updated" id="updated" hidden><span class="live" id="live"></span><span>Catalogue mis à jour le <strong id="updated-date"></strong></span></p>
+        <!--horspc:updated-->
+<p class="updated" id="updated" data-generated-at="2026-10-24T11:22:41Z"><span class="live" id="live"></span><span>Catalogue mis à jour le <strong id="updated-date">24/10/2026</strong></span></p>
+<!--/horspc:updated-->
       </div>
       <div class="top-actions">
         <button class="icon-btn" type="button" id="theme-toggle" aria-label="Passer en thème sombre">
@@ -79,10 +182,23 @@
     </div>
   </div>
   <div class="results">
-    <span aria-live="polite"><strong id="count">…</strong> sans version PC</span>
+    <span aria-live="polite"><!--horspc:count-->
+<strong id="count">8 jeux</strong>
+<!--/horspc:count--> sans version PC</span>
     <span>Prix TTC, en euros</span>
   </div>
-  <div class="grid" id="grid"></div>
+  <div class="grid" id="grid">
+<!--horspc:grid-->
+<article class="card" data-platforms="ps5" data-status="none" data-price="" data-discount="" data-release="2024-09-06" data-title="Astro Bot"><div class="cover has-img"><img src="covers/astro-bot.webp" width="264" height="352" decoding="async" alt="Jaquette de Astro Bot"><span class="covers"><span class="console ps">PS5</span></span></div><div class="body"><span class="status ex">Exclusif console</span><h2 class="title"><a href="jeux/astro-bot/">Astro Bot</a></h2><p class="sub"><span>Sortie le 06/09/2024</span><span></span></p><div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div></div></article>
+<article class="card" data-platforms="ps5" data-status="none" data-price="" data-discount="" data-release="2025-10-02" data-title="Ghost of Yōtei"><div class="cover has-img"><img src="covers/ghost-of-yotei.webp" width="264" height="352" decoding="async" alt="Jaquette de Ghost of Yōtei"><span class="covers"><span class="console ps">PS5</span></span></div><div class="body"><span class="status ex">Exclusif console</span><h2 class="title"><a href="jeux/ghost-of-yotei/">Ghost of Yōtei</a></h2><p class="sub"><span>Sortie le 02/10/2025</span><span></span></p><div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div></div></article>
+<article class="card" data-platforms="ps5" data-status="none" data-price="" data-discount="" data-release="2026-04-30" data-title="Saros"><div class="cover has-img"><img src="covers/saros.webp" width="264" height="352" decoding="async" alt="Jaquette de Saros"><span class="covers"><span class="console ps">PS5</span></span></div><div class="body"><span class="status ex">Exclusif console</span><h2 class="title"><a href="jeux/saros/">Saros</a></h2><p class="sub"><span>Sortie le 30/04/2026</span><span></span></p><div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div></div></article>
+<article class="card" data-platforms="ps5" data-status="none" data-price="" data-discount="" data-release="2022-03-04" data-title="Gran Turismo 7"><div class="cover has-img"><img src="covers/gran-turismo-7.webp" width="264" height="352" decoding="async" alt="Jaquette de Gran Turismo 7"><span class="covers"><span class="console ps">PS5</span></span></div><div class="body"><span class="status ex">Exclusif console</span><h2 class="title"><a href="jeux/gran-turismo-7/">Gran Turismo 7</a></h2><p class="sub"><span>Sortie le 04/03/2022</span><span></span></p><div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div></div></article>
+<article class="card" data-platforms="switch2" data-status="none" data-price="" data-discount="" data-release="2025-06-05" data-title="Mario Kart World"><div class="cover has-img"><img src="covers/mario-kart-world.webp" width="264" height="352" loading="lazy" decoding="async" alt="Jaquette de Mario Kart World"><span class="covers"><span class="console nin">Switch 2</span></span></div><div class="body"><span class="status ex">Exclusif console</span><h2 class="title"><a href="jeux/mario-kart-world/">Mario Kart World</a></h2><p class="sub"><span>Sortie le 05/06/2025</span><span></span></p><div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div></div></article>
+<article class="card" data-platforms="switch2" data-status="none" data-price="" data-discount="" data-release="2025-07-17" data-title="Donkey Kong Bananza"><div class="cover has-img"><img src="covers/donkey-kong-bananza.webp" width="264" height="352" loading="lazy" decoding="async" alt="Jaquette de Donkey Kong Bananza"><span class="covers"><span class="console nin">Switch 2</span></span></div><div class="body"><span class="status ex">Exclusif console</span><h2 class="title"><a href="jeux/donkey-kong-bananza/">Donkey Kong Bananza</a></h2><p class="sub"><span>Sortie le 17/07/2025</span><span></span></p><div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div></div></article>
+<article class="card" data-platforms="switch" data-status="none" data-price="" data-discount="" data-release="2023-05-12" data-title="The Legend of Zelda: Tears of the Kingdom"><div class="cover has-img"><img src="covers/zelda-tears-of-the-kingdom.webp" width="264" height="352" loading="lazy" decoding="async" alt="Jaquette de The Legend of Zelda: Tears of the Kingdom"><span class="covers"><span class="console nin">Switch</span></span></div><div class="body"><span class="status ex">Exclusif console</span><h2 class="title"><a href="jeux/zelda-tears-of-the-kingdom/">The Legend of Zelda: Tears of the Kingdom</a></h2><p class="sub"><span>Sortie le 12/05/2023</span><span></span></p><div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div></div></article>
+<article class="card" data-platforms="switch" data-status="none" data-price="" data-discount="" data-release="2022-11-18" data-title="Pokémon Écarlate"><div class="cover has-img"><img src="covers/pokemon-ecarlate.webp" width="264" height="352" loading="lazy" decoding="async" alt="Jaquette de Pokémon Écarlate"><span class="covers"><span class="console nin">Switch</span></span></div><div class="body"><span class="status ex">Exclusif console</span><h2 class="title"><a href="jeux/pokemon-ecarlate/">Pokémon Écarlate</a></h2><p class="sub"><span>Sortie le 18/11/2022</span><span></span></p><div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div></div></article>
+<!--/horspc:grid-->
+</div>
 </main>
 
 <footer class="foot">
@@ -131,7 +247,7 @@
         <p><strong>Données personnelles.</strong> Aucun cookie ni traceur. Le thème choisi reste dans le stockage local de votre navigateur. L'hébergeur journalise les adresses IP des visiteurs pour la sécurité du service.</p>
       </div>
       <div class="foot-bottom">
-        <span>© 2026 Mathis Aguado<span data-foot-updated hidden> · catalogue généré le <span data-foot-date></span></span></span>
+        <span>© 2026 Mathis Aguado<span data-foot-updated> · catalogue généré le <span data-foot-date>24/10/2026</span></span></span>
         <span>HorsPC n'est affilié à aucun constructeur, éditeur ni marchand ; les marques citées appartiennent à leurs propriétaires.</span>
         <a href="#top">Haut de page ↑</a>
       </div>

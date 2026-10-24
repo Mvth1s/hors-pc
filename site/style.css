@@ -202,3 +202,25 @@ color-scheme:light;container-type:inline-size;background:var(--bg);color:var(--i
 .hp .faq-item summary{cursor:pointer;padding:16px 0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.01em;list-style-position:inside}
 .hp .faq-item[open] summary{border-bottom:1px dashed var(--line);margin-bottom:12px}
 .hp .faq-item p{margin:0 0 14px}
+/* --- Rendu statique : outils de filtre réservés au JS, liens de fiche, pages de jeux --- */
+html:not(.js) .hp .toolbar,html:not(.js) .hp #theme-toggle{display:none}
+.hp .card[hidden]{display:none}
+.hp .title a{color:inherit;text-decoration:none}
+.hp .title a:hover{text-decoration:underline}
+.hp .breadcrumb{font-size:13px;color:var(--muted);padding:20px 0 12px}
+.hp .breadcrumb a{color:var(--ink)}
+.hp .game{display:grid;grid-template-columns:264px 1fr;gap:32px;align-items:start;padding-bottom:40px}
+.hp .game .cover{border-radius:14px;border:1px solid var(--line)}
+.hp .game-body{display:flex;flex-direction:column;gap:12px;min-width:0}
+.hp .game-body h1{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:40px;line-height:1.1;letter-spacing:-0.02em}
+.hp .game-body h2{margin:16px 0 0;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.hp .game-body .cta{align-self:flex-start;padding:0 20px}
+.hp .facts{display:grid;grid-template-columns:max-content 1fr;gap:6px 20px;margin:0;font-size:14px}
+.hp .facts dt{color:var(--muted)}
+.hp .facts dd{margin:0}
+.hp .facts a,.hp .back{color:var(--ink)}
+@container (max-width:640px){
+.hp .game{grid-template-columns:1fr;gap:20px}
+.hp .game .cover{max-width:220px}
+.hp .game-body h1{font-size:30px}
+}
