@@ -161,8 +161,11 @@ class Scraper:
         if not self._same_game(page, titles, game.platforms[0], entry):
             self.fetcher.record(source, "rejected", url, f"autre produit : {page.name}")
             return None
-        if page.currency not in (None, "EUR") or page.price is None:
-            self.fetcher.record(source, "rejected", url, "prix absent ou hors euros")
+        if page.price is None:
+            self.fetcher.record(source, "rejected", url, "aucune offre (pas encore en vente ?)")
+            return None
+        if page.currency not in (None, "EUR"):
+            self.fetcher.record(source, "rejected", url, f"prix hors euros ({page.currency})")
             return None
         if page.available is False:
             self.fetcher.record(source, "rejected", url, "indisponible")

@@ -435,3 +435,29 @@ def test_fiche_lue_une_seule_fois_par_run(fetcher: Fetcher) -> None:
     routes = mock_sites()
     Scraper(ALL, fetcher).run([MKW], {}, empty(), TODAY)
     assert routes["pixmania"].call_count == 1 and routes["boulanger"].call_count == 1
+
+
+def test_json_ld_avec_entites_html_dans_les_chaines() -> None:
+    # Boulanger : « (&quot;CGU&quot;) » en description ; décodé avant parsing, le JSON cassait.
+    html = page("boulanger.html").replace(
+        '"name": "Jeu Switch 2 NINTENDO Mario Kart World"',
+        '"name": "Jeu Switch 2 NINTENDO Mario Kart World", '
+        '"description": "Code soumis aux Conditions (&quot;CGU&quot;) d&#39;utilisation"',
+    )
+    product = src.parse_boulanger(html)
+    assert (product.price, product.eans) == (Decimal("89.99"), {EAN_LECLERC})
+
+
+@respx.mock
+def test_precommande_sans_offre_ecartee_sans_alerte(fetcher: Fetcher) -> None:
+    mock_robots()
+    no_offer = page("boulanger.html").replace('"offers"', '"offres"')
+    mock_sites(boulanger=no_offer)
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"boulanger": BOULANGER_REF}, "checked": {}
+    }}}  # fmt: skip
+    observations, report = Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert observations == [] and not report.needs_attention
+    assert ("rejected", "aucune offre (pas encore en vente ?)") in {
+        (e["kind"], e["detail"]) for e in report.events
+    }

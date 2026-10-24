@@ -64,9 +64,8 @@ def jsonld_objects(page: str) -> Iterator[dict[str, Any]]:
     for block in re.findall(
         r"<script[^>]+application/ld\+json[^>]*>(.*?)</script>", page, re.S | re.I
     ):
-        try:
-            data = json.loads(html.unescape(block.strip()))
-        except ValueError:
+        data = _json(block.strip())
+        if data is None:
             continue
         stack = [data]
         while stack:
@@ -78,16 +77,27 @@ def jsonld_objects(page: str) -> Iterator[dict[str, Any]]:
                 stack.extend(v for k, v in item.items() if k == "@graph")
 
 
+def _json(text: str) -> Any:
+    """JSON brut d'abord : un `&quot;` décodé trop tôt casserait une chaîne (Boulanger)."""
+    for candidate in (text, html.unescape(text)):
+        try:
+            return json.loads(candidate, strict=False)
+        except ValueError:
+            continue
+    return None
+
+
 def _types(obj: dict[str, Any]) -> set[str]:
     value = obj.get("@type")
     return set(value) if isinstance(value, list) else {value}
 
 
 def _product(page: str) -> dict[str, Any]:
-    for obj in jsonld_objects(page):
-        if "Product" in _types(obj) and obj.get("offers"):
-            return obj
-    raise MissingData("JSON-LD Product avec offres absent")
+    """Product JSON-LD, de préférence avec offres (une précommande peut ne pas en avoir)."""
+    products = [o for o in jsonld_objects(page) if "Product" in _types(o)]
+    if not products:
+        raise MissingData("JSON-LD Product absent")
+    return next((p for p in products if p.get("offers")), products[0])
 
 
 def _eans(product: dict[str, Any]) -> set[str]:
@@ -157,12 +167,13 @@ def _text(page: str) -> str:
 
 def parse_leclerc(page: str) -> ProductPage:
     product = _product(page)
-    offers = [o for o in _offers(product) if "Offer" in _types(o)]
-    if not offers:
+    offers = _offers(product)
+    own = [o for o in offers if "Offer" in _types(o)]
+    if offers and not own:
         raise MissingData("JSON-LD Offer absent (seulement AggregateOffer)")
-    offer = offers[0]
+    offer = own[0] if own else {}
     return ProductPage(
-        name=str(product.get("name", "")),
+        name=html.unescape(str(product.get("name", ""))),
         eans=_eans(product),
         price=_decimal(offer.get("price")),
         currency=offer.get("priceCurrency"),
@@ -174,10 +185,10 @@ def parse_leclerc(page: str) -> ProductPage:
 
 def parse_boulanger(page: str) -> ProductPage:
     product = _product(page)
-    offer = _offers(product)[0]
+    offer = next(iter(_offers(product)), {})
     seller = re.search(r'data-analytics_product_seller="([^"]+)"', page)
     return ProductPage(
-        name=str(product.get("name", "")),
+        name=html.unescape(str(product.get("name", ""))),
         eans=_eans(product),
         price=_decimal(offer.get("price") or offer.get("lowPrice")),
         currency=offer.get("priceCurrency"),
@@ -189,14 +200,14 @@ def parse_boulanger(page: str) -> ProductPage:
 
 def parse_pixmania(page: str) -> ProductPage:
     product = _product(page)
-    offer = _offers(product)[0]
+    offer = next(iter(_offers(product)), {})
     shipping = (offer.get("shippingDetails") or {}).get("shippingRate") or {}
     # Le JSON-LD nomme la plateforme ; le vendeur professionnel réel est le lien « marchand ».
     seller = re.search(
         r"Vendu par.{0,200}?href=['\"]/fr/fr/marchand/[^'\"]+['\"][^>]*>([^<]+)</a>", page, re.S
     )
     return ProductPage(
-        name=str(product.get("name", "")),
+        name=html.unescape(str(product.get("name", ""))),
         eans=_eans(product),
         price=_decimal(offer.get("price") or offer.get("lowPrice")),
         currency=offer.get("priceCurrency"),
