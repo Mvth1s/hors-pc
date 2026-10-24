@@ -15,7 +15,13 @@ def runs(condition: str | None, event: str) -> bool:
     """Évalue une condition `if:` limitée à github.event_name, ==, ||, && et always()."""
     if condition is None:
         return True
-    expr = condition.replace("always()", "True").replace("||", " or ").replace("&&", " and ")
+    # Chemin nominal : aucune étape précédente en échec.
+    expr = (
+        condition.replace("always()", "True")
+        .replace("failure()", "False")
+        .replace("||", " or ")
+        .replace("&&", " and ")
+    )
     expr = expr.replace("github.event_name", repr(event))
     return _evaluate(ast.parse(expr, mode="eval").body, condition)
 
@@ -85,3 +91,17 @@ def test_lint_et_tests_avant_le_build(event: str) -> None:
     for cmd in ("uv run ruff check .", "uv run ruff format --check .", "uv run pytest"):
         assert cmd in position, cmd
         assert position[cmd] < build
+
+
+@pytest.mark.parametrize("event", ["push", *FULL_EVENTS])
+def test_notification_discord_seulement_en_cas_d_echec(event: str) -> None:
+    job = workflow()["jobs"]["notify"]
+    condition = job["if"]
+    assert not runs(condition, event)  # chemin nominal : pas de notification
+    on_failure = runs(condition.replace("failure()", "always()"), event)
+    assert on_failure == (event in FULL_EVENTS)
+    step = job["steps"][0]
+    assert step["env"]["DISCORD_WEBHOOK_URL"] == "${{ secrets.DISCORD_WEBHOOK_URL }}"
+    assert 'if [ -z "$DISCORD_WEBHOOK_URL" ]' in step["run"]  # secret absent : rien
+    for var in ("WORKFLOW", "EVENT", "RUN_URL"):
+        assert f"${var}" in step["run"]

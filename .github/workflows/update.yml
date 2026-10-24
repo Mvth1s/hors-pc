@@ -129,3 +129,26 @@ jobs:
           Pistes : workflow « Mise à jour » en échec (voir ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions), \
           secrets IGDB expirés, ou cron désactivé par GitHub après 60 jours sans activité \
           (Actions > Mise à jour > Enable workflow)."
+
+  notify:
+    # Prévient sur Discord si le build planifié ou manuel (ou son déploiement) échoue.
+    needs: [build, deploy]
+    if: failure() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-24.04
+    permissions: {}
+    steps:
+      - name: Notification Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          WORKFLOW: ${{ github.workflow }}
+          EVENT: ${{ github.event_name }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "Secret DISCORD_WEBHOOK_URL absent : pas de notification"
+            exit 0
+          fi
+          payload=$(jq -n --arg content "❌ HorsPC : le workflow « $WORKFLOW » a échoué (événement : $EVENT). $RUN_URL" \
+            '{content: $content, allowed_mentions: {parse: []}}')
+          curl --fail --silent --show-error --max-time 20 \
+            -H "Content-Type: application/json" -d "$payload" "$DISCORD_WEBHOOK_URL"

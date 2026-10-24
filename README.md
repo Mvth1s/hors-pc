@@ -247,6 +247,13 @@ En attendant, déclarer `https://mvth1s.github.io/hors-pc/sitemap.xml` directeme
 - Lien « Gérer les cookies » (pied de page, FAQ, confidentialité) : rouvre le bandeau ; un retrait supprime les cookies `_ga*` et recharge la page sans GA.
 - `tests/test_consent.py` (Playwright, Chromium headless, requêtes Google simulées) : aucune requête externe avant consentement ni après refus sur toutes les pages, `gtag.js` chargé après acceptation et aucun autre domaine, boutons de même taille, nouvelle demande après 6 mois, retrait. En local : `uv run playwright install --only-shell chromium` une fois.
 
+## Notifications Discord
+
+Deux canaux complémentaires, configurés hors du code :
+
+- **Échec du build planifié ou manuel** : le job `notify` d'`update.yml` (`if: failure()`, événements `schedule` et `workflow_dispatch` seulement) envoie un message au webhook Discord du secret `DISCORD_WEBHOOK_URL` : nom du workflow, événement et lien du run. Si le secret est absent, l'étape ne fait rien. Un échec sur un simple push n'envoie rien : la CI le signale déjà sur le commit.
+- **Activité du dépôt** : un webhook GitHub (Settings › Webhooks) pointe vers l'URL du webhook Discord **suffixée par `/github`**, format que Discord comprend nativement, avec les événements `issues`, `issue_comment`, `pull_request` et `release`. Les demandes de retrait et les signalements d'erreur, qui arrivent en issues, sont ainsi notifiés.
+
 ## Pages légales
 
 `site/faq.html` (questions en `<details>`, JSON-LD `FAQPage`), `site/mentions-legales.html`, `site/confidentialite.html` et `site/methodologie.html` sont statiques et liées depuis le pied de page de toutes les pages. `tests/test_site.py` vérifie qu'aucune page ne charge de ressource externe, que le pied de page lie les trois pages et qu'elles sont datées. **TODO bloquant** : `test_adresse_de_contact_renseignee` échoue tant que l'adresse de contact de l'éditeur n'est pas renseignée dans `mentions-legales.html`.
