@@ -23,12 +23,18 @@ log = logging.getLogger(__name__)
 GAME_TYPES = ("Main Game", "Remake", "Remaster")
 # Fiches liées qui peuvent porter la version PC d'un jeu (remaster, director's cut...).
 RELATED = ("remasters", "remakes", "ports", "expanded_games", "standalone_expansions")
+# Types qui restent le même jeu que leur parent_game : une sortie PC du parent compte.
+# Un Remake est un autre jeu : son original n'est pas contrôlé.
+SAME_GAME_TYPES = ("Remaster", "Port")
 _RELEASE = "release_dates.platform,release_dates.date,release_dates.status"
 FIELDS = ",".join(
     [
         "name,slug,platforms,first_release_date,total_rating_count,hypes,game_type.type",
         _RELEASE,
-        *(f"{r}.name,{r}.platforms,{r}.{_RELEASE.replace(',', f',{r}.')}" for r in RELATED),
+        *(
+            f"{r}.name,{r}.platforms,{r}.{_RELEASE.replace(',', f',{r}.')}"
+            for r in (*RELATED, "parent_game")
+        ),
     ]
 )
 PAGE_SIZE = 500
@@ -161,10 +167,13 @@ def _evaluate(
     row: dict[str, Any], editions: list[dict[str, Any]], ctx: Context, include_legacy: bool
 ) -> Candidate | None:
     notes = []
+    game_type = (row.get("game_type") or {}).get("type", "?")
+    parent = row.get("parent_game") if game_type in SAME_GAME_TYPES else None
     for entry, label in (
         [(row, None)]
         + [(rel, rel.get("name")) for r in RELATED for rel in row.get(r) or []]
         + [(ed, ed.get("name")) for ed in editions]
+        + ([(parent, f"jeu d'origine {parent.get('name')}")] if parent else [])
     ):
         status = pc_status(entry, ctx.pc_id, ctx.refs, ctx.now)
         if status == "released":
@@ -187,7 +196,7 @@ def _evaluate(
         name=row["name"],
         slug=_slug(row["slug"]),
         platforms=platforms,
-        game_type=(row.get("game_type") or {}).get("type", "?"),
+        game_type=game_type,
         first_release=first,
         total_rating_count=row.get("total_rating_count"),
         hypes=row.get("hypes"),

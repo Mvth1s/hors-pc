@@ -73,7 +73,7 @@ Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot →
 `uv run python -m horspc candidates [--limit 50] [--min-ratings 20] [--recent-limit 20] [--include-legacy] [--output data/candidates.yaml]` interroge IGDB et écrit un YAML au format de `games.yaml`, **à curer à la main** (le fichier est ignoré par git ; la commande refuse d'écrire dans `games.yaml`).
 
 - Jeux sur PS5, Switch ou Switch 2, de type Main Game, Remake ou Remaster (ids lus via `/game_types`), hors éditions (`version_parent`), absents de `games.yaml`.
-- Exclusion PC avec la même logique que `pc_status`, appliquée à la fiche, à ses fiches liées (`remasters`, `remakes`, `ports`, `expanded_games`, `standalone_expansions`) et à ses éditions : seul un jeu **released** sur PC est écarté ; un portage annoncé reste candidat, signalé en commentaire.
+- Exclusion PC avec la même logique que `pc_status`, appliquée à la fiche, à ses fiches liées (`remasters`, `remakes`, `ports`, `expanded_games`, `standalone_expansions`) et à ses éditions, ainsi qu'au jeu d'origine (`parent_game`) pour un Remaster ou un Port (même jeu), mais pas pour un Remake (autre jeu) : seul un jeu **released** sur PC est écarté ; un portage annoncé reste candidat, signalé en commentaire.
 - Première sortie sur PS5, Switch ou Switch 2 (les originaux PS4, Wii U, GBA… ressortis sur ces consoles sont écartés, sauf `--include-legacy`). `platforms` reprend les consoles de cette première sortie.
 - Deux sections : les plus notés (`total_rating_count`, seuil `--min-ratings`), puis « Sorties récentes » des 365 derniers jours triées par `hypes`, sans seuil (le champ `follows` n'est plus renseigné par IGDB).
 

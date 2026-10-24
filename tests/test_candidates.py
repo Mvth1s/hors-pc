@@ -54,8 +54,14 @@ def run(igdb: IgdbClient, **kw):
 
 def test_filtres(igdb: IgdbClient) -> None:
     popular, _ = run(igdb)
-    assert [c.slug for c in popular] == ["exclu-ps5", "portage-annonce", "portage-annule"]
-    exclu, annonce, annule = popular
+    assert [c.slug for c in popular] == [
+        "exclu-ps5",
+        "portage-annonce",
+        "portage-annule",
+        "remake-jeu-pc",
+        "remaster-portage-annonce",
+    ]
+    exclu, annonce, annule, *_ = popular
     assert (exclu.platforms, exclu.total_rating_count, exclu.notes) == (["ps5"], 900, [])
     assert exclu.first_release == date(2023, 11, 14)
     # Portage annoncé via une fiche liée : gardé, signalé en commentaire.
@@ -86,13 +92,8 @@ def test_yaml_valide_et_commente(igdb: IgdbClient) -> None:
     text = render_yaml(popular, recent, date(2026, 10, 26), 20)
     entries = yaml.safe_load(text)
     validate_entries(entries)
-    assert [e["slug"] for e in entries] == [
-        "exclu-ps5",
-        "portage-annonce",
-        "portage-annule",
-        "nouveaute",
-    ]
-    assert entries[3]["title"] == 'Nouveauté "Switch 2"'
+    assert [e["slug"] for e in entries][-1] == "nouveaute"
+    assert entries[-1]["title"] == 'Nouveauté "Switch 2"'
     assert all(e["launch_price"] is None for e in entries)
     assert "# --- Sorties récentes (365 derniers jours, triées par hypes" in text
     assert "- slug: exclu-ps5  # 900 notes · Main Game · sortie 2023-11-14" in text
@@ -106,3 +107,14 @@ def test_cli_refuse_d_ecrire_dans_games_yaml(tmp_path: Path) -> None:
     games.write_text("[]", encoding="utf-8")
     assert main(["candidates", "--games", str(games), "--output", str(games)]) == 2
     assert games.read_text(encoding="utf-8") == "[]"
+
+
+def test_parent_game_controle_pour_remaster_pas_pour_remake(igdb: IgdbClient) -> None:
+    popular, _ = run(igdb)
+    slugs = [c.slug for c in popular]
+    # Remaster dont l'original est sorti sur PC (cas réel : L.A. Noire) : écarté.
+    assert "remaster-jeu-pc" not in slugs
+    # Remake d'un jeu sorti sur PC : un autre jeu, gardé.
+    assert "remake-jeu-pc" in slugs
+    remaster = next(c for c in popular if c.slug == "remaster-portage-annonce")
+    assert remaster.notes == ["portage PC annoncé via « jeu d'origine Original » (igdb 1911)"]

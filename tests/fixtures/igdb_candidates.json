@@ -214,6 +214,109 @@
      "status": 5
     }
    ]
+  },
+  {
+   "id": 1009,
+   "name": "Remaster d'un jeu PC",
+   "slug": "remaster-jeu-pc",
+   "platforms": [
+    130
+   ],
+   "total_rating_count": 150,
+   "game_type": {
+    "id": 9,
+    "type": "Remaster"
+   },
+   "release_dates": [
+    {
+     "id": 91,
+     "platform": 130,
+     "date": 1700000000
+    }
+   ],
+   "parent_game": {
+    "id": 1909,
+    "name": "Original PC",
+    "platforms": [
+     6,
+     12
+    ],
+    "release_dates": [
+     {
+      "id": 92,
+      "platform": 6,
+      "date": 1300000000
+     }
+    ]
+   }
+  },
+  {
+   "id": 1010,
+   "name": "Remake d'un jeu PC",
+   "slug": "remake-jeu-pc",
+   "platforms": [
+    167
+   ],
+   "total_rating_count": 140,
+   "game_type": {
+    "id": 8,
+    "type": "Remake"
+   },
+   "release_dates": [
+    {
+     "id": 93,
+     "platform": 167,
+     "date": 1700000000
+    }
+   ],
+   "parent_game": {
+    "id": 1910,
+    "name": "Original PC 2",
+    "platforms": [
+     6
+    ],
+    "release_dates": [
+     {
+      "id": 94,
+      "platform": 6,
+      "date": 1300000000
+     }
+    ]
+   }
+  },
+  {
+   "id": 1011,
+   "name": "Remaster portage annoncé",
+   "slug": "remaster-portage-annonce",
+   "platforms": [
+    167
+   ],
+   "total_rating_count": 130,
+   "game_type": {
+    "id": 9,
+    "type": "Remaster"
+   },
+   "release_dates": [
+    {
+     "id": 95,
+     "platform": 167,
+     "date": 1700000000
+    }
+   ],
+   "parent_game": {
+    "id": 1911,
+    "name": "Original",
+    "platforms": [
+     6,
+     9
+    ],
+    "release_dates": [
+     {
+      "id": 96,
+      "platform": 6
+     }
+    ]
+   }
   }
  ],
  "recent": [
