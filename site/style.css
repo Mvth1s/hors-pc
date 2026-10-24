@@ -238,3 +238,15 @@ html:not(.js) .hp .toolbar,html:not(.js) .hp #theme-toggle{display:none}
 /* --- Liens externes : icône et mention réservée aux lecteurs d'écran --- */
 .hp .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .hp .ext-icon{display:inline-block;margin-left:.2em;font-size:.9em;text-decoration:none}
+/* --- Carte entièrement cliquable (stretched link) --- */
+.hp .card{position:relative;transition:transform .15s ease,box-shadow .15s ease}
+.hp .card .title a::after{content:'';position:absolute;inset:0;z-index:1;border-radius:14px}
+.hp .card .cta,.hp .card .source a{position:relative;z-index:2}
+.hp .card:hover,.hp .card:focus-within{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.14)}
+.hp.dark .card:hover,.hp.dark .card:focus-within{box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.hp .card .title a:focus-visible{outline:none}
+.hp .card:has(.title a:focus-visible){outline:3px solid var(--ps);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){
+.hp .card{transition:none}
+.hp .card:hover,.hp .card:focus-within{transform:none}
+}
