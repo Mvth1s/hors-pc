@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-19T06:17:40Z",
+  "currency": "EUR",
+  "games": [
+    {
+      "slug": "astro-bot",
+      "title": "Astro Bot",
+      "platforms": ["ps5"],
+      "release_date": "2024-09-06",
+      "launch_price_cents": 6999,
+      "igdb_id": 255340,
+      "igdb_url": "https://www.igdb.com/games/astro-bot",
+      "igdb_fetched_at": "2026-10-19T06:17:38Z",
+      "cover_url": null,
+      "pc_status": "announced",
+      "pc_status_source": "igdb",
+      "offer": null
+    },
+    {
+      "slug": "saros",
+      "title": "Saros",
+      "platforms": ["ps5"],
+      "release_date": "2026-04-30",
+      "launch_price_cents": null,
+      "igdb_id": 300001,
+      "igdb_url": "https://www.igdb.com/games/saros",
+      "igdb_fetched_at": "2026-10-19T06:17:38Z",
+      "cover_url": null,
+      "pc_status": "released",
+      "pc_status_source": "manual",
+      "offer": null
+    }
+  ]
+}

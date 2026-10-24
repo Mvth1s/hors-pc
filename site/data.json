@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-24T10:34:08Z",
+  "currency": "EUR",
+  "games": [
+    {
+      "slug": "astro-bot",
+      "title": "Astro Bot",
+      "platforms": [
+        "ps5"
+      ],
+      "release_date": null,
+      "launch_price_cents": 6999,
+      "igdb_id": null,
+      "igdb_url": null,
+      "igdb_fetched_at": null,
+      "cover_url": null,
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "offer": null
+    },
+    {
+      "slug": "ghost-of-yotei",
+      "title": "Ghost of Yōtei",
+      "platforms": [
+        "ps5"
+      ],
+      "release_date": null,
+      "launch_price_cents": 7999,
+      "igdb_id": null,
+      "igdb_url": null,
+      "igdb_fetched_at": null,
+      "cover_url": null,
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "offer": null
+    },
+    {
+      "slug": "saros",
+      "title": "Saros",
+      "platforms": [
+        "ps5"
+      ],
+      "release_date": null,
+      "launch_price_cents": null,
+      "igdb_id": null,
+      "igdb_url": null,
+      "igdb_fetched_at": null,
+      "cover_url": null,
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "offer": null
+    },
+    {
+      "slug": "gran-turismo-7",
+      "title": "Gran Turismo 7",
+      "platforms": [
+        "ps5"
+      ],
+      "release_date": null,
+      "launch_price_cents": 7999,
+      "igdb_id": null,
+      "igdb_url": null,
+      "igdb_fetched_at": null,
+      "cover_url": null,
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "offer": null
+    },
+    {
+      "slug": "mario-kart-world",
+      "title": "Mario Kart World",
+      "platforms": [
+        "switch2"
+      ],
+      "release_date": null,
+      "launch_price_cents": 8999,
+      "igdb_id": null,
+      "igdb_url": null,
+      "igdb_fetched_at": null,
+      "cover_url": null,
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "offer": null
+    },
+    {
+      "slug": "donkey-kong-bananza",
+      "title": "Donkey Kong Bananza",
+      "platforms": [
+        "switch2"
+      ],
+      "release_date": null,
+      "launch_price_cents": null,
+      "igdb_id": null,
+      "igdb_url": null,
+      "igdb_fetched_at": null,
+      "cover_url": null,
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "offer": null
+    },
+    {
+      "slug": "zelda-tears-of-the-kingdom",
+      "title": "The Legend of Zelda: Tears of the Kingdom",
+      "platforms": [
+        "switch"
+      ],
+      "release_date": null,
+      "launch_price_cents": 6999,
+      "igdb_id": null,
+      "igdb_url": null,
+      "igdb_fetched_at": null,
+      "cover_url": null,
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "offer": null
+    },
+    {
+      "slug": "pokemon-ecarlate",
+      "title": "Pokémon Écarlate",
+      "platforms": [
+        "switch"
+      ],
+      "release_date": null,
+      "launch_price_cents": 5999,
+      "igdb_id": null,
+      "igdb_url": null,
+      "igdb_fetched_at": null,
+      "cover_url": null,
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "offer": null
+    }
+  ]
+}
