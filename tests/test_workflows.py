@@ -14,7 +14,7 @@ WORKFLOW = Path(__file__).parents[1] / ".github" / "workflows" / "update.yml"
 FULL_EVENTS = ["schedule", "workflow_dispatch"]
 
 
-def runs(condition: str | None, event: str) -> bool:
+def runs(condition: str | None, event: str, test_notification: bool = False) -> bool:
     """Évalue une condition `if:` limitée à github.event_name, ==, ||, && et always()."""
     if condition is None:
         return True
@@ -26,6 +26,7 @@ def runs(condition: str | None, event: str) -> bool:
         .replace("&&", " and ")
     )
     expr = expr.replace("github.event_name", repr(event))
+    expr = expr.replace("inputs.test_notification", repr(test_notification))
     return _evaluate(ast.parse(expr, mode="eval").body, condition)
 
 
@@ -49,11 +50,11 @@ def workflow() -> dict[str, Any]:
     return yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))
 
 
-def executed_steps(event: str) -> list[dict[str, Any]]:
+def executed_steps(event: str, test_notification: bool = False) -> list[dict[str, Any]]:
     steps = []
     for job in workflow()["jobs"].values():
-        if runs(job.get("if"), event):
-            steps += [s for s in job["steps"] if runs(s.get("if"), event)]
+        if runs(job.get("if"), event, test_notification):
+            steps += [s for s in job["steps"] if runs(s.get("if"), event, test_notification)]
     return steps
 
 
@@ -230,3 +231,43 @@ def test_discord_payload(
     assert len(embed["title"]) <= 256 and len(embed["description"]) <= 300
     assert embed["color"] == color
     assert "username" not in data
+
+
+FAILURE_STEP = "Échec volontaire pour tester la notification"
+
+
+def test_option_test_notification() -> None:
+    option = workflow()[True]["workflow_dispatch"]["inputs"]["test_notification"]
+    assert option["type"] == "boolean"
+    assert option["default"] is False
+
+
+@pytest.mark.parametrize(
+    ("event", "option", "expected"),
+    [
+        ("workflow_dispatch", True, True),
+        ("workflow_dispatch", False, False),
+        ("schedule", True, False),
+        ("schedule", False, False),
+        ("push", True, False),
+        ("push", False, False),
+    ],
+)
+def test_echec_volontaire_seulement_sur_dispatch_avec_option(
+    event: str, option: bool, expected: bool
+) -> None:
+    names = [s.get("name") for s in executed_steps(event, test_notification=option)]
+    assert (FAILURE_STEP in names) is expected
+
+
+def test_echec_volontaire_avant_build_commit_et_deploiement() -> None:
+    build_steps = workflow()["jobs"]["build"]["steps"]
+    names = [s.get("name") for s in build_steps]
+    assert names[0] == FAILURE_STEP
+    step = build_steps[0]
+    assert "exit 1" in step["run"]
+    assert "${{" not in step["run"]
+    # deploy et notify dépendent du job build : un échec ici bloque tout déploiement.
+    jobs = workflow()["jobs"]
+    assert "build" in jobs["deploy"]["needs"]
+    assert "build" in jobs["notify"]["needs"]

@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "17 6 * * 1" # lundi 06:17 UTC
   workflow_dispatch:
+    inputs:
+      test_notification:
+        description: "Faire échouer le build volontairement pour tester la notification Discord"
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths: ["site/**", "src/**", "data/**"]
@@ -26,6 +31,13 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Échec volontaire (workflow_dispatch, option test_notification) pour tester le job
+      # notify : en tête du job, avant tout build, commit et déploiement.
+      - name: Échec volontaire pour tester la notification
+        if: github.event_name == 'workflow_dispatch' && inputs.test_notification
+        run: |
+          echo "::error::Échec volontaire demandé (test_notification) : test du job notify"
+          exit 1
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
         with:
