@@ -74,6 +74,8 @@ Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot →
 
 Ajouter une observation à `data/prices.manual.yaml`. Les anciennes observations restent : elles forment l'historique.
 
+`uv run python -m horspc price add` guide la saisie : jeu (liste numérotée ou slug, complétion avec Tab), marchand (liste blanche), format (déduit du marchand), prix, port (vide = inconnu), vente par l'enseigne (refus explicite sinon) et URL. `observed_at` vaut la date du jour. Le relevé est validé avec les mêmes modèles que le build et ajouté en fin de fichier, commentaires et ordre préservés (ruamel.yaml) ; rien n'est écrit si la validation échoue.
+
 `uv run python -m horspc stale` liste les jeux à relever : sans aucun relevé, ou dont l'offre retenue est `stale` (aucun relevé de moins de 30 jours). Ils sont triés du plus ancien dernier relevé au plus récent (sans relevé en tête), avec la date et l'URL du dernier relevé et le dernier relevé de chaque marchand.
 
 ```yaml

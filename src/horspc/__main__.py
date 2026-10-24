@@ -1,4 +1,4 @@
-"""CLI : `uv run python -m horspc build [--offline]` ou `uv run python -m horspc stale`."""
+"""CLI : `uv run python -m horspc build [--offline] | stale | price add`."""
 
 import argparse
 import logging
@@ -9,7 +9,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from horspc import build, stale
+from horspc import build, price_add, stale
 from horspc.http import HttpClient
 from horspc.igdb import IgdbClient
 
@@ -78,6 +78,10 @@ def cmd_stale(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_price_add(args: argparse.Namespace) -> int:
+    return price_add.price_add(args.games, args.prices, date.today())
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="horspc", description="Outils du catalogue HorsPC.")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -90,9 +94,15 @@ def main(argv: list[str] | None = None) -> int:
     cmd = sub.add_parser("stale", help="liste les jeux sans prix ou au relevé trop ancien")
     cmd.set_defaults(func=cmd_stale)
 
-    for name in ("build", "stale"):
-        sub.choices[name].add_argument("--games", type=Path, default=build.GAMES_PATH)
-        sub.choices[name].add_argument("--prices", type=Path, default=build.PRICES_PATH)
+    price = sub.add_parser("price", help="relevés de prix manuels").add_subparsers(
+        dest="price_command", required=True
+    )
+    price_cmd = price.add_parser("add", help="ajoute un relevé de façon interactive")
+    price_cmd.set_defaults(func=cmd_price_add)
+
+    for cmd in (sub.choices["build"], sub.choices["stale"], price_cmd):
+        cmd.add_argument("--games", type=Path, default=build.GAMES_PATH)
+        cmd.add_argument("--prices", type=Path, default=build.PRICES_PATH)
 
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
