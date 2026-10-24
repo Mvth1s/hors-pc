@@ -36,7 +36,7 @@ python3 -m http.server -d site 8000   # puis http://localhost:8000
 
 Les identifiants IGDB sont ceux d'une application Twitch (<https://dev.twitch.tv/console/apps>). Sans identifiants, `uv run python -m horspc build --offline` reprend les champs IGDB et le `generated_at` du `data.json` existant (ou l'heure courante s'il n'existe pas).
 
-Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent qui n'est pas au `schema_version` courant (2) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
+Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent présent mais mal formé (JSON invalide, `schema_version` différent du schéma courant, ou contenu refusé par le modèle ; seul un fichier absent est toléré) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
 
 Tests et lint :
 

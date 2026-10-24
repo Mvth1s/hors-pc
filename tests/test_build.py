@@ -372,3 +372,20 @@ def test_cli_data_json_v1_code_non_nul(workdir: Path, capsys) -> None:
     assert code == 1
     assert "schema_version 1, 2 attendu" in capsys.readouterr().err
     assert (workdir / "data.json").read_bytes() == before
+
+
+@pytest.mark.parametrize(
+    ("content", "message"),
+    [
+        ("{pas du json", "n'est pas un JSON valide"),
+        (
+            '{"schema_version": 2, "generated_at": "hier", "currency": "EUR", "games": []}',
+            "refusé par le modèle",
+        ),
+    ],
+)
+def test_data_json_precedent_mal_forme_refuse(workdir: Path, content: str, message: str) -> None:
+    (workdir / "data.json").write_text(content, encoding="utf-8")
+    with pytest.raises(build.PreviousDataError, match=message):
+        run(workdir, None)
+    assert (workdir / "data.json").read_text(encoding="utf-8") == content

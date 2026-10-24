@@ -32,21 +32,21 @@ def load_catalog(games_path: Path, prices_path: Path, now: datetime) -> Catalog:
 
 
 class PreviousDataError(Exception):
-    """data.json précédent dans un schéma qui n'est pas celui du code."""
+    """data.json précédent présent mais inutilisable (JSON invalide, schéma ou contenu refusé)."""
 
 
 def load_previous(path: Path) -> DataFile | None:
-    """data.json précédent ; None s'il est absent ou illisible.
+    """data.json précédent, ou None s'il est absent.
 
-    Lève PreviousDataError s'il n'est pas au schema_version courant.
+    Lève PreviousDataError s'il est présent mais mal formé : JSON invalide, schema_version
+    différent du schéma courant, ou contenu refusé par le modèle.
     """
     if not path.exists():
         return None
     try:
         raw = json.loads(path.read_bytes())
     except ValueError as exc:
-        log.warning("data.json précédent illisible, ignoré : %s", exc)
-        return None
+        raise PreviousDataError(f"{path} n'est pas un JSON valide : {exc}") from exc
     expected = DataFile.model_fields["schema_version"].default
     version = raw.get("schema_version") if isinstance(raw, dict) else None
     if version != expected:
@@ -57,8 +57,7 @@ def load_previous(path: Path) -> DataFile | None:
     try:
         return DataFile.model_validate(raw)
     except ValidationError as exc:
-        log.warning("data.json précédent illisible, ignoré : %s", exc)
-        return None
+        raise PreviousDataError(f"{path} est refusé par le modèle :\n{exc}") from exc
 
 
 def build_data(
