@@ -31,6 +31,9 @@ GAME_FIELDS = (
 # release_date console : seules ces régions et ces statuts (ou un statut absent) comptent.
 RELEASE_REGIONS = ("europe", "worldwide")
 FULL_RELEASE = "Full Release"
+# pc_status : une ligne PC à l'un de ces statuts (ou sans statut) et datée du passé = released.
+PC_RELEASED_STATUSES = (FULL_RELEASE, "Early Access", "Advanced Access", "Offline")
+CANCELLED = "Cancelled"
 
 
 class IgdbError(Exception):
@@ -109,7 +112,7 @@ class IgdbClient:
                 igdb_id=row["id"],
                 url=row.get("url"),
                 release_date=release,
-                pc_status=pc_status(row, platform_ids[PC_SLUG], now),
+                pc_status=pc_status(row, platform_ids[PC_SLUG], refs, now),
             )
             if game.igdb_id is None:
                 log.info("IGDB : %s → %d (%s)", game.slug, row["id"], row.get("name"))
@@ -132,7 +135,9 @@ class IgdbClient:
         """Régions et statuts de sortie, via /release_date_regions et /release_date_statuses."""
         if self._release_refs is None:
             regions = self._ids_by_name("release_date_regions", "region", RELEASE_REGIONS)
-            statuses = self._ids_by_name("release_date_statuses", "name", (FULL_RELEASE,))
+            statuses = self._ids_by_name(
+                "release_date_statuses", "name", (*PC_RELEASED_STATUSES, CANCELLED)
+            )
             self._release_refs = ReleaseRefs(frozenset(regions.values()), statuses)
         return self._release_refs
 
@@ -250,12 +255,24 @@ def _warn_no_release_date(slug: str, rejected: Counter[str]) -> None:
     )
 
 
-def pc_status(row: dict[str, Any], pc_id: int, now: datetime) -> PcStatus:
-    """released si une sortie PC est passée, announced si le PC est listé, none sinon."""
-    pc_dates = [rd for rd in row.get("release_dates") or [] if rd.get("platform") == pc_id]
+def pc_status(row: dict[str, Any], pc_id: int, refs: ReleaseRefs, now: datetime) -> PcStatus:
+    """Statut PC déduit des release_dates PC, les lignes Cancelled étant ignorées.
+
+    released : une ligne Full Release, Early Access, Advanced Access, Offline ou sans statut,
+    datée du passé. announced : une autre ligne retenue (date future ou absente, ou statut
+    Alpha, Beta...). none : aucune ligne PC retenue, même si le PC figure dans `platforms`.
+    """
+    cancelled = refs.statuses[CANCELLED]
+    released = {refs.statuses[name] for name in PC_RELEASED_STATUSES}
+    lines = [
+        rd
+        for rd in row.get("release_dates") or []
+        if rd.get("platform") == pc_id and rd.get("status") != cancelled
+    ]
+    if not lines:
+        return "none"
     now_ts = now.timestamp()
-    if any("date" in rd and rd["date"] <= now_ts for rd in pc_dates):
-        return "released"
-    if pc_dates or pc_id in (row.get("platforms") or []):
-        return "announced"
-    return "none"
+    for rd in lines:
+        if "date" in rd and rd["date"] <= now_ts and rd.get("status", FULL_RELEASE) in released:
+            return "released"
+    return "announced"

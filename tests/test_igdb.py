@@ -156,3 +156,27 @@ def test_region_ou_statut_introuvable(igdb: IgdbClient, api: respx.MockRouter) -
     api.post(f"{API_URL}/release_date_regions").respond(json=[{"id": 8, "region": "worldwide"}])
     with pytest.raises(IgdbError, match="europe"):
         igdb.fetch_games([entry("astro-bot", "Astro Bot", ["ps5"])], NOW)
+
+
+@pytest.mark.parametrize(
+    ("slug", "igdb_id", "expected"),
+    [
+        # Seule ligne PC au statut Cancelled : ignorée, même si le PC est dans platforms.
+        ("portage-annule", 400002, "none"),
+        # Early Access passé (région Amérique du Nord : la région ne compte pas pour le PC).
+        ("pc-acces-anticipe", 400003, "released"),
+        # Bêta passée (hors liste released) + ligne Cancelled ignorée.
+        ("pc-beta", 400004, "announced"),
+        # Ligne PC sans date ni statut.
+        ("ghost-of-yotei", 250634, "announced"),
+        # Full Release passée.
+        ("death-stranding-2", 152063, "released"),
+        ("astro-bot", 255340, "none"),
+    ],
+)
+def test_pc_status_selon_les_statuts(
+    igdb: IgdbClient, api: respx.MockRouter, slug: str, igdb_id: int, expected: str
+) -> None:
+    api.post(GAMES_URL).respond(json=load_fixture("igdb_games.json"))
+    result = igdb.fetch_games([entry(slug, slug, ["ps5"], igdb_id)], NOW)
+    assert result[slug].pc_status == expected

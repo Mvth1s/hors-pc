@@ -146,5 +146,87 @@
     "platform": 167
    }
   ]
+ },
+ {
+  "id": 400002,
+  "name": "Portage annulé",
+  "url": "https://www.igdb.com/games/portage-annule",
+  "platforms": [
+   6,
+   167
+  ],
+  "release_dates": [
+   {
+    "id": 12,
+    "platform": 167,
+    "date": 1700000000,
+    "status": 6,
+    "release_region": 8
+   },
+   {
+    "id": 13,
+    "platform": 6,
+    "date": 1760000000,
+    "status": 5,
+    "release_region": 8
+   }
+  ]
+ },
+ {
+  "id": 400003,
+  "name": "PC en accès anticipé",
+  "url": "https://www.igdb.com/games/pc-acces-anticipe",
+  "platforms": [
+   6,
+   167
+  ],
+  "release_dates": [
+   {
+    "id": 14,
+    "platform": 167,
+    "date": 1700000000,
+    "status": 6,
+    "release_region": 8
+   },
+   {
+    "id": 15,
+    "platform": 6,
+    "date": 1760000000,
+    "status": 3,
+    "release_region": 2
+   }
+  ]
+ },
+ {
+  "id": 400004,
+  "name": "PC en bêta",
+  "url": "https://www.igdb.com/games/pc-beta",
+  "platforms": [
+   6,
+   167
+  ],
+  "release_dates": [
+   {
+    "id": 16,
+    "platform": 167,
+    "date": 1700000000,
+    "status": 6,
+    "release_region": 8
+   },
+   {
+    "id": 17,
+    "platform": 6,
+    "date": 1760000000,
+    "status": 2,
+    "release_region": 8
+   },
+   {
+    "id": 18,
+    "platform": 6,
+    "date": 1700000000,
+    "status": 5,
+    "release_region": 8
+   }
+  ]
  }
 ]
