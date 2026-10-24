@@ -10,6 +10,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
 <script src="theme.js" defer></script>
+<script src="footer.js" defer></script>
 </head>
 <body class="hp">
 <script>
@@ -71,15 +72,33 @@ Contact : <a href="https://support.github.com/contact" rel="noopener">https://su
 
 <footer class="foot">
   <div class="wrap">
-    <p>Prix TTC relevés manuellement chez des marchands français. HorsPC n'est affilié à aucun constructeur, éditeur ni marchand et ne touche aucune commission ; les noms de jeux et de consoles appartiennent à leurs propriétaires.</p>
-    <p>Dates de sortie et statut PC : données fournies par <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>.</p>
-    <p>Jaquettes via <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>. Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs. Demande de retrait : <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait%20de%20jaquette" rel="noopener">ouvrir une issue GitHub</a>.</p>
-    <nav class="foot-links" aria-label="Informations">
-      <a href="./">Catalogue</a>
-      <a href="methodologie.html">Méthodologie des prix</a>
-      <a href="mentions-legales.html">Mentions légales</a>
-      <a href="confidentialite.html">Confidentialité</a>
-    </nav>
+    <div class="foot-grid">
+      <section class="foot-col" aria-labelledby="foot-horspc">
+        <h2 class="foot-title" id="foot-horspc"><a href="./">HorsPC</a></h2>
+        <p>Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix.</p>
+        <p>Projet personnel non commercial.</p>
+        <p><a href="https://github.com/Mvth1s/hors-pc" rel="noopener">Code source sur GitHub</a></p>
+        <p class="foot-updated" data-foot-updated hidden>Catalogue mis à jour le <strong data-foot-date></strong></p>
+      </section>
+      <nav class="foot-col" aria-labelledby="foot-infos">
+        <h2 class="foot-title" id="foot-infos">Informations</h2>
+        <ul>
+          <li><a href="methodologie.html">Méthodologie des prix</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="confidentialite.html">Confidentialité</a></li>
+        </ul>
+      </nav>
+      <section class="foot-col" aria-labelledby="foot-credits">
+        <h2 class="foot-title" id="foot-credits">Crédits</h2>
+        <p>Dates de sortie, statut PC et jaquettes via <a href="https://www.igdb.com" rel="noopener">IGDB.com</a>. Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs.</p>
+        <p>Polices Bricolage Grotesque et IBM Plex Sans, sous licence SIL Open Font License 1.1.</p>
+        <p>Demande de retrait : <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait" rel="noopener">ouvrir une issue GitHub</a>.</p>
+      </section>
+    </div>
+    <div class="foot-bottom">
+      <p>Prix TTC relevés manuellement chez des marchands français. HorsPC n'est affilié à aucun constructeur, éditeur ni marchand et ne touche aucune commission.</p>
+      <p>Fait par <a href="https://mathisaguado.vercel.app" rel="noopener">Mathis Aguado</a></p>
+    </div>
   </div>
 </footer>
 </body>

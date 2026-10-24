@@ -102,3 +102,23 @@ def test_favicons_lies_et_presents(page: Path) -> None:
     for name in ("favicon.svg", "favicon-32.png", "apple-touch-icon.png"):
         assert f'href="{name}"' in text
         assert (SITE / name).is_file()
+
+
+def _footer(page: Path) -> str:
+    blocks = re.findall(r"<footer\b.*?</footer>", page.read_text(encoding="utf-8"), re.S)
+    assert len(blocks) == 1, f"{page.name} : {len(blocks)} bloc(s) <footer>"
+    return blocks[0]
+
+
+def test_footer_identique_dans_toutes_les_pages() -> None:
+    reference = _footer(SITE / "index.html")
+    divergent = [p.name for p in PAGES if _footer(p) != reference]
+    assert not divergent, f"pied de page différent de index.html dans : {', '.join(divergent)}"
+
+
+@pytest.mark.parametrize("page", PAGES, ids=lambda p: p.name)
+def test_un_seul_chargement_de_data_json(page: Path) -> None:
+    scripts = [u for u in parse(page).loaded if u.endswith(".js")]
+    loaders = [s for s in scripts if s in ("app.js", "footer.js")]
+    expected = ["app.js"] if page.name == "index.html" else ["footer.js"]
+    assert loaders == expected, f"{page.name} charge {loaders}"

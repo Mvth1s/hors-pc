@@ -208,6 +208,13 @@ function renderFreshness(generatedAt) {
   const date = frDateTime(generatedAt);
   $("updated-date").textContent = date;
   $("updated").hidden = false;
+  // Pied de page commun : sur le catalogue, c'est app.js qui le renseigne (footer.js absent),
+  // pour ne charger data.json qu'une fois.
+  const footLine = document.querySelector("[data-foot-updated]");
+  if (footLine) {
+    footLine.querySelector("[data-foot-date]").textContent = date;
+    footLine.hidden = false;
+  }
   const stale = days > STALE_BANNER_DAYS;
   $("live").classList.toggle("old", stale);
   $("stale-banner").hidden = !stale;
