@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "generated_at": "2026-10-19T06:17:40Z",
   "currency": "EUR",
   "games": [
@@ -15,7 +15,8 @@
       "igdb_id": 255340,
       "igdb_url": "https://www.igdb.com/games/astro-bot",
       "igdb_fetched_at": "2026-10-19T06:17:38Z",
-      "cover_url": null,
+      "cover_url": "covers/astro-bot.webp",
+      "cover_image_id": "coba3k",
       "pc_status": "announced",
       "pc_status_source": "igdb",
       "offer": null
@@ -33,6 +34,7 @@
       "igdb_url": "https://www.igdb.com/games/saros",
       "igdb_fetched_at": "2026-10-19T06:17:38Z",
       "cover_url": null,
+      "cover_image_id": null,
       "pc_status": "released",
       "pc_status_source": "manual",
       "offer": null

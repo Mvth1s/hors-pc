@@ -59,6 +59,7 @@ def main(argv: list[str] | None = None) -> int:
                 games_path=args.games,
                 prices_path=args.prices,
                 output_path=args.output,
+                http=None if igdb is None else http,
             )
         except ValidationError as exc:
             print(f"Validation refusée, data.json non écrit :\n{exc}", file=sys.stderr)

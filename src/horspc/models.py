@@ -273,7 +273,8 @@ class GameOut(_Output):
     igdb_id: PositiveInt | None
     igdb_url: HttpUrl | None
     igdb_fetched_at: UtcDatetime | None
-    cover_url: None = None
+    cover_url: str | None = Field(pattern=r"^covers/[a-z0-9]+(?:-[a-z0-9]+)*\.webp$")
+    cover_image_id: str | None = Field(min_length=1)
     pc_status: PcStatus
     pc_status_source: PcStatusSource
     offer: OfferOut | None
@@ -284,11 +285,18 @@ class GameOut(_Output):
             raise ValueError("release_date_source est null si et seulement si release_date l'est")
         return self
 
+    @model_validator(mode="after")
+    def _cover(self) -> "GameOut":
+        expected = None if self.cover_image_id is None else f"covers/{self.slug}.webp"
+        if self.cover_url != expected:
+            raise ValueError(f"cover_url doit valoir {expected!r} (cover_image_id, slug)")
+        return self
+
 
 class DataFile(_Output):
-    """Contenu de site/data.json (schéma v2)."""
+    """Contenu de site/data.json (schéma v3)."""
 
-    schema_version: Literal[2] = 2
+    schema_version: Literal[3] = 3
     generated_at: UtcDatetime
     currency: Literal["EUR"] = "EUR"
     games: list[GameOut]

@@ -12,10 +12,11 @@ src/horspc/
   __main__.py           CLI : uv run python -m horspc build [--offline]
   models.py             modèles Pydantic v2 (entrées YAML, sortie data.json, liste des marchands)
   http.py               client HTTP : User-Agent, timeouts, retries, 1 requête/s max par hôte
-  igdb.py               client IGDB v4 : date de sortie, fiche IGDB, statut PC
+  igdb.py               client IGDB v4 : date de sortie, fiche IGDB, statut PC, id de jaquette
+  covers.py             jaquettes IGDB téléchargées en WebP dans site/covers/
   prices/               Protocol PriceProvider, provider manuel, règle de sélection
   build.py              fusion, validation, écriture de site/data.json
-site/                   index.html, style.css, app.js, fonts/, data.json (généré, versionné)
+site/                   index.html, style.css, app.js, fonts/, data.json et covers/ (générés, versionnés)
 tests/                  pytest, appels réseau mockés avec respx (fixtures IGDB figées)
 docs/maquette/          maquette de référence du front (non publiée)
 .github/workflows/      ci.yml (ruff + pytest), update.yml (build hebdo + Pages)
@@ -102,13 +103,13 @@ Sont refusés à la validation, avec un message explicite : les marketplaces (`r
 
 `discount_pct` = `round(100 × (1 − price / launch_price))`, port exclu ; `null` sans prix de lancement. Le badge n'est affiché que si la réduction est positive.
 
-## Schéma de `site/data.json` (v2)
+## Schéma de `site/data.json` (v3)
 
 Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le formatage (`53,30 €`, `JJ/MM/AAAA`) est fait par le front. Le modèle de référence est `DataFile` dans `src/horspc/models.py`.
 
 ```json
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "generated_at": "2026-10-26T06:17:42Z",
   "currency": "EUR",
   "games": [
@@ -122,7 +123,8 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
       "igdb_id": 255340,
       "igdb_url": "https://www.igdb.com/games/astro-bot",
       "igdb_fetched_at": "2026-10-26T06:17:40Z",
-      "cover_url": null,
+      "cover_url": "covers/astro-bot.webp",
+      "cover_image_id": "coba3k",
       "pc_status": "none",
       "pc_status_source": "igdb",
       "offer": {
@@ -147,13 +149,21 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 - `pc_status` : déduit des `release_dates` PC d'IGDB (toutes régions), les lignes au statut Cancelled étant ignorées. `released` si une ligne Full Release, Early Access, Advanced Access, Offline ou sans statut a une date passée ; `announced` pour toute autre ligne retenue (date future ou absente, ou statut Alpha, Beta…) ; `none` si aucune ligne PC n'est retenue, même si le PC figure dans les plateformes du jeu. `pc_status_source` vaut `manual` quand `pc_override` est utilisé.
 - L'identifiant de la plateforme PC n'est pas codé en dur : il est lu via l'endpoint `platforms` d'IGDB (slug `win`).
 - Si IGDB est injoignable, les champs IGDB (dont `igdb_fetched_at`) sont repris du `data.json` précédent ; le build n'échoue pas.
-- `cover_url` reste `null` en v1, tant que les conditions d'usage des images IGDB n'ont pas été validées. Le site affiche les initiales du jeu.
+- `cover_url` : chemin relatif `covers/<slug>.webp`, ou `null` sans jaquette ; `cover_image_id` : `image_id` IGDB de la jaquette présente sur disque. Ajoutés en v3. Le site ne charge jamais d'image depuis `images.igdb.com`.
+
+### Jaquettes
+
+- Au build complet, `covers.py` récupère l'`image_id` de la cover IGDB de chaque jeu et télécharge `t_cover_big` (264 × 352) **directement en WebP** : IGDB sert ce format quand on demande l'extension `.webp`, aucune conversion ni dépendance n'est nécessaire. Le contenu est vérifié (en-tête `RIFF…WEBP`).
+- Le fichier n'est retéléchargé que si l'`image_id` a changé par rapport au `data.json` précédent, ou s'il manque. En cas d'échec, l'ancien fichier est conservé ; si IGDB n'a plus de cover, le fichier est supprimé, ainsi que les jaquettes de jeux retirés du catalogue.
+- Les fichiers ne sont écrits qu'après validation et écriture de `data.json` : un build refusé ne touche pas `site/covers/`.
+- En `--offline` (ou si IGDB est indisponible), les fichiers déjà présents sont réutilisés tels quels ; rien n'est téléchargé ni supprimé.
+- Le front affiche la jaquette (`width`/`height`, `loading="lazy"`) et retombe sur le visuel à initiales, avec la mention « Visuel provisoire », si `cover_url` est `null`.
 
 ## Mise à jour automatique et seuils de fraîcheur
 
 `.github/workflows/update.yml` se comporte différemment selon l'événement :
 
-| Événement | Build | Commit de `data.json` | Déploiement Pages | Job `freshness` |
+| Événement | Build | Commit de `data.json` et `site/covers/` | Déploiement Pages | Job `freshness` |
 |---|---|---|---|---|
 | `schedule` (**lundi 06:17 UTC**) et `workflow_dispatch` | complet, avec IGDB (secrets) | oui, s'il a changé | oui | oui |
 | `push` sur `main` touchant `site/`, `src/` ou `data/` | `--offline` (sans IGDB ni secrets) | **jamais** | oui, avec le `data.json` ainsi généré | non |
@@ -189,6 +199,6 @@ Le job d'alerte tourne même quand le build échoue (sur `schedule` et `workflow
 
 ## Crédits
 
-- Dates de sortie et statut PC : données fournies par [IGDB.com](https://www.igdb.com), attribution visible dans le pied de page du site.
+- Dates de sortie, statut PC et jaquettes : [IGDB.com](https://www.igdb.com), attribution visible dans le pied de page du site. Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs ; une demande de retrait peut être faite via une issue GitHub (lien dans le pied de page).
 - Polices auto-hébergées (aucun appel à Google Fonts) : Bricolage Grotesque et IBM Plex Sans, sous licence SIL Open Font License 1.1 (`site/fonts/OFL-*.txt`).
 - HorsPC n'est affilié à aucun constructeur, éditeur ni marchand.

@@ -111,6 +111,27 @@ function shippingText(offer) {
   return offer.shipping_cents === 0 ? " · port offert" : ` · + ${euros(offer.shipping_cents)} de port`;
 }
 
+// Dimensions de t_cover_big (IGDB), pour réserver la place avant le chargement.
+const COVER_WIDTH = 264;
+const COVER_HEIGHT = 352;
+
+/** Jaquette locale si disponible, sinon visuel provisoire à initiales. */
+function coverHtml(g, consoles) {
+  if (g.cover_url && /^covers\/[a-z0-9-]+\.webp$/.test(g.cover_url)) {
+    return `
+      <div class="cover has-img">
+        <img src="${esc(g.cover_url)}" width="${COVER_WIDTH}" height="${COVER_HEIGHT}" loading="lazy" decoding="async" alt="Jaquette de ${esc(g.title)}">
+        <span class="covers">${consoles}</span>
+      </div>`;
+  }
+  return `
+      <div class="cover cv-${g._color}" role="img" aria-label="Visuel provisoire de ${esc(g.title)}">
+        <span class="covers">${consoles}</span>
+        <span class="initials" aria-hidden="true">${esc(initials(g.title))}</span>
+        <span class="cover-tag">Visuel provisoire</span>
+      </div>`;
+}
+
 function cardHtml(g) {
   const status = STATUSES[g.pc_status];
   const consoles = g.platforms
@@ -145,11 +166,7 @@ function cardHtml(g) {
 
   return `
     <article class="card">
-      <div class="cover cv-${g._color}" role="img" aria-label="Visuel provisoire de ${esc(g.title)}">
-        <span class="covers">${consoles}</span>
-        <span class="initials" aria-hidden="true">${esc(initials(g.title))}</span>
-        <span class="cover-tag">Visuel provisoire</span>
-      </div>
+      ${coverHtml(g, consoles)}
       <div class="body">
         <span class="${status.cls}">${status.label}</span>
         <h2 class="title">${esc(g.title)}</h2>

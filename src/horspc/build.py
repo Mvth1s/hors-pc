@@ -11,6 +11,8 @@ from typing import Any
 import yaml
 from pydantic import ValidationError
 
+from horspc import covers
+from horspc.http import HttpClient
 from horspc.igdb import IgdbClient, IgdbError, IgdbGame
 from horspc.models import Catalog, DataFile, GameOut, to_cents
 from horspc.prices import ManualPriceProvider, Offer, PriceProvider
@@ -67,13 +69,16 @@ def build_data(
     previous: dict[str, GameOut],
     now: datetime,
     generated_at: datetime | None = None,
+    cover_ids: dict[str, str | None] | None = None,
 ) -> DataFile:
     """Assemble et valide le contenu de data.json.
 
     `igdb_results` vaut None quand IGDB est injoignable : les champs IGDB sont alors repris
     du data.json précédent. `generated_at` vaut `now` par défaut ; `now` sert toujours au
-    calcul de `offer.stale`.
+    calcul de `offer.stale`. `cover_ids` donne, par slug, l'image_id de la jaquette présente
+    dans site/covers/ (absent ou None : pas de jaquette).
     """
+    cover_ids = cover_ids or {}
     games = []
     for game in catalog.games:
         info = None if igdb_results is None else igdb_results.get(game.slug)
@@ -82,7 +87,7 @@ def build_data(
             "title": game.title,
             "platforms": game.platforms,
             "launch_price_cents": _cents(game.launch_price),
-            "cover_url": None,
+            **_cover_fields(game.slug, cover_ids.get(game.slug)),
             **_igdb_fields(info, previous.get(game.slug), now),
         }
         if game.pc_override is not None:
@@ -115,11 +120,13 @@ def run(
     games_path: Path = GAMES_PATH,
     prices_path: Path = PRICES_PATH,
     output_path: Path = OUTPUT_PATH,
+    http: HttpClient | None = None,
 ) -> DataFile:
     """Build complet.
 
-    Lève ValidationError si les entrées ou la sortie sont invalides, PreviousDataError si le
-    data.json précédent n'est pas au schéma courant.
+    Les jaquettes sont téléchargées avec `http` (build complet uniquement) et écrites dans
+    site/covers/ seulement après data.json. Lève ValidationError si les entrées ou la sortie
+    sont invalides, PreviousDataError si le data.json précédent est mal formé.
     """
     catalog = load_catalog(games_path, prices_path, now)
     previous_file = load_previous(output_path)
@@ -136,6 +143,18 @@ def run(
             igdb_results = igdb.fetch_games(catalog.games, now)
         except IgdbError as exc:
             log.warning("%s ; champs IGDB repris du data.json précédent", exc)
+    site_dir = output_path.parent
+    updates = []
+    for game in catalog.games:
+        prev = previous.get(game.slug)
+        prev_id = None if prev is None else prev.cover_image_id
+        info = None if igdb_results is None else igdb_results.get(game.slug)
+        if info is None or http is None:
+            updates.append(covers.keep_local(site_dir, game.slug, prev_id))
+        else:
+            updates.append(
+                covers.fetch_cover(http, site_dir, game.slug, info.cover_image_id, prev_id)
+            )
     data = build_data(
         catalog,
         ManualPriceProvider(catalog.observations),
@@ -143,8 +162,12 @@ def run(
         previous,
         now,
         generated_at,
+        {u.slug: u.image_id for u in updates},
     )
     write_data(data, output_path)
+    if igdb_results is not None and http is not None:
+        # Hors ligne ou IGDB indisponible : les fichiers présents sont réutilisés tels quels.
+        covers.apply_updates(site_dir, updates)
     log.info("%s écrit : %d jeux", output_path, len(data.games))
     return data
 
@@ -188,6 +211,13 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
         "igdb_fetched_at": None,
         "pc_status": "none",
         "pc_status_source": "igdb",
+    }
+
+
+def _cover_fields(slug: str, image_id: str | None) -> dict[str, Any]:
+    return {
+        "cover_url": None if image_id is None else covers.cover_url(slug),
+        "cover_image_id": image_id,
     }
 
 

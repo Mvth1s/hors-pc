@@ -135,6 +135,9 @@ color-scheme:light;container-type:inline-size;background:var(--bg);color:var(--i
 .hp.is-dark .icon-sun{display:block}
 .hp .covers{position:absolute;top:10px;left:10px;display:flex;gap:4px;flex-wrap:wrap}
 .hp .covers .console{position:static}
+.hp .cover.has-img{background:var(--surface-2)}
+.hp .cover.has-img::before{display:none}
+.hp .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .hp .cv-0{background:#0F766E;color:#FFFFFF}
 .hp .cv-1{background:#4C1D95;color:#FFFFFF}
 .hp .cv-2{background:#F59E0B;color:#1A1200}

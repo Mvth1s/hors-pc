@@ -25,7 +25,7 @@ PLATFORM_SLUGS: dict[Platform, str] = {"ps5": "ps5", "switch": "switch", "switch
 
 GAME_FIELDS = (
     "name,url,platforms,release_dates.platform,release_dates.date,"
-    "release_dates.release_region,release_dates.status"
+    "release_dates.release_region,release_dates.status,cover.image_id"
 )
 
 # release_date console : seules ces régions et ces statuts (ou un statut absent) comptent.
@@ -46,6 +46,7 @@ class IgdbGame:
     url: str | None
     release_date: date | None
     pc_status: PcStatus
+    cover_image_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -113,6 +114,7 @@ class IgdbClient:
                 url=row.get("url"),
                 release_date=release,
                 pc_status=pc_status(row, platform_ids[PC_SLUG], refs, now),
+                cover_image_id=(row.get("cover") or {}).get("image_id"),
             )
             if game.igdb_id is None:
                 log.info("IGDB : %s → %d (%s)", game.slug, row["id"], row.get("name"))
