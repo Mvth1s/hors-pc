@@ -36,7 +36,7 @@ python3 -m http.server -d site 8000   # puis http://localhost:8000
 
 Les identifiants IGDB sont ceux d'une application Twitch (<https://dev.twitch.tv/console/apps>). Sans identifiants, `uv run python -m horspc build --offline` reprend les champs IGDB et le `generated_at` du `data.json` existant (ou l'heure courante s'il n'existe pas).
 
-Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie ; `data.json` n'est pas modifié), `2` identifiants IGDB manquants.
+Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent qui n'est pas au `schema_version` courant (2) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
 
 Tests et lint :
 
@@ -143,7 +143,7 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 ```
 
 - `release_date` : plus ancienne sortie sur l'une des plateformes du jeu, parmi les dates IGDB en région `europe` ou `worldwide` et au statut « Full Release » ou sans statut (accès anticipé, Advanced Access, alpha, bêta, etc. sont écartés). Les ids de région et de statut sont lus par leur nom via `/release_date_regions` et `/release_date_statuses`. Si aucune date ne passe ces filtres, le build journalise un WARNING (slug, nombre de dates écartées par motif) : ajouter alors un `release_date_override`.
-- `release_date_source` : `igdb`, `manual` (`release_date_override`) ou `null` si `release_date` est `null`. Ajouté en v2 ; un `data.json` v1 est relu et converti automatiquement.
+- `release_date_source` : `igdb`, `manual` (`release_date_override`) ou `null` si `release_date` est `null`. Ajouté en v2.
 - `pc_status` : déduit des `release_dates` PC d'IGDB (toutes régions), les lignes au statut Cancelled étant ignorées. `released` si une ligne Full Release, Early Access, Advanced Access, Offline ou sans statut a une date passée ; `announced` pour toute autre ligne retenue (date future ou absente, ou statut Alpha, Beta…) ; `none` si aucune ligne PC n'est retenue, même si le PC figure dans les plateformes du jeu. `pc_status_source` vaut `manual` quand `pc_override` est utilisé.
 - L'identifiant de la plateforme PC n'est pas codé en dur : il est lu via l'endpoint `platforms` d'IGDB (slug `win`).
 - Si IGDB est injoignable, les champs IGDB (dont `igdb_fetched_at`) sont repris du `data.json` précédent ; le build n'échoue pas.

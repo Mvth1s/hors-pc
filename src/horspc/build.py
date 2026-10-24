@@ -31,13 +31,32 @@ def load_catalog(games_path: Path, prices_path: Path, now: datetime) -> Catalog:
     )
 
 
+class PreviousDataError(Exception):
+    """data.json précédent dans un schéma qui n'est pas celui du code."""
+
+
 def load_previous(path: Path) -> DataFile | None:
-    """data.json précédent ; None s'il est absent ou illisible."""
+    """data.json précédent ; None s'il est absent ou illisible.
+
+    Lève PreviousDataError s'il n'est pas au schema_version courant.
+    """
     if not path.exists():
         return None
     try:
-        return DataFile.model_validate(_upgrade(json.loads(path.read_bytes())))
-    except (ValidationError, ValueError) as exc:
+        raw = json.loads(path.read_bytes())
+    except ValueError as exc:
+        log.warning("data.json précédent illisible, ignoré : %s", exc)
+        return None
+    expected = DataFile.model_fields["schema_version"].default
+    version = raw.get("schema_version") if isinstance(raw, dict) else None
+    if version != expected:
+        raise PreviousDataError(
+            f"{path} est en schema_version {version!r}, {expected} attendu : "
+            "le régénérer avec un build complet (sans --offline) après l'avoir supprimé"
+        )
+    try:
+        return DataFile.model_validate(raw)
+    except ValidationError as exc:
         log.warning("data.json précédent illisible, ignoré : %s", exc)
         return None
 
@@ -98,7 +117,11 @@ def run(
     prices_path: Path = PRICES_PATH,
     output_path: Path = OUTPUT_PATH,
 ) -> DataFile:
-    """Build complet. Lève ValidationError si les entrées ou la sortie sont invalides."""
+    """Build complet.
+
+    Lève ValidationError si les entrées ou la sortie sont invalides, PreviousDataError si le
+    data.json précédent n'est pas au schéma courant.
+    """
     catalog = load_catalog(games_path, prices_path, now)
     previous_file = load_previous(output_path)
     previous = {} if previous_file is None else {g.slug: g for g in previous_file.games}
@@ -182,17 +205,6 @@ def _offer_fields(offer: Offer, launch_price_cents: int | None) -> dict[str, Any
         "source": offer.source,
         "stale": offer.stale,
     }
-
-
-def _upgrade(raw: Any) -> Any:
-    """Convertit un data.json v1 (sans release_date_source) au schéma courant."""
-    if isinstance(raw, dict) and raw.get("schema_version") == 1:
-        raw = {**raw, "schema_version": 2}
-        raw["games"] = [
-            {**g, "release_date_source": "igdb" if g.get("release_date") else None}
-            for g in raw.get("games", [])
-        ]
-    return raw
 
 
 def _cents(amount: Decimal | None) -> int | None:

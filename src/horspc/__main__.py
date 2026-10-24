@@ -63,6 +63,9 @@ def main(argv: list[str] | None = None) -> int:
         except ValidationError as exc:
             print(f"Validation refusée, data.json non écrit :\n{exc}", file=sys.stderr)
             return 1
+        except build.PreviousDataError as exc:
+            print(f"data.json précédent refusé, rien n'est écrit : {exc}", file=sys.stderr)
+            return 1
     return 0
 
 

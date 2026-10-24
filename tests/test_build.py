@@ -114,7 +114,6 @@ def test_igdb_injoignable_reprend_les_valeurs_precedentes() -> None:
     # Les valeurs manuelles précédentes ne sont pas reprises sans override.
     assert saros.pc_status == "none"
     assert saros.pc_status_source == "igdb"
-    # Un data.json v1 est relu : release_date_source déduit de release_date.
     assert astro.release_date_source == "igdb"
 
 
@@ -339,3 +338,37 @@ def test_release_date_manuelle_precedente_non_reprise() -> None:
     data = make(catalog(), None, prev)
     saros = data.games[1]
     assert (saros.release_date, saros.release_date_source) == (None, None)
+
+
+@pytest.mark.parametrize("version", [1, None, 3])
+def test_data_json_precedent_hors_v2_refuse(workdir: Path, version: int | None) -> None:
+    raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
+    if version is None:
+        del raw["schema_version"]
+    else:
+        raw["schema_version"] = version
+    (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
+    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 2 attendu"):
+        run(workdir, None)
+
+
+def test_cli_data_json_v1_code_non_nul(workdir: Path, capsys) -> None:
+    raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
+    raw["schema_version"] = 1
+    (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
+    before = (workdir / "data.json").read_bytes()
+    code = main(
+        [
+            "build",
+            "--offline",
+            "--games",
+            str(workdir / "games.yaml"),
+            "--prices",
+            str(workdir / "prices.yaml"),
+            "--output",
+            str(workdir / "data.json"),
+        ]
+    )
+    assert code == 1
+    assert "schema_version 1, 2 attendu" in capsys.readouterr().err
+    assert (workdir / "data.json").read_bytes() == before
