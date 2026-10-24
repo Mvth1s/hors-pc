@@ -14,47 +14,55 @@
 - slug: astro-bot
   title: Astro Bot
   platforms: [ps5]
+  igdb_id: 303811
   launch_price: 69.99
   launch_price_source: https://www.actugaming.net/astro-bot-precommandes-editions-649057/
 
 - slug: ghost-of-yotei
   title: Ghost of Yōtei
   platforms: [ps5]
+  igdb_id: 317627
   launch_price: 79.99
   launch_price_source: https://www.gameblog.fr/jeu-video/ed/news/ghost-of-yotei-precommandes-physique-meilleur-prix-694705
 
 - slug: saros
   title: Saros
   platforms: [ps5]
+  igdb_id: 331215
   # Sources contradictoires (69,99 € ou 79,99 €) : à confirmer.
   launch_price: null
 
 - slug: gran-turismo-7
   title: Gran Turismo 7
   platforms: [ps5]
+  igdb_id: 101006
   launch_price: 79.99
   launch_price_source: https://www.phonandroid.com/gran-turismo-7-ps5-et-ps4-comparatif-meilleur-prix.html
 
 - slug: mario-kart-world
   title: Mario Kart World
   platforms: [switch2]
+  igdb_id: 338067
   launch_price: 89.99
   launch_price_source: https://www.phonandroid.com/mario-kart-world-switch-2-prix-jeu-precommande-moins-cher-leclerc.html
 
 - slug: donkey-kong-bananza
   title: Donkey Kong Bananza
   platforms: [switch2]
+  igdb_id: 338106
   # Pas de source officielle trouvée pour le prix conseillé : à confirmer.
   launch_price: null
 
 - slug: zelda-tears-of-the-kingdom
   title: "The Legend of Zelda: Tears of the Kingdom"
   platforms: [switch]
+  igdb_id: 119388
   launch_price: 69.99
   launch_price_source: https://www.tomsguide.fr/zelda-tears-of-the-kingdom-il-serait-vendu-7999-e-une-premiere-pour-la-nintendo-switch/
 
 - slug: pokemon-ecarlate
   title: Pokémon Écarlate
   platforms: [switch]
+  igdb_id: 191931
   launch_price: 59.99
   launch_price_source: https://www.phonandroid.com/pokemon-ecarlate-et-pokemon-violet-ou-les-acheter-au-meilleur-prix.html
