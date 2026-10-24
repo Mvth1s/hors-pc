@@ -70,6 +70,8 @@ Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot →
 
 ## Ajouter un prix
 
+**Pourquoi les prix sont manuels.** Aucune extraction automatique : les comparateurs (leDénicheur) et les stores officiels (PlayStation, Nintendo) l'interdisent dans leurs CGU ou leur robots.txt, et idealo bloque les automates. Pas d'affiliation non plus : les commissions rendraient le projet commercial, ce qui sort du cadre gratuit non commercial de l'API IGDB et contredirait la mention « ne touche aucune commission » du site.
+
 Ajouter une observation à `data/prices.manual.yaml`. Les anciennes observations restent : elles forment l'historique.
 
 ```yaml
