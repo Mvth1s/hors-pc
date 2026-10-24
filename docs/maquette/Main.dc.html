@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>HorsPC, catalogue</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="{{rootClass}}">
+<header class="top">
+<div class="wrap">
+<div class="top-inner">
+<div class="brand">
+<h1 class="logo">Hors<span class="logo-pc">PC</span></h1>
+<p class="tagline">Les jeux PS5, Switch et Switch 2 qui ne sont jamais sortis sur PC, et où les acheter au meilleur prix.</p>
+<p class="updated"><span class="{{liveClass}}"></span><span>Prix relevés le <strong>{{updatedAt}}</strong></span></p>
+</div>
+<div class="top-actions">
+<button class="icon-btn" type="button" aria-label="{{themeLabel}}" onClick="{{toggleTheme}}">
+<sc-if value="{{dark}}" hint-placeholder-val="{{ false }}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+</sc-if>
+<sc-if value="{{light}}" hint-placeholder-val="{{ true }}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+</sc-if>
+</button>
+</div>
+</div>
+</div>
+</header>
+<sc-if value="{{stale}}" hint-placeholder-val="{{ false }}">
+<div class="stale" role="status">
+<div class="wrap">
+<div class="stale-inner">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4M12 17h.01"></path></svg>
+<p><strong>Données anciennes : dernier relevé le 05/10/2026, il y a 19 jours.</strong> Les prix et les stocks ont pu changer, vérifie chez le marchand avant d'acheter.</p>
+</div>
+</div>
+</div>
+</sc-if>
+<main class="wrap">
+<div class="toolbar">
+<div class="group">
+<span class="group-label">Console</span>
+<div class="chips">
+<sc-for list="{{platforms}}" as="p" hint-placeholder-count="4">
+<button class="chip" type="button" aria-pressed="{{p.pressed}}" onClick="{{p.pick}}">
+<sc-if value="{{p.hasDot}}" hint-placeholder-val="{{ true }}"><span class="{{p.dot}}"></span></sc-if>
+<span>{{p.label}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div class="group">
+<span class="group-label">Statut PC</span>
+<div class="chips">
+<sc-for list="{{statuses}}" as="s" hint-placeholder-count="3">
+<button class="chip" type="button" aria-pressed="{{s.pressed}}" onClick="{{s.pick}}">{{s.label}}</button>
+</sc-for>
+</div>
+</div>
+<div class="toolbar-end">
+<div class="group">
+<label class="group-label" for="hp-sort">Trier par</label>
+<div class="select-box">
+<select id="hp-sort" value="{{sort}}" onChange="{{onSort}}">
+<option value="price">Prix le plus bas</option>
+<option value="discount">Plus grosse réduction</option>
+<option value="release">Sortie la plus récente</option>
+</select>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<div class="results">
+<span><strong>{{countLabel}}</strong> sans version PC</span>
+<span>Prix TTC, en euros</span>
+</div>
+<div class="grid">
+<sc-for list="{{games}}" as="g" hint-placeholder-count="4">
+<article class="card">
+<div class="{{g.coverClass}}" role="img" aria-label="{{g.coverAlt}}">
+<span class="{{g.consoleClass}}">{{g.consoleLabel}}</span>
+<span class="initials">{{g.initials}}</span>
+<span class="cover-tag">Visuel provisoire</span>
+</div>
+<div class="body">
+<span class="{{g.statusClass}}">{{g.statusLabel}}</span>
+<h2 class="title">{{g.name}}</h2>
+<p class="sub"><span>Sortie le {{g.release}}</span><span>{{g.type}}</span></p>
+<div class="price-block">
+<span class="was">Lancement <s>{{g.launchTxt}}</s></span>
+<div class="price-row">
+<span class="price">{{g.euros}}<small>,{{g.cents}}&nbsp;€</small></span>
+<span class="discount">-{{g.pct}}&nbsp;%</span>
+</div>
+</div>
+<sc-if value="{{stale}}" hint-placeholder-val="{{ false }}">
+<p class="source old"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span>{{g.merchant}}, relevé le {{releve}}. Prix à vérifier.</span></p>
+</sc-if>
+<sc-if value="{{fresh}}" hint-placeholder-val="{{ true }}">
+<p class="source">{{g.merchant}}, relevé le {{releve}}</p>
+</sc-if>
+<a class="cta" href="#">Voir l'offre<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg></a>
+</div>
+</article>
+</sc-for>
+<sc-if value="{{isEmpty}}" hint-placeholder-val="{{ false }}">
+<div class="empty">
+<div class="empty-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12a4 4 0 0 1 4 4v1.5a3.5 3.5 0 0 1-6.2 2.2L14.5 14h-5l-1.3 1.7A3.5 3.5 0 0 1 2 13.5V12a4 4 0 0 1 4-4z"></path><path d="M7 11v3M5.5 12.5h3M16 11.5h.01M18 13.5h.01"></path></svg></div>
+<h2>Aucun jeu ne correspond à ces filtres</h2>
+<div class="active-filters">
+<sc-for list="{{activeFilters}}" as="f" hint-placeholder-count="2">
+<span class="pill">{{f}}</span>
+</sc-for>
+</div>
+<p>Aucune exclusivité de cette sélection n'est dans le catalogue pour l'instant. Essaie une autre console ou retire le filtre de statut.</p>
+<button class="btn" type="button" onClick="{{reset}}">Réinitialiser les filtres</button>
+</div>
+</sc-if>
+</div>
+</main>
+<footer class="foot">
+<div class="wrap">
+<p>Prix TTC relevés automatiquement chez des marchands français. HorsPC n'est affilié à aucun constructeur ; les noms de jeux et de consoles appartiennent à leurs propriétaires.</p>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false,"section":"Thème"},"stale":{"editor":"boolean","default":false,"section":"État"},"platform":{"editor":"enum","options":["all","ps5","switch","switch2"],"default":"all","section":"État"},"status":{"editor":"enum","options":["all","exclusive","port"],"default":"all","section":"État"},"$preview":{"width":1440,"height":1040}}'>
+class Component extends DCLogic {
+  pickVal(k, def) {
+    const s = this.state || {};
+    if (s[k] !== undefined) return s[k];
+    const p = this.props[k];
+    return (p !== undefined && p !== null) ? p : def;
+  }
+  renderVals() {
+    const dark = !!this.pickVal('dark', false);
+    const stale = !!this.pickVal('stale', false);
+    const platform = this.pickVal('platform', 'all');
+    const status = this.pickVal('status', 'all');
+    const sort = this.pickVal('sort', 'price');
+    const releve = stale ? '05/10/2026' : '24/10/2026';
+    const fmt = (n) => n.toFixed(2).replace('.', ',') + '\u00a0€';
+    const consoleNames = { ps5: 'PS5', 'switch': 'Switch', switch2: 'Switch 2' };
+    const statusNames = { exclusive: 'Exclusif console', port: 'Portage PC annoncé' };
+    const data = [
+      { id: 'ab', name: 'Astro Bot', initials: 'AB', platform: 'ps5', release: '06/09/2024', rk: 20240906, launch: 69.99, low: 53.30, merchant: 'Boutique A', type: 'Physique', status: 'exclusive' },
+      { id: 'gy', name: 'Ghost of Yōtei', initials: 'GY', platform: 'ps5', release: '02/10/2025', rk: 20251002, launch: 79.99, low: 59.69, merchant: 'Boutique B', type: 'Démat', status: 'port' },
+      { id: 'mk', name: 'Mario Kart World', initials: 'MK', platform: 'switch2', release: '05/06/2025', rk: 20250605, launch: 89.99, low: 65.99, merchant: 'Boutique C', type: 'Physique', status: 'exclusive' },
+      { id: 'dk', name: 'Donkey Kong Bananza', initials: 'DK', platform: 'switch2', release: '17/07/2025', rk: 20250717, launch: 59.90, low: 51.99, merchant: 'Boutique A', type: 'Physique', status: 'exclusive' }
+    ];
+    let games = data
+      .filter((g) => (platform === 'all' || g.platform === platform) && (status === 'all' || g.status === status))
+      .map((g) => {
+        const parts = g.low.toFixed(2).split('.');
+        return Object.assign({}, g, {
+          pct: Math.round((g.launch - g.low) / g.launch * 100),
+          euros: parts[0],
+          cents: parts[1],
+          launchTxt: fmt(g.launch),
+          consoleLabel: consoleNames[g.platform],
+          consoleClass: g.platform === 'ps5' ? 'console ps' : 'console nin',
+          coverClass: 'cover cv-' + g.id,
+          coverAlt: 'Jaquette provisoire de ' + g.name,
+          statusLabel: statusNames[g.status],
+          statusClass: g.status === 'exclusive' ? 'status ex' : 'status port'
+        });
+      });
+    if (sort === 'price') games.sort((a, b) => a.low - b.low);
+    if (sort === 'discount') games.sort((a, b) => b.pct - a.pct);
+    if (sort === 'release') games.sort((a, b) => b.rk - a.rk);
+    const platforms = [
+      { id: 'all', label: 'Toutes', dot: '' },
+      { id: 'ps5', label: 'PS5', dot: 'cdot ps' },
+      { id: 'switch', label: 'Switch', dot: 'cdot nin' },
+      { id: 'switch2', label: 'Switch 2', dot: 'cdot nin' }
+    ].map((p) => Object.assign({}, p, { hasDot: !!p.dot, pressed: String(platform === p.id), pick: () => this.setState({ platform: p.id }) }));
+    const statuses = [
+      { id: 'all', label: 'Tous' },
+      { id: 'exclusive', label: 'Exclusif' },
+      { id: 'port', label: 'Portage annoncé' }
+    ].map((s) => Object.assign({}, s, { pressed: String(status === s.id), pick: () => this.setState({ status: s.id }) }));
+    const activeFilters = [];
+    if (platform !== 'all') activeFilters.push(consoleNames[platform]);
+    if (status !== 'all') activeFilters.push(status === 'exclusive' ? 'Exclusif' : 'Portage annoncé');
+    const n = games.length;
+    return {
+      rootClass: dark ? 'hp dark' : 'hp',
+      dark: dark,
+      light: !dark,
+      stale: stale,
+      fresh: !stale,
+      liveClass: stale ? 'live old' : 'live',
+      updatedAt: stale ? '05/10/2026 à 06:00' : '24/10/2026 à 06:00',
+      releve: releve,
+      themeLabel: dark ? 'Passer en thème clair' : 'Passer en thème sombre',
+      toggleTheme: () => this.setState({ dark: !dark }),
+      platforms: platforms,
+      statuses: statuses,
+      sort: sort,
+      onSort: (e) => this.setState({ sort: e.target.value }),
+      games: games,
+      isEmpty: n === 0,
+      countLabel: n + (n > 1 ? ' jeux' : ' jeu'),
+      activeFilters: activeFilters,
+      reset: () => this.setState({ platform: 'all', status: 'all' })
+    };
+  }
+}
+</script>
+</body>
+</html>
