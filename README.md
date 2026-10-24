@@ -34,7 +34,7 @@ uv run python -m horspc build # régénère site/data.json
 python3 -m http.server -d site 8000   # puis http://localhost:8000
 ```
 
-Les identifiants IGDB sont ceux d'une application Twitch (<https://dev.twitch.tv/console/apps>). Sans identifiants, `uv run python -m horspc build --offline` reprend les champs IGDB du `data.json` existant.
+Les identifiants IGDB sont ceux d'une application Twitch (<https://dev.twitch.tv/console/apps>). Sans identifiants, `uv run python -m horspc build --offline` reprend les champs IGDB et le `generated_at` du `data.json` existant (ou l'heure courante s'il n'existe pas).
 
 Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie ; `data.json` n'est pas modifié), `2` identifiants IGDB manquants.
 
@@ -152,7 +152,7 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 | `schedule` (**lundi 06:17 UTC**) et `workflow_dispatch` | complet, avec IGDB (secrets) | oui, s'il a changé | oui | oui |
 | `push` sur `main` touchant `site/`, `src/` ou `data/` | `--offline` (sans IGDB ni secrets) | **jamais** | oui, avec le `data.json` ainsi généré | non |
 
-Sur un push, le site est donc redéployé avec les prix et le code à jour, mais les champs IGDB viennent du `data.json` versionné. Ce `data.json` régénéré n'existe que dans l'artefact déployé : le dépôt n'est modifié que par le build planifié ou manuel. Conséquence à connaître : le `generated_at` affiché sur le site est alors celui du push, tandis que le job `freshness` lit celui du dépôt.
+Sur un push, le site est donc redéployé avec les prix et le code à jour, mais les champs IGDB viennent du `data.json` versionné. Ce `data.json` régénéré n'existe que dans l'artefact déployé : le dépôt n'est modifié que par le build planifié ou manuel. Le build `--offline` reprend aussi le `generated_at` du `data.json` versionné : un push ne rajeunit donc pas la date « Catalogue mis à jour le » et ne masque pas la bannière d'ancienneté, qui reflètent toujours le dernier build complet. Seul `offer.stale` est recalculé avec l'heure courante, si bien qu'un relevé peut passer en « Prix à vérifier » après un push.
 
 Deux garde-fous vérifient qu'un push ne produit aucun commit du bot :
 

@@ -50,7 +50,9 @@ def catalog(games: list[dict[str, Any]] = GAMES, observations: list[dict[str, An
 
 
 def previous() -> dict:
-    return build.load_previous(FIXTURES / "data_previous.json")
+    data = build.load_previous(FIXTURES / "data_previous.json")
+    assert data is not None
+    return {g.slug: g for g in data.games}
 
 
 def make(cat: Catalog, igdb: dict[str, IgdbGame | None] | None, prev: dict | None = None):
@@ -264,3 +266,27 @@ def test_cli_identifiants_manquants(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("IGDB_CLIENT_ID", raising=False)
     monkeypatch.delenv("IGDB_CLIENT_SECRET", raising=False)
     assert main(["build"]) == 2
+
+
+def test_offline_reprend_generated_at_precedent(workdir: Path) -> None:
+    data = run(workdir, None)
+    assert data.model_dump(mode="json")["generated_at"] == "2026-10-19T06:17:40Z"
+    # offer.stale reste calculé avec l'heure courante (relevé du 20/10, 6 jours avant NOW).
+    assert data.games[0].offer is not None
+    assert data.games[0].offer.stale is False
+
+
+def test_offline_relevé_ancien_devient_stale_malgre_generated_at(workdir: Path) -> None:
+    (workdir / "prices.yaml").write_text(
+        yaml.safe_dump([OBSERVATION | {"observed_at": "2026-09-20"}]), encoding="utf-8"
+    )
+    data = run(workdir, None)
+    # 2026-09-20 est récent par rapport au generated_at repris (19/10), mais pas à NOW (26/10).
+    assert data.games[0].offer is not None
+    assert data.games[0].offer.stale is True
+
+
+def test_offline_sans_data_json_precedent_utilise_l_heure_courante(workdir: Path) -> None:
+    (workdir / "data.json").unlink()
+    data = run(workdir, None)
+    assert data.model_dump(mode="json")["generated_at"] == "2026-10-26T06:17:42Z"

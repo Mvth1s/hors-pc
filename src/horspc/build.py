@@ -31,16 +31,15 @@ def load_catalog(games_path: Path, prices_path: Path, now: datetime) -> Catalog:
     )
 
 
-def load_previous(path: Path) -> dict[str, GameOut]:
-    """Jeux du data.json précédent, par slug ; vide s'il est absent ou illisible."""
+def load_previous(path: Path) -> DataFile | None:
+    """data.json précédent ; None s'il est absent ou illisible."""
     if not path.exists():
-        return {}
+        return None
     try:
-        previous = DataFile.model_validate_json(path.read_bytes())
+        return DataFile.model_validate_json(path.read_bytes())
     except ValidationError as exc:
         log.warning("data.json précédent illisible, ignoré : %s", exc)
-        return {}
-    return {game.slug: game for game in previous.games}
+        return None
 
 
 def build_data(
@@ -49,11 +48,13 @@ def build_data(
     igdb_results: dict[str, IgdbGame | None] | None,
     previous: dict[str, GameOut],
     now: datetime,
+    generated_at: datetime | None = None,
 ) -> DataFile:
     """Assemble et valide le contenu de data.json.
 
     `igdb_results` vaut None quand IGDB est injoignable : les champs IGDB sont alors repris
-    du data.json précédent.
+    du data.json précédent. `generated_at` vaut `now` par défaut ; `now` sert toujours au
+    calcul de `offer.stale`.
     """
     games = []
     for game in catalog.games:
@@ -74,7 +75,7 @@ def build_data(
             None if offer is None else _offer_fields(offer, entry["launch_price_cents"])
         )
         games.append(entry)
-    return DataFile.model_validate({"generated_at": now, "games": games})
+    return DataFile.model_validate({"generated_at": generated_at or now, "games": games})
 
 
 def write_data(data: DataFile, path: Path) -> None:
@@ -96,17 +97,27 @@ def run(
 ) -> DataFile:
     """Build complet. Lève ValidationError si les entrées ou la sortie sont invalides."""
     catalog = load_catalog(games_path, prices_path, now)
-    previous = load_previous(output_path)
+    previous_file = load_previous(output_path)
+    previous = {} if previous_file is None else {g.slug: g for g in previous_file.games}
     igdb_results = None
+    generated_at = now
     if igdb is None:
-        log.warning("Mode hors ligne : champs IGDB repris du data.json précédent")
+        log.warning("Mode hors ligne : champs IGDB et generated_at repris du data.json précédent")
+        # Un build hors ligne n'est pas une mise à jour : la fraîcheur affichée ne bouge pas.
+        if previous_file is not None:
+            generated_at = previous_file.generated_at
     else:
         try:
             igdb_results = igdb.fetch_games(catalog.games, now)
         except IgdbError as exc:
             log.warning("%s ; champs IGDB repris du data.json précédent", exc)
     data = build_data(
-        catalog, ManualPriceProvider(catalog.observations), igdb_results, previous, now
+        catalog,
+        ManualPriceProvider(catalog.observations),
+        igdb_results,
+        previous,
+        now,
+        generated_at,
     )
     write_data(data, output_path)
     log.info("%s écrit : %d jeux", output_path, len(data.games))
