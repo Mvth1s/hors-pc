@@ -27,6 +27,12 @@ def api():
     with respx.mock(assert_all_called=False) as router:
         router.post(TOKEN_URL).respond(json=load_fixture("igdb_token.json"))
         router.post(PLATFORMS_URL).respond(json=load_fixture("igdb_platforms.json"))
+        router.post(f"{API_URL}/release_date_regions").respond(
+            json=load_fixture("igdb_release_regions.json")
+        )
+        router.post(f"{API_URL}/release_date_statuses").respond(
+            json=load_fixture("igdb_release_statuses.json")
+        )
         yield router
 
 
@@ -107,3 +113,46 @@ def test_secret_dans_le_corps_pas_dans_l_url(igdb: IgdbClient, api: respx.MockRo
     request = api.routes[0].calls.last.request
     assert "secret-test" not in str(request.url)
     assert b"client_secret=secret-test" in request.content
+
+
+def test_release_date_europe_ou_monde_en_version_complete(
+    igdb: IgdbClient, api: respx.MockRouter, caplog: pytest.LogCaptureFixture
+) -> None:
+    api.post(GAMES_URL).respond(json=load_fixture("igdb_games.json"))
+    games = [
+        # Advanced Access (28/04) et sortie Japon (26/04) écartées : reste le 30/04.
+        entry("saros", "Saros", ["ps5"], 331215),
+        # Statut absent accepté ; la ligne Switch 2 (autre plateforme) est ignorée.
+        entry("pokemon-ecarlate", "Pokémon Écarlate", ["switch"], 191931),
+        entry("sans-date", "Jeu sans date retenue", ["ps5"], 400001),
+    ]
+    result = igdb.fetch_games(games, NOW)
+    assert result["saros"].release_date == date(2026, 4, 30)
+    assert result["pokemon-ecarlate"].release_date == date(2022, 11, 18)
+    assert result["sans-date"].release_date is None
+    warnings = [r.getMessage() for r in caplog.records if r.levelname == "WARNING"]
+    assert warnings == [
+        "IGDB : sans-date, aucune date de sortie retenue (3 date(s) écartée(s) : "
+        "1 région, 1 sans date, 1 statut) ; ajouter un release_date_override"
+    ]
+
+
+def test_pas_d_avertissement_si_release_date_override(
+    igdb: IgdbClient, api: respx.MockRouter, caplog: pytest.LogCaptureFixture
+) -> None:
+    api.post(GAMES_URL).respond(json=load_fixture("igdb_games.json"))
+    game = GameEntry(
+        slug="sans-date",
+        title="Jeu sans date retenue",
+        platforms=["ps5"],
+        igdb_id=400001,
+        release_date_override={"date": "2023-11-17", "source_url": "https://example.org/sortie"},
+    )
+    igdb.fetch_games([game], NOW)
+    assert not [r for r in caplog.records if r.levelname == "WARNING"]
+
+
+def test_region_ou_statut_introuvable(igdb: IgdbClient, api: respx.MockRouter) -> None:
+    api.post(f"{API_URL}/release_date_regions").respond(json=[{"id": 8, "region": "worldwide"}])
+    with pytest.raises(IgdbError, match="europe"):
+        igdb.fetch_games([entry("astro-bot", "Astro Bot", ["ps5"])], NOW)

@@ -10,6 +10,7 @@
 #   launch_price_source  URL de la source (obligatoire si launch_price est renseigné)
 #   pc_override          optionnel, prioritaire sur IGDB :
 #                          {status: none|announced|released, source_url, checked_at}
+#   release_date_override optionnel, prioritaire sur IGDB : {date, source_url}
 
 - slug: astro-bot
   title: Astro Bot

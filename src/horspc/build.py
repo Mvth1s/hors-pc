@@ -36,8 +36,8 @@ def load_previous(path: Path) -> DataFile | None:
     if not path.exists():
         return None
     try:
-        return DataFile.model_validate_json(path.read_bytes())
-    except ValidationError as exc:
+        return DataFile.model_validate(_upgrade(json.loads(path.read_bytes())))
+    except (ValidationError, ValueError) as exc:
         log.warning("data.json précédent illisible, ignoré : %s", exc)
         return None
 
@@ -70,6 +70,9 @@ def build_data(
         if game.pc_override is not None:
             entry["pc_status"] = game.pc_override.status
             entry["pc_status_source"] = "manual"
+        if game.release_date_override is not None:
+            entry["release_date"] = game.release_date_override.date
+            entry["release_date_source"] = "manual"
         offer = provider.get_best_offer(game, now.date())
         entry["offer"] = (
             None if offer is None else _offer_fields(offer, entry["launch_price_cents"])
@@ -136,6 +139,7 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
     if info is not None:
         return {
             "release_date": info.release_date,
+            "release_date_source": None if info.release_date is None else "igdb",
             "igdb_id": info.igdb_id,
             "igdb_url": info.url,
             "igdb_fetched_at": now,
@@ -143,17 +147,20 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
             "pc_status_source": "igdb",
         }
     if prev is not None:
+        # Une valeur manuelle retirée de games.yaml ne doit pas survivre au build suivant.
+        keep_release = prev.release_date_source == "igdb"
         return {
-            "release_date": prev.release_date,
+            "release_date": prev.release_date if keep_release else None,
+            "release_date_source": "igdb" if keep_release else None,
             "igdb_id": prev.igdb_id,
             "igdb_url": prev.igdb_url,
             "igdb_fetched_at": prev.igdb_fetched_at,
-            # Un statut manuel retiré de games.yaml ne doit pas survivre au build suivant.
             "pc_status": prev.pc_status if prev.pc_status_source == "igdb" else "none",
             "pc_status_source": "igdb",
         }
     return {
         "release_date": None,
+        "release_date_source": None,
         "igdb_id": None,
         "igdb_url": None,
         "igdb_fetched_at": None,
@@ -175,6 +182,17 @@ def _offer_fields(offer: Offer, launch_price_cents: int | None) -> dict[str, Any
         "source": offer.source,
         "stale": offer.stale,
     }
+
+
+def _upgrade(raw: Any) -> Any:
+    """Convertit un data.json v1 (sans release_date_source) au schéma courant."""
+    if isinstance(raw, dict) and raw.get("schema_version") == 1:
+        raw = {**raw, "schema_version": 2}
+        raw["games"] = [
+            {**g, "release_date_source": "igdb" if g.get("release_date") else None}
+            for g in raw.get("games", [])
+        ]
+    return raw
 
 
 def _cents(amount: Decimal | None) -> int | None:

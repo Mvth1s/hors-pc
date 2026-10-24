@@ -1,29 +1,150 @@
 [
-  {
-    "id": 255340,
-    "name": "Astro Bot",
-    "url": "https://www.igdb.com/games/astro-bot",
-    "platforms": [167],
-    "release_dates": [{"id": 1, "platform": 167, "date": 1725580800}]
-  },
-  {
-    "id": 250634,
-    "name": "Ghost of Yōtei",
-    "url": "https://www.igdb.com/games/ghost-of-yotei",
-    "platforms": [6, 167],
-    "release_dates": [
-      {"id": 2, "platform": 167, "date": 1759363200},
-      {"id": 3, "platform": 6}
-    ]
-  },
-  {
-    "id": 152063,
-    "name": "Death Stranding 2: On the Beach",
-    "url": "https://www.igdb.com/games/death-stranding-2-on-the-beach",
-    "platforms": [6, 167],
-    "release_dates": [
-      {"id": 4, "platform": 167, "date": 1750377600},
-      {"id": 5, "platform": 6, "date": 1773878400}
-    ]
-  }
+ {
+  "id": 255340,
+  "name": "Astro Bot",
+  "url": "https://www.igdb.com/games/astro-bot",
+  "platforms": [
+   167
+  ],
+  "release_dates": [
+   {
+    "id": 1,
+    "platform": 167,
+    "date": 1725580800,
+    "release_region": 8,
+    "status": 6
+   }
+  ]
+ },
+ {
+  "id": 250634,
+  "name": "Ghost of Yōtei",
+  "url": "https://www.igdb.com/games/ghost-of-yotei",
+  "platforms": [
+   6,
+   167
+  ],
+  "release_dates": [
+   {
+    "id": 2,
+    "platform": 167,
+    "date": 1759363200,
+    "release_region": 8,
+    "status": 6
+   },
+   {
+    "id": 3,
+    "platform": 6,
+    "release_region": 8
+   }
+  ]
+ },
+ {
+  "id": 152063,
+  "name": "Death Stranding 2: On the Beach",
+  "url": "https://www.igdb.com/games/death-stranding-2-on-the-beach",
+  "platforms": [
+   6,
+   167
+  ],
+  "release_dates": [
+   {
+    "id": 4,
+    "platform": 167,
+    "date": 1750377600,
+    "release_region": 8,
+    "status": 6
+   },
+   {
+    "id": 5,
+    "platform": 6,
+    "date": 1773878400,
+    "release_region": 8,
+    "status": 6
+   }
+  ]
+ },
+ {
+  "id": 331215,
+  "name": "Saros",
+  "url": "https://www.igdb.com/games/saros",
+  "platforms": [
+   167
+  ],
+  "release_dates": [
+   {
+    "id": 905222,
+    "platform": 167,
+    "date": 1777334400,
+    "status": 34,
+    "release_region": 8
+   },
+   {
+    "id": 845397,
+    "platform": 167,
+    "date": 1777507200,
+    "status": 6,
+    "release_region": 8
+   },
+   {
+    "id": 900001,
+    "platform": 167,
+    "date": 1777161600,
+    "status": 6,
+    "release_region": 5
+   }
+  ]
+ },
+ {
+  "id": 191931,
+  "name": "Pokémon Scarlet",
+  "url": "https://www.igdb.com/games/pokemon-scarlet",
+  "platforms": [
+   508,
+   130
+  ],
+  "release_dates": [
+   {
+    "id": 7,
+    "platform": 130,
+    "date": 1668729600,
+    "release_region": 8
+   },
+   {
+    "id": 8,
+    "platform": 508,
+    "date": 1749081600,
+    "status": 36,
+    "release_region": 8
+   }
+  ]
+ },
+ {
+  "id": 400001,
+  "name": "Jeu sans date retenue",
+  "url": "https://www.igdb.com/games/jeu-sans-date",
+  "platforms": [
+   167
+  ],
+  "release_dates": [
+   {
+    "id": 9,
+    "platform": 167,
+    "date": 1700000000,
+    "status": 3,
+    "release_region": 8
+   },
+   {
+    "id": 10,
+    "platform": 167,
+    "date": 1700000000,
+    "status": 6,
+    "release_region": 2
+   },
+   {
+    "id": 11,
+    "platform": 167
+   }
+  ]
+ }
 ]

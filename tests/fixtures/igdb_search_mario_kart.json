@@ -1,16 +1,28 @@
 [
-  {
-    "id": 338067,
-    "name": "Mario Kart World",
-    "url": "https://www.igdb.com/games/mario-kart-world",
-    "platforms": [508],
-    "release_dates": [{"id": 6, "platform": 508, "date": 1749081600}]
-  },
-  {
-    "id": 338999,
-    "name": "Mario Kart World: Deluxe",
-    "url": "https://www.igdb.com/games/mario-kart-world-deluxe",
-    "platforms": [508],
-    "release_dates": []
-  }
+ {
+  "id": 338067,
+  "name": "Mario Kart World",
+  "url": "https://www.igdb.com/games/mario-kart-world",
+  "platforms": [
+   508
+  ],
+  "release_dates": [
+   {
+    "id": 6,
+    "platform": 508,
+    "date": 1749081600,
+    "release_region": 8,
+    "status": 6
+   }
+  ]
+ },
+ {
+  "id": 338999,
+  "name": "Mario Kart World: Deluxe",
+  "url": "https://www.igdb.com/games/mario-kart-world-deluxe",
+  "platforms": [
+   508
+  ],
+  "release_dates": []
+ }
 ]

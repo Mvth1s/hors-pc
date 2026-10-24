@@ -24,6 +24,7 @@ from pydantic import (
 Platform = Literal["ps5", "switch", "switch2"]
 PcStatus = Literal["none", "announced", "released"]
 PcStatusSource = Literal["igdb", "manual"]
+ReleaseDateSource = Literal["igdb", "manual"]
 OfferFormat = Literal["physical", "digital"]
 Condition = Literal["new"]
 
@@ -140,6 +141,13 @@ class PcOverride(_Input):
         return value
 
 
+class ReleaseDateOverride(_Input):
+    """Date de sortie saisie à la main, prioritaire sur IGDB (peut être future)."""
+
+    date: date
+    source_url: HttpUrl
+
+
 class GameEntry(_Input):
     """Une entrée de games.yaml : une référence achetable."""
 
@@ -150,6 +158,7 @@ class GameEntry(_Input):
     launch_price: Euros | None = None
     launch_price_source: HttpUrl | None = None
     pc_override: PcOverride | None = None
+    release_date_override: ReleaseDateOverride | None = None
 
     @field_validator("platforms")
     @classmethod
@@ -259,6 +268,7 @@ class GameOut(_Output):
     title: str
     platforms: list[Platform] = Field(min_length=1)
     release_date: date | None
+    release_date_source: ReleaseDateSource | None
     launch_price_cents: PositiveCents | None
     igdb_id: PositiveInt | None
     igdb_url: HttpUrl | None
@@ -268,11 +278,17 @@ class GameOut(_Output):
     pc_status_source: PcStatusSource
     offer: OfferOut | None
 
+    @model_validator(mode="after")
+    def _release_source(self) -> "GameOut":
+        if (self.release_date is None) != (self.release_date_source is None):
+            raise ValueError("release_date_source est null si et seulement si release_date l'est")
+        return self
+
 
 class DataFile(_Output):
-    """Contenu de site/data.json (schéma v1)."""
+    """Contenu de site/data.json (schéma v2)."""
 
-    schema_version: Literal[1] = 1
+    schema_version: Literal[2] = 2
     generated_at: UtcDatetime
     currency: Literal["EUR"] = "EUR"
     games: list[GameOut]

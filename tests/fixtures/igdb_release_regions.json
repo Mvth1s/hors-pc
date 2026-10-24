@@ -1,0 +1,42 @@
+[
+ {
+  "id": 1,
+  "region": "europe"
+ },
+ {
+  "id": 2,
+  "region": "north_america"
+ },
+ {
+  "id": 3,
+  "region": "australia"
+ },
+ {
+  "id": 4,
+  "region": "new_zealand"
+ },
+ {
+  "id": 5,
+  "region": "japan"
+ },
+ {
+  "id": 6,
+  "region": "china"
+ },
+ {
+  "id": 7,
+  "region": "asia"
+ },
+ {
+  "id": 8,
+  "region": "worldwide"
+ },
+ {
+  "id": 9,
+  "region": "korea"
+ },
+ {
+  "id": 10,
+  "region": "brazil"
+ }
+]

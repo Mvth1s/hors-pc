@@ -1,0 +1,38 @@
+[
+ {
+  "id": 4,
+  "name": "Offline"
+ },
+ {
+  "id": 6,
+  "name": "Full Release"
+ },
+ {
+  "id": 2,
+  "name": "Beta"
+ },
+ {
+  "id": 1,
+  "name": "Alpha"
+ },
+ {
+  "id": 5,
+  "name": "Cancelled"
+ },
+ {
+  "id": 3,
+  "name": "Early Access"
+ },
+ {
+  "id": 34,
+  "name": "Advanced Access"
+ },
+ {
+  "id": 35,
+  "name": "Digital Compatibility Release"
+ },
+ {
+  "id": 36,
+  "name": "Next-Gen Optimization Patch Release"
+ }
+]

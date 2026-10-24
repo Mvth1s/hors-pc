@@ -4,6 +4,7 @@ import logging
 import re
 import time
 import unicodedata
+from collections import Counter
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
@@ -22,7 +23,14 @@ API_URL = "https://api.igdb.com/v4"
 PC_SLUG = "win"
 PLATFORM_SLUGS: dict[Platform, str] = {"ps5": "ps5", "switch": "switch", "switch2": "switch-2"}
 
-GAME_FIELDS = "name,url,platforms,release_dates.platform,release_dates.date"
+GAME_FIELDS = (
+    "name,url,platforms,release_dates.platform,release_dates.date,"
+    "release_dates.release_region,release_dates.status"
+)
+
+# release_date console : seules ces régions et ces statuts (ou un statut absent) comptent.
+RELEASE_REGIONS = ("europe", "worldwide")
+FULL_RELEASE = "Full Release"
 
 
 class IgdbError(Exception):
@@ -35,6 +43,14 @@ class IgdbGame:
     url: str | None
     release_date: date | None
     pc_status: PcStatus
+
+
+@dataclass(frozen=True)
+class ReleaseRefs:
+    """Identifiants IGDB des régions et statuts de sortie, lus par leur nom."""
+
+    regions: frozenset[int]
+    statuses: dict[str, int]
 
 
 class IgdbClient:
@@ -54,6 +70,7 @@ class IgdbClient:
         self._token: str | None = None
         self._token_expires_at = 0.0
         self._platform_ids: dict[str, int] | None = None
+        self._release_refs: ReleaseRefs | None = None
 
     def fetch_games(self, games: Sequence[GameEntry], now: datetime) -> dict[str, IgdbGame | None]:
         """Renvoie, pour chaque slug, la fiche IGDB trouvée ou None."""
@@ -64,6 +81,7 @@ class IgdbClient:
 
     def _fetch_games(self, games: Sequence[GameEntry], now: datetime) -> dict[str, IgdbGame | None]:
         platform_ids = self.platform_ids()
+        refs = self.release_refs()
         by_id: dict[int, dict[str, Any]] = {}
         ids = [g.igdb_id for g in games if g.igdb_id is not None]
         if ids:
@@ -84,7 +102,15 @@ class IgdbClient:
                 log.warning("IGDB : aucun résultat pour %s", game.slug)
                 result[game.slug] = None
                 continue
-            result[game.slug] = _to_game(row, console_ids, platform_ids[PC_SLUG], now)
+            release, rejected = release_date(row, console_ids, refs)
+            if release is None and game.release_date_override is None:
+                _warn_no_release_date(game.slug, rejected)
+            result[game.slug] = IgdbGame(
+                igdb_id=row["id"],
+                url=row.get("url"),
+                release_date=release,
+                pc_status=pc_status(row, platform_ids[PC_SLUG], now),
+            )
             if game.igdb_id is None:
                 log.info("IGDB : %s → %d (%s)", game.slug, row["id"], row.get("name"))
         return result
@@ -101,6 +127,23 @@ class IgdbClient:
                 raise KeyError(f"plateformes IGDB introuvables : {', '.join(missing)}")
             self._platform_ids = found
         return self._platform_ids
+
+    def release_refs(self) -> ReleaseRefs:
+        """Régions et statuts de sortie, via /release_date_regions et /release_date_statuses."""
+        if self._release_refs is None:
+            regions = self._ids_by_name("release_date_regions", "region", RELEASE_REGIONS)
+            statuses = self._ids_by_name("release_date_statuses", "name", (FULL_RELEASE,))
+            self._release_refs = ReleaseRefs(frozenset(regions.values()), statuses)
+        return self._release_refs
+
+    def _ids_by_name(self, endpoint: str, field: str, names: Sequence[str]) -> dict[str, int]:
+        quoted = ",".join(f'"{n}"' for n in names)
+        rows = self.query(endpoint, f"fields id,{field}; where {field} = ({quoted}); limit 50;")
+        found = {row[field]: row["id"] for row in rows}
+        missing = sorted(set(names) - found.keys())
+        if missing:
+            raise KeyError(f"/{endpoint} : introuvable(s) : {', '.join(missing)}")
+        return {name: found[name] for name in names}
 
     def query(self, endpoint: str, body: str) -> list[dict[str, Any]]:
         """POST d'une requête Apicalypse ; renouvelle le token une fois si IGDB renvoie 401."""
@@ -169,17 +212,41 @@ def _normalize(text: str) -> str:
     return re.sub(r"[^a-z0-9]", "", ascii_text.lower())
 
 
-def _to_game(row: dict[str, Any], console_ids: set[int], pc_id: int, now: datetime) -> IgdbGame:
-    release_dates = row.get("release_dates") or []
-    console_dates = [
-        rd["date"] for rd in release_dates if rd.get("platform") in console_ids and "date" in rd
-    ]
-    release = min(console_dates, default=None)
-    return IgdbGame(
-        igdb_id=row["id"],
-        url=row.get("url"),
-        release_date=None if release is None else datetime.fromtimestamp(release, UTC).date(),
-        pc_status=pc_status(row, pc_id, now),
+def release_date(
+    row: dict[str, Any], console_ids: set[int], refs: ReleaseRefs
+) -> tuple[date | None, Counter[str]]:
+    """Plus ancienne sortie console en Europe ou Monde, en version complète (ou sans statut).
+
+    Renvoie aussi le décompte des lignes écartées, par motif : statut, région, sans date.
+    """
+    kept: list[int] = []
+    rejected: Counter[str] = Counter()
+    for rd in row.get("release_dates") or []:
+        if rd.get("platform") not in console_ids:
+            continue
+        if "date" not in rd:
+            rejected["sans date"] += 1
+        elif "status" in rd and rd["status"] != refs.statuses[FULL_RELEASE]:
+            rejected["statut"] += 1
+        elif rd.get("release_region") not in refs.regions:
+            rejected["région"] += 1
+        else:
+            kept.append(rd["date"])
+    if not kept:
+        return None, rejected
+    return datetime.fromtimestamp(min(kept), UTC).date(), rejected
+
+
+def _warn_no_release_date(slug: str, rejected: Counter[str]) -> None:
+    if rejected:
+        detail = ", ".join(f"{n} {reason}" for reason, n in sorted(rejected.items()))
+        why = f"{sum(rejected.values())} date(s) écartée(s) : {detail}"
+    else:
+        why = "aucune date pour ces plateformes"
+    log.warning(
+        "IGDB : %s, aucune date de sortie retenue (%s) ; ajouter un release_date_override",
+        slug,
+        why,
     )
 
 

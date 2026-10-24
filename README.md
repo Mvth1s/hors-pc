@@ -60,6 +60,9 @@ uv run ruff check . && uv run ruff format --check .
     status: none                  # none | announced | released
     source_url: https://…
     checked_at: 2026-10-24
+  release_date_override:          # optionnel, prioritaire sur IGDB (date future admise)
+    date: 2026-04-30
+    source_url: https://…
 ```
 
 Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot → 255340`) et signale les correspondances approximatives : il est conseillé d'épingler alors l'`igdb_id`. Un jeu dont le `pc_status` passe à `released` reste dans `data.json` mais n'est plus affiché ; on peut ensuite le retirer de `games.yaml`.
@@ -99,13 +102,13 @@ Sont refusés à la validation, avec un message explicite : les marketplaces (`r
 
 `discount_pct` = `round(100 × (1 − price / launch_price))`, port exclu ; `null` sans prix de lancement. Le badge n'est affiché que si la réduction est positive.
 
-## Schéma de `site/data.json` (v1)
+## Schéma de `site/data.json` (v2)
 
 Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le formatage (`53,30 €`, `JJ/MM/AAAA`) est fait par le front. Le modèle de référence est `DataFile` dans `src/horspc/models.py`.
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generated_at": "2026-10-26T06:17:42Z",
   "currency": "EUR",
   "games": [
@@ -114,6 +117,7 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
       "title": "Astro Bot",
       "platforms": ["ps5"],
       "release_date": "2024-09-06",
+      "release_date_source": "igdb",
       "launch_price_cents": 6999,
       "igdb_id": 255340,
       "igdb_url": "https://www.igdb.com/games/astro-bot",
@@ -138,6 +142,8 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 }
 ```
 
+- `release_date` : plus ancienne sortie sur l'une des plateformes du jeu, parmi les dates IGDB en région `europe` ou `worldwide` et au statut « Full Release » ou sans statut (accès anticipé, Advanced Access, alpha, bêta, etc. sont écartés). Les ids de région et de statut sont lus par leur nom via `/release_date_regions` et `/release_date_statuses`. Si aucune date ne passe ces filtres, le build journalise un WARNING (slug, nombre de dates écartées par motif) : ajouter alors un `release_date_override`.
+- `release_date_source` : `igdb`, `manual` (`release_date_override`) ou `null` si `release_date` est `null`. Ajouté en v2 ; un `data.json` v1 est relu et converti automatiquement.
 - `pc_status` : `released` si IGDB indique une sortie PC passée, `announced` si le PC est listé sans date ou avec une date future, `none` sinon. `pc_status_source` vaut `manual` quand `pc_override` est utilisé.
 - L'identifiant de la plateforme PC n'est pas codé en dur : il est lu via l'endpoint `platforms` d'IGDB (slug `win`).
 - Si IGDB est injoignable, les champs IGDB (dont `igdb_fetched_at`) sont repris du `data.json` précédent ; le build n'échoue pas.

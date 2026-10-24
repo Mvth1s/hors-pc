@@ -68,12 +68,13 @@ ASTRO = IgdbGame(255340, "https://www.igdb.com/games/astro-bot", date(2024, 9, 6
 def test_schema_complet_et_offre() -> None:
     data = make(catalog(), {"astro-bot": ASTRO, "saros": None})
     dumped = data.model_dump(mode="json")
-    assert dumped["schema_version"] == 1
+    assert dumped["schema_version"] == 2
     assert dumped["generated_at"] == "2026-10-26T06:17:42Z"
     assert dumped["currency"] == "EUR"
     astro = dumped["games"][0]
     assert astro["igdb_fetched_at"] == "2026-10-26T06:17:42Z"
     assert astro["release_date"] == "2024-09-06"
+    assert astro["release_date_source"] == "igdb"
     assert astro["launch_price_cents"] == 6999
     assert astro["cover_url"] is None
     assert astro["offer"] == {
@@ -91,6 +92,8 @@ def test_schema_complet_et_offre() -> None:
     saros = dumped["games"][1]
     assert saros["offer"] is None
     assert saros["igdb_id"] is None
+    assert saros["release_date"] is None
+    assert saros["release_date_source"] is None
 
 
 @pytest.mark.parametrize(
@@ -108,9 +111,11 @@ def test_igdb_injoignable_reprend_les_valeurs_precedentes() -> None:
     assert astro.release_date == date(2024, 9, 6)
     assert astro.pc_status == "announced"
     assert astro.igdb_fetched_at.isoformat() == "2026-10-19T06:17:38+00:00"
-    # Le statut manuel précédent n'est pas repris sans pc_override.
+    # Les valeurs manuelles précédentes ne sont pas reprises sans override.
     assert saros.pc_status == "none"
     assert saros.pc_status_source == "igdb"
+    # Un data.json v1 est relu : release_date_source déduit de release_date.
+    assert astro.release_date_source == "igdb"
 
 
 def test_pc_override_prioritaire_sur_igdb() -> None:
@@ -220,6 +225,12 @@ def test_run_avec_igdb_mocke(workdir: Path, http: HttpClient) -> None:
     with respx.mock:
         respx.post(TOKEN_URL).respond(json=load_fixture("igdb_token.json"))
         respx.post(f"{API_URL}/platforms").respond(json=load_fixture("igdb_platforms.json"))
+        respx.post(f"{API_URL}/release_date_regions").respond(
+            json=load_fixture("igdb_release_regions.json")
+        )
+        respx.post(f"{API_URL}/release_date_statuses").respond(
+            json=load_fixture("igdb_release_statuses.json")
+        )
         respx.post(f"{API_URL}/games").respond(json=load_fixture("igdb_games.json"))
         run(workdir, IgdbClient("id", "secret", http))
     written = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
@@ -290,3 +301,41 @@ def test_offline_sans_data_json_precedent_utilise_l_heure_courante(workdir: Path
     (workdir / "data.json").unlink()
     data = run(workdir, None)
     assert data.model_dump(mode="json")["generated_at"] == "2026-10-26T06:17:42Z"
+
+
+def test_release_date_override_prioritaire() -> None:
+    games = [
+        GAMES[0]
+        | {
+            "release_date_override": {
+                "date": "2024-09-05",
+                "source_url": "https://example.org/sortie",
+            }
+        }
+    ]
+    data = make(catalog(games), {"astro-bot": ASTRO})
+    assert data.games[0].release_date == date(2024, 9, 5)
+    assert data.games[0].release_date_source == "manual"
+
+
+def test_release_date_override_peut_etre_future() -> None:
+    override = {"date": "2027-03-01", "source_url": "https://example.org/sortie"}
+    games = [GAMES[1] | {"release_date_override": override}]
+    data = make(catalog(games, observations=[]), {"saros": None})
+    assert data.games[0].release_date == date(2027, 3, 1)
+
+
+def test_release_date_source_coherente() -> None:
+    data = make(catalog(), {"astro-bot": ASTRO, "saros": None})
+    raw = data.model_dump(mode="json")
+    raw["games"][0]["release_date_source"] = None
+    with pytest.raises(ValidationError, match="release_date_source"):
+        DataFile.model_validate(raw)
+
+
+def test_release_date_manuelle_precedente_non_reprise() -> None:
+    prev = previous()
+    prev["saros"] = prev["saros"].model_copy(update={"release_date_source": "manual"})
+    data = make(catalog(), None, prev)
+    saros = data.games[1]
+    assert (saros.release_date, saros.release_date_source) == (None, None)
