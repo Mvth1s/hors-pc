@@ -169,6 +169,8 @@ def test_region_ou_statut_introuvable(igdb: IgdbClient, api: respx.MockRouter) -
         ("pc-beta", 400004, "announced"),
         # Ligne PC sans date ni statut.
         ("ghost-of-yotei", 250634, "announced"),
+        # Ligne PC sans statut, datée du passé (cas réel : The Last of Us Part I).
+        ("pc-sans-statut", 400005, "released"),
         # Full Release passée.
         ("death-stranding-2", 152063, "released"),
         ("astro-bot", 255340, "none"),

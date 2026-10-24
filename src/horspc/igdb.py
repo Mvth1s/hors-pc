@@ -275,6 +275,7 @@ def pc_status(row: dict[str, Any], pc_id: int, refs: ReleaseRefs, now: datetime)
         return "none"
     now_ts = now.timestamp()
     for rd in lines:
-        if "date" in rd and rd["date"] <= now_ts and rd.get("status", FULL_RELEASE) in released:
+        status_ok = "status" not in rd or rd["status"] in released
+        if "date" in rd and rd["date"] <= now_ts and status_ok:
             return "released"
     return "announced"
