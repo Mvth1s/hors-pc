@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Questions fréquentes · HorsPC</title>
+<meta name="description" content="Questions fréquentes sur HorsPC : choix des jeux, prix, filtres, jaquettes, cookies.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script src="theme.js" defer></script>
+<script src="footer.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Pourquoi tel jeu n'est-il pas listé ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Le catalogue est choisi à la main et n'est pas exhaustif. Un jeu n'y figure que s'il est sorti sur PS5, Switch ou Switch 2 et n'est pas sorti sur PC. Il peut aussi manquer simplement parce qu'il n'a pas encore été ajouté : vous pouvez le suggérer en ouvrant une issue GitHub."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Que veut dire « Portage PC annoncé » ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Le jeu n'est pas encore sorti sur PC, mais une version PC est annoncée : IGDB.com la liste avec une date future ou sans date. Le jeu reste au catalogue jusqu'à la sortie effective de cette version."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pourquoi des jeux Switch apparaissent-ils dans le filtre Switch 2 ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La Switch 2 fait tourner la plupart des jeux Switch. Le filtre « Switch 2 » montre donc tout ce qui se joue sur Switch 2, y compris les jeux Switch ; le badge de chaque fiche indique la console de la version vendue."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "D'où viennent les prix, et à quelle fréquence sont-ils mis à jour ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Les prix sont relevés à la main sur les sites des enseignes, toujours pour une offre vendue par l'enseigne elle-même et livrable partout en France. Chaque fiche affiche le marchand et la date du relevé ; un relevé de plus de 30 jours est signalé « Prix à vérifier ». Les données de jeux (dates, statut PC, jaquettes) sont actualisées chaque semaine. Le détail est dans la méthodologie des prix."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pourquoi pas de liens affiliés ni de prix automatiques ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Les comparateurs de prix et les boutiques officielles interdisent l'extraction automatique de leurs pages dans leurs conditions d'utilisation ou leur robots.txt. Et des liens affiliés rendraient le projet commercial, ce qui sortirait du cadre gratuit et non commercial de l'API IGDB utilisée pour les données de jeux."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pourquoi un jeu disparaît-il quand il sort sur PC ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "HorsPC ne liste que des jeux absents du PC. Le statut PC est vérifié chaque semaine sur IGDB.com : dès qu'une version PC est sortie, le jeu n'a plus sa place au catalogue et n'est plus affiché."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Comment signaler une erreur ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Le plus simple est d'ouvrir une issue GitHub (formulaire pré-rempli, compte GitHub requis), en indiquant la page, l'erreur et une source. Vous pouvez aussi écrire à l'adresse indiquée dans les mentions légales."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "D'où viennent les jaquettes ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Les jaquettes proviennent d'IGDB.com. Elles sont copiées sur ce site (aucune image n'est chargée depuis IGDB) et appartiennent à leurs éditeurs respectifs. Une demande de retrait peut être faite depuis le pied de page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pourquoi un bandeau cookies ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "HorsPC mesure son audience avec Google Analytics 4, uniquement si vous l'acceptez. Tant que vous n'avez pas cliqué sur « Accepter », aucun script Google n'est chargé. Refuser n'a aucune conséquence sur l'utilisation du site, et vous pouvez changer d'avis à tout moment avec le lien Gérer les cookies."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body class="hp" id="top">
+<script>
+  // Thème appliqué avant le premier rendu pour éviter un flash.
+  try { var t = localStorage.getItem("horspc-theme"); if (t === "light" || t === "dark") document.body.classList.add(t); } catch (e) {}
+</script>
+<header class="top">
+  <div class="wrap">
+    <div class="top-inner">
+      <div class="brand">
+        <p class="logo"><a href="./" aria-label="HorsPC, retour au catalogue">Hors<span class="logo-pc">PC</span></a></p>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" type="button" id="theme-toggle" aria-label="Passer en thème sombre">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap legal">
+<h1>Questions fréquentes</h1>
+<p class="legal-updated">Dernière mise à jour : 24/10/2026</p>
+<div class="faq">
+<details class="faq-item">
+  <summary>Pourquoi tel jeu n'est-il pas listé ?</summary>
+  <p>Le catalogue est choisi à la main et n'est pas exhaustif. Un jeu n'y figure que s'il est sorti sur PS5, Switch ou Switch 2 et n'est pas sorti sur PC. Il peut aussi manquer simplement parce qu'il n'a pas encore été ajouté : vous pouvez le suggérer en <a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Erreur%20%3A%20&body=Page%20concern%C3%A9e%20%3A%0A%0AErreur%20constat%C3%A9e%20%3A%0A%0ACorrection%20propos%C3%A9e%20%28avec%20source%29%20%3A%0A" rel="noopener">ouvrant une issue GitHub</a>.</p>
+</details>
+<details class="faq-item">
+  <summary>Que veut dire « Portage PC annoncé » ?</summary>
+  <p>Le jeu n'est pas encore sorti sur PC, mais une version PC est annoncée : IGDB.com la liste avec une date future ou sans date. Le jeu reste au catalogue jusqu'à la sortie effective de cette version.</p>
+</details>
+<details class="faq-item">
+  <summary>Pourquoi des jeux Switch apparaissent-ils dans le filtre Switch 2 ?</summary>
+  <p>La Switch 2 fait tourner la plupart des jeux Switch. Le filtre « Switch 2 » montre donc tout ce qui se joue sur Switch 2, y compris les jeux Switch ; le badge de chaque fiche indique la console de la version vendue.</p>
+</details>
+<details class="faq-item">
+  <summary>D'où viennent les prix, et à quelle fréquence sont-ils mis à jour ?</summary>
+  <p>Les prix sont relevés à la main sur les sites des enseignes, toujours pour une offre vendue par l'enseigne elle-même et livrable partout en France. Chaque fiche affiche le marchand et la date du relevé ; un relevé de plus de 30 jours est signalé « Prix à vérifier ». Les données de jeux (dates, statut PC, jaquettes) sont actualisées chaque semaine. Le détail est dans la <a href="methodologie.html">méthodologie des prix</a>.</p>
+</details>
+<details class="faq-item">
+  <summary>Pourquoi pas de liens affiliés ni de prix automatiques ?</summary>
+  <p>Les comparateurs de prix et les boutiques officielles interdisent l'extraction automatique de leurs pages dans leurs conditions d'utilisation ou leur robots.txt. Et des liens affiliés rendraient le projet commercial, ce qui sortirait du cadre gratuit et non commercial de l'API IGDB utilisée pour les données de jeux.</p>
+</details>
+<details class="faq-item">
+  <summary>Pourquoi un jeu disparaît-il quand il sort sur PC ?</summary>
+  <p>HorsPC ne liste que des jeux absents du PC. Le statut PC est vérifié chaque semaine sur IGDB.com : dès qu'une version PC est sortie, le jeu n'a plus sa place au catalogue et n'est plus affiché.</p>
+</details>
+<details class="faq-item">
+  <summary>Comment signaler une erreur ?</summary>
+  <p>Le plus simple est d'<a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Erreur%20%3A%20&body=Page%20concern%C3%A9e%20%3A%0A%0AErreur%20constat%C3%A9e%20%3A%0A%0ACorrection%20propos%C3%A9e%20%28avec%20source%29%20%3A%0A" rel="noopener">ouvrir une issue GitHub</a> (formulaire pré-rempli, compte GitHub requis), en indiquant la page, l'erreur et une source. Vous pouvez aussi écrire à l'adresse indiquée dans les <a href="mentions-legales.html">mentions légales</a>.</p>
+</details>
+<details class="faq-item">
+  <summary>D'où viennent les jaquettes ?</summary>
+  <p>Les jaquettes proviennent d'<a href="https://www.igdb.com" rel="noopener">IGDB.com</a>. Elles sont copiées sur ce site (aucune image n'est chargée depuis IGDB) et appartiennent à leurs éditeurs respectifs. Une demande de retrait peut être faite depuis le pied de page.</p>
+</details>
+<details class="faq-item">
+  <summary>Pourquoi un bandeau cookies ?</summary>
+  <p>HorsPC mesure son audience avec Google Analytics 4, uniquement si vous l'acceptez. Tant que vous n'avez pas cliqué sur « Accepter », aucun script Google n'est chargé. Refuser n'a aucune conséquence sur l'utilisation du site, et vous pouvez changer d'avis à tout moment avec le lien <a href="confidentialite.html#cookies" data-consent-open>Gérer les cookies</a>.</p>
+</details>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-card">
+      <div class="foot-main">
+        <div class="foot-brand">
+          <a class="foot-logo" href="./">Hors<span class="logo-pc">PC</span></a>
+          <p>Les exclus PS5, Switch et Switch 2 jamais sorties sur PC, au meilleur prix relevé en France.</p>
+          <ul class="foot-social">
+            <li><a href="https://github.com/Mvth1s/hors-pc" rel="noopener" aria-label="Dépôt GitHub de HorsPC" title="Dépôt GitHub"><svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/in/mathis-aguado" rel="noopener" aria-label="LinkedIn de Mathis Aguado" title="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a></li>
+            <li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;" aria-label="Écrire à &#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;" title="E-mail"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></a></li>
+          </ul>
+        </div>
+        <nav class="foot-col" aria-labelledby="foot-catalogue">
+          <h2 class="foot-title" id="foot-catalogue">Catalogue</h2>
+          <ul>
+            <li><a href="./">Tous les jeux</a></li>
+            <li><a href="./?console=ps5">PS5</a></li>
+            <li><a href="./?console=switch2">Switch 2</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="methodologie.html">Méthodologie des prix</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-col" aria-labelledby="foot-projet">
+          <h2 class="foot-title" id="foot-projet">Projet</h2>
+          <ul>
+            <li><a href="https://github.com/Mvth1s/hors-pc" rel="noopener">Code source ↗</a></li>
+            <li><a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Erreur%20%3A%20&body=Page%20concern%C3%A9e%20%3A%0A%0AErreur%20constat%C3%A9e%20%3A%0A%0ACorrection%20propos%C3%A9e%20%28avec%20source%29%20%3A%0A" rel="noopener">Signaler une erreur ↗</a></li>
+            <li><a href="https://github.com/Mvth1s/hors-pc/issues/new?title=Demande%20de%20retrait" rel="noopener">Demande de retrait ↗</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-col" aria-labelledby="foot-legal">
+          <h2 class="foot-title" id="foot-legal">Informations légales</h2>
+          <ul>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="confidentialite.html">Confidentialité</a></li>
+            <li><a href="confidentialite.html#cookies">Cookies : aucun</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="foot-legal">
+        <p><strong>Éditeur.</strong> Mathis Aguado, particulier ; projet personnel non commercial. Contact : <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;">&#109;&#97;&#103;&#46;&#100;&#51;&#118;&#43;&#103;&#105;&#116;&#104;&#117;&#98;&#64;&#112;&#109;&#46;&#109;&#101;</a>.</p>
+        <p><strong>Hébergeur.</strong> GitHub, Inc. (service GitHub Pages), 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, États-Unis.</p>
+        <p><strong>Données personnelles.</strong> Aucun cookie ni traceur. Le thème choisi reste dans le stockage local de votre navigateur. L'hébergeur journalise les adresses IP des visiteurs pour la sécurité du service.</p>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 Mathis Aguado<span data-foot-updated hidden> · catalogue généré le <span data-foot-date></span></span></span>
+        <span>HorsPC n'est affilié à aucun constructeur, éditeur ni marchand ; les marques citées appartiennent à leurs propriétaires.</span>
+        <a href="#top">Haut de page ↑</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,6 +1,7 @@
 """Contrôles statiques du site : pages légales, pied de page, aucune ressource externe."""
 
 import html
+import json
 import re
 from html.parser import HTMLParser
 from pathlib import Path
@@ -44,7 +45,7 @@ def is_external(url: str) -> bool:
 
 
 def test_pages_attendues() -> None:
-    assert {p.name for p in PAGES} == {"index.html", *LEGAL_LINKS}
+    assert {p.name for p in PAGES} == {"index.html", "faq.html", *LEGAL_LINKS}
 
 
 @pytest.mark.parametrize("page", PAGES, ids=lambda p: p.name)
@@ -122,3 +123,18 @@ def test_un_seul_chargement_de_data_json(page: Path) -> None:
     loaders = [s for s in scripts if s in ("app.js", "footer.js")]
     expected = ["app.js"] if page.name == "index.html" else ["footer.js"]
     assert loaders == expected, f"{page.name} charge {loaders}"
+
+
+def test_faq_jsonld_coherent_avec_les_questions() -> None:
+    text = (SITE / "faq.html").read_text(encoding="utf-8")
+    blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', text, re.S)
+    assert len(blocks) == 1
+    data = json.loads(blocks[0])
+    assert data["@context"] == "https://schema.org" and data["@type"] == "FAQPage"
+    summaries = [html.unescape(q) for q in re.findall(r"<summary>(.*?)</summary>", text)]
+    assert [q["name"] for q in data["mainEntity"]] == summaries
+    assert len(summaries) == 9
+    for question in data["mainEntity"]:
+        assert question["@type"] == "Question"
+        assert question["acceptedAnswer"]["@type"] == "Answer"
+        assert question["acceptedAnswer"]["text"].strip()

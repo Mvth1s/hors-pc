@@ -220,7 +220,7 @@ Le job d'alerte tourne même quand le build échoue (sur `schedule` et `workflow
 
 ## Pages légales
 
-`site/mentions-legales.html`, `site/confidentialite.html` et `site/methodologie.html` sont statiques et liées depuis le pied de page de toutes les pages. `tests/test_site.py` vérifie qu'aucune page ne charge de ressource externe, que le pied de page lie les trois pages et qu'elles sont datées. **TODO bloquant** : `test_adresse_de_contact_renseignee` échoue tant que l'adresse de contact de l'éditeur n'est pas renseignée dans `mentions-legales.html`.
+`site/faq.html` (questions en `<details>`, JSON-LD `FAQPage`), `site/mentions-legales.html`, `site/confidentialite.html` et `site/methodologie.html` sont statiques et liées depuis le pied de page de toutes les pages. `tests/test_site.py` vérifie qu'aucune page ne charge de ressource externe, que le pied de page lie les trois pages et qu'elles sont datées. **TODO bloquant** : `test_adresse_de_contact_renseignee` échoue tant que l'adresse de contact de l'éditeur n'est pas renseignée dans `mentions-legales.html`.
 
 ## Crédits
 
