@@ -164,12 +164,18 @@ class ReleaseDateOverride(_Input):
     source_url: HttpUrl
 
 
+class Edition(_Input):
+    """Une édition d'un jeu : sa version pour une console (EAN, fiches et offres propres)."""
+
+    platform: Platform
+
+
 class GameEntry(_Input):
-    """Une entrée de games.yaml : une référence achetable."""
+    """Une entrée de games.yaml : un jeu, avec une édition par console sans version PC."""
 
     slug: Slug
     title: str = Field(min_length=1)
-    platforms: list[Platform] = Field(min_length=1)
+    editions: list[Edition] = Field(min_length=1)
     igdb_id: PositiveInt | None = None
     launch_price: Euros | None = None
     launch_price_source: HttpUrl | None = None
@@ -177,12 +183,16 @@ class GameEntry(_Input):
     release_date_override: ReleaseDateOverride | None = None
     description_fr: str | None = Field(default=None, min_length=1)
 
-    @field_validator("platforms")
+    @field_validator("editions")
     @classmethod
-    def _unique_platforms(cls, value: list[Platform]) -> list[Platform]:
-        if len(set(value)) != len(value):
-            raise ValueError("plateforme en double")
+    def _unique_platforms(cls, value: list[Edition]) -> list[Edition]:
+        if len({e.platform for e in value}) != len(value):
+            raise ValueError("édition en double pour une même plateforme")
         return value
+
+    @property
+    def platforms(self) -> list[Platform]:
+        return [e.platform for e in self.editions]
 
     @model_validator(mode="after")
     def _price_has_source(self) -> "GameEntry":
@@ -195,6 +205,7 @@ class PriceObservation(_Input):
     """Un relevé de prix manuel dans prices.manual.yaml."""
 
     slug: Slug
+    platform: Platform | None = None  # édition ; facultatif si le jeu n'en a qu'une
     price: Euros
     shipping: EurosOrZero | None
     format: OfferFormat
@@ -247,6 +258,7 @@ class ScrapedObservation(_Input):
     """Un relevé automatique (une ligne de data/prices.scraped.jsonl)."""
 
     slug: Slug
+    platform: Platform
     merchant: ScrapedSource
     seller: str = Field(min_length=1)
     price: Euros
@@ -287,7 +299,20 @@ class Catalog(_Input):
             raise ValueError(f"slugs inconnus dans prices.manual.yaml : {', '.join(unknown)}")
         if len(set(self.observations)) != len(self.observations):
             raise ValueError("observation en double dans prices.manual.yaml")
+        editions = {g.slug: g.platforms for g in self.games}
+        for obs in self.observations:
+            platforms = editions[obs.slug]
+            if obs.platform is None and len(platforms) > 1:
+                raise ValueError(f"{obs.slug} a plusieurs éditions : platform est obligatoire")
+            if obs.platform is not None and obs.platform not in platforms:
+                raise ValueError(f"{obs.slug} n'a pas d'édition {obs.platform}")
         return self
+
+    def observation_platform(self, obs: PriceObservation) -> Platform:
+        """Édition d'un relevé manuel : la sienne, sinon l'unique édition du jeu."""
+        if obs.platform is not None:
+            return obs.platform
+        return next(g.platforms[0] for g in self.games if g.slug == obs.slug)
 
 
 # --- Sortie data.json ---------------------------------------------------------
@@ -298,6 +323,7 @@ class _Output(BaseModel):
 
 
 class OfferOut(_Output):
+    platform: Platform  # édition à laquelle l'offre se rapporte
     price_cents: PositiveCents
     shipping_cents: Cents | None
     discount_pct: int | None
@@ -316,10 +342,26 @@ class ScreenshotOut(_Output):
     url: str = Field(pattern=r"^screens/[a-z0-9-]+/[A-Za-z0-9_-]+\.webp$")
 
 
+class EditionOut(_Output):
+    platform: Platform
+    offer: OfferOut | None
+    # Preuves IGDB (external_games) pour le badge « Physique et numérique ».
+    sold_digital: bool
+    listed_physical: bool
+
+    @model_validator(mode="after")
+    def _offer_platform(self) -> "EditionOut":
+        if self.offer is not None and self.offer.platform != self.platform:
+            raise ValueError("offre d'une autre édition")
+        return self
+
+
 class GameOut(_Output):
     slug: Slug
     title: str
-    platforms: list[Platform] = Field(min_length=1)
+    platforms: list[Platform] = Field(min_length=1)  # dérivé des éditions (filtres)
+    editions: list[EditionOut] = Field(min_length=1)
+    best_offer: OfferOut | None  # meilleure offre toutes éditions
     release_date: date | None
     release_date_source: ReleaseDateSource | None
     launch_price_cents: PositiveCents | None
@@ -336,10 +378,17 @@ class GameOut(_Output):
     summary_source: SummarySource | None
     screenshots: list[ScreenshotOut] = Field(max_length=4)
     trailer_youtube_id: str | None = Field(pattern=r"^[A-Za-z0-9_-]{11}$")
-    # Preuves IGDB (external_games) pour le badge « Physique et numérique ».
-    sold_digital: bool = False
-    listed_physical: bool = False
-    offer: OfferOut | None
+
+    @model_validator(mode="after")
+    def _editions(self) -> "GameOut":
+        if self.platforms != [e.platform for e in self.editions]:
+            raise ValueError("platforms doit lister les plateformes des éditions, dans l'ordre")
+        offers = [e.offer for e in self.editions if e.offer is not None]
+        if (self.best_offer is None) != (not offers) or (
+            self.best_offer is not None and self.best_offer not in offers
+        ):
+            raise ValueError("best_offer doit être l'une des offres des éditions")
+        return self
 
     @model_validator(mode="after")
     def _release_source(self) -> "GameOut":
@@ -365,9 +414,9 @@ class GameOut(_Output):
 
 
 class DataFile(_Output):
-    """Contenu de site/data.json (schéma v5)."""
+    """Contenu de site/data.json (schéma v6 : éditions par jeu)."""
 
-    schema_version: Literal[5] = 5
+    schema_version: Literal[6] = 6
     generated_at: UtcDatetime
     currency: Literal["EUR"] = "EUR"
     games: list[GameOut]

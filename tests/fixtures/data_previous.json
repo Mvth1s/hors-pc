@@ -1,5 +1,5 @@
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "generated_at": "2026-10-19T06:17:40Z",
   "currency": "EUR",
   "games": [
@@ -25,7 +25,15 @@
       "summary_source": null,
       "screenshots": [],
       "trailer_youtube_id": null,
-      "offer": null
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null
     },
     {
       "slug": "saros",
@@ -49,7 +57,15 @@
       "summary_source": null,
       "screenshots": [],
       "trailer_youtube_id": null,
-      "offer": null
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null
     }
   ]
 }

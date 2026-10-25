@@ -58,6 +58,11 @@ def _prompt(games: list[dict[str, Any]], ask: Ask, say: Say, today: date) -> dic
     for i, game in enumerate(games, 1):
         say(f"  {i:>2}. {game['slug']}  ({game['title']})")
     slug = _choose(ask, "Jeu (numéro ou slug, Tab pour compléter) : ", slugs)
+    game = next(g for g in games if g["slug"] == slug)
+    platforms = [e["platform"] for e in game.get("editions", [])]
+    platform = None  # jeu à une seule édition : déduite au build
+    if len(platforms) > 1:
+        platform = _choose(ask, f"Édition ({' / '.join(platforms)}) : ", platforms)
 
     merchant_ids = list(MERCHANTS)
     say("Marchands admis :")
@@ -84,6 +89,7 @@ def _prompt(games: list[dict[str, Any]], ask: Ask, say: Say, today: date) -> dic
     url = ask("URL de la page produit : ").strip()
     return {
         "slug": slug,
+        **({"platform": platform} if platform else {}),
         "price": price,
         "shipping": shipping,
         "format": offer_format,
@@ -155,6 +161,8 @@ def _append(prices_path: Path, obs: PriceObservation, games_path: Path, today: d
         document.fa.set_block_style()  # remplace un `[]` vide par une liste en bloc
     entry = CommentedMap()
     entry["slug"] = obs.slug
+    if obs.platform is not None:
+        entry["platform"] = obs.platform
     entry["price"] = obs.price
     entry["shipping"] = obs.shipping
     entry["format"] = obs.format

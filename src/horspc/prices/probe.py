@@ -28,8 +28,8 @@ class ProbeRow:
 
 def probe_urls(source: str, discovered: dict[str, Any]) -> list[tuple[str, str]]:
     """(type, URL) à tester : point d'entrée de la découverte, puis une fiche connue."""
-    games = discovered.get("games", {}).values()
-    known = next((g["sources"][source] for g in games if source in g["sources"]), None)
+    editions = [e for game in discovered.get("games", {}).values() for e in game.values()]
+    known = next((e["sources"][source] for e in editions if source in e["sources"]), None)
     if source == "leclerc":
         return [("fiche", known or src.leclerc_url(FALLBACK_EAN))]
     if source == "boulanger":

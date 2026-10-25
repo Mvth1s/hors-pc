@@ -14,19 +14,19 @@ from horspc.__main__ import main
 from horspc.http import HttpClient
 from horspc.igdb import API_URL, TOKEN_URL, IgdbClient, IgdbGame
 from horspc.models import Catalog, DataFile
-from horspc.prices import ManualPriceProvider, Offer
+from horspc.prices import Offer
 from tests.conftest import FIXTURES, NOW, load_fixture
 
 GAMES: list[dict[str, Any]] = [
     {
         "slug": "astro-bot",
         "title": "Astro Bot",
-        "platforms": ["ps5"],
+        "editions": [{"platform": "ps5"}],
         "igdb_id": 255340,
         "launch_price": 69.99,
         "launch_price_source": "https://example.org/astro-bot",
     },
-    {"slug": "saros", "title": "Saros", "platforms": ["ps5"], "launch_price": None},
+    {"slug": "saros", "title": "Saros", "editions": [{"platform": "ps5"}], "launch_price": None},
 ]
 
 OBSERVATION: dict[str, Any] = {
@@ -56,7 +56,7 @@ def previous() -> dict:
 
 
 def make(cat: Catalog, igdb: dict[str, IgdbGame | None] | None, prev: dict | None = None):
-    return build.build_data(cat, ManualPriceProvider(cat.observations), igdb, prev or {}, NOW)
+    return build.build_data(cat, build.price_provider(cat), igdb, prev or {}, NOW)
 
 
 ASTRO = IgdbGame(255340, "https://www.igdb.com/games/astro-bot", date(2024, 9, 6), "none")
@@ -68,7 +68,7 @@ ASTRO = IgdbGame(255340, "https://www.igdb.com/games/astro-bot", date(2024, 9, 6
 def test_schema_complet_et_offre() -> None:
     data = make(catalog(), {"astro-bot": ASTRO, "saros": None})
     dumped = data.model_dump(mode="json")
-    assert dumped["schema_version"] == 5
+    assert dumped["schema_version"] == 6
     assert dumped["generated_at"] == "2026-10-26T06:17:42Z"
     assert dumped["currency"] == "EUR"
     astro = dumped["games"][0]
@@ -78,7 +78,8 @@ def test_schema_complet_et_offre() -> None:
     assert astro["launch_price_cents"] == 6999
     assert astro["cover_url"] is None
     assert astro["cover_image_id"] is None
-    assert astro["offer"] == {
+    offer = {
+        "platform": "ps5",
         "price_cents": 5330,
         "shipping_cents": None,
         "discount_pct": 24,
@@ -91,8 +92,13 @@ def test_schema_complet_et_offre() -> None:
         "source": "manual",
         "stale": True,
     }
+    assert astro["platforms"] == ["ps5"]
+    assert astro["editions"] == [
+        {"platform": "ps5", "offer": offer, "sold_digital": False, "listed_physical": False}
+    ]
+    assert astro["best_offer"] == offer
     saros = dumped["games"][1]
-    assert saros["offer"] is None
+    assert saros["best_offer"] is None and saros["editions"][0]["offer"] is None
     assert saros["igdb_id"] is None
     assert saros["release_date"] is None
     assert saros["release_date_source"] is None
@@ -139,9 +145,18 @@ def test_sortie_invalide_refusee() -> None:
     class BrokenProvider:
         name = "manual"
 
-        def get_best_offer(self, game, today) -> Offer:
+        def get_offer(self, game, platform, today) -> Offer:
             return Offer(
-                0, None, "physical", "new", "Amazon", "https://x.fr", today, "manual", False
+                platform,
+                0,
+                None,
+                "physical",
+                "new",
+                "Amazon",
+                "https://x.fr",
+                today,
+                "manual",
+                False,
             )
 
     with pytest.raises(ValidationError):
@@ -188,9 +203,9 @@ def test_observation_en_double_refusee() -> None:
     [
         ([GAMES[0], GAMES[0]], "slugs en double"),
         ([GAMES[0] | {"launch_price_source": None}], "vont ensemble"),
-        ([GAMES[1] | {"platforms": []}], "platforms"),
-        ([GAMES[1] | {"platforms": ["ps5", "ps5"]}], "en double"),
-        ([GAMES[1] | {"platforms": ["pc"]}], "platforms"),
+        ([GAMES[1] | {"editions": []}], "editions"),
+        ([GAMES[1] | {"editions": [{"platform": "ps5"}, {"platform": "ps5"}]}], "en double"),
+        ([GAMES[1] | {"editions": [{"platform": "pc"}]}], "platform"),
         ([GAMES[1] | {"slug": "Saros"}], "slug"),
     ],
 )
@@ -240,7 +255,7 @@ def test_run_avec_igdb_mocke(workdir: Path, http: HttpClient) -> None:
     astro = written["games"][0]
     assert astro["pc_status"] == "none"
     assert astro["igdb_fetched_at"] == "2026-10-26T06:17:42Z"
-    assert astro["offer"]["stale"] is False
+    assert astro["best_offer"]["stale"] is False
 
 
 def test_run_igdb_hors_service_garde_l_ancien_fetched_at(workdir: Path, http: HttpClient) -> None:
@@ -285,8 +300,8 @@ def test_offline_reprend_generated_at_precedent(workdir: Path) -> None:
     data = run(workdir, None)
     assert data.model_dump(mode="json")["generated_at"] == "2026-10-19T06:17:40Z"
     # offer.stale reste calculé avec l'heure courante (relevé du 20/10, 6 jours avant NOW).
-    assert data.games[0].offer is not None
-    assert data.games[0].offer.stale is False
+    assert data.games[0].best_offer is not None
+    assert data.games[0].best_offer.stale is False
 
 
 def test_offline_relevé_ancien_devient_stale_malgre_generated_at(workdir: Path) -> None:
@@ -295,8 +310,8 @@ def test_offline_relevé_ancien_devient_stale_malgre_generated_at(workdir: Path)
     )
     data = run(workdir, None)
     # 2026-09-20 est récent par rapport au generated_at repris (19/10), mais pas à NOW (26/10).
-    assert data.games[0].offer is not None
-    assert data.games[0].offer.stale is True
+    assert data.games[0].best_offer is not None
+    assert data.games[0].best_offer.stale is True
 
 
 def test_offline_sans_data_json_precedent_utilise_l_heure_courante(workdir: Path) -> None:
@@ -343,7 +358,7 @@ def test_release_date_manuelle_precedente_non_reprise() -> None:
     assert (saros.release_date, saros.release_date_source) == (None, None)
 
 
-@pytest.mark.parametrize("version", [4, None, 6])
+@pytest.mark.parametrize("version", [5, None, 7])
 def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: int | None) -> None:
     raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
     if version is None:
@@ -351,7 +366,7 @@ def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: 
     else:
         raw["schema_version"] = version
     (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
-    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 5 attendu"):
+    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 6 attendu"):
         run(workdir, None)
 
 
@@ -373,7 +388,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
         ]
     )
     assert code == 1
-    assert "schema_version 2, 5 attendu" in capsys.readouterr().err
+    assert "schema_version 2, 6 attendu" in capsys.readouterr().err
     assert (workdir / "data.json").read_bytes() == before
 
 
@@ -382,7 +397,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
     [
         ("{pas du json", "n'est pas un JSON valide"),
         (
-            '{"schema_version": 5, "generated_at": "hier", "currency": "EUR", "games": []}',
+            '{"schema_version": 6, "generated_at": "hier", "currency": "EUR", "games": []}',
             "refusé par le modèle",
         ),
     ],
@@ -413,3 +428,87 @@ def test_description_fr_prioritaire_sur_le_resume_igdb() -> None:
     assert astro.developers == ["Team Asobi"]
     data = make(catalog(observations=[]), {"astro-bot": info, "saros": None})
     assert (data.games[0].summary, data.games[0].summary_source) == ("English summary", "igdb")
+
+
+# --- Éditions --------------------------------------------------------------------------------
+
+GTA = {
+    "slug": "gta-vi",
+    "title": "Grand Theft Auto VI",
+    "editions": [{"platform": "ps5"}, {"platform": "xbox_series"}],
+}
+
+
+def manual(**kw: Any) -> dict[str, Any]:
+    return OBSERVATION | {"slug": "gta-vi", "observed_at": date(2026, 10, 20)} | kw
+
+
+def test_releve_manuel_multi_editions_exige_platform() -> None:
+    with pytest.raises(ValidationError, match="plusieurs éditions"):
+        catalog([GTA], [manual()])
+    with pytest.raises(ValidationError, match="pas d'édition switch"):
+        catalog([GTA], [manual(platform="switch")])
+    assert catalog([GTA], [manual(platform="xbox_series")]).observations[0].platform == (
+        "xbox_series"
+    )
+
+
+def test_offre_par_edition_et_meilleure_offre() -> None:
+    cat = catalog(
+        [GTA],
+        [
+            manual(platform="ps5", price=59.99),
+            manual(
+                platform="xbox_series", price=54.99, merchant="fnac", url="https://www.fnac.com/x"
+            ),
+        ],
+    )
+    data = make(cat, None)
+    (game,) = data.games
+    assert game.platforms == ["ps5", "xbox_series"]
+    by_platform = {e.platform: e.offer.price_cents for e in game.editions}
+    assert by_platform == {"ps5": 5999, "xbox_series": 5499}
+    assert (game.best_offer.platform, game.best_offer.price_cents) == ("xbox_series", 5499)
+
+
+def test_meilleure_offre_a_jour_puis_physique_avant_prix() -> None:
+    base = {
+        "shipping_cents": None,
+        "observed_at": date(2026, 10, 20),
+        "merchant": "E.Leclerc",
+        "stale": False,
+        "format": "physical",
+    }
+    old = base | {"platform": "ps5", "price_cents": 1000, "stale": True}
+    box = base | {"platform": "xbox_series", "price_cents": 2000, "format": "code_box"}
+    physical = base | {"platform": "switch", "price_cents": 3000}
+    assert build.best_offer([old, box, physical]) is physical
+    assert build.best_offer([old, box]) is box
+    assert build.best_offer([]) is None
+
+
+def test_offre_d_une_autre_edition_refusee() -> None:
+    from horspc.models import EditionOut
+
+    with pytest.raises(ValidationError, match="autre édition"):
+        EditionOut.model_validate(
+            {
+                "platform": "ps5",
+                "offer": {
+                    "platform": "switch",
+                    "price_cents": 100,
+                    "shipping_cents": None,
+                    "discount_pct": None,
+                    "format": "physical",
+                    "condition": "new",
+                    "merchant": "E.Leclerc",
+                    "seller": None,
+                    "url": "https://www.e.leclerc/fp/x",
+                    "observed_at": "2026-10-20",
+                    "source": "scraped",
+                    "stale": False,
+                },
+                "sold_digital": False,
+                "listed_physical": False,
+            }
+        )

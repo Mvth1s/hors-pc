@@ -6,7 +6,7 @@ import time
 import unicodedata
 from collections import Counter
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from typing import Any
 
@@ -76,8 +76,9 @@ class IgdbGame:
     screenshot_ids: tuple[str, ...] = ()
     trailer_id: str | None = None
     alternative_names: tuple[str, ...] = ()  # pour reconnaître les fiches marchandes
-    sold_digital: bool = False  # store officiel ou Amazon Digital sur une plateforme du jeu
-    listed_physical: bool = False  # entrée Physical sur une plateforme du jeu
+    # Par édition : sold_digital (store officiel ou Amazon Digital) et listed_physical (entrée
+    # Physical) d'après external_games.
+    format_proofs: dict[str, dict[str, bool]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -156,7 +157,7 @@ class IgdbClient:
                 alternative_names=tuple(
                     a["name"] for a in (row.get("alternative_names") or []) if a.get("name")
                 ),
-                **format_proofs(row, game.platforms),
+                format_proofs={p: format_proofs(row, [p]) for p in game.platforms},
             )
             if game.igdb_id is None:
                 log.info("IGDB : %s → %d (%s)", game.slug, row["id"], row.get("name"))
@@ -343,7 +344,7 @@ def pc_status(row: dict[str, Any], pc_id: int, refs: ReleaseRefs, now: datetime)
 
 
 def format_proofs(row: dict[str, Any], platforms: Sequence[Platform]) -> dict[str, bool]:
-    """Ventes numérique et physique attestées par external_games pour les plateformes du jeu."""
+    """Ventes numérique et physique attestées par external_games pour ces plateformes."""
     slugs = {PLATFORM_SLUGS[p] for p in platforms}
     digital = physical = False
     for ext in row.get("external_games") or []:

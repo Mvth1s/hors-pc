@@ -14,7 +14,8 @@ PLATFORMS_URL = f"{API_URL}/platforms"
 
 
 def entry(slug: str, title: str, platforms: list[str], igdb_id: int | None = None) -> GameEntry:
-    return GameEntry(slug=slug, title=title, platforms=platforms, igdb_id=igdb_id)
+    editions = [{"platform": p} for p in platforms]
+    return GameEntry(slug=slug, title=title, editions=editions, igdb_id=igdb_id)
 
 
 @pytest.fixture
@@ -144,7 +145,7 @@ def test_pas_d_avertissement_si_release_date_override(
     game = GameEntry(
         slug="sans-date",
         title="Jeu sans date retenue",
-        platforms=["ps5"],
+        editions=[{"platform": "ps5"}],
         igdb_id=400001,
         release_date_override={"date": "2023-11-17", "source_url": "https://example.org/sortie"},
     )

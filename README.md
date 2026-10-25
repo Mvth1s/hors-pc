@@ -8,8 +8,9 @@ Catalogue web des **jeux console absents du PC** (PS5, Switch, Switch 2, Xbox Se
 data/
   games.yaml            liste curée des jeux (source de vérité)
   sources.config.yaml   sources de prix automatiques activées (enabled + motif)
-  prices.scraped.jsonl  relevés automatiques, une ligne par relevé (généré, versionné)
-  discovered.json       EAN et fiches trouvés par jeu et par source (généré, versionné)
+  prices.scraped.jsonl  relevés automatiques, une ligne par relevé et par édition (généré, versionné)
+  discovered.json       EAN et fiches trouvés par jeu, édition et source (généré, versionné)
+  redirects.yaml        anciens slugs de pages → slug actuel (jeux fusionnés)
   prices.manual.yaml    corrections d'urgence (relevés manuels, prioritaires)
 src/horspc/
   __main__.py           CLI : uv run python -m horspc build [--offline]
@@ -56,12 +57,12 @@ uv run ruff check . && uv run ruff format --check .
 
 ## Ajouter un jeu
 
-**Règle : une entrée de `games.yaml` = une référence achetable = un prix.** Une édition distincte (par exemple une « Nintendo Switch 2 Edition ») est une autre entrée, pas une plateforme de plus. Zelda Tears of the Kingdom et Pokémon Écarlate sont donc listés en `[switch]` seulement.
+**Règle : une entrée de `games.yaml` = un jeu, avec une édition par console sans version PC.** Chaque édition a ses propres EAN, fiches et offres (GTA VI : `ps5` et `xbox_series` ; Zelda Tears of the Kingdom : `switch` et `switch2`, la « Nintendo Switch 2 Edition »). Le site affiche une carte par jeu.
 
 ```yaml
 - slug: astro-bot                 # kebab-case, unique
   title: Astro Bot
-  platforms: [ps5]                # ps5 | switch | switch2 | xbox_series
+  editions: [{platform: ps5}]     # une par console : ps5 | switch | switch2 | xbox_series
   igdb_id: 255340                 # optionnel : sinon recherche IGDB par titre et plateforme
   launch_price: 69.99             # € TTC, ou null
   launch_price_source: https://…  # obligatoire si launch_price est renseigné
@@ -108,9 +109,9 @@ Dans `data.json`, `offer.source` vaut `scraped` ou `manual`, et `offer.seller` n
 
 ## Correction d'urgence : prix manuel
 
-`data/prices.manual.yaml` ne sert qu'à corriger un relevé automatique erroné ; rien sur le site n'en dépend. Un relevé manuel est **prioritaire** sur un relevé automatique du même marchand et du même jour. Les anciennes observations restent : elles forment l'historique.
+`data/prices.manual.yaml` ne sert qu'à corriger un relevé automatique erroné ; rien sur le site n'en dépend. Un relevé manuel est **prioritaire** sur un relevé automatique de la même édition, du même marchand et du même jour. Champ `platform` : obligatoire si le jeu a plusieurs éditions, facultatif sinon. Les anciennes observations restent : elles forment l'historique.
 
-`uv run python -m horspc price add` guide la saisie : jeu (liste numérotée ou slug, complétion avec Tab), marchand (liste blanche), format (déduit du marchand), prix, port (vide = inconnu), vente par l'enseigne (refus explicite sinon) et URL. `observed_at` vaut la date du jour. Le relevé est validé avec les mêmes modèles que le build et ajouté en fin de fichier, commentaires et ordre préservés (ruamel.yaml) ; rien n'est écrit si la validation échoue.
+`uv run python -m horspc price add` guide la saisie : jeu (liste numérotée ou slug, complétion avec Tab), édition (si le jeu en a plusieurs), marchand (liste blanche), format (déduit du marchand), prix, port (vide = inconnu), vente par l'enseigne (refus explicite sinon) et URL. `observed_at` vaut la date du jour. Le relevé est validé avec les mêmes modèles que le build et ajouté en fin de fichier, commentaires et ordre préservés (ruamel.yaml) ; rien n'est écrit si la validation échoue.
 
 `uv run python -m horspc stale` liste les jeux à relever : sans aucun relevé, ou dont l'offre retenue est `stale` (aucun relevé de moins de 30 jours). Ils sont triés du plus ancien dernier relevé au plus récent (sans relevé en tête), avec la date et l'URL du dernier relevé et le dernier relevé de chaque marchand.
 
@@ -149,13 +150,13 @@ Sont refusés à la validation, avec un message explicite : les marketplaces (`r
 
 `discount_pct` = `round(100 × (1 − price / launch_price))`, port exclu ; `null` sans prix de lancement. Le badge n'est affiché que si la réduction est positive.
 
-## Schéma de `site/data.json` (v5)
+## Schéma de `site/data.json` (v6)
 
 Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le formatage (`53,30 €`, `JJ/MM/AAAA`) est fait par le front. Le modèle de référence est `DataFile` dans `src/horspc/models.py`.
 
 ```json
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "generated_at": "2026-10-26T06:17:42Z",
   "currency": "EUR",
   "games": [
@@ -179,7 +180,12 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
       "summary_source": "igdb",
       "screenshots": [{"image_id": "scsiqf", "url": "screens/astro-bot/scsiqf.webp"}],
       "trailer_youtube_id": "wHMNQzLG_Jg",
-      "offer": {
+      "editions": [
+        {"platform": "ps5", "offer": {"platform": "ps5", "price_cents": 5330, "…": "…"},
+         "sold_digital": true, "listed_physical": true}
+      ],
+      "best_offer": {
+        "platform": "ps5",
         "price_cents": 5330,
         "shipping_cents": null,
         "discount_pct": 24,
@@ -202,7 +208,8 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 - `pc_status` : déduit des `release_dates` PC d'IGDB (toutes régions), les lignes au statut Cancelled étant ignorées. `released` si une ligne Full Release, Early Access, Advanced Access, Offline ou sans statut a une date passée ; `announced` pour toute autre ligne retenue (date future ou absente, ou statut Alpha, Beta…) ; `none` si aucune ligne PC n'est retenue, même si le PC figure dans les plateformes du jeu. `pc_status_source` vaut `manual` quand `pc_override` est utilisé.
 - L'identifiant de la plateforme PC n'est pas codé en dur : il est lu via l'endpoint `platforms` d'IGDB (slug `win`).
 - Si IGDB est injoignable, les champs IGDB (dont `igdb_fetched_at`) sont repris du `data.json` précédent ; le build n'échoue pas.
-- `sold_digital` / `listed_physical` : preuves IGDB tirées d'`external_games` pour les plateformes du jeu (vente sur un store officiel ou Amazon au format Digital ; entrée au format Physical). Le badge « Physique et numérique » n'est affiché que si `sold_digital` est vrai **et** qu'une preuve physique existe (`listed_physical`, ou une offre `physical` relevée ; une `code_box` ne compte pas). Aucun autre badge de format (jamais « Numérique uniquement » ni « Physique uniquement ») : l'absence d'une entrée IGDB ne prouve pas l'absence d'une édition. Champs ajoutés en v5 avec `false` par défaut.
+- `editions[].sold_digital` / `editions[].listed_physical` : preuves IGDB tirées d'`external_games` pour la plateforme de l'édition (vente sur un store officiel ou Amazon au format Digital ; entrée au format Physical). Le badge « Physique et numérique » n'est affiché que si `sold_digital` est vrai **et** qu'une preuve physique existe (`listed_physical`, ou une offre `physical` relevée ; une `code_box` ne compte pas). Aucun autre badge de format (jamais « Numérique uniquement » ni « Physique uniquement ») : l'absence d'une entrée IGDB ne prouve pas l'absence d'une édition. Champs ajoutés en v5 avec `false` par défaut.
+- `editions` (v6) : une par console, avec son offre (`null` sans relevé) et ses preuves de format ; `platforms` en est dérivé (filtres) ; `best_offer` est la meilleure offre toutes éditions, avec sa `platform` : à jour avant « Prix à vérifier », puis physique, boîte avec code, démat, puis prix port compris.
 - `offer.seller` : vendeur professionnel d'une place de marché (« ShopVite » sur Pixmania), `null` quand l'enseigne vend elle-même ; `offer.source` : `scraped` (relevé automatique) ou `manual` (correction d'urgence). Ajoutés en v5.
 - `cover_url` : chemin relatif `covers/<slug>.webp`, ou `null` sans jaquette ; `cover_image_id` : `image_id` IGDB de la jaquette présente sur disque. Ajoutés en v3. Le site ne charge jamais d'image depuis `images.igdb.com`.
 

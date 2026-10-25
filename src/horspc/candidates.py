@@ -241,7 +241,7 @@ def render_yaml(
     lines = [
         f"# Candidats générés le {today.isoformat()} par `horspc candidates` (données IGDB).",
         "# À curer à la main avant de copier dans data/games.yaml : titre français,",
-        "# plateforme (une entrée = une référence achetable), absence réelle de version PC,",
+        "# éditions (une entrée = un jeu, une édition par console), absence réelle de version PC,",
         "# prix de lancement.",
         "# Critères : sur PS5, Switch, Switch 2 ou Xbox Series ; Main Game, Remake ou Remaster ;",
         "# hors éditions (version_parent) ; pas sorti sur PC (fiche, fiches liées, éditions) ;",
@@ -269,7 +269,8 @@ def _entries(candidates: list[Candidate], score: Any) -> list[str]:
         for note in c.notes:
             lines.append(f"  # {note}")
         lines.append(f"  title: {json.dumps(c.name, ensure_ascii=False)}")
-        lines.append(f"  platforms: [{', '.join(c.platforms)}]")
+        editions = ", ".join(f"{{platform: {p}}}" for p in c.platforms)
+        lines.append(f"  editions: [{editions}]")
         lines.append(f"  igdb_id: {c.igdb_id}")
         lines.append("  launch_price: null")
         lines.append("")

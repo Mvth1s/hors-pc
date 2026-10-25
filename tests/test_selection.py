@@ -94,10 +94,13 @@ def test_egalite_departagee_par_date_puis_marchand() -> None:
     assert best is not None and best.observation.merchant == "amazon"
 
 
+SINGLE = {"astro-bot": "ps5", "saros": "ps5"}
+
+
 def test_provider_manuel_convertit_en_centimes() -> None:
-    game = GameEntry(slug="astro-bot", title="Astro Bot", platforms=["ps5"])
-    provider = ManualPriceProvider([obs("amazon", "53.30", shipping="2.99")])
-    offer = provider.get_best_offer(game, TODAY)
+    game = GameEntry(slug="astro-bot", title="Astro Bot", editions=[{"platform": "ps5"}])
+    provider = ManualPriceProvider([obs("amazon", "53.30", shipping="2.99")], (), SINGLE)
+    offer = provider.get_offer(game, "ps5", TODAY)
     assert offer is not None
     assert (offer.price_cents, offer.shipping_cents) == (5330, 299)
     assert offer.merchant == "Amazon"
@@ -106,5 +109,5 @@ def test_provider_manuel_convertit_en_centimes() -> None:
 
 
 def test_provider_manuel_sans_relevé() -> None:
-    game = GameEntry(slug="saros", title="Saros", platforms=["ps5"])
-    assert ManualPriceProvider([obs()]).get_best_offer(game, TODAY) is None
+    game = GameEntry(slug="saros", title="Saros", editions=[{"platform": "ps5"}])
+    assert ManualPriceProvider([obs()], (), SINGLE).get_offer(game, "ps5", TODAY) is None

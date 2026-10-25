@@ -155,7 +155,11 @@ def footer_of(page: Path) -> str:
 
 
 def test_pages_de_jeux_sans_iframe_ni_ressource_youtube() -> None:
-    pages = sorted(SITE.glob("jeux/*/index.html"))
+    pages = [
+        p
+        for p in sorted(SITE.glob("jeux/*/index.html"))
+        if 'http-equiv="refresh"' not in p.read_text(encoding="utf-8")
+    ]
     assert pages
     for page in pages:
         text = page.read_text(encoding="utf-8")

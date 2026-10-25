@@ -11,10 +11,14 @@ from horspc.stale import format_report, stale_games
 from tests.conftest import TODAY
 
 GAMES = [
-    {"slug": "astro-bot", "title": "Astro Bot", "platforms": ["ps5"]},
-    {"slug": "saros", "title": "Saros", "platforms": ["ps5"]},
-    {"slug": "gran-turismo-7", "title": "Gran Turismo 7", "platforms": ["ps5"]},
-    {"slug": "mario-kart-world", "title": "Mario Kart World", "platforms": ["switch2"]},
+    {"slug": "astro-bot", "title": "Astro Bot", "editions": [{"platform": "ps5"}]},
+    {"slug": "saros", "title": "Saros", "editions": [{"platform": "ps5"}]},
+    {"slug": "gran-turismo-7", "title": "Gran Turismo 7", "editions": [{"platform": "ps5"}]},
+    {
+        "slug": "mario-kart-world",
+        "title": "Mario Kart World",
+        "editions": [{"platform": "switch2"}],
+    },
 ]
 URLS = {
     "amazon": "https://www.amazon.fr/dp/{}",

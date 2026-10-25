@@ -18,8 +18,7 @@ class PriceObservation(Protocol):
 
 
 RECENT_DAYS = 30
-# Physique d'abord, puis boîte avec code, puis démat.
-_FORMAT_RANK = {"physical": 0, "code_box": 1, "digital": 2}
+FORMAT_RANK = {"physical": 0, "code_box": 1, "digital": 2}
 
 
 @dataclass(frozen=True)
@@ -45,7 +44,7 @@ def latest_per_offer(observations: Iterable[PriceObservation]) -> list[PriceObse
 
 def _rank(obs: PriceObservation) -> tuple[int, Decimal, int, str]:
     return (
-        _FORMAT_RANK[obs.format],
+        FORMAT_RANK[obs.format],  # physique, puis boîte avec code, puis démat
         comparison_price(obs),
         -obs.observed_at.toordinal(),
         obs.merchant,

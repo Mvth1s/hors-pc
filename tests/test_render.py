@@ -42,8 +42,13 @@ def root_pages() -> list[Path]:
     return sorted(SITE.glob("*.html"))
 
 
+def is_redirect(page: Path) -> bool:
+    return 'http-equiv="refresh"' in page.read_text(encoding="utf-8")
+
+
 def game_pages() -> list[Path]:
-    return sorted(SITE.glob(f"{GAMES_DIR}/*/index.html"))
+    """Pages de jeux, hors redirections des anciens slugs (jeux fusionnés)."""
+    return [p for p in sorted(SITE.glob(f"{GAMES_DIR}/*/index.html")) if not is_redirect(p)]
 
 
 def visible_games() -> list[dict[str, Any]]:
@@ -148,11 +153,36 @@ def test_sitemap_liste_toutes_les_pages() -> None:
 NOW = datetime(2026, 10, 26, 6, 0, tzinfo=UTC)
 
 
-def game(slug: str, **kw: Any) -> dict[str, Any]:
+def game(
+    slug: str,
+    platforms: tuple[str, ...] = ("ps5",),
+    offer: dict[str, Any] | None = None,
+    sold_digital: bool = False,
+    listed_physical: bool = False,
+    offers: dict[str, dict[str, Any]] | None = None,
+    **kw: Any,
+) -> dict[str, Any]:
+    """Jeu de data.json ; `offer` va à la première édition, `offers` donne l'offre par édition."""
+    offers = dict(offers or {})
+    if offer is not None:
+        offers[platforms[0]] = offer
+    editions = [
+        {
+            "platform": p,
+            "offer": None if p not in offers else offers[p] | {"platform": p},
+            "sold_digital": sold_digital,
+            "listed_physical": listed_physical,
+        }
+        for p in platforms
+    ]
+    with_offer = [e["offer"] for e in editions if e["offer"]]
+    best = min(with_offer, key=lambda o: o["price_cents"]) if with_offer else None
     return {
         "slug": slug,
         "title": slug.replace("-", " ").title(),
-        "platforms": ["ps5"],
+        "platforms": list(platforms),
+        "editions": editions,
+        "best_offer": best,
         "release_date": "2024-09-06",
         "release_date_source": "igdb",
         "launch_price_cents": 6999,
@@ -169,7 +199,6 @@ def game(slug: str, **kw: Any) -> dict[str, Any]:
         "summary_source": None,
         "screenshots": [],
         "trailer_youtube_id": None,
-        "offer": None,
     } | kw
 
 
@@ -377,7 +406,7 @@ def test_jeu_a_venir_badge_date_et_statut_pc(site: Path) -> None:
     render(
         site,
         [
-            game("gta", platforms=["ps5"], release_date="2026-11-19", release_date_source="igdb"),
+            game("gta", release_date="2026-11-19", release_date_source="igdb"),
             game("sorti", release_date="2026-10-26", release_date_source="igdb"),
         ],
     )
@@ -397,7 +426,7 @@ def test_jeu_a_venir_badge_date_et_statut_pc(site: Path) -> None:
 
 
 def test_xbox_series_badge_et_jsonld(site: Path) -> None:
-    render(site, [game("halo", platforms=["xbox_series"])])
+    render(site, [game("halo", platforms=("xbox_series",))])
     index = (site / "index.html").read_text(encoding="utf-8")
     assert '<span class="console xb">Xbox Series</span>' in index
     data = game_jsonld((site / GAMES_DIR / "halo" / "index.html").read_text(encoding="utf-8"))
@@ -454,3 +483,18 @@ def test_badge_physique_et_numerique(
         text = path.read_text(encoding="utf-8")
         assert ('<span class="status fmt">Physique et numérique</span>' in text) is badge
         assert "Numérique uniquement" not in text and "Physique uniquement" not in text
+
+
+def test_ancien_slug_redirige_hors_sitemap(site: Path) -> None:
+    render_site(
+        DataFile.model_validate({"generated_at": NOW, "games": [game("gta")]}),
+        site,
+        {"gta-xbox": "gta", "inconnu": "absent"},
+    )
+    page = (site / GAMES_DIR / "gta-xbox" / "index.html").read_text(encoding="utf-8")
+    target = f"{SITE_URL}{GAMES_DIR}/gta/"
+    assert f'<link rel="canonical" href="{target}">' in page
+    assert f'<meta http-equiv="refresh" content="0; url={target}">' in page
+    sitemap = (site / "sitemap.xml").read_text(encoding="utf-8")
+    assert "gta-xbox" not in sitemap and target in sitemap
+    assert not (site / GAMES_DIR / "inconnu").exists()  # cible absente : pas de redirection

@@ -1,6 +1,6 @@
 {
-  "schema_version": 5,
-  "generated_at": "2026-10-25T10:07:54Z",
+  "schema_version": 6,
+  "generated_at": "2026-10-25T10:42:38Z",
   "currency": "EUR",
   "games": [
     {
@@ -9,12 +9,47 @@
       "platforms": [
         "ps5"
       ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": {
+            "platform": "ps5",
+            "price_cents": 5490,
+            "shipping_cents": null,
+            "discount_pct": 22,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/astro-bot-ps5-0711719591818",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "ps5",
+        "price_cents": 5490,
+        "shipping_cents": null,
+        "discount_pct": 22,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/astro-bot-ps5-0711719591818",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2024-09-06",
       "release_date_source": "igdb",
       "launch_price_cents": 6999,
       "igdb_id": 303811,
       "igdb_url": "https://www.igdb.com/games/astro-bot",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/astro-bot.webp",
       "cover_image_id": "coba3k",
       "pc_status": "none",
@@ -45,22 +80,7 @@
           "url": "screens/astro-bot/scsiqg.webp"
         }
       ],
-      "trailer_youtube_id": "wHMNQzLG_Jg",
-      "sold_digital": true,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 5490,
-        "shipping_cents": null,
-        "discount_pct": 22,
-        "format": "physical",
-        "condition": "new",
-        "merchant": "E.Leclerc",
-        "seller": null,
-        "url": "https://www.e.leclerc/fp/astro-bot-ps5-0711719591818",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
+      "trailer_youtube_id": "wHMNQzLG_Jg"
     },
     {
       "slug": "ghost-of-yotei",
@@ -68,12 +88,47 @@
       "platforms": [
         "ps5"
       ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": {
+            "platform": "ps5",
+            "price_cents": 5499,
+            "shipping_cents": null,
+            "discount_pct": 31,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/ghost-of-yotei-ps5-0711719020240",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "ps5",
+        "price_cents": 5499,
+        "shipping_cents": null,
+        "discount_pct": 31,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/ghost-of-yotei-ps5-0711719020240",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2025-10-02",
       "release_date_source": "igdb",
       "launch_price_cents": 7999,
       "igdb_id": 317627,
       "igdb_url": "https://www.igdb.com/games/ghost-of-yotei",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/ghost-of-yotei.webp",
       "cover_image_id": "co9coo",
       "pc_status": "none",
@@ -104,22 +159,7 @@
           "url": "screens/ghost-of-yotei/sctzwt.webp"
         }
       ],
-      "trailer_youtube_id": "7z7kqwuf0a8",
-      "sold_digital": true,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 5499,
-        "shipping_cents": null,
-        "discount_pct": 31,
-        "format": "physical",
-        "condition": "new",
-        "merchant": "E.Leclerc",
-        "seller": null,
-        "url": "https://www.e.leclerc/fp/ghost-of-yotei-ps5-0711719020240",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
+      "trailer_youtube_id": "7z7kqwuf0a8"
     },
     {
       "slug": "saros",
@@ -127,12 +167,47 @@
       "platforms": [
         "ps5"
       ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": {
+            "platform": "ps5",
+            "price_cents": 6999,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/saros-ps5-0711719026990",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "ps5",
+        "price_cents": 6999,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/saros-ps5-0711719026990",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2026-04-30",
       "release_date_source": "igdb",
       "launch_price_cents": null,
       "igdb_id": 331215,
       "igdb_url": "https://www.igdb.com/games/saros",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/saros.webp",
       "cover_image_id": "coajye",
       "pc_status": "none",
@@ -163,22 +238,7 @@
           "url": "screens/saros/sc104fq.webp"
         }
       ],
-      "trailer_youtube_id": "rK4W-hBrSZs",
-      "sold_digital": true,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 6999,
-        "shipping_cents": null,
-        "discount_pct": null,
-        "format": "physical",
-        "condition": "new",
-        "merchant": "E.Leclerc",
-        "seller": null,
-        "url": "https://www.e.leclerc/fp/saros-ps5-0711719026990",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
+      "trailer_youtube_id": "rK4W-hBrSZs"
     },
     {
       "slug": "gran-turismo-7",
@@ -186,12 +246,47 @@
       "platforms": [
         "ps5"
       ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": {
+            "platform": "ps5",
+            "price_cents": 3895,
+            "shipping_cents": 499,
+            "discount_pct": 51,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "Globale Multimedia",
+            "url": "https://www.pixmania.com/fr/fr/sony-gran-turismo-7-standard-playstation-5-106722.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "ps5",
+        "price_cents": 3895,
+        "shipping_cents": 499,
+        "discount_pct": 51,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "Globale Multimedia",
+        "url": "https://www.pixmania.com/fr/fr/sony-gran-turismo-7-standard-playstation-5-106722.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2022-03-04",
       "release_date_source": "igdb",
       "launch_price_cents": 7999,
       "igdb_id": 101006,
       "igdb_url": "https://www.igdb.com/games/gran-turismo-7",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/gran-turismo-7.webp",
       "cover_image_id": "co2g84",
       "pc_status": "none",
@@ -222,22 +317,7 @@
           "url": "screens/gran-turismo-7/sc8bjd.webp"
         }
       ],
-      "trailer_youtube_id": "OyAbx6S_VCA",
-      "sold_digital": true,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 3895,
-        "shipping_cents": 499,
-        "discount_pct": 51,
-        "format": "physical",
-        "condition": "new",
-        "merchant": "Pixmania",
-        "seller": "Globale Multimedia",
-        "url": "https://www.pixmania.com/fr/fr/sony-gran-turismo-7-standard-playstation-5-106722.html",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
+      "trailer_youtube_id": "OyAbx6S_VCA"
     },
     {
       "slug": "mario-kart-world",
@@ -245,12 +325,47 @@
       "platforms": [
         "switch2"
       ],
+      "editions": [
+        {
+          "platform": "switch2",
+          "offer": {
+            "platform": "switch2",
+            "price_cents": 6625,
+            "shipping_cents": null,
+            "discount_pct": 26,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch2",
+        "price_cents": 6625,
+        "shipping_cents": null,
+        "discount_pct": 26,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2025-06-05",
       "release_date_source": "igdb",
       "launch_price_cents": 8999,
       "igdb_id": 338067,
       "igdb_url": "https://www.igdb.com/games/mario-kart-world",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/mario-kart-world.webp",
       "cover_image_id": "cob9s9",
       "pc_status": "none",
@@ -281,22 +396,7 @@
           "url": "screens/mario-kart-world/scz96i.webp"
         }
       ],
-      "trailer_youtube_id": "3pE23YTYEZM",
-      "sold_digital": false,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 6625,
-        "shipping_cents": null,
-        "discount_pct": 26,
-        "format": "physical",
-        "condition": "new",
-        "merchant": "E.Leclerc",
-        "seller": null,
-        "url": "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
+      "trailer_youtube_id": "3pE23YTYEZM"
     },
     {
       "slug": "donkey-kong-bananza",
@@ -304,12 +404,47 @@
       "platforms": [
         "switch2"
       ],
+      "editions": [
+        {
+          "platform": "switch2",
+          "offer": {
+            "platform": "switch2",
+            "price_cents": 5895,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/donkey-kong-bananza-nintendo-switch-2-0045496312770",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch2",
+        "price_cents": 5895,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/donkey-kong-bananza-nintendo-switch-2-0045496312770",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2025-07-17",
       "release_date_source": "igdb",
       "launch_price_cents": null,
       "igdb_id": 338106,
       "igdb_url": "https://www.igdb.com/games/donkey-kong-bananza",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/donkey-kong-bananza.webp",
       "cover_image_id": "cobd1q",
       "pc_status": "none",
@@ -340,35 +475,75 @@
           "url": "screens/donkey-kong-bananza/scw2wq.webp"
         }
       ],
-      "trailer_youtube_id": "mIddsPkdX9U",
-      "sold_digital": false,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 5895,
-        "shipping_cents": null,
-        "discount_pct": null,
-        "format": "physical",
-        "condition": "new",
-        "merchant": "E.Leclerc",
-        "seller": null,
-        "url": "https://www.e.leclerc/fp/donkey-kong-bananza-nintendo-switch-2-0045496312770",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
+      "trailer_youtube_id": "mIddsPkdX9U"
     },
     {
       "slug": "zelda-tears-of-the-kingdom",
       "title": "The Legend of Zelda: Tears of the Kingdom",
       "platforms": [
-        "switch"
+        "switch",
+        "switch2"
       ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 5149,
+            "shipping_cents": null,
+            "discount_pct": 26,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-switch-0045496478735",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        },
+        {
+          "platform": "switch2",
+          "offer": {
+            "platform": "switch2",
+            "price_cents": 8359,
+            "shipping_cents": 0,
+            "discount_pct": -19,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "ShopVite",
+            "url": "https://www.pixmania.com/fr/fr/the-legend-of-zelda-tears-of-the-kingdom-switch-2-397668.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 5149,
+        "shipping_cents": null,
+        "discount_pct": 26,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-switch-0045496478735",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2023-05-12",
       "release_date_source": "igdb",
       "launch_price_cents": 6999,
       "igdb_id": 119388,
       "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-tears-of-the-kingdom",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/zelda-tears-of-the-kingdom.webp",
       "cover_image_id": "co5vmg",
       "pc_status": "none",
@@ -399,22 +574,7 @@
           "url": "screens/zelda-tears-of-the-kingdom/scaoj6.webp"
         }
       ],
-      "trailer_youtube_id": "3fr1Z07AV00",
-      "sold_digital": true,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 5149,
-        "shipping_cents": null,
-        "discount_pct": 26,
-        "format": "physical",
-        "condition": "new",
-        "merchant": "E.Leclerc",
-        "seller": null,
-        "url": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-switch-0045496478735",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
+      "trailer_youtube_id": "3fr1Z07AV00"
     },
     {
       "slug": "pokemon-ecarlate",
@@ -422,12 +582,47 @@
       "platforms": [
         "switch"
       ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 4416,
+            "shipping_cents": null,
+            "discount_pct": 26,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/pokemon-ecarlate-switch-0045496510732",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 4416,
+        "shipping_cents": null,
+        "discount_pct": 26,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/pokemon-ecarlate-switch-0045496510732",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2022-11-18",
       "release_date_source": "igdb",
       "launch_price_cents": 5999,
       "igdb_id": 191931,
       "igdb_url": "https://www.igdb.com/games/pokemon-scarlet",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/pokemon-ecarlate.webp",
       "cover_image_id": "co5sfi",
       "pc_status": "none",
@@ -458,35 +653,62 @@
           "url": "screens/pokemon-ecarlate/scg8uf.webp"
         }
       ],
-      "trailer_youtube_id": "1VTsaSNRVbY",
-      "sold_digital": true,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 4416,
-        "shipping_cents": null,
-        "discount_pct": 26,
-        "format": "physical",
-        "condition": "new",
-        "merchant": "E.Leclerc",
-        "seller": null,
-        "url": "https://www.e.leclerc/fp/pokemon-ecarlate-switch-0045496510732",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
+      "trailer_youtube_id": "1VTsaSNRVbY"
     },
     {
       "slug": "grand-theft-auto-vi",
       "title": "Grand Theft Auto VI",
       "platforms": [
-        "ps5"
+        "ps5",
+        "xbox_series"
       ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": {
+            "platform": "ps5",
+            "price_cents": 6000,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "code_box",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/grand-theft-auto-vi-code-in-a-box-ps5-5026555439824",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        },
+        {
+          "platform": "xbox_series",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": {
+        "platform": "ps5",
+        "price_cents": 6000,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "code_box",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/grand-theft-auto-vi-code-in-a-box-ps5-5026555439824",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
       "release_date": "2026-11-19",
       "release_date_source": "igdb",
       "launch_price_cents": null,
       "igdb_id": 52189,
       "igdb_url": "https://www.igdb.com/games/grand-theft-auto-vi",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
+      "igdb_fetched_at": "2026-10-25T10:42:38Z",
       "cover_url": "covers/grand-theft-auto-vi.webp",
       "cover_image_id": "cocv1v",
       "pc_status": "none",
@@ -518,70 +740,7 @@
           "url": "screens/grand-theft-auto-vi/scpsp8.webp"
         }
       ],
-      "trailer_youtube_id": "QdBZY2fkU-0",
-      "sold_digital": true,
-      "listed_physical": true,
-      "offer": {
-        "price_cents": 6000,
-        "shipping_cents": null,
-        "discount_pct": null,
-        "format": "code_box",
-        "condition": "new",
-        "merchant": "E.Leclerc",
-        "seller": null,
-        "url": "https://www.e.leclerc/fp/grand-theft-auto-vi-code-in-a-box-ps5-5026555439824",
-        "observed_at": "2026-10-25",
-        "source": "scraped",
-        "stale": false
-      }
-    },
-    {
-      "slug": "grand-theft-auto-vi-xbox-series",
-      "title": "Grand Theft Auto VI",
-      "platforms": [
-        "xbox_series"
-      ],
-      "release_date": "2026-11-19",
-      "release_date_source": "igdb",
-      "launch_price_cents": null,
-      "igdb_id": 52189,
-      "igdb_url": "https://www.igdb.com/games/grand-theft-auto-vi",
-      "igdb_fetched_at": "2026-10-25T10:07:54Z",
-      "cover_url": "covers/grand-theft-auto-vi-xbox-series.webp",
-      "cover_image_id": "cocv1v",
-      "pc_status": "none",
-      "pc_status_source": "igdb",
-      "developers": [
-        "Rockstar Games"
-      ],
-      "publishers": [
-        "Rockstar Games",
-        "Take-Two Interactive"
-      ],
-      "summary": "Grand Theft Auto VI heads to the state of Leonida, home to the neon-soaked streets of Vice City and beyond in the biggest, most immersive evolution of the Grand Theft Auto series yet.",
-      "summary_source": "igdb",
-      "screenshots": [
-        {
-          "image_id": "scwpqj",
-          "url": "screens/grand-theft-auto-vi-xbox-series/scwpqj.webp"
-        },
-        {
-          "image_id": "scpsp7",
-          "url": "screens/grand-theft-auto-vi-xbox-series/scpsp7.webp"
-        },
-        {
-          "image_id": "scpsp6",
-          "url": "screens/grand-theft-auto-vi-xbox-series/scpsp6.webp"
-        },
-        {
-          "image_id": "scpsp8",
-          "url": "screens/grand-theft-auto-vi-xbox-series/scpsp8.webp"
-        }
-      ],
-      "trailer_youtube_id": "QdBZY2fkU-0",
-      "sold_digital": false,
-      "listed_physical": false,
-      "offer": null
+      "trailer_youtube_id": "QdBZY2fkU-0"
     }
   ]
 }

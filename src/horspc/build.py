@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+from collections.abc import Iterable
 from datetime import datetime
 from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
@@ -14,9 +15,10 @@ from pydantic import ValidationError
 from horspc import covers, render
 from horspc.http import HttpClient
 from horspc.igdb import IgdbClient, IgdbError, IgdbGame
-from horspc.models import Catalog, DataFile, GameOut, to_cents
+from horspc.models import Catalog, DataFile, GameOut, ScrapedObservation, to_cents
 from horspc.prices import ManualPriceProvider, Offer, PriceProvider, scraper
 from horspc.prices.fetch import Fetcher
+from horspc.prices.selection import FORMAT_RANK
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +29,7 @@ OUTPUT_PATH = ROOT / "site" / "data.json"
 SCRAPED_PATH = ROOT / "data" / "prices.scraped.jsonl"
 DISCOVERED_PATH = ROOT / "data" / "discovered.json"
 SOURCES_PATH = ROOT / "data" / "sources.config.yaml"
+REDIRECTS_PATH = ROOT / "data" / "redirects.yaml"
 
 
 def load_catalog(games_path: Path, prices_path: Path, now: datetime) -> Catalog:
@@ -110,12 +113,31 @@ def build_data(
         if game.release_date_override is not None:
             entry["release_date"] = game.release_date_override.date
             entry["release_date_source"] = "manual"
-        offer = provider.get_best_offer(game, now.date())
-        entry["offer"] = (
-            None if offer is None else _offer_fields(offer, entry["launch_price_cents"])
-        )
+        prev = previous.get(game.slug)
+        editions = []
+        for platform in game.platforms:
+            offer = provider.get_offer(game, platform, now.date())
+            editions.append(
+                {
+                    "platform": platform,
+                    "offer": (
+                        None if offer is None else _offer_fields(offer, entry["launch_price_cents"])
+                    ),
+                    **_proofs(info, prev, platform),
+                }
+            )
+        entry["editions"] = editions
+        entry["best_offer"] = best_offer([e["offer"] for e in editions if e["offer"]])
         games.append(entry)
     return DataFile.model_validate({"generated_at": generated_at or now, "games": games})
+
+
+def price_provider(
+    catalog: Catalog, scraped: Iterable[ScrapedObservation] = ()
+) -> ManualPriceProvider:
+    """Relevés manuels et automatiques ; un relevé manuel sans platform vise l'unique édition."""
+    single = {g.slug: g.platforms[0] for g in catalog.games if len(g.editions) == 1}
+    return ManualPriceProvider(catalog.observations, scraped, single)
 
 
 def write_data(data: DataFile, path: Path) -> None:
@@ -204,7 +226,7 @@ def run(
             )
     data = build_data(
         catalog,
-        ManualPriceProvider(catalog.observations, history),
+        price_provider(catalog, history),
         igdb_results,
         previous,
         now,
@@ -223,7 +245,8 @@ def run(
         covers.apply_updates(site_dir, updates)
         covers.apply_screens(site_dir, screen_updates)
     if render_html and (site_dir / "index.html").exists():
-        render.render_site(data, site_dir)
+        redirects = _read_yaml_map(REDIRECTS_PATH)
+        render.render_site(data, site_dir, redirects)
     elif render_html:
         log.warning("Pas de gabarit index.html dans %s : rendu HTML ignoré", site_dir)
     log.info("%s écrit : %d jeux", output_path, len(data.games))
@@ -253,8 +276,6 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
             "summary": info.summary,
             "summary_source": None if info.summary is None else "igdb",
             "trailer_youtube_id": info.trailer_id,
-            "sold_digital": info.sold_digital,
-            "listed_physical": info.listed_physical,
         }
     if prev is not None:
         # Une valeur manuelle retirée de games.yaml ne doit pas survivre au build suivant.
@@ -272,8 +293,6 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
             "summary": prev.summary if prev.summary_source == "igdb" else None,
             "summary_source": "igdb" if prev.summary_source == "igdb" else None,
             "trailer_youtube_id": prev.trailer_youtube_id,
-            "sold_digital": prev.sold_digital,
-            "listed_physical": prev.listed_physical,
         }
     return {
         "release_date": None,
@@ -288,9 +307,35 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
         "summary": None,
         "summary_source": None,
         "trailer_youtube_id": None,
-        "sold_digital": False,
-        "listed_physical": False,
     }
+
+
+def _proofs(info: IgdbGame | None, prev: GameOut | None, platform: str) -> dict[str, bool]:
+    """Preuves de format d'une édition : IGDB, sinon data.json précédent, sinon aucune."""
+    if info is not None:
+        return info.format_proofs.get(platform) or {"sold_digital": False, "listed_physical": False}
+    old = next((e for e in prev.editions if e.platform == platform), None) if prev else None
+    if old is None:
+        return {"sold_digital": False, "listed_physical": False}
+    return {"sold_digital": old.sold_digital, "listed_physical": old.listed_physical}
+
+
+def best_offer(offers: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Meilleure offre toutes éditions : à jour d'abord, puis physique, boîte avec code, démat,
+    puis prix port compris (port inconnu : prix seul), relevé le plus récent, marchand."""
+    if not offers:
+        return None
+    return min(
+        offers,
+        key=lambda o: (
+            o["stale"],
+            FORMAT_RANK[o["format"]],
+            o["price_cents"] + (o["shipping_cents"] or 0),
+            -o["observed_at"].toordinal(),
+            o["merchant"],
+            o["platform"],
+        ),
+    )
 
 
 def _cover_fields(slug: str, image_id: str | None) -> dict[str, Any]:
@@ -302,6 +347,7 @@ def _cover_fields(slug: str, image_id: str | None) -> dict[str, Any]:
 
 def _offer_fields(offer: Offer, launch_price_cents: int | None) -> dict[str, Any]:
     return {
+        "platform": offer.platform,
         "price_cents": offer.price_cents,
         "shipping_cents": offer.shipping_cents,
         "discount_pct": discount_pct(offer.price_cents, launch_price_cents),
@@ -318,6 +364,12 @@ def _offer_fields(offer: Offer, launch_price_cents: int | None) -> dict[str, Any
 
 def _cents(amount: Decimal | None) -> int | None:
     return None if amount is None else to_cents(amount)
+
+
+def _read_yaml_map(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
 
 def _read_yaml(path: Path) -> list[Any]:

@@ -67,8 +67,15 @@ ARROW = (
 )
 
 
-def render_site(data: DataFile, site_dir: Path) -> None:
-    """Écrit le catalogue statique, les pages de jeux, les métadonnées SEO et le sitemap."""
+def render_site(data: DataFile, site_dir: Path, redirects: dict[str, str] | None = None) -> None:
+    """Écrit le catalogue statique, les pages de jeux, les métadonnées SEO et le sitemap.
+
+    `redirects` : ancien slug → slug actuel (jeux fusionnés) ; l'ancienne page devient une
+    redirection, hors sitemap.
+    """
+    redirects = {
+        old: new for old, new in (redirects or {}).items() if new in {g.slug for g in data.games}
+    }
     games = [g for g in data.games if g.pc_status != "released"]
     generated = data.generated_at.date()
     previous_lastmod = _read_sitemap(site_dir / "sitemap.xml")
@@ -99,7 +106,11 @@ def render_site(data: DataFile, site_dir: Path) -> None:
         lastmod[url] = previous_lastmod.get(url, generated) if unchanged else generated
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(page, encoding="utf-8")
-    slugs = {g.slug for g in games}
+    for old, new in redirects.items():
+        path = games_root / old / "index.html"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(_redirect_page(f"{SITE_URL}{GAMES_DIR}/{new}/"), encoding="utf-8")
+    slugs = {g.slug for g in games} | set(redirects)
     if games_root.is_dir():
         for directory in games_root.iterdir():
             if directory.is_dir() and directory.name not in slugs:
@@ -295,7 +306,7 @@ def _cover(game: GameOut, color: int, prefix: str, lazy: bool) -> str:
 
 
 def _price_block(game: GameOut, with_cta: bool) -> str:
-    offer = game.offer
+    offer = game.best_offer
     if offer is None:
         return '<div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div>'
     launch = (
@@ -341,7 +352,7 @@ def merchant_label(offer: OfferOut) -> str:
 
 
 def _sort_attrs(game: GameOut) -> str:
-    offer = game.offer
+    offer = game.best_offer
     price = "" if offer is None else str(offer.price_cents + (offer.shipping_cents or 0))
     discount = "" if offer is None or offer.discount_pct is None else str(offer.discount_pct)
     release = game.release_date.isoformat() if game.release_date else ""
@@ -355,11 +366,14 @@ def _sort_attrs(game: GameOut) -> str:
 def both_formats(game: GameOut) -> bool:
     """« Physique et numérique » seulement si les deux preuves existent ; aucun autre badge.
 
-    Numérique : store officiel ou Amazon Digital (IGDB). Physique : entrée Physical (IGDB) ou
-    offre physique neuve relevée ; une boîte avec code ne prouve pas une édition physique.
+    Par édition : numérique = store officiel ou Amazon Digital (IGDB) ; physique = entrée
+    Physical (IGDB) ou offre physique neuve relevée (une boîte avec code ne compte pas).
     """
-    physical = game.listed_physical or (game.offer is not None and game.offer.format == "physical")
-    return game.sold_digital and physical
+    return any(
+        e.sold_digital
+        and (e.listed_physical or (e.offer is not None and e.offer.format == "physical"))
+        for e in game.editions
+    )
 
 
 def is_upcoming(game: GameOut, today: date) -> bool:
@@ -392,7 +406,7 @@ def _card(game: GameOut, index: int, today: date) -> str:
         release = "À venir"
     else:
         release = f"Sortie le {_fr(game.release_date)}"
-    fmt = FORMATS[game.offer.format] if game.offer else ""
+    fmt = FORMATS[game.best_offer.format] if game.best_offer else ""
     return (
         f'<article class="card" {_sort_attrs(game)}>'
         f"{_cover(game, index, '', lazy=index >= 4)}"
@@ -432,10 +446,10 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
         if game.pc_status == "announced"
         else "jamais sorti sur PC"
     )
-    if game.offer:
+    if game.best_offer:
         description += (
-            f". Meilleur prix relevé : {_euros(game.offer.price_cents)} chez "
-            f"{merchant_label(game.offer)} le {_fr(game.offer.observed_at)}."
+            f". Meilleur prix relevé : {_euros(game.best_offer.price_cents)} chez "
+            f"{merchant_label(game.best_offer)} le {_fr(game.best_offer.observed_at)}."
         )
     else:
         description += ". Prix pas encore relevé."
@@ -455,8 +469,8 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
         ("Sortie", _release_fact(game, generated)),
         ("Statut PC", label),
     ]
-    if game.offer:
-        facts.append(("Format de l'offre", FORMATS[game.offer.format]))
+    if game.best_offer:
+        facts.append(("Format de l'offre", FORMATS[game.best_offer.format]))
     if game.developers:
         facts.append(
             ("Studio" + ("s" if len(game.developers) > 1 else ""), _e(", ".join(game.developers)))
@@ -505,6 +519,18 @@ def _breadcrumb(game: GameOut, url: str) -> dict[str, Any]:
             {"@type": "ListItem", "position": 2, "name": game.title, "item": url},
         ],
     }
+
+
+def _redirect_page(target: str) -> str:
+    """Page d'un ancien slug : redirection immédiate, canonical vers la page fusionnée."""
+    return (
+        '<!doctype html>\n<html lang="fr">\n<head>\n<meta charset="utf-8">\n'
+        f'<title>Page déplacée · HorsPC</title>\n<link rel="canonical" href="{_a(target)}">\n'
+        f'<meta http-equiv="refresh" content="0; url={_a(target)}">\n'
+        '<meta name="robots" content="noindex">\n</head>\n<body>\n'
+        f'<p>Cette page a été déplacée : <a href="{_a(target)}">{_e(target)}</a>.</p>\n'
+        "</body>\n</html>\n"
+    )
 
 
 def _release_fact(game: GameOut, today: date) -> str:
@@ -597,7 +623,7 @@ def _videogame(game: GameOut, url: str) -> dict[str, Any]:
         data["author"] = [{"@type": "Organization", "name": n} for n in game.developers]
     if game.publishers:
         data["publisher"] = [{"@type": "Organization", "name": n} for n in game.publishers]
-    offer = game.offer
+    offer = game.best_offer
     # Une offre non vérifiée depuis 30 jours n'est plus publiée : son prix n'est plus garanti.
     if offer and not offer.stale:
         data["offers"] = {
