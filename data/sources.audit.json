@@ -1,0 +1,689 @@
+{
+  "checked_at": "2026-10-25",
+  "schema": 1,
+  "sources": {
+    "amazon": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "2b9e5c39a6554cf7",
+        "status": 200,
+        "verdicts": {
+          "/": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.amazon.fr/gp/help/customer/display.html?nodeId=201909000": {
+          "clauses": 12,
+          "hash": "e4f299a3fec4fdf7",
+          "status": 200
+        }
+      }
+    },
+    "auchan": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "4a60dee1170aa44e",
+        "status": 200,
+        "verdicts": {
+          "/recherche?text=x": "interdit (Disallow: /recherche*)"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.auchan.fr/cgu/ep-cgu": {
+          "clauses": 4,
+          "hash": "e1ae456f49ff61d2",
+          "status": 200
+        }
+      }
+    },
+    "boulanger": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "product": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 400,
+        "verdicts": {
+          "/c/jeu-playstation-5": "non vérifiable",
+          "/ref/1220885": "non vérifiable",
+          "/resultats?tr=x": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {
+        "https://www.boulanger.com/evenement/conditions-generales-vente-boulanger": {
+          "clauses": null,
+          "hash": null,
+          "status": "non demandé (bloqué)"
+        }
+      }
+    },
+    "carrefour": {
+      "home": {
+        "blocked": true,
+        "status": 403
+      },
+      "robots": {
+        "rules": "2a72d0933d239c45",
+        "status": 200,
+        "verdicts": {
+          "/": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.carrefour.fr/conditions-generales-utilisation-marketplace": {
+          "clauses": null,
+          "hash": null,
+          "status": "non demandé (bloqué)"
+        },
+        "https://www.carrefour.fr/conditions-generales-ventes": {
+          "clauses": null,
+          "hash": null,
+          "status": "non demandé (bloqué)"
+        }
+      }
+    },
+    "cdiscount": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "product": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/jeux-pc-video-console/nintendo-switch/mario-kart-world-jeu-nintendo-switch-2/f-10328-ninns2mkworld.html": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    },
+    "cultura": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "product": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/p-ghost-of-yotei-12140797.html": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    },
+    "darty": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "product": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/nav/achat/ref/MC121424408.html": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    },
+    "easycash": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    },
+    "ebay": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "b24db49d7d024b34",
+        "status": 200,
+        "verdicts": {
+          "/": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.ebay.fr/help/policies/member-behaviour-policies/user-agreement?id=4259": {
+          "clauses": 10,
+          "hash": "f1bb9ce09c7d2fb4",
+          "status": 200
+        }
+      }
+    },
+    "fnac": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "product": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/a21590928/Ghost-of-Yotei-PS5-Jeu-video-Playstation-5": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    },
+    "gamecash": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    },
+    "intermarche": {
+      "home": {
+        "blocked": true,
+        "status": 403
+      },
+      "product": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": "7b9af96520d0ae2f",
+        "status": 200,
+        "verdicts": {
+          "/produit/jeu-switch-51-worldwide-games-a-partir-de-12-ans/0045496426323": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {}
+    },
+    "joueclub": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "3af20e29b9653eb9",
+        "status": 200,
+        "verdicts": {
+          "/": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.joueclub.fr/contenu/conditions-generales-de-vente.html": {
+          "clauses": 6,
+          "hash": "a5edd2889de5f6cb",
+          "status": 200
+        }
+      }
+    },
+    "king-jouet": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    },
+    "lagranderecre": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "42313490c0507c67",
+        "status": 200,
+        "verdicts": {
+          "/": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.lagranderecre.fr/informations-legales/conditions-generales-de-vente.html": {
+          "clauses": 5,
+          "hash": "6f9d54ffaae1f7a8",
+          "status": 200
+        }
+      }
+    },
+    "ldlc": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": "erreur réseau",
+        "verdicts": {
+          "/recherche/x/": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {
+        "https://www.ldlc.com/aide/58-nos-conditions-generales-de-vente/": {
+          "clauses": null,
+          "hash": null,
+          "status": "non demandé (bloqué)"
+        }
+      }
+    },
+    "leclerc": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "jsonld": "lisible",
+      "product": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "42b2361e51753e43",
+        "status": 200,
+        "verdicts": {
+          "/cat/jeux-ps5": "autorisé",
+          "/cat/jeux-switch-2?page=2": "autorisé",
+          "/fp/x-0045496312336": "autorisé",
+          "/recherche?q=x": "interdit (Disallow: /recherche)"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.e.leclerc/i/conditions-generales-d-utilisation": {
+          "clauses": 0,
+          "hash": null,
+          "status": 200
+        },
+        "https://www.e.leclerc/i/conditions-generales-de-vente": {
+          "clauses": 0,
+          "hash": null,
+          "status": 200
+        }
+      }
+    },
+    "ledenicheur": {
+      "home": {
+        "blocked": true,
+        "challenge": "/cdn-cgi/challenge-platform",
+        "status": 200
+      },
+      "robots": {
+        "rules": "3b6a455b4180f459",
+        "status": 200,
+        "verdicts": {
+          "/": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://ledenicheur.fr/information/conditions-generales-dutilisation": {
+          "clauses": null,
+          "hash": null,
+          "status": "non demandé (bloqué)"
+        }
+      }
+    },
+    "maxi-toys": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    },
+    "micromania": {
+      "home": {
+        "blocked": true,
+        "challenge": "_Incapsula_Resource",
+        "status": 200
+      },
+      "product": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 200,
+        "verdicts": {
+          "/p/ghost-of-yotei-150141.html": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "200, pas un fichier TDMRep"
+      },
+      "terms": {}
+    },
+    "microsoft-store": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "4fea23cf92c5b580",
+        "status": 200,
+        "verdicts": {
+          "/fr-FR": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.microsoft.com/fr-fr/servicesagreement": {
+          "clauses": 12,
+          "hash": "1c753c968fdd4ac4",
+          "status": 200
+        }
+      }
+    },
+    "nintendo": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "726fa25c8da95370",
+        "status": 200,
+        "verdicts": {
+          "/fr-fr/Jeux/": "autorisé (Allow: /)"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {}
+    },
+    "pixmania": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "jsonld": "lisible",
+      "product": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "b610da7e6bc727d2",
+        "status": 200,
+        "verdicts": {
+          "/fr/fr/mario-kart-world-switch-2-397665.html": "autorisé",
+          "/fr/fr/search/x": "interdit (Disallow: */search/*)"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.pixmania.com/fr/fr/conditions-generales-d-utilisation.html": {
+          "clauses": 1,
+          "hash": "9a3c2d19ae7aab6f",
+          "status": 200
+        }
+      }
+    },
+    "playstation-store": {
+      "home": {
+        "blocked": false,
+        "status": 200
+      },
+      "robots": {
+        "rules": "dd69ff8643592e72",
+        "status": 200,
+        "verdicts": {
+          "/fr-fr/pages/latest": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": 404
+      },
+      "terms": {
+        "https://www.playstation.com/fr-fr/legal/website-terms-of-use/": {
+          "clauses": 4,
+          "hash": "a6f4875629b89e72",
+          "status": 200
+        }
+      }
+    },
+    "rakuten": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {
+        "https://fr.shopping.rakuten.com/newhelp/conditions-generales-dutilisation": {
+          "clauses": null,
+          "hash": null,
+          "status": "non demandé (bloqué)"
+        }
+      }
+    },
+    "rueducommerce": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": "erreur réseau",
+        "verdicts": {
+          "/recherche/x": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {
+        "https://www.rueducommerce.fr/aide/1044-nos-conditions-generales-de-vente/": {
+          "clauses": null,
+          "hash": null,
+          "status": "non demandé (bloqué)"
+        }
+      }
+    },
+    "smyths": {
+      "home": {
+        "blocked": true,
+        "challenge": "_Incapsula_Resource",
+        "status": 200
+      },
+      "robots": {
+        "rules": "122ee76fe38ccdb4",
+        "status": 200,
+        "verdicts": {
+          "/": "autorisé"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "200, pas un fichier TDMRep"
+      },
+      "terms": {}
+    },
+    "super-u": {
+      "home": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "product": {
+        "blocked": null,
+        "status": "non demandé (bloqué)"
+      },
+      "robots": {
+        "rules": null,
+        "status": 403,
+        "verdicts": {
+          "/p/jeu-nintendo-switch-super-mario-odyssey/7523150.html": "non vérifiable"
+        }
+      },
+      "tdm": {
+        "header": null,
+        "meta": null,
+        "tdmrep": "non demandé"
+      },
+      "terms": {}
+    }
+  }
+}
