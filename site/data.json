@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-10-25T10:42:38Z",
+  "generated_at": "2026-10-25T10:54:02Z",
   "currency": "EUR",
   "games": [
     {
@@ -49,7 +49,7 @@
       "launch_price_cents": 6999,
       "igdb_id": 303811,
       "igdb_url": "https://www.igdb.com/games/astro-bot",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/astro-bot.webp",
       "cover_image_id": "coba3k",
       "pc_status": "none",
@@ -128,7 +128,7 @@
       "launch_price_cents": 7999,
       "igdb_id": 317627,
       "igdb_url": "https://www.igdb.com/games/ghost-of-yotei",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/ghost-of-yotei.webp",
       "cover_image_id": "co9coo",
       "pc_status": "none",
@@ -207,7 +207,7 @@
       "launch_price_cents": null,
       "igdb_id": 331215,
       "igdb_url": "https://www.igdb.com/games/saros",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/saros.webp",
       "cover_image_id": "coajye",
       "pc_status": "none",
@@ -286,7 +286,7 @@
       "launch_price_cents": 7999,
       "igdb_id": 101006,
       "igdb_url": "https://www.igdb.com/games/gran-turismo-7",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/gran-turismo-7.webp",
       "cover_image_id": "co2g84",
       "pc_status": "none",
@@ -365,7 +365,7 @@
       "launch_price_cents": 8999,
       "igdb_id": 338067,
       "igdb_url": "https://www.igdb.com/games/mario-kart-world",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/mario-kart-world.webp",
       "cover_image_id": "cob9s9",
       "pc_status": "none",
@@ -444,7 +444,7 @@
       "launch_price_cents": null,
       "igdb_id": 338106,
       "igdb_url": "https://www.igdb.com/games/donkey-kong-bananza",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/donkey-kong-bananza.webp",
       "cover_image_id": "cobd1q",
       "pc_status": "none",
@@ -543,7 +543,7 @@
       "launch_price_cents": 6999,
       "igdb_id": 119388,
       "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-tears-of-the-kingdom",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/zelda-tears-of-the-kingdom.webp",
       "cover_image_id": "co5vmg",
       "pc_status": "none",
@@ -622,7 +622,7 @@
       "launch_price_cents": 5999,
       "igdb_id": 191931,
       "igdb_url": "https://www.igdb.com/games/pokemon-scarlet",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/pokemon-ecarlate.webp",
       "cover_image_id": "co5sfi",
       "pc_status": "none",
@@ -708,7 +708,7 @@
       "launch_price_cents": null,
       "igdb_id": 52189,
       "igdb_url": "https://www.igdb.com/games/grand-theft-auto-vi",
-      "igdb_fetched_at": "2026-10-25T10:42:38Z",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
       "cover_url": "covers/grand-theft-auto-vi.webp",
       "cover_image_id": "cocv1v",
       "pc_status": "none",
@@ -741,6 +741,2699 @@
         }
       ],
       "trailer_youtube_id": "QdBZY2fkU-0"
+    },
+    {
+      "slug": "demon-s-souls",
+      "title": "Demon's Souls",
+      "platforms": [
+        "ps5"
+      ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2020-11-12",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 134606,
+      "igdb_url": "https://www.igdb.com/games/demons-souls",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/demon-s-souls.webp",
+      "cover_image_id": "co2kj9",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Bluepoint Games"
+      ],
+      "publishers": [
+        "Sony Interactive Entertainment"
+      ],
+      "summary": "Entirely rebuilt from the ground up and masterfully enhanced, Demon's Souls is a remake of the 2009 release that introduces the horrors of a fog-laden, dark fantasy land to a whole new generation of gamers. Those who’ve faced its trials and tribulations before, can once again challenge the darkness in stunning visual quality with incredible performance. The remake features improved graphics and animations, sound and lighting tweaks and a reimagining of many of the visual, musical and mechanical aspects of the original game.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc8bl7",
+          "url": "screens/demon-s-souls/sc8bl7.webp"
+        },
+        {
+          "image_id": "sc8bl8",
+          "url": "screens/demon-s-souls/sc8bl8.webp"
+        },
+        {
+          "image_id": "sc8bl5",
+          "url": "screens/demon-s-souls/sc8bl5.webp"
+        },
+        {
+          "image_id": "sc8bl4",
+          "url": "screens/demon-s-souls/sc8bl4.webp"
+        }
+      ],
+      "trailer_youtube_id": "2TMs2E6cms4"
+    },
+    {
+      "slug": "marvel-s-wolverine",
+      "title": "Marvel's Wolverine",
+      "platforms": [
+        "ps5"
+      ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-09-15",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 168667,
+      "igdb_url": "https://www.igdb.com/games/marvels-wolverine",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/marvel-s-wolverine.webp",
+      "cover_image_id": "cob5mk",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Insomniac Games"
+      ],
+      "publishers": [
+        "Sony Interactive Entertainment"
+      ],
+      "summary": "Marvel's Wolverine is a single-player action-adventure game and a standalone entry in the Marvel's Spider-Man series, sharing continuity with those titles while telling its own self-contained story. Players control Logan/Wolverine in close-quarters combat, using his adamantium claws against enemies drawn from the X-Men comic book mythology.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scfehk",
+          "url": "screens/marvel-s-wolverine/scfehk.webp"
+        },
+        {
+          "image_id": "sc104gl",
+          "url": "screens/marvel-s-wolverine/sc104gl.webp"
+        },
+        {
+          "image_id": "sc104gn",
+          "url": "screens/marvel-s-wolverine/sc104gn.webp"
+        },
+        {
+          "image_id": "sc104go",
+          "url": "screens/marvel-s-wolverine/sc104go.webp"
+        }
+      ],
+      "trailer_youtube_id": "rJrqHyojaa4"
+    },
+    {
+      "slug": "unicorn-overlord",
+      "title": "Unicorn Overlord",
+      "platforms": [
+        "ps5",
+        "switch",
+        "xbox_series"
+      ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": {
+            "platform": "ps5",
+            "price_cents": 6411,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "Shopelya",
+            "url": "https://www.pixmania.com/fr/fr/unicorn-overlord-ps5-252363.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        },
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        },
+        {
+          "platform": "xbox_series",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "ps5",
+        "price_cents": 6411,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "Shopelya",
+        "url": "https://www.pixmania.com/fr/fr/unicorn-overlord-ps5-252363.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2024-03-08",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 68353,
+      "igdb_url": "https://www.igdb.com/games/unicorn-overlord--1",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/unicorn-overlord.webp",
+      "cover_image_id": "co7310",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Vanillaware"
+      ],
+      "publishers": [
+        "Atlus",
+        "Sega"
+      ],
+      "summary": "From the masterminds that brought 13 Sentinels: Aegis Rim and Odin Sphere, ATLUS x Vanillaware presents the rebirth of tactical fantasy RPG. Fight against fate and embark on a royal adventure to regain your reign alongside trustworthy allies.\n\nUnicorn Overlord combines the timeless tactical RPG genre with overworld exploration and innovative battle system for a unique epic fantasy experience in the iconic Vanillaware style.\n\nTraverse a vibrant world, assemble units and direct them into exquisitely animated battles. Perform heroic deeds and grow renown throughout the five nations. Cultivate a grand army with over 60 unique characters, from humans and elves to massive beasts and heavenly angels",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scojd8",
+          "url": "screens/unicorn-overlord/scojd8.webp"
+        },
+        {
+          "image_id": "scojdb",
+          "url": "screens/unicorn-overlord/scojdb.webp"
+        },
+        {
+          "image_id": "scojd5",
+          "url": "screens/unicorn-overlord/scojd5.webp"
+        },
+        {
+          "image_id": "scojd6",
+          "url": "screens/unicorn-overlord/scojd6.webp"
+        }
+      ],
+      "trailer_youtube_id": "I-enIFmoDrc"
+    },
+    {
+      "slug": "code-violet",
+      "title": "Code Violet",
+      "platforms": [
+        "ps5"
+      ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-01-10",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 328275,
+      "igdb_url": "https://www.igdb.com/games/code-violet",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/code-violet.webp",
+      "cover_image_id": "coa6dd",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "TeamKill Media"
+      ],
+      "publishers": [
+        "TeamKill Media"
+      ],
+      "summary": "Developed by TeamKill Media, Code Violet is a third-person action horror game, where you take on the role of Violet Sinclair, a girl plucked from the past who must unravel the mysteries of the Aion Bioengineering Complex as she avoids, hides or fights against the creatures who have overrun it.\n\nWith the evacuation protocol in effect, Violet’s main goal is to escape the complex and save those she cares for, but with the creatures and a mysterious Director doing all in their power to stop you, will you get out alive?",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scy5l6",
+          "url": "screens/code-violet/scy5l6.webp"
+        },
+        {
+          "image_id": "scy5l8",
+          "url": "screens/code-violet/scy5l8.webp"
+        },
+        {
+          "image_id": "scy5l3",
+          "url": "screens/code-violet/scy5l3.webp"
+        },
+        {
+          "image_id": "scy5la",
+          "url": "screens/code-violet/scy5la.webp"
+        }
+      ],
+      "trailer_youtube_id": "gDFBxMOcp4k"
+    },
+    {
+      "slug": "god-of-war-sons-of-sparta",
+      "title": "God of War Sons of Sparta",
+      "platforms": [
+        "ps5"
+      ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-02-12",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 389443,
+      "igdb_url": "https://www.igdb.com/games/god-of-war-sons-of-sparta",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/god-of-war-sons-of-sparta.webp",
+      "cover_image_id": "cobigb",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Mega Cat Studios"
+      ],
+      "publishers": [
+        "Sony Interactive Entertainment"
+      ],
+      "summary": "Join young Kratos and Deimos, sons of Sparta, on a Greek odyssey as they discover the meaning of duty and honour.\nAn engaging and exciting 2D action-adventure brought to life from the talented pixel superstars at Mega Cat Studios. Experience retro classic gameplay with God of War’s signature spectacle, action, and heartfelt storytelling.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc11xcb",
+          "url": "screens/god-of-war-sons-of-sparta/sc11xcb.webp"
+        },
+        {
+          "image_id": "sc11xcc",
+          "url": "screens/god-of-war-sons-of-sparta/sc11xcc.webp"
+        },
+        {
+          "image_id": "sc11xcd",
+          "url": "screens/god-of-war-sons-of-sparta/sc11xcd.webp"
+        },
+        {
+          "image_id": "sc11xce",
+          "url": "screens/god-of-war-sons-of-sparta/sc11xce.webp"
+        }
+      ],
+      "trailer_youtube_id": "eFhOo6NTt70"
+    },
+    {
+      "slug": "nhl-27",
+      "title": "NHL 27",
+      "platforms": [
+        "ps5",
+        "xbox_series"
+      ],
+      "editions": [
+        {
+          "platform": "ps5",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        },
+        {
+          "platform": "xbox_series",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-09-11",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 408771,
+      "igdb_url": "https://www.igdb.com/games/nhl-27",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/nhl-27.webp",
+      "cover_image_id": "coclmw",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "EA Vancouver"
+      ],
+      "publishers": [
+        "EA Sports"
+      ],
+      "summary": "EA Sports NHL 27 brings the identity of every NHL team to life on the ice, in the arena, and through the broadcast.\n\nExperience Authentic Atmospheres across all 32 NHL arenas, each designed to capture the sound, spectacle, and identity of its home team. Real-world goal songs, new pregame introductions, and a fully overhauled crowd bring every building closer to its real-world counterpart.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc14i31",
+          "url": "screens/nhl-27/sc14i31.webp"
+        },
+        {
+          "image_id": "sc14i2x",
+          "url": "screens/nhl-27/sc14i2x.webp"
+        },
+        {
+          "image_id": "sc14i2y",
+          "url": "screens/nhl-27/sc14i2y.webp"
+        },
+        {
+          "image_id": "sc14i2z",
+          "url": "screens/nhl-27/sc14i2z.webp"
+        }
+      ],
+      "trailer_youtube_id": "vkz-p4wYegU"
+    },
+    {
+      "slug": "the-legend-of-zelda-breath-of-the-wild",
+      "title": "The Legend of Zelda: Breath of the Wild",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 5149,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/the-legend-of-zelda-breath-of-the-wild-switch-0045496420024",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 5149,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/the-legend-of-zelda-breath-of-the-wild-switch-0045496420024",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2017-03-03",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 7346,
+      "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-breath-of-the-wild",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/the-legend-of-zelda-breath-of-the-wild.webp",
+      "cover_image_id": "co3p2d",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 3"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "The Legend of Zelda: Breath of the Wild is the first 3D open-world game in the Zelda series. Link can travel anywhere and be equipped with weapons and armor found throughout the world to grant him various bonuses. Unlike many games in the series, Breath of the Wild does not impose a specific order in which quests or dungeons must be completed. While the game still has environmental obstacles such as weather effects, inhospitable lands, or powerful enemies, many of them can be overcome using the right method. A lot of critics ranked Breath of the Wild as one of the best video games of all time.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sckj69",
+          "url": "screens/the-legend-of-zelda-breath-of-the-wild/sckj69.webp"
+        },
+        {
+          "image_id": "sckj6a",
+          "url": "screens/the-legend-of-zelda-breath-of-the-wild/sckj6a.webp"
+        },
+        {
+          "image_id": "sckj6d",
+          "url": "screens/the-legend-of-zelda-breath-of-the-wild/sckj6d.webp"
+        },
+        {
+          "image_id": "sckj6f",
+          "url": "screens/the-legend-of-zelda-breath-of-the-wild/sckj6f.webp"
+        }
+      ],
+      "trailer_youtube_id": "zw47_q9wbBE"
+    },
+    {
+      "slug": "super-mario-odyssey",
+      "title": "Super Mario Odyssey",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 5478,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "NET GAMES RETRO",
+            "url": "https://www.pixmania.com/fr/fr/nintendo-super-mario-odyssey-switch-standard-nintendo-switch-231507.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 5478,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "NET GAMES RETRO",
+        "url": "https://www.pixmania.com/fr/fr/nintendo-super-mario-odyssey-switch-standard-nintendo-switch-231507.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2017-10-27",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 26758,
+      "igdb_url": "https://www.igdb.com/games/super-mario-odyssey",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/super-mario-odyssey.webp",
+      "cover_image_id": "co1mxf",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 8"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Explore incredible places far from the Mushroom Kingdom as you join Mario and his new ally Cappy on a massive, globe-trotting 3D adventure. Use amazing new abilities, like the power to capture and control objects, animals, and enemies to collect Power Moons so you can power up the Odyssey airship and save Princess Peach from Bowser’s wedding plans!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "kcapvog4g7ko1n21x57t",
+          "url": "screens/super-mario-odyssey/kcapvog4g7ko1n21x57t.webp"
+        },
+        {
+          "image_id": "kmbewcsuuytnsxvemltw",
+          "url": "screens/super-mario-odyssey/kmbewcsuuytnsxvemltw.webp"
+        },
+        {
+          "image_id": "tcgnbkmz7f0tgglfol9m",
+          "url": "screens/super-mario-odyssey/tcgnbkmz7f0tgglfol9m.webp"
+        },
+        {
+          "image_id": "q1ydkthtdtozqzw1tr2m",
+          "url": "screens/super-mario-odyssey/q1ydkthtdtozqzw1tr2m.webp"
+        }
+      ],
+      "trailer_youtube_id": "wGQHQc_3ycE"
+    },
+    {
+      "slug": "super-smash-bros-ultimate",
+      "title": "Super Smash Bros. Ultimate",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 5149,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/super-smash-bros-ultimate-switch-0045496422868",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 5149,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/super-smash-bros-ultimate-switch-0045496422868",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2018-12-07",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 90101,
+      "igdb_url": "https://www.igdb.com/games/super-smash-bros-ultimate",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/super-smash-bros-ultimate.webp",
+      "cover_image_id": "co2255",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Sora",
+        "Bandai Namco Studios"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Super Smash Bros. Ultimate is a crossover fighting game for the Nintendo Switch and the fifth main entry in the series. It features every playable fighter from previous installments alongside new additions such as Inkling and Ridley. The game includes faster combat, new items, and expanded defensive mechanics. Modes include local and online multiplayer, a single-player adventure mode called World of Light, and various casual and competitive rulesets.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "mi0pns4kpvku1mt9rj3c",
+          "url": "screens/super-smash-bros-ultimate/mi0pns4kpvku1mt9rj3c.webp"
+        },
+        {
+          "image_id": "mx0rezw9cvublfnbjalm",
+          "url": "screens/super-smash-bros-ultimate/mx0rezw9cvublfnbjalm.webp"
+        },
+        {
+          "image_id": "sc5rl9",
+          "url": "screens/super-smash-bros-ultimate/sc5rl9.webp"
+        },
+        {
+          "image_id": "sc5rla",
+          "url": "screens/super-smash-bros-ultimate/sc5rla.webp"
+        }
+      ],
+      "trailer_youtube_id": "L93H7YC-83o"
+    },
+    {
+      "slug": "animal-crossing-new-horizons",
+      "title": "Animal Crossing: New Horizons",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2020-03-20",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 109462,
+      "igdb_url": "https://www.igdb.com/games/animal-crossing-new-horizons",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/animal-crossing-new-horizons.webp",
+      "cover_image_id": "co3wls",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 5"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Escape to a deserted island and create your own paradise as you explore, create, and customize in Animal Crossing: New Horizons. Your island getaway has a wealth of natural resources that can be used to craft everything from tools to creature comforts. You can hunt down insects at the crack of dawn, decorate your paradise throughout the day, or enjoy sunset on the beach while fishing in the ocean. The time of day and season match real life, so each day on your island is a chance to check in and find new surprises all year round.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sctl7m",
+          "url": "screens/animal-crossing-new-horizons/sctl7m.webp"
+        },
+        {
+          "image_id": "sctl7n",
+          "url": "screens/animal-crossing-new-horizons/sctl7n.webp"
+        },
+        {
+          "image_id": "sctl7o",
+          "url": "screens/animal-crossing-new-horizons/sctl7o.webp"
+        },
+        {
+          "image_id": "sc836w",
+          "url": "screens/animal-crossing-new-horizons/sc836w.webp"
+        }
+      ],
+      "trailer_youtube_id": "9C5Lu4Ripco"
+    },
+    {
+      "slug": "fire-emblem-three-houses",
+      "title": "Fire Emblem: Three Houses",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2019-07-26",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 26845,
+      "igdb_url": "https://www.igdb.com/games/fire-emblem-three-houses",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/fire-emblem-three-houses.webp",
+      "cover_image_id": "co1n8t",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Intelligent Systems"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Fire Emblem: Three Houses is a tactical role-playing game developed by Intelligent Systems and Koei Tecmo for the Nintendo Switch. Players take the role of a professor at Garreg Mach Monastery, where they teach and guide one of three student houses. Gameplay combines turn-based battles, character development, exploration, and relationship-building.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "wgoxfasbgocvjf6wvxoj",
+          "url": "screens/fire-emblem-three-houses/wgoxfasbgocvjf6wvxoj.webp"
+        },
+        {
+          "image_id": "xbfmiaqsxciduahpv6xk",
+          "url": "screens/fire-emblem-three-houses/xbfmiaqsxciduahpv6xk.webp"
+        },
+        {
+          "image_id": "amstvw2qfwncxduyeegb",
+          "url": "screens/fire-emblem-three-houses/amstvw2qfwncxduyeegb.webp"
+        },
+        {
+          "image_id": "vqxowfpq2xurqwfqiffx",
+          "url": "screens/fire-emblem-three-houses/vqxowfpq2xurqwfqiffx.webp"
+        }
+      ],
+      "trailer_youtube_id": "rkux5h0PeXo"
+    },
+    {
+      "slug": "the-legend-of-zelda-link-s-awakening",
+      "title": "The Legend of Zelda: Link's Awakening",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2019-09-20",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 115284,
+      "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-links-awakening--1",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/the-legend-of-zelda-link-s-awakening.webp",
+      "cover_image_id": "co1qve",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Grezzo"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "As Link, you awaken in a strange land away from Hyrule, where animals talk and monsters roam. To uncover the truth behind your whereabouts and rouse the legendary Wind Fish, explore Koholint Island and all its trap-ridden dungeons, reimagined in stunning detail for this new release of one of the most beloved The Legend of Zelda games. Along the way, you'll meet a hilarious assortment of charming characters to which you'll never want to say goodbye.\n\nIn this new version of the game, the classic soundtrack has been reborn with new arrangements, and now you can equip more items at once, review key conversations, and navigate the map in new ways. Try your hand at the renovated mini-games to earn dolls based on the Super Mario series...or Chamber Stones, which you can use to arrange your own Chamber Dungeons. Each one is a puzzle in and of itself!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sckj7b",
+          "url": "screens/the-legend-of-zelda-link-s-awakening/sckj7b.webp"
+        },
+        {
+          "image_id": "sckj7c",
+          "url": "screens/the-legend-of-zelda-link-s-awakening/sckj7c.webp"
+        },
+        {
+          "image_id": "sckj7d",
+          "url": "screens/the-legend-of-zelda-link-s-awakening/sckj7d.webp"
+        },
+        {
+          "image_id": "sckj7h",
+          "url": "screens/the-legend-of-zelda-link-s-awakening/sckj7h.webp"
+        }
+      ],
+      "trailer_youtube_id": "_U-_XfDGgDw"
+    },
+    {
+      "slug": "pokemon-sword",
+      "title": "Pokémon Épée",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 6886,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "ASD",
+            "url": "https://www.pixmania.com/fr/fr/nintendo-pokemon-sword-standard-nintendo-switch-231469.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 6886,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "ASD",
+        "url": "https://www.pixmania.com/fr/fr/nintendo-pokemon-sword-standard-nintendo-switch-231469.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2019-11-15",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 37382,
+      "igdb_url": "https://www.igdb.com/games/pokemon-sword",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/pokemon-sword.webp",
+      "cover_image_id": "co1zk2",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Game Freak"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "A turn-based role-playing game set in the Galar region, a fictional land inspired by the United Kingdom. Players catch, train, and battle creatures called Pokémon while traveling across the region to collect eight Gym badges and ultimately challenge the reigning Champion. The game introduces the Dynamax and Gigantamax mechanics, which temporarily transform Pokémon into giant forms with enhanced attacks. A fully explorable open-world Wild Area connects major locations, with weather-dependent Pokémon encounters and cooperative raid battles for up to four players. The first mainline Pokémon entry on the Nintendo Switch, it notably adopted DLC expansions instead of the series' traditional enhanced re-releases.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc67pk",
+          "url": "screens/pokemon-sword/sc67pk.webp"
+        },
+        {
+          "image_id": "sc67pn",
+          "url": "screens/pokemon-sword/sc67pn.webp"
+        },
+        {
+          "image_id": "sc67po",
+          "url": "screens/pokemon-sword/sc67po.webp"
+        },
+        {
+          "image_id": "sc67pl",
+          "url": "screens/pokemon-sword/sc67pl.webp"
+        }
+      ],
+      "trailer_youtube_id": "BdA22Lh6Rwk"
+    },
+    {
+      "slug": "luigi-s-mansion-3",
+      "title": "Luigi's Mansion 3",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2019-10-31",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 109455,
+      "igdb_url": "https://www.igdb.com/games/luigis-mansion-3",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/luigi-s-mansion-3.webp",
+      "cover_image_id": "co22a9",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Next Level Games",
+        "Nintendo EPD Production Group No. 6"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Luigi embarks on a dream vacation with Mario and friends upon receiving an invitation to a luxurious hotel. However, his dream quickly becomes a nightmare when King Boo reveals everything had been a ploy to capture Mario and friends. With the assistance of Professor E. Gadd once again, the reluctant and cowardly hero Luigi traverses up and down treacherous floors of the now-ominous hotel on a quest to save them.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc6vip",
+          "url": "screens/luigi-s-mansion-3/sc6vip.webp"
+        },
+        {
+          "image_id": "sc6ljf",
+          "url": "screens/luigi-s-mansion-3/sc6ljf.webp"
+        },
+        {
+          "image_id": "sc6viq",
+          "url": "screens/luigi-s-mansion-3/sc6viq.webp"
+        },
+        {
+          "image_id": "sc6vis",
+          "url": "screens/luigi-s-mansion-3/sc6vis.webp"
+        }
+      ],
+      "trailer_youtube_id": "8w9-31FrjU8"
+    },
+    {
+      "slug": "super-mario-bros-wonder",
+      "title": "Super Mario Bros. Wonder",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 5899,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "123consommables",
+            "url": "https://www.pixmania.com/fr/fr/super-mario-bros-wonder-switch-197078.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 5899,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "123consommables",
+        "url": "https://www.pixmania.com/fr/fr/super-mario-bros-wonder-switch-197078.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2023-10-20",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 254339,
+      "igdb_url": "https://www.igdb.com/games/super-mario-bros-wonder",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/super-mario-bros-wonder.webp",
+      "cover_image_id": "co6nnl",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 10"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Super Mario Bros. Wonder is a side-scrolling platform game and the first 2D Super Mario entry since New Super Mario Bros. U (2012). Players choose from twelve characters and traverse levels across the Flower Kingdom, a new setting for the series. The game's central mechanic is the Wonder Flower, which dramatically alters levels in unpredictable ways when touched. New power-ups include an elephant transformation, a bubble flower, and a drill hat, while an equippable badge system allows players to customize their abilities. The game supports local multiplayer for up to four active players and includes an asynchronous online mode.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scn3er",
+          "url": "screens/super-mario-bros-wonder/scn3er.webp"
+        },
+        {
+          "image_id": "scn3es",
+          "url": "screens/super-mario-bros-wonder/scn3es.webp"
+        },
+        {
+          "image_id": "scn3et",
+          "url": "screens/super-mario-bros-wonder/scn3et.webp"
+        },
+        {
+          "image_id": "scn3eu",
+          "url": "screens/super-mario-bros-wonder/scn3eu.webp"
+        }
+      ],
+      "trailer_youtube_id": "JStAYvbeSHc"
+    },
+    {
+      "slug": "pokemon-legends-arceus",
+      "title": "Légendes Pokémon : Arceus",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 5899,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "123consommables",
+            "url": "https://www.pixmania.com/fr/fr/legendes-pokemon-arceus-jeu-nintendo-switch-97162.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 5899,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "123consommables",
+        "url": "https://www.pixmania.com/fr/fr/legendes-pokemon-arceus-jeu-nintendo-switch-97162.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2022-01-28",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 144054,
+      "igdb_url": "https://www.igdb.com/games/pokemon-legends-arceus",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/pokemon-legends-arceus.webp",
+      "cover_image_id": "co3d03",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Game Freak"
+      ],
+      "publishers": [
+        "Nintendo",
+        "The Pokémon Company"
+      ],
+      "summary": "The Pokémon Legends: Arceus game honors past Pokémon games’ core gameplay while infusing new action and RPG elements.\n\nYou’ll need to catch, survey, and research wild Pokémon in a long-gone era of the Sinnoh region to create and complete the region’s first Pokédex.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc93am",
+          "url": "screens/pokemon-legends-arceus/sc93am.webp"
+        },
+        {
+          "image_id": "sc93an",
+          "url": "screens/pokemon-legends-arceus/sc93an.webp"
+        },
+        {
+          "image_id": "sc93ak",
+          "url": "screens/pokemon-legends-arceus/sc93ak.webp"
+        },
+        {
+          "image_id": "sc93al",
+          "url": "screens/pokemon-legends-arceus/sc93al.webp"
+        }
+      ],
+      "trailer_youtube_id": "I4RynqpahT8"
+    },
+    {
+      "slug": "metroid-dread",
+      "title": "Metroid Dread",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 7177,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "UNILABS",
+            "url": "https://www.pixmania.com/fr/fr/metroid-dread-jeu-switch-90467.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 7177,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "UNILABS",
+        "url": "https://www.pixmania.com/fr/fr/metroid-dread-jeu-switch-90467.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2021-10-07",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 15698,
+      "igdb_url": "https://www.igdb.com/games/metroid-dread",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/metroid-dread.webp",
+      "cover_image_id": "coba9g",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo Entertainment Planning & Development",
+        "MercurySteam",
+        "Nintendo EPD Production Group No. 7"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Join intergalactic bounty hunter Samus Aran in her first new 2D Metroid story in 19 years. Samus’ story continues after the events of the Metroid Fusion game when she descends upon planet ZDR to investigate a mysterious transmission sent to the Galactic Federation. The remote planet has become overrun by vicious alien lifeforms and chilling mechanical menaces. Samus is more agile and capable than ever, but can she overcome the inhuman threat stalking the depths of ZDR?",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scaif6",
+          "url": "screens/metroid-dread/scaif6.webp"
+        },
+        {
+          "image_id": "scahuj",
+          "url": "screens/metroid-dread/scahuj.webp"
+        },
+        {
+          "image_id": "scaif7",
+          "url": "screens/metroid-dread/scaif7.webp"
+        },
+        {
+          "image_id": "scaif8",
+          "url": "screens/metroid-dread/scaif8.webp"
+        }
+      ],
+      "trailer_youtube_id": "AOvefm5U250"
+    },
+    {
+      "slug": "super-mario-maker-2",
+      "title": "Super Mario Maker 2",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2019-06-28",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 115276,
+      "igdb_url": "https://www.igdb.com/games/super-mario-maker-2",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/super-mario-maker-2.webp",
+      "cover_image_id": "co21vy",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 10"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "A side-scrolling Mario adventure that unleashes the creative potential of Super Mario Maker 2 awaits in Story Mode, which contains over 100 built-in courses. And in Course Maker, a wide range of parts, tools, and more are available so you can construct your own courses. Want coin-shooting cannons? Bowser riding on a giant Goomba? Cat Mario sliding down slopes to take out an army of baddies? Go for it! You call the shots. Pass a Joy-Con controller to a partner to build co-operatively on a single system!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc635y",
+          "url": "screens/super-mario-maker-2/sc635y.webp"
+        },
+        {
+          "image_id": "sc635t",
+          "url": "screens/super-mario-maker-2/sc635t.webp"
+        },
+        {
+          "image_id": "sc635r",
+          "url": "screens/super-mario-maker-2/sc635r.webp"
+        },
+        {
+          "image_id": "sc635v",
+          "url": "screens/super-mario-maker-2/sc635v.webp"
+        }
+      ],
+      "trailer_youtube_id": "AjJWzJC8Kfk"
+    },
+    {
+      "slug": "xenoblade-chronicles-2",
+      "title": "Xenoblade Chronicles 2",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 5345,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "ZONA DE JUEGO",
+            "url": "https://www.pixmania.com/fr/fr/nintendo-xenoblade-chronicles-2-standard-multilingue-nintendo-switch-155283.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 5345,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "ZONA DE JUEGO",
+        "url": "https://www.pixmania.com/fr/fr/nintendo-xenoblade-chronicles-2-standard-multilingue-nintendo-switch-155283.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2017-12-01",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 26766,
+      "igdb_url": "https://www.igdb.com/games/xenoblade-chronicles-2",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/xenoblade-chronicles-2.webp",
+      "cover_image_id": "cob8r2",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Monolith Soft"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "The next adventure is on the Nintendo Switch console set on the backs of colossal, living Titans. Discover each Titan's diverse regions, culture, wildlife, equipment, and hidden secrets. Find, bond with, and command weaponized life forms known as Blades to earn abilities and enhance them. Uncover the history of Alrest and the mystery of its endless ocean of clouds.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "syug9kgrtmuqynmu7uqg",
+          "url": "screens/xenoblade-chronicles-2/syug9kgrtmuqynmu7uqg.webp"
+        },
+        {
+          "image_id": "rnljjizxuo9odqvvhlw1",
+          "url": "screens/xenoblade-chronicles-2/rnljjizxuo9odqvvhlw1.webp"
+        },
+        {
+          "image_id": "vh11ez90tgswhzx6ckys",
+          "url": "screens/xenoblade-chronicles-2/vh11ez90tgswhzx6ckys.webp"
+        },
+        {
+          "image_id": "sj98v0eoqxxzgalf9mn4",
+          "url": "screens/xenoblade-chronicles-2/sj98v0eoqxxzgalf9mn4.webp"
+        }
+      ],
+      "trailer_youtube_id": "vXSTAM5fP0s"
+    },
+    {
+      "slug": "mario-rabbids-kingdom-battle",
+      "title": "Mario + The Lapins Crétins : Kingdom Battle",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2017-08-29",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 28414,
+      "igdb_url": "https://www.igdb.com/games/mario-plus-rabbids-kingdom-battle",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/mario-rabbids-kingdom-battle.webp",
+      "cover_image_id": "co2274",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Ubisoft Milan",
+        "Ubisoft Paris"
+      ],
+      "publishers": [
+        "Ubisoft Entertainment"
+      ],
+      "summary": "This is the story of an unexpected encounter between Mario and the irreverent Rabbids. The Mushroom Kingdom has been torn apart by a mysterious vortex, transporting the Rabbids into the once-peaceful area, splintering this beloved land. To bring order back to the Kingdom, Mario, Luigi, Princess Peach, and Yoshi team up with Rabbids heroes in a journey through four different worlds.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "ndsfwcpghdnr2neyatbz",
+          "url": "screens/mario-rabbids-kingdom-battle/ndsfwcpghdnr2neyatbz.webp"
+        },
+        {
+          "image_id": "fgh2nq5ksdxslgmbqfdw",
+          "url": "screens/mario-rabbids-kingdom-battle/fgh2nq5ksdxslgmbqfdw.webp"
+        },
+        {
+          "image_id": "k05fitvynqxhddf2gx2w",
+          "url": "screens/mario-rabbids-kingdom-battle/k05fitvynqxhddf2gx2w.webp"
+        },
+        {
+          "image_id": "b7hfcnv9pa3tckjcqhsf",
+          "url": "screens/mario-rabbids-kingdom-battle/b7hfcnv9pa3tckjcqhsf.webp"
+        }
+      ],
+      "trailer_youtube_id": "xvOq8yRa6nA"
+    },
+    {
+      "slug": "super-mario-party",
+      "title": "Super Mario Party",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 4416,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/super-mario-party-switch-0045496422950",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 4416,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/super-mario-party-switch-0045496422950",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2018-10-05",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 103339,
+      "igdb_url": "https://www.igdb.com/games/super-mario-party",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/super-mario-party.webp",
+      "cover_image_id": "cobaa9",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "NDCube",
+        "Nintendo"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Turn the tables on opponents as you race across the board to collect the most stars in the original four-player Mario Party series board game mode. Discover 80 mini-games packed with wildly different challenges, play with others online and enjoy this full-on frenzy with family and friends!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "lfnon0dqj2w7enufgnbn",
+          "url": "screens/super-mario-party/lfnon0dqj2w7enufgnbn.webp"
+        },
+        {
+          "image_id": "hd6db0prckeyavmg1lmr",
+          "url": "screens/super-mario-party/hd6db0prckeyavmg1lmr.webp"
+        },
+        {
+          "image_id": "h45w9ukzx2qwxlqeolzm",
+          "url": "screens/super-mario-party/h45w9ukzx2qwxlqeolzm.webp"
+        },
+        {
+          "image_id": "mdlndvmhqp1qa9pipqoo",
+          "url": "screens/super-mario-party/mdlndvmhqp1qa9pipqoo.webp"
+        }
+      ],
+      "trailer_youtube_id": "7pu9t5AL1Ss"
+    },
+    {
+      "slug": "pokemon-let-s-go-pikachu",
+      "title": "Pokémon: Let's Go, Pikachu!",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2018-11-16",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 25877,
+      "igdb_url": "https://www.igdb.com/games/pokemon-lets-go-pikachu",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/pokemon-let-s-go-pikachu.webp",
+      "cover_image_id": "co1zjy",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Game Freak"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Take your Pokémon journey to the Kanto region with your energetic partner, Pikachu, to become a top Pokémon Trainer as you battle other trainers. Use a throwing motion to catch Pokémon in the wild with either one Joy-Con controller or Poké Ball Plus accessory, which will light up, vibrate, and make sounds to bring your adventure to life. Share your adventure with family or friends in 2-player action on one system using a second Joy-Con or Poké Ball Plus (sold separately). You can even connect to the Pokémon GO app using a compatible smartphone to bring over Pokémon originally discovered in the Kanto region! Explore the diverse and vibrant region of Kanto! True-to-size wild Pokémon roam around in the game, so catch them like a real Pokémon Trainer by using motion, timing, and a well-placed Poké Ball. Go on a stroll with your favorite Pokémon in your Poké Ball Plus! Connect your game directly to Pokémon GO* to receive Kanto region Pokémon.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "wusyhc8xov4bldpil4my",
+          "url": "screens/pokemon-let-s-go-pikachu/wusyhc8xov4bldpil4my.webp"
+        },
+        {
+          "image_id": "n1jbkybjz6entv3a5gvd",
+          "url": "screens/pokemon-let-s-go-pikachu/n1jbkybjz6entv3a5gvd.webp"
+        },
+        {
+          "image_id": "uvufj8hsohxilfq84bqu",
+          "url": "screens/pokemon-let-s-go-pikachu/uvufj8hsohxilfq84bqu.webp"
+        },
+        {
+          "image_id": "p9ogwu6qujrivbhp7ker",
+          "url": "screens/pokemon-let-s-go-pikachu/p9ogwu6qujrivbhp7ker.webp"
+        }
+      ],
+      "trailer_youtube_id": "PZ3kwK2slV4"
+    },
+    {
+      "slug": "astral-chain",
+      "title": "Astral Chain",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 10420,
+            "shipping_cents": 499,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "Arboremedia",
+            "url": "https://www.pixmania.com/fr/fr/nintendo-astral-chain-standard-nintendo-switch-231520.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 10420,
+        "shipping_cents": 499,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "Arboremedia",
+        "url": "https://www.pixmania.com/fr/fr/nintendo-astral-chain-standard-nintendo-switch-231520.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2019-08-30",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 115283,
+      "igdb_url": "https://www.igdb.com/games/astral-chain",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/astral-chain.webp",
+      "cover_image_id": "cobd39",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "PlatinumGames"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Astral Chain is a stylish action game that blends fast-paced combat with investigation elements. Players fight alongside a controllable companion called a Legion, using coordinated attacks, restraints, and abilities to overcome enemies and solve environmental challenges.\nThe game mixes high-energy battles with exploration and light detective work, offering varied gameplay and a strong focus on fluid, dual-character combat.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc6vig",
+          "url": "screens/astral-chain/sc6vig.webp"
+        },
+        {
+          "image_id": "sc635h",
+          "url": "screens/astral-chain/sc635h.webp"
+        },
+        {
+          "image_id": "sc635j",
+          "url": "screens/astral-chain/sc635j.webp"
+        },
+        {
+          "image_id": "sc635l",
+          "url": "screens/astral-chain/sc635l.webp"
+        }
+      ],
+      "trailer_youtube_id": "brmmV3g4qqo"
+    },
+    {
+      "slug": "crash-team-racing-nitro-fueled",
+      "title": "Crash Team Racing Nitro-Fueled",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2019-06-21",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 113113,
+      "igdb_url": "https://www.igdb.com/games/crash-team-racing-nitro-fueled",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/crash-team-racing-nitro-fueled.webp",
+      "cover_image_id": "co2wvy",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Beenox"
+      ],
+      "publishers": [
+        "Activision Blizzard",
+        "Activision"
+      ],
+      "summary": "Crash Team Racing Nitro-Fueled is a kart racing game developed by Beenox and published by Activision. It is a remaster of Crash Team Racing, which was originally developed by Naughty Dog for the PlayStation.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc5r8i",
+          "url": "screens/crash-team-racing-nitro-fueled/sc5r8i.webp"
+        },
+        {
+          "image_id": "sc5r8f",
+          "url": "screens/crash-team-racing-nitro-fueled/sc5r8f.webp"
+        },
+        {
+          "image_id": "sc5r8g",
+          "url": "screens/crash-team-racing-nitro-fueled/sc5r8g.webp"
+        },
+        {
+          "image_id": "sc5r8h",
+          "url": "screens/crash-team-racing-nitro-fueled/sc5r8h.webp"
+        }
+      ],
+      "trailer_youtube_id": "cuTM-G3nfgY"
+    },
+    {
+      "slug": "kirby-and-the-forgotten-land",
+      "title": "Kirby et le monde oublié",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 4499,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/kirby-et-le-monde-oublie-switch-0045496429287",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 4499,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/kirby-et-le-monde-oublie-switch-0045496429287",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2022-03-25",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 172427,
+      "igdb_url": "https://www.igdb.com/games/kirby-and-the-forgotten-land",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/kirby-and-the-forgotten-land.webp",
+      "cover_image_id": "co3vlw",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "HAL Laboratory"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Join Kirby in an unforgettable journey through a mysterious world in a delightful 3D platforming adventure. Take control of the powerful pink puffball, Kirby, and move around freely in 3D stages as you discover a mysterious world with abandoned structures from a past civilization - like a shopping mall?! Copy enemies’ abilities like Sword and Ice and use them to attack and explore your surroundings! What journey awaits Kirby? Take a deep breath and get ready for an unforgettable adventure!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scdrva",
+          "url": "screens/kirby-and-the-forgotten-land/scdrva.webp"
+        },
+        {
+          "image_id": "scdrvb",
+          "url": "screens/kirby-and-the-forgotten-land/scdrvb.webp"
+        },
+        {
+          "image_id": "scdrve",
+          "url": "screens/kirby-and-the-forgotten-land/scdrve.webp"
+        },
+        {
+          "image_id": "scdrv5",
+          "url": "screens/kirby-and-the-forgotten-land/scdrv5.webp"
+        }
+      ],
+      "trailer_youtube_id": "H3LAkr0ANgw"
+    },
+    {
+      "slug": "splatoon-3",
+      "title": "Splatoon 3",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 4416,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/splatoon-3-switch-0045496510657",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 4416,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/splatoon-3-switch-0045496510657",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2022-09-09",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 143613,
+      "igdb_url": "https://www.igdb.com/games/splatoon-3",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/splatoon-3.webp",
+      "cover_image_id": "co59x3",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 5"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Enter the Splatlands, a sun-scorched desert inhabited by battle-hardened Inklings and Octolings. Splatsville, the city of chaos, is the adrenaline-fueled heart of this dusty wasteland. Even in this desolate environment, Turf War reigns supreme and battles rage in new stages located in the surrounding wilds. Dynamic new moves help these fighters dodge attacks and cover more ground, along with a new bow-shaped weapon to sling ink.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc9284",
+          "url": "screens/splatoon-3/sc9284.webp"
+        },
+        {
+          "image_id": "sc9285",
+          "url": "screens/splatoon-3/sc9285.webp"
+        },
+        {
+          "image_id": "sc9283",
+          "url": "screens/splatoon-3/sc9283.webp"
+        },
+        {
+          "image_id": "sc9286",
+          "url": "screens/splatoon-3/sc9286.webp"
+        }
+      ],
+      "trailer_youtube_id": "GUYDXVDLmns"
+    },
+    {
+      "slug": "mario-tennis-aces",
+      "title": "Mario Tennis Aces",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2018-06-22",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 81145,
+      "igdb_url": "https://www.igdb.com/games/mario-tennis-aces",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/mario-tennis-aces.webp",
+      "cover_image_id": "co1tfw",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Camelot Software Planning",
+        "Camelot"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "A new Mario Tennis game is bringing a new level of skill and competition to Nintendo Switch. Mario steps onto the court in classy tennis garb for intense rallies against a variety of characters in full-blown tennis battles. New wrinkles in tennis gameplay will challenge your ability to read an opponent's position and stroke to determine which shot will give you the advantage. And this time the game adds the first story mode since the Mario Tennis game on Game Boy Advance, offering a new flavor of tennis gameplay, with a variety of missions, boss battles and more",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "hkacotef23y4lz6totqy",
+          "url": "screens/mario-tennis-aces/hkacotef23y4lz6totqy.webp"
+        },
+        {
+          "image_id": "v39sq77rpa6rbdxs98kd",
+          "url": "screens/mario-tennis-aces/v39sq77rpa6rbdxs98kd.webp"
+        },
+        {
+          "image_id": "jtvlryo7zke2ay94yqu7",
+          "url": "screens/mario-tennis-aces/jtvlryo7zke2ay94yqu7.webp"
+        },
+        {
+          "image_id": "elrsm1wpgmzoxkpbvlou",
+          "url": "screens/mario-tennis-aces/elrsm1wpgmzoxkpbvlou.webp"
+        }
+      ],
+      "trailer_youtube_id": "ewiReKFzgYE"
+    },
+    {
+      "slug": "metroid-prime-remastered",
+      "title": "Metroid Prime Remastered",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2023-02-08",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 236663,
+      "igdb_url": "https://www.igdb.com/games/metroid-prime-remastered",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/metroid-prime-remastered.webp",
+      "cover_image_id": "cobbn9",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Retro Studios",
+        "Nintendo EPD Production Group No. 6"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Get behind the visor of intergalactic bounty hunter Samus Aran in her critically-acclaimed first-person adventure.\n\nStep into the boots of Samus Aran as you navigate the winding paths and interconnected environments of an alluring-yet-dangerous alien planet. Use powers like the iconic Morph Ball and Grapple Beam to revisit hard-to-reach areas and find a path forward. With revamped graphics, sound, unlockable art, and updated control schemes, Samus’ 3D platforming debut has reached greater heights. Calm and capable, Samus takes on this solo mission...but she is far from alone.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scl69z",
+          "url": "screens/metroid-prime-remastered/scl69z.webp"
+        },
+        {
+          "image_id": "scl69x",
+          "url": "screens/metroid-prime-remastered/scl69x.webp"
+        },
+        {
+          "image_id": "scl69y",
+          "url": "screens/metroid-prime-remastered/scl69y.webp"
+        },
+        {
+          "image_id": "scl69w",
+          "url": "screens/metroid-prime-remastered/scl69w.webp"
+        }
+      ],
+      "trailer_youtube_id": "PujvFR1KvTM"
+    },
+    {
+      "slug": "orbitals",
+      "title": "Orbitals",
+      "platforms": [
+        "switch2"
+      ],
+      "editions": [
+        {
+          "platform": "switch2",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-09-03",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 381237,
+      "igdb_url": "https://www.igdb.com/games/orbitals--1",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/orbitals.webp",
+      "cover_image_id": "coc9r6",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Shapefarm"
+      ],
+      "publishers": [
+        "Kepler Interactive"
+      ],
+      "summary": "Team up as Maki and Omura, two inseparable explorers with a whole lot more determination than experience. You’ll brave the perils of space in search of help for their crumbling station home, now trapped within a supernatural cosmic storm.\n\nOrbitals captures the warmth and style of classic Japanese anime, brought to life with hand-crafted cinematic cutscenes from Studio Massket, full Japanese and English voice acting, and an original soundtrack that channels the magic of the era.\n\nBuilt from the ground up for asymmetric 2-player co-op, either in local split-screen or online, Orbitals rewards smart teamwork and clear communication. Use each character’s unique tools to open the path forward, overcome danger, and meet out-of-this-world creatures and characters on a bombastic adventure.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc11c37",
+          "url": "screens/orbitals/sc11c37.webp"
+        },
+        {
+          "image_id": "sc11c38",
+          "url": "screens/orbitals/sc11c38.webp"
+        },
+        {
+          "image_id": "sc11c3a",
+          "url": "screens/orbitals/sc11c3a.webp"
+        },
+        {
+          "image_id": "sc11c3b",
+          "url": "screens/orbitals/sc11c3b.webp"
+        }
+      ],
+      "trailer_youtube_id": "YLXtLqTfV7I"
+    },
+    {
+      "slug": "fire-emblem-fortune-s-weave",
+      "title": "Fire Emblem: Fortune's Weave",
+      "platforms": [
+        "switch2"
+      ],
+      "editions": [
+        {
+          "platform": "switch2",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-09-17",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 366896,
+      "igdb_url": "https://www.igdb.com/games/fire-emblem-fortunes-weave",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/fire-emblem-fortune-s-weave.webp",
+      "cover_image_id": "coc7ma",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Intelligent Systems"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Fire Emblem: Fortune's Weave is a turn-based strategy RPG centered around the Heroic Games, a tournament where warriors with different motivations compete for a chance to have their greatest wish granted by the Divine Sovereign. The game builds on the tactical foundation of previous Fire Emblem titles, featuring turn-based combat with combat arts, gambits, and crests. A new mechanic called Blaze Arts lets units spend health to perform powerful special abilities on the battlefield.\nThe game appears to be set in the same world as Fire Emblem: Three Houses, though in a different era, and follows characters like Cai, who enters the tournament to save his father's life.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc104g4",
+          "url": "screens/fire-emblem-fortune-s-weave/sc104g4.webp"
+        },
+        {
+          "image_id": "sc104g5",
+          "url": "screens/fire-emblem-fortune-s-weave/sc104g5.webp"
+        },
+        {
+          "image_id": "sc104g6",
+          "url": "screens/fire-emblem-fortune-s-weave/sc104g6.webp"
+        },
+        {
+          "image_id": "sc104g7",
+          "url": "screens/fire-emblem-fortune-s-weave/sc104g7.webp"
+        }
+      ],
+      "trailer_youtube_id": "j6eNaiftiWE"
+    },
+    {
+      "slug": "kirby-air-riders",
+      "title": "Kirby Air Riders",
+      "platforms": [
+        "switch2"
+      ],
+      "editions": [
+        {
+          "platform": "switch2",
+          "offer": {
+            "platform": "switch2",
+            "price_cents": 5003,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "NET GAMES RETRO",
+            "url": "https://www.pixmania.com/fr/fr/kirby-air-riders-switch-2-532926.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch2",
+        "price_cents": 5003,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "NET GAMES RETRO",
+        "url": "https://www.pixmania.com/fr/fr/kirby-air-riders-switch-2-532926.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2025-11-20",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 338105,
+      "igdb_url": "https://www.igdb.com/games/kirby-air-riders",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/kirby-air-riders.webp",
+      "cover_image_id": "coaauz",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Sora",
+        "Bandai Namco Studios"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Kirby Air Riders is the long-awaited sequel to Kirby Air Ride on the Gamecube.\n\nPick your rider, pick your machine, and mount up for competition! Take on your rivals in frantic arena battles or fast-paced races on the ground and in the air. Use the Boost Charge button to brake and control your turns as your machine automatically fights for top speed. Fill your Boost Charge Gauge as you drift around the bend and release it to trigger an explosive dash!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scw2wl",
+          "url": "screens/kirby-air-riders/scw2wl.webp"
+        },
+        {
+          "image_id": "scyp5f",
+          "url": "screens/kirby-air-riders/scyp5f.webp"
+        },
+        {
+          "image_id": "scyp5h",
+          "url": "screens/kirby-air-riders/scyp5h.webp"
+        },
+        {
+          "image_id": "scyp5g",
+          "url": "screens/kirby-air-riders/scyp5g.webp"
+        }
+      ],
+      "trailer_youtube_id": "oJVsNMp_nAU"
+    },
+    {
+      "slug": "rhythm-heaven-groove",
+      "title": "Rhythm Paradise Groove",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-07-02",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 337031,
+      "igdb_url": "https://www.igdb.com/games/rhythm-heaven-groove",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/rhythm-heaven-groove.webp",
+      "cover_image_id": "cobwkn",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "TNX",
+        "Nintendo EPD Production Group No. 4"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "The rhythm is starting up again! Rhythm Heaven Groove comes to Nintendo Switch!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scvwd0",
+          "url": "screens/rhythm-heaven-groove/scvwd0.webp"
+        },
+        {
+          "image_id": "scvwd1",
+          "url": "screens/rhythm-heaven-groove/scvwd1.webp"
+        },
+        {
+          "image_id": "scvwd2",
+          "url": "screens/rhythm-heaven-groove/scvwd2.webp"
+        },
+        {
+          "image_id": "scvwd4",
+          "url": "screens/rhythm-heaven-groove/scvwd4.webp"
+        }
+      ],
+      "trailer_youtube_id": "ZkgjFacpnLE"
+    },
+    {
+      "slug": "splatoon-raiders",
+      "title": "Splatoon Raiders",
+      "platforms": [
+        "switch2"
+      ],
+      "editions": [
+        {
+          "platform": "switch2",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-07-23",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 348977,
+      "igdb_url": "https://www.igdb.com/games/splatoon-raiders",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/splatoon-raiders.webp",
+      "cover_image_id": "cobyho",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 5"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Splat scores of enemies and hunt for treasure in this single-player focused action shooter.\n\nPlay as a mechanic working with Deep Cut – a trio of swashbuckling musicians – and venture out into the mysterious Spirhalite Islands! Customize your character, kit yourself out with mechanical gadgets and ink-splattering weapons, and take on waves of foes called Salmonids as you raid the islands for salvage.\n\nThis is mainly a single-player adventure, but you won’t be alone: one member of Deep Cut will raid alongside you in a powerful bot. You can also join with up to three other players online or via local wireless.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scxge6",
+          "url": "screens/splatoon-raiders/scxge6.webp"
+        },
+        {
+          "image_id": "scxg8t",
+          "url": "screens/splatoon-raiders/scxg8t.webp"
+        },
+        {
+          "image_id": "scxge4",
+          "url": "screens/splatoon-raiders/scxge4.webp"
+        },
+        {
+          "image_id": "scxge7",
+          "url": "screens/splatoon-raiders/scxge7.webp"
+        }
+      ],
+      "trailer_youtube_id": "d7ve2zWmkEA"
+    },
+    {
+      "slug": "yoshi-and-the-mysterious-book",
+      "title": "Yoshi and the Mysterious Book",
+      "platforms": [
+        "switch2"
+      ],
+      "editions": [
+        {
+          "platform": "switch2",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-05-21",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 366883,
+      "igdb_url": "https://www.igdb.com/games/yoshi-and-the-mysterious-book",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/yoshi-and-the-mysterious-book.webp",
+      "cover_image_id": "cobr0r",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Good-Feel"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Join Yoshi for a new adventure in Yoshi and the Mysterious Book, launching on Nintendo Switch 2 in spring 2026.\n\nOne day, on the island where Yoshi and his friends live, a peculiar talking book named Mr. E suddenly falls from the sky. This peculiar book’s pages contain information about unusual creatures, so Yoshi decides to jump in and help investigate!\n\nAs Yoshi wanders through the book, you'll make all sorts of discoveries about the creatures you find and those discoveries will be written down. You'll find lots of unusual creatures residing within the book – a page-turning adventure awaits!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scz4in",
+          "url": "screens/yoshi-and-the-mysterious-book/scz4in.webp"
+        },
+        {
+          "image_id": "scz4ij",
+          "url": "screens/yoshi-and-the-mysterious-book/scz4ij.webp"
+        },
+        {
+          "image_id": "scz4il",
+          "url": "screens/yoshi-and-the-mysterious-book/scz4il.webp"
+        },
+        {
+          "image_id": "scz4im",
+          "url": "screens/yoshi-and-the-mysterious-book/scz4im.webp"
+        }
+      ],
+      "trailer_youtube_id": "YluJneE1bMo"
+    },
+    {
+      "slug": "pokemon-legends-z-a",
+      "title": "Légendes Pokémon : Z-A",
+      "platforms": [
+        "switch",
+        "switch2"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": true
+        },
+        {
+          "platform": "switch2",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2025-10-16",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 288327,
+      "igdb_url": "https://www.igdb.com/games/pokemon-legends-z-a",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/pokemon-legends-z-a.webp",
+      "cover_image_id": "co9wzc",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Game Freak"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "A new adventure awaits within Lumiose City, where an urban redevelopment plan is underway to shape the city into a place that belongs to both people and Pokémon. Please look forward to seeing it for yourself.​​",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scvsqj",
+          "url": "screens/pokemon-legends-z-a/scvsqj.webp"
+        },
+        {
+          "image_id": "scvsqg",
+          "url": "screens/pokemon-legends-z-a/scvsqg.webp"
+        },
+        {
+          "image_id": "scvsqi",
+          "url": "screens/pokemon-legends-z-a/scvsqi.webp"
+        },
+        {
+          "image_id": "scvsqk",
+          "url": "screens/pokemon-legends-z-a/scvsqk.webp"
+        }
+      ],
+      "trailer_youtube_id": "3VH7kQgM4Mo"
+    },
+    {
+      "slug": "metroid-prime-4-beyond",
+      "title": "Metroid Prime 4: Beyond",
+      "platforms": [
+        "switch",
+        "switch2"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 7324,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "Infopavon",
+            "url": "https://www.pixmania.com/fr/fr/metroid-prime-4-beyond-switch-540920.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": false,
+          "listed_physical": true
+        },
+        {
+          "platform": "switch2",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 7324,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "Infopavon",
+        "url": "https://www.pixmania.com/fr/fr/metroid-prime-4-beyond-switch-540920.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2025-12-04",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 37136,
+      "igdb_url": "https://www.igdb.com/games/metroid-prime-4-beyond",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/metroid-prime-4-beyond.webp",
+      "cover_image_id": "cob9xh",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 6",
+        "Retro Studios"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Deadly sharpshooter Sylux has finally caught up with renowned bounty hunter Samus Aran! After an unexpected accident in the wake of their clash, Samus finds herself transported to Viewros— a mysterious planet once inhabited by an ancient race. Now she must explore this planet, all while battling the strange creatures that inhabit it, to find her way home.\n\nScan your surroundings for clues, make the most of your equipment and weapons, and use Samus's newfound psychic abilities— and her technologically advanced bike, the Vi-O-La— to traverse and explore the environment. Operate mechanisms, control your charge beam, and more— you'll need every tool at your disposal to survive and escape Viewros!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scssmm",
+          "url": "screens/metroid-prime-4-beyond/scssmm.webp"
+        },
+        {
+          "image_id": "scssmk",
+          "url": "screens/metroid-prime-4-beyond/scssmk.webp"
+        },
+        {
+          "image_id": "scssml",
+          "url": "screens/metroid-prime-4-beyond/scssml.webp"
+        },
+        {
+          "image_id": "scssmn",
+          "url": "screens/metroid-prime-4-beyond/scssmn.webp"
+        }
+      ],
+      "trailer_youtube_id": "mMAgmdR8jwU"
+    },
+    {
+      "slug": "the-legend-of-zelda-echoes-of-wisdom",
+      "title": "The Legend of Zelda: Echoes of Wisdom",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 4416,
+            "shipping_cents": null,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "E.Leclerc",
+            "seller": null,
+            "url": "https://www.e.leclerc/fp/the-legend-of-zelda-echoes-of-wisdom-switch-0045496512415",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": false,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 4416,
+        "shipping_cents": null,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "E.Leclerc",
+        "seller": null,
+        "url": "https://www.e.leclerc/fp/the-legend-of-zelda-echoes-of-wisdom-switch-0045496512415",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2024-09-26",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 306149,
+      "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-echoes-of-wisdom",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/the-legend-of-zelda-echoes-of-wisdom.webp",
+      "cover_image_id": "co8d9b",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Grezzo",
+        "Nintendo Entertainment Planning & Development",
+        "Nintendo EPD Production Group No. 3"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "The people of Hyrule are being stolen away by strange rifts that have appeared, and with a certain swordsman among those missing, it’s up to Princess Zelda to save her kingdom.\n\nTeam up with the mysterious fairy, Tri, and use the power of the Tri Rod to learn how to create echoes, imitations of things found in the environment. You can then recreate those echoes whenever you like to solve puzzles and defeat enemies.\n\nCreate echoes like water blocks to reach new heights, make bridges out of old beds, throw rocks at foes, or find your own creative combination of echoes to do things your way. You can even create echoes of monsters to fight at your side in combat!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scsso6",
+          "url": "screens/the-legend-of-zelda-echoes-of-wisdom/scsso6.webp"
+        },
+        {
+          "image_id": "scsso7",
+          "url": "screens/the-legend-of-zelda-echoes-of-wisdom/scsso7.webp"
+        },
+        {
+          "image_id": "scssob",
+          "url": "screens/the-legend-of-zelda-echoes-of-wisdom/scssob.webp"
+        },
+        {
+          "image_id": "scsso8",
+          "url": "screens/the-legend-of-zelda-echoes-of-wisdom/scsso8.webp"
+        }
+      ],
+      "trailer_youtube_id": "Sh0l78KD7mA"
+    },
+    {
+      "slug": "pikmin-4",
+      "title": "Pikmin 4",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 6266,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "ASD",
+            "url": "https://www.pixmania.com/fr/fr/pikmin-4-switch-171084.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 6266,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "ASD",
+        "url": "https://www.pixmania.com/fr/fr/pikmin-4-switch-171084.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2023-07-21",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 59843,
+      "igdb_url": "https://www.igdb.com/games/pikmin-4",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/pikmin-4.webp",
+      "cover_image_id": "coba9h",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo Entertainment Planning & Development",
+        "Eighting",
+        "Nintendo EPD Production Group No. 10"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Meet Pikmin, small, plantlike creatures you can grow, pluck, command, and overpower your enemies with! These curious helpers come in different types—fire is no sweat for Red Pikmin and the brand-new Ice Pikmin can freeze enemies and the environment. Use your Pikmin’s miniature might (and a bit of strategy) to explore this mysterious planet.\n\nYou get a dog, too! Oatchi, resident good boy and dependable partner, can help with things like smashing obstacles and carrying Pikmin throughout your adventure. With the miniscule Pikmin and a capable canine in tow, no challenge is too big!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scix20",
+          "url": "screens/pikmin-4/scix20.webp"
+        },
+        {
+          "image_id": "scix22",
+          "url": "screens/pikmin-4/scix22.webp"
+        },
+        {
+          "image_id": "scix21",
+          "url": "screens/pikmin-4/scix21.webp"
+        }
+      ],
+      "trailer_youtube_id": "AYR3DVFUnyc"
+    },
+    {
+      "slug": "tomodachi-life-living-the-dream",
+      "title": "Tomodachi Life: Une vie de rêve",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": false,
+          "listed_physical": false
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2026-04-16",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 337036,
+      "igdb_url": "https://www.igdb.com/games/tomodachi-life-living-the-dream",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/tomodachi-life-living-the-dream.webp",
+      "cover_image_id": "cobdqd",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Nintendo EPD Production Group No. 4"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Create Mii characters based on family and friends, someone you admire, or something completely original—there are plenty of personality traits, little quirks, and physical traits to choose from—including some face customization options you haven’t seen before! Go deep into getting every detail just right, or create Miis quickly and easily by answering some simple questions, and then help them explore their likes and dislikes, find relationships, and get up to all sorts of fun. Your Miis are bound to surprise you as they take on a life of their own!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "scvw29",
+          "url": "screens/tomodachi-life-living-the-dream/scvw29.webp"
+        },
+        {
+          "image_id": "scvw2a",
+          "url": "screens/tomodachi-life-living-the-dream/scvw2a.webp"
+        },
+        {
+          "image_id": "sc11k1p",
+          "url": "screens/tomodachi-life-living-the-dream/sc11k1p.webp"
+        },
+        {
+          "image_id": "sc11k1q",
+          "url": "screens/tomodachi-life-living-the-dream/sc11k1q.webp"
+        }
+      ],
+      "trailer_youtube_id": "Dvo1V7DWYsA"
+    },
+    {
+      "slug": "paper-mario-the-origami-king",
+      "title": "Paper Mario: The Origami King",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": null,
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": null,
+      "release_date": "2020-07-17",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 133923,
+      "igdb_url": "https://www.igdb.com/games/paper-mario-the-origami-king",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/paper-mario-the-origami-king.webp",
+      "cover_image_id": "cob89j",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "Intelligent Systems",
+        "Nintendo EPD Production Group No. 6"
+      ],
+      "publishers": [
+        "Nintendo"
+      ],
+      "summary": "Join Mario and his new companion Olivia on a comedic adventure that will take you to the far corners of a papercraft world in Paper Mario: The Origami King on Nintendo Switch!\n\nFace off against the Origami King and his army of paper invaders, team up with some extraordinary companions and master magical powers on your quest to save the world.\n\nUnwrap an epic quest!\n\nTravel the land, repair the damage done by the Folded Soldiers and rescue Toads trapped in all manner of wacky scrapes!\n\nWith the help of Olivia’s paper-folding powers, use the far-reaching 1,000 Fold Arms and other paper transformations to save those imprisoned by the Origami King’s henchmen, and help restore peace to the world.\n\nPut a stop to King Olly's plans by engaging in battles which will put both your tactical thinking and puzzle solving skills to the test – against his origami army, as well as humongous bosses under his command!",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "sc88j0",
+          "url": "screens/paper-mario-the-origami-king/sc88j0.webp"
+        },
+        {
+          "image_id": "sc88it",
+          "url": "screens/paper-mario-the-origami-king/sc88it.webp"
+        },
+        {
+          "image_id": "sc88j2",
+          "url": "screens/paper-mario-the-origami-king/sc88j2.webp"
+        },
+        {
+          "image_id": "sc88iy",
+          "url": "screens/paper-mario-the-origami-king/sc88iy.webp"
+        }
+      ],
+      "trailer_youtube_id": "CB7KBIgn2m0"
+    },
+    {
+      "slug": "kirby-star-allies",
+      "title": "Kirby Star Allies",
+      "platforms": [
+        "switch"
+      ],
+      "editions": [
+        {
+          "platform": "switch",
+          "offer": {
+            "platform": "switch",
+            "price_cents": 5480,
+            "shipping_cents": 0,
+            "discount_pct": null,
+            "format": "physical",
+            "condition": "new",
+            "merchant": "Pixmania",
+            "seller": "ZONA DE JUEGO",
+            "url": "https://www.pixmania.com/fr/fr/nintendo-kirby-star-allies-standard-nintendo-switch-231390.html",
+            "observed_at": "2026-10-25",
+            "source": "scraped",
+            "stale": false
+          },
+          "sold_digital": true,
+          "listed_physical": true
+        }
+      ],
+      "best_offer": {
+        "platform": "switch",
+        "price_cents": 5480,
+        "shipping_cents": 0,
+        "discount_pct": null,
+        "format": "physical",
+        "condition": "new",
+        "merchant": "Pixmania",
+        "seller": "ZONA DE JUEGO",
+        "url": "https://www.pixmania.com/fr/fr/nintendo-kirby-star-allies-standard-nintendo-switch-231390.html",
+        "observed_at": "2026-10-25",
+        "source": "scraped",
+        "stale": false
+      },
+      "release_date": "2018-03-16",
+      "release_date_source": "igdb",
+      "launch_price_cents": null,
+      "igdb_id": 37137,
+      "igdb_url": "https://www.igdb.com/games/kirby-star-allies",
+      "igdb_fetched_at": "2026-10-25T10:54:02Z",
+      "cover_url": "covers/kirby-star-allies.webp",
+      "cover_image_id": "co8ezz",
+      "pc_status": "none",
+      "pc_status_source": "igdb",
+      "developers": [
+        "HAL Laboratory"
+      ],
+      "publishers": [
+        "Nintendo of Europe",
+        "Nintendo of America",
+        "Nintendo"
+      ],
+      "summary": "Kirby is back in this new title coming to the Nintendo Switch console in HD. Recruit enemies as helpers, use Kirby copy abilities such as Sword, Fire and Water, and join forces with up to three friends for a different kind of team-up action.",
+      "summary_source": "igdb",
+      "screenshots": [
+        {
+          "image_id": "dvdv5gp3hjv9nlwqq7u9",
+          "url": "screens/kirby-star-allies/dvdv5gp3hjv9nlwqq7u9.webp"
+        },
+        {
+          "image_id": "ab2ke4ar298b3yhrv0t5",
+          "url": "screens/kirby-star-allies/ab2ke4ar298b3yhrv0t5.webp"
+        },
+        {
+          "image_id": "u0mibnad5eaugvzm0per",
+          "url": "screens/kirby-star-allies/u0mibnad5eaugvzm0per.webp"
+        },
+        {
+          "image_id": "ko4xlgoct8zklhxxfmoz",
+          "url": "screens/kirby-star-allies/ko4xlgoct8zklhxxfmoz.webp"
+        }
+      ],
+      "trailer_youtube_id": "1vNmTih9IXI"
     }
   ]
 }

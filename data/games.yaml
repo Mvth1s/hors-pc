@@ -77,3 +77,256 @@
   editions: [{platform: ps5}, {platform: xbox_series}]
   igdb_id: 52189
   launch_price: null
+
+# --- Sélection du 25/10/2026 (candidats IGDB curés) ---
+
+- slug: demon-s-souls
+  title: "Demon's Souls"
+  editions: [{platform: ps5}]
+  igdb_id: 134606
+  launch_price: null
+
+- slug: marvel-s-wolverine
+  title: "Marvel's Wolverine"
+  editions: [{platform: ps5}]
+  igdb_id: 168667
+  launch_price: null
+
+# Sans version PC : PS5, Switch et Xbox Series (aussi sur PS4).
+- slug: unicorn-overlord
+  title: "Unicorn Overlord"
+  editions: [{platform: ps5}, {platform: switch}, {platform: xbox_series}]
+  igdb_id: 68353
+  launch_price: null
+
+- slug: code-violet
+  title: "Code Violet"
+  editions: [{platform: ps5}]
+  igdb_id: 328275
+  launch_price: null
+
+# Dématérialisé au lancement ; édition physique annoncée.
+- slug: god-of-war-sons-of-sparta
+  title: "God of War Sons of Sparta"
+  editions: [{platform: ps5}]
+  igdb_id: 389443
+  launch_price: null
+
+- slug: nhl-27
+  title: "NHL 27"
+  editions: [{platform: ps5}, {platform: xbox_series}]
+  igdb_id: 408771
+  launch_price: null
+
+- slug: the-legend-of-zelda-breath-of-the-wild
+  title: "The Legend of Zelda: Breath of the Wild"
+  editions: [{platform: switch}]
+  igdb_id: 7346
+  launch_price: null
+
+- slug: super-mario-odyssey
+  title: "Super Mario Odyssey"
+  editions: [{platform: switch}]
+  igdb_id: 26758
+  launch_price: null
+
+- slug: super-smash-bros-ultimate
+  title: "Super Smash Bros. Ultimate"
+  editions: [{platform: switch}]
+  igdb_id: 90101
+  launch_price: null
+
+- slug: animal-crossing-new-horizons
+  title: "Animal Crossing: New Horizons"
+  editions: [{platform: switch}]
+  igdb_id: 109462
+  launch_price: null
+
+- slug: fire-emblem-three-houses
+  title: "Fire Emblem: Three Houses"
+  editions: [{platform: switch}]
+  igdb_id: 26845
+  launch_price: null
+
+- slug: the-legend-of-zelda-link-s-awakening
+  title: "The Legend of Zelda: Link's Awakening"
+  editions: [{platform: switch}]
+  igdb_id: 115284
+  launch_price: null
+
+- slug: pokemon-sword
+  title: "Pokémon Épée"
+  editions: [{platform: switch}]
+  igdb_id: 37382
+  launch_price: null
+
+- slug: luigi-s-mansion-3
+  title: "Luigi's Mansion 3"
+  editions: [{platform: switch}]
+  igdb_id: 109455
+  launch_price: null
+
+- slug: super-mario-bros-wonder
+  title: "Super Mario Bros. Wonder"
+  editions: [{platform: switch}]
+  igdb_id: 254339
+  launch_price: null
+
+- slug: pokemon-legends-arceus
+  title: "Légendes Pokémon : Arceus"
+  editions: [{platform: switch}]
+  igdb_id: 144054
+  launch_price: null
+
+# Homonyme PC sans rapport sur IGDB (projet de fan, igdb 323061).
+- slug: metroid-dread
+  title: "Metroid Dread"
+  editions: [{platform: switch}]
+  igdb_id: 15698
+  launch_price: null
+
+- slug: super-mario-maker-2
+  title: "Super Mario Maker 2"
+  editions: [{platform: switch}]
+  igdb_id: 115276
+  launch_price: null
+
+- slug: xenoblade-chronicles-2
+  title: "Xenoblade Chronicles 2"
+  editions: [{platform: switch}]
+  igdb_id: 26766
+  launch_price: null
+
+- slug: mario-rabbids-kingdom-battle
+  title: "Mario + The Lapins Crétins : Kingdom Battle"
+  editions: [{platform: switch}]
+  igdb_id: 28414
+  launch_price: null
+
+- slug: super-mario-party
+  title: "Super Mario Party"
+  editions: [{platform: switch}]
+  igdb_id: 103339
+  launch_price: null
+
+- slug: pokemon-let-s-go-pikachu
+  title: "Pokémon: Let's Go, Pikachu!"
+  editions: [{platform: switch}]
+  igdb_id: 25877
+  launch_price: null
+
+- slug: astral-chain
+  title: "Astral Chain"
+  editions: [{platform: switch}]
+  igdb_id: 115283
+  launch_price: null
+
+# Aussi sur PS4 et Xbox One, jamais sur PC.
+- slug: crash-team-racing-nitro-fueled
+  title: "Crash Team Racing Nitro-Fueled"
+  editions: [{platform: switch}]
+  igdb_id: 113113
+  launch_price: null
+
+- slug: kirby-and-the-forgotten-land
+  title: "Kirby et le monde oublié"
+  editions: [{platform: switch}]
+  igdb_id: 172427
+  launch_price: null
+
+- slug: splatoon-3
+  title: "Splatoon 3"
+  editions: [{platform: switch}]
+  igdb_id: 143613
+  launch_price: null
+
+- slug: mario-tennis-aces
+  title: "Mario Tennis Aces"
+  editions: [{platform: switch}]
+  igdb_id: 81145
+  launch_price: null
+
+- slug: metroid-prime-remastered
+  title: "Metroid Prime Remastered"
+  editions: [{platform: switch}]
+  igdb_id: 236663
+  launch_price: null
+
+# Homonyme PC sans rapport sur IGDB (Orbitals, 2021, igdb 133119).
+- slug: orbitals
+  title: "Orbitals"
+  editions: [{platform: switch2}]
+  igdb_id: 381237
+  launch_price: null
+
+- slug: fire-emblem-fortune-s-weave
+  title: "Fire Emblem: Fortune's Weave"
+  editions: [{platform: switch2}]
+  igdb_id: 366896
+  launch_price: null
+
+- slug: kirby-air-riders
+  title: "Kirby Air Riders"
+  editions: [{platform: switch2}]
+  igdb_id: 338105
+  launch_price: null
+
+- slug: rhythm-heaven-groove
+  title: "Rhythm Paradise Groove"
+  editions: [{platform: switch}]
+  igdb_id: 337031
+  launch_price: null
+
+- slug: splatoon-raiders
+  title: "Splatoon Raiders"
+  editions: [{platform: switch2}]
+  igdb_id: 348977
+  launch_price: null
+
+- slug: yoshi-and-the-mysterious-book
+  title: "Yoshi and the Mysterious Book"
+  editions: [{platform: switch2}]
+  igdb_id: 366883
+  launch_price: null
+
+- slug: pokemon-legends-z-a
+  title: "Légendes Pokémon : Z-A"
+  editions: [{platform: switch}, {platform: switch2}]
+  igdb_id: 288327
+  launch_price: null
+
+- slug: metroid-prime-4-beyond
+  title: "Metroid Prime 4: Beyond"
+  editions: [{platform: switch}, {platform: switch2}]
+  igdb_id: 37136
+  launch_price: null
+
+- slug: the-legend-of-zelda-echoes-of-wisdom
+  title: "The Legend of Zelda: Echoes of Wisdom"
+  editions: [{platform: switch}]
+  igdb_id: 306149
+  launch_price: null
+
+- slug: pikmin-4
+  title: "Pikmin 4"
+  editions: [{platform: switch}]
+  igdb_id: 59843
+  launch_price: null
+
+- slug: tomodachi-life-living-the-dream
+  title: "Tomodachi Life: Une vie de rêve"
+  editions: [{platform: switch}]
+  igdb_id: 337036
+  launch_price: null
+
+- slug: paper-mario-the-origami-king
+  title: "Paper Mario: The Origami King"
+  editions: [{platform: switch}]
+  igdb_id: 133923
+  launch_price: null
+
+- slug: kirby-star-allies
+  title: "Kirby Star Allies"
+  editions: [{platform: switch}]
+  igdb_id: 37137
+  launch_price: null

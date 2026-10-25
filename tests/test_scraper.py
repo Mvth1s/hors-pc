@@ -464,7 +464,7 @@ def test_precommande_sans_offre_ecartee_sans_alerte(fetcher: Fetcher) -> None:
     }}}}  # fmt: skip
     observations, report = Scraper({"boulanger": True}, fetcher).run([MKW], {}, discovered, TODAY)
     assert observations == [] and not report.needs_attention
-    assert ("rejected", "aucune offre (pas encore en vente ?)") in {
+    assert ("rejected", "aucune offre en ligne (rupture ou précommande pas encore ouverte)") in {
         (e["kind"], e["detail"]) for e in report.events
     }
 

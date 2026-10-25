@@ -1,5 +1,29 @@
 {
   "games": {
+    "animal-crossing-new-horizons": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "astral-chain": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496424688"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/astral-chain-switch-0045496424688",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-astral-chain-standard-nintendo-switch-231520.html"
+        }
+      }
+    },
     "astro-bot": {
       "ps5": {
         "checked": {
@@ -15,6 +39,33 @@
           "leclerc": "https://www.e.leclerc/fp/astro-bot-ps5-0711719591818",
           "pixmania": "https://www.pixmania.com/fr/fr/astro-bot-ps5-305180.html"
         }
+      }
+    },
+    "code-violet": {
+      "ps5": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "crash-team-racing-nitro-fueled": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "demon-s-souls": {
+      "ps5": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
       }
     },
     "donkey-kong-bananza": {
@@ -34,6 +85,24 @@
         }
       }
     },
+    "fire-emblem-fortune-s-weave": {
+      "switch2": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "fire-emblem-three-houses": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
     "ghost-of-yotei": {
       "ps5": {
         "checked": {
@@ -49,6 +118,15 @@
           "leclerc": "https://www.e.leclerc/fp/ghost-of-yotei-ps5-0711719020240",
           "pixmania": "https://www.pixmania.com/fr/fr/ghost-of-yotei-ps5-443902.html"
         }
+      }
+    },
+    "god-of-war-sons-of-sparta": {
+      "ps5": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
       }
     },
     "gran-turismo-7": {
@@ -91,6 +169,60 @@
         "sources": {}
       }
     },
+    "kirby-air-riders": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496313159"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/kirby-air-riders-nintendo-switch-2-0045496313159",
+          "pixmania": "https://www.pixmania.com/fr/fr/kirby-air-riders-switch-2-532926.html"
+        }
+      }
+    },
+    "kirby-and-the-forgotten-land": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496429287"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/kirby-et-le-monde-oublie-switch-0045496429287",
+          "pixmania": "https://www.pixmania.com/fr/fr/kirby-et-le-monde-oublie-jeu-nintendo-switch-97125.html"
+        }
+      }
+    },
+    "kirby-star-allies": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496421625"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/kirby-star-allies-switch-0045496421625",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-kirby-star-allies-standard-nintendo-switch-231390.html"
+        }
+      }
+    },
+    "luigi-s-mansion-3": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
     "mario-kart-world": {
       "switch2": {
         "checked": {
@@ -106,6 +238,132 @@
           "boulanger": "https://www.boulanger.com/ref/1220885",
           "leclerc": "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336",
           "pixmania": "https://www.pixmania.com/fr/fr/mario-kart-world-switch-2-397665.html"
+        }
+      }
+    },
+    "mario-rabbids-kingdom-battle": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "mario-tennis-aces": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496422011"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-mario-tennis-aces-standard-nintendo-switch-231540.html"
+        }
+      }
+    },
+    "marvel-s-wolverine": {
+      "ps5": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "metroid-dread": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496428471"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/metroid-dread-switch-0045496428471",
+          "pixmania": "https://www.pixmania.com/fr/fr/metroid-dread-jeu-switch-90467.html"
+        }
+      }
+    },
+    "metroid-prime-4-beyond": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496513245"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/metroid-prime-4-beyond-switch-540920.html"
+        }
+      },
+      "switch2": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "metroid-prime-remastered": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "nhl-27": {
+      "ps5": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      },
+      "xbox_series": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "orbitals": {
+      "switch2": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "paper-mario-the-origami-king": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "pikmin-4": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496479305"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pikmin-4-switch-0045496479305",
+          "pixmania": "https://www.pixmania.com/fr/fr/pikmin-4-switch-171084.html"
         }
       }
     },
@@ -126,6 +384,69 @@
         }
       }
     },
+    "pokemon-legends-arceus": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496428280"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/legendes-pokemon-arceus-switch-0045496428280",
+          "pixmania": "https://www.pixmania.com/fr/fr/legendes-pokemon-arceus-jeu-nintendo-switch-97162.html"
+        }
+      }
+    },
+    "pokemon-legends-z-a": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      },
+      "switch2": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "pokemon-let-s-go-pikachu": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "pokemon-sword": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496424749"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-pokemon-sword-standard-nintendo-switch-231469.html"
+        }
+      }
+    },
+    "rhythm-heaven-groove": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
     "saros": {
       "ps5": {
         "checked": {
@@ -141,6 +462,198 @@
           "leclerc": "https://www.e.leclerc/fp/saros-ps5-0711719026990",
           "pixmania": "https://www.pixmania.com/fr/fr/saros-ps5-528089.html"
         }
+      }
+    },
+    "splatoon-3": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496510657"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/splatoon-3-switch-0045496510657",
+          "pixmania": "https://www.pixmania.com/fr/fr/splatoon-3-jeu-nintendo-switch-132042.html"
+        }
+      }
+    },
+    "splatoon-raiders": {
+      "switch2": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "super-mario-bros-wonder": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496479794"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-mario-bros-wonder-switch-0045496479794",
+          "pixmania": "https://www.pixmania.com/fr/fr/super-mario-bros-wonder-switch-197078.html"
+        }
+      }
+    },
+    "super-mario-maker-2": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "super-mario-odyssey": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496420864"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-super-mario-odyssey-switch-standard-nintendo-switch-231507.html"
+        }
+      }
+    },
+    "super-mario-party": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496422950"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-mario-party-switch-0045496422950",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-super-mario-party-standard-nintendo-switch-231612.html"
+        }
+      }
+    },
+    "super-smash-bros-ultimate": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496422868"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-smash-bros-ultimate-switch-0045496422868",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-super-smash-bros-ultimate-switch-nintendo-switch-231600.html"
+        }
+      }
+    },
+    "the-legend-of-zelda-breath-of-the-wild": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496420024"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-breath-of-the-wild-switch-0045496420024",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-the-legend-of-zelda-breath-of-the-wild-standard-nintendo-switch-174034.html"
+        }
+      }
+    },
+    "the-legend-of-zelda-echoes-of-wisdom": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496512415"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-echoes-of-wisdom-switch-0045496512415",
+          "pixmania": "https://www.pixmania.com/fr/fr/the-legend-of-zelda-echoes-of-wisdom-switch-290743.html"
+        }
+      }
+    },
+    "the-legend-of-zelda-link-s-awakening": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "tomodachi-life-living-the-dream": {
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "unicorn-overlord": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "5055277052929"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-ps5-5055277052929",
+          "pixmania": "https://www.pixmania.com/fr/fr/unicorn-overlord-ps5-252363.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      },
+      "xbox_series": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "xenoblade-chronicles-2": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-25",
+          "pixmania": "2026-10-25"
+        },
+        "eans": [
+          "0045496420956"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-xenoblade-chronicles-2-standard-multilingue-nintendo-switch-155283.html"
+        }
+      }
+    },
+    "yoshi-and-the-mysterious-book": {
+      "switch2": {
+        "checked": {
+          "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
       }
     },
     "zelda-tears-of-the-kingdom": {

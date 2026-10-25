@@ -217,7 +217,12 @@ class Scraper:
             self.fetcher.record(source, "rejected", url, f"autre produit : {page.name}")
             return None
         if page.price is None:
-            self.fetcher.record(source, "rejected", url, "aucune offre (pas encore en vente ?)")
+            self.fetcher.record(
+                source,
+                "rejected",
+                url,
+                "aucune offre en ligne (rupture ou précommande pas encore ouverte)",
+            )
             return None
         if page.currency not in (None, "EUR"):
             self.fetcher.record(source, "rejected", url, f"prix hors euros ({page.currency})")
