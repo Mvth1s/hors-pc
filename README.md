@@ -1,6 +1,85 @@
 # HorsPC
 
+Catalogue des jeux console absents du PC (PS5, Switch, Switch 2, Xbox Series), avec le prix le plus bas relevé en France, mis à jour chaque semaine par un pipeline GitHub Actions et publié en site statique.
+
+**Site : <https://mvth1s.github.io/hors-pc/>**
+
+[![CI](https://github.com/Mvth1s/hors-pc/actions/workflows/ci.yml/badge.svg)](https://github.com/Mvth1s/hors-pc/actions/workflows/ci.yml)
+[![Mise à jour](https://github.com/Mvth1s/hors-pc/actions/workflows/update.yml/badge.svg)](https://github.com/Mvth1s/hors-pc/actions/workflows/update.yml)
+
+![Catalogue HorsPC : filtres par console et statut PC, cartes avec jaquette, badges et meilleur prix relevé](docs/catalogue.jpg)
+
+## Ce que montre ce projet
+
+- **Pipeline hebdomadaire, tests bloquants avant déploiement** : cron du lundi, ruff et pytest avant tout build, commit des données puis déploiement GitHub Pages ; un push redéploie sans rien commiter. Preuves : [`.github/workflows/update.yml`](.github/workflows/update.yml), [`tests/test_workflows.py`](tests/test_workflows.py) (jobs et étapes exécutés pour chaque événement).
+- **Rendu statique et SEO** : HTML complet au build (catalogue lisible sans JS, une page par jeu), JSON-LD `VideoGame` / `Offer` / `AggregateOffer` / `BreadcrumbList`, sitemap avec `lastmod` réels. Preuves : [`src/horspc/render.py`](src/horspc/render.py), [`tests/test_render.py`](tests/test_render.py), section [SEO et rendu statique](#seo-et-rendu-statique).
+- **Relevé de prix automatisé et légal** : exception de fouille de textes et de données (TDM) avec une analyse par source, robots.txt interprété selon la RFC 9309 (jokers, règle la plus longue) et relu à chaque run, 1 requête par seconde par site, aucun contournement (une source qui bloque est arrêtée pour le run), règle de plateforme de confiance. Preuves : [`docs/sources.md`](docs/sources.md), [`src/horspc/robots.py`](src/horspc/robots.py), [`src/horspc/prices/fetch.py`](src/horspc/prices/fetch.py), [`src/horspc/prices/trust.py`](src/horspc/prices/trust.py), [`tests/test_robots.py`](tests/test_robots.py), [`tests/test_scraper.py`](tests/test_scraper.py) (pages figées, aucun appel réseau).
+- **Consentement CNIL testé en navigateur headless** : aucune requête Google avant accord ni après refus, vérifié avec Playwright sur l'accueil, les pages légales, la FAQ et une page de jeu. Preuves : [`site/consent.js`](site/consent.js), [`tests/test_consent.py`](tests/test_consent.py), section [Mesure d'audience](#mesure-daudience-ga4-conforme-cnil).
+- **Alertes** : Discord si le build planifié échoue ou si une source de prix est bloquée (sans faire échouer le build), issue « Données obsolètes » si `data.json` vieillit, diagnostic `scrape_dry_run` de ce que voient les IP de GitHub Actions. Preuves : jobs `notify` et `freshness` d'[`update.yml`](.github/workflows/update.yml), [`.github/workflows/discord.yml`](.github/workflows/discord.yml), [`src/horspc/prices/probe.py`](src/horspc/prices/probe.py).
+- **Schéma de données versionné et validé** : entrées YAML et sortie `data.json` (v6, éditions par console) validées par Pydantic v2 ; un `data.json` précédent d'un autre schéma est refusé. Preuves : [`src/horspc/models.py`](src/horspc/models.py), [`tests/test_build.py`](tests/test_build.py), section [Schéma de `site/data.json`](#schéma-de-sitedatajson-v6).
+- **Sécurité des workflows** : permissions minimales par job (`permissions: {}` pour les notifications), action tierce `astral-sh/setup-uv` épinglée par SHA (actions officielles `actions/*` par version majeure), aucune expression `${{ github.event.* }}` dans les blocs `run` (événement lu avec `jq`), webhook Discord facultatif. Preuves : [`.github/workflows/`](.github/workflows/), tests `test_discord_*` de [`tests/test_workflows.py`](tests/test_workflows.py).
+
+## Architecture (vue d'ensemble)
+
+```mermaid
+flowchart LR
+    subgraph Sources
+        IGDB["IGDB API<br/>dates, statut PC, jaquettes"]
+        LEC["E.Leclerc<br/>catégories + fiches"]
+        PIX["Pixmania<br/>sitemaps + fiches"]
+    end
+    subgraph Données versionnées
+        GY["data/games.yaml"]
+        DISC["data/discovered.json"]
+        HIST["data/prices.scraped.jsonl"]
+    end
+    CRON(["cron lundi 06:17 UTC<br/>ou workflow_dispatch"]) --> CI["ruff + pytest<br/>bloquants"]
+    CI --> BUILD["build Python<br/>src/horspc"]
+    GY --> BUILD
+    IGDB --> BUILD
+    LEC -->|"robots.txt RFC 9309, 1 req/s"| BUILD
+    PIX -->|"robots.txt RFC 9309, 1 req/s"| BUILD
+    BUILD <--> DISC
+    BUILD <--> HIST
+    BUILD --> VAL{"validation<br/>Pydantic"}
+    VAL -->|refus| FAIL["échec du build"]
+    VAL --> SITE["site statique<br/>data.json + HTML"]
+    SITE --> COMMIT["commit des données"]
+    COMMIT --> PAGES["GitHub Pages"]
+    FAIL --> DISCORD["Discord"]
+    BUILD -->|"source bloquée"| DISCORD
+    PAGES -.-> FRESH["issue « Données obsolètes »<br/>si data.json a plus de 8 jours"]
+```
+
+Un push sur `main` qui touche `site/`, `src/` ou `data/` passe par les mêmes lint et tests, puis redéploie le site en mode hors ligne (sans IGDB ni relevé, sans commit).
+
+## Chiffres clés (25/10/2026)
+
+| Indicateur | Valeur |
+|---|---|
+| Jeux au catalogue | 50 (57 éditions par console) |
+| Jeux avec au moins une offre | 39 / 50 (43 éditions sur 57 ; 8 éditions en rupture affichée) |
+| Sources de prix actives | E.Leclerc, Pixmania (Boulanger désactivé, voir [`docs/sources.md`](docs/sources.md)) |
+| Tests | 527 (pytest, réseau simulé avec respx, navigateur headless pour le consentement) |
+
+## Documentation
+
 Catalogue web des **jeux console absents du PC** (PS5, Switch, Switch 2, Xbox Series), sortis ou à venir, avec le prix le plus bas relevé en France. Le site est statique (HTML, CSS, JS vanilla) et lit un unique `site/data.json`, régénéré chaque semaine par GitHub Actions puis publié sur GitHub Pages.
+
+- [Architecture](#architecture) (arborescence du code)
+- [Lancer en local](#lancer-en-local)
+- [Ajouter un jeu](#ajouter-un-jeu) ([candidats IGDB](#trouver-des-candidats))
+- [Jeux à venir](#jeux-à-venir)
+- [Prix : relevé automatique](#prix--relevé-automatique)
+- [Correction d'urgence : prix manuel](#correction-durgence--prix-manuel) ([règle de sélection](#règle-de-sélection))
+- [Schéma de `site/data.json`](#schéma-de-sitedatajson-v6) ([jaquettes](#jaquettes))
+- [Mise à jour automatique et seuils de fraîcheur](#mise-à-jour-automatique-et-seuils-de-fraîcheur) ([configuration du dépôt](#configuration-du-dépôt-github))
+- [SEO et rendu statique](#seo-et-rendu-statique)
+- [Mesure d'audience (GA4, conforme CNIL)](#mesure-daudience-ga4-conforme-cnil)
+- [Notifications Discord](#notifications-discord)
+- [Pages légales](#pages-légales)
+- [Crédits](#crédits)
+- Sources de prix, cadre légal et preuves : [`docs/sources.md`](docs/sources.md)
 
 ## Architecture
 
