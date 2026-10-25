@@ -84,34 +84,103 @@ Catalogue web des **jeux console absents du PC** (PS5, Switch, Switch 2, Xbox Se
 
 ## Architecture
 
-```
-data/
-  games.yaml            liste curée des jeux (source de vérité)
-  sources.config.yaml   sources de prix automatiques activées (enabled + motif)
-  prices.scraped.jsonl  relevés automatiques, une ligne par relevé et par édition (généré, versionné)
-  discovered.json       EAN et fiches trouvés par jeu, édition et source (généré, versionné)
-  redirects.yaml        anciens slugs de pages → slug actuel (jeux fusionnés)
-  prices.manual.yaml    corrections d'urgence (relevés manuels, prioritaires)
-src/horspc/
-  __main__.py           CLI : uv run python -m horspc build [--offline]
-  models.py             modèles Pydantic v2 (entrées YAML, sortie data.json, liste des marchands)
-  http.py               client HTTP : User-Agent, timeouts, retries, 1 requête/s max par hôte
-  igdb.py               client IGDB v4 : date de sortie, fiche IGDB, statut PC, id de jaquette
-  covers.py             jaquettes IGDB téléchargées en WebP dans site/covers/
-  robots.py             robots.txt (RFC 9309 : jokers * et $, règle la plus longue)
-  prices/               relevé automatique (fetch, sources, matching, scraper), règle de
-                        plateforme de confiance (trust), provider et règle de sélection
-  build.py              fusion, validation, écriture de site/data.json
-  render.py             rendu statique : fiches dans index.html, pages de jeux, SEO, sitemap.xml
-site/                   index.html, mentions-legales.html, confidentialite.html, methodologie.html,
-                        style.css, theme.js (thème, toutes pages), app.js (catalogue), fonts/,
-                        data.json et covers/ (générés, versionnés)
-tests/                  pytest, appels réseau mockés avec respx (fixtures IGDB figées)
-docs/maquette/          maquette de référence du front (non publiée)
-.github/workflows/      ci.yml (ruff + pytest), update.yml (build hebdo + Pages)
-```
+Flux de données : [`data/games.yaml`](data/games.yaml) + IGDB + relevé automatique ([`data/prices.scraped.jsonl`](data/prices.scraped.jsonl)) + [`data/prices.manual.yaml`](data/prices.manual.yaml) → [`build.py`](src/horspc/build.py) → validation Pydantic → [`site/data.json`](site/data.json) → [`render.py`](src/horspc/render.py) → HTML statique ; [`site/app.js`](site/app.js) filtre, trie et affiche les prix par console dans le navigateur, sans lire `data.json`.
 
-Flux de données : `games.yaml` + IGDB + relevé automatique (`prices.scraped.jsonl`) + `prices.manual.yaml` → `build.py` → validation Pydantic → `site/data.json` → `app.js`.
+**Données : [`data/`](data/)**
+
+| Chemin | Rôle |
+|---|---|
+| [`data/games.yaml`](data/games.yaml) | Liste curée des jeux et de leurs éditions par console (source de vérité). |
+| [`data/sources.config.yaml`](data/sources.config.yaml) | Sources de prix activées ou non, avec le motif. |
+| [`data/discovered.json`](data/discovered.json) | EAN, fiches et ruptures par jeu, édition et source (généré, versionné). |
+| [`data/prices.scraped.jsonl`](data/prices.scraped.jsonl) | Historique des relevés automatiques, une ligne par relevé (généré, versionné). |
+| [`data/prices.manual.yaml`](data/prices.manual.yaml) | Corrections d'urgence manuelles, prioritaires sur le relevé du même jour. |
+| [`data/redirects.yaml`](data/redirects.yaml) | Anciens slugs de pages de jeu vers le slug actuel (jeux fusionnés). |
+
+**Code : [`src/horspc/`](src/horspc/)**
+
+| Chemin | Rôle |
+|---|---|
+| [`__main__.py`](src/horspc/__main__.py) | CLI : `build`, `stale`, `price add`, `candidates`, `scrape-report`, `scrape-probe`. |
+| [`build.py`](src/horspc/build.py) | Assemble jeux, IGDB et prix, valide et écrit `site/data.json`. |
+| [`models.py`](src/horspc/models.py) | Modèles Pydantic v2 : entrées YAML, relevés, sortie `data.json` (schéma v6). |
+| [`igdb.py`](src/horspc/igdb.py) | Client IGDB v4 : dates, statut PC, jaquettes, captures, preuves de format. |
+| [`covers.py`](src/horspc/covers.py) | Téléchargement des jaquettes et captures IGDB en WebP dans `site/`. |
+| [`render.py`](src/horspc/render.py) | Rendu statique : catalogue, pages de jeux, SEO, JSON-LD, sitemap. |
+| [`http.py`](src/horspc/http.py) | Client HTTP partagé : User-Agent, timeouts, retries, 1 requête/s par hôte. |
+| [`robots.py`](src/horspc/robots.py) | Lecture de robots.txt selon la RFC 9309 (jokers, règle la plus longue). |
+| [`candidates.py`](src/horspc/candidates.py) | Propose des jeux IGDB sans version PC à ajouter au catalogue. |
+| [`stale.py`](src/horspc/stale.py) | Liste les jeux sans relevé manuel récent (commande `stale`). |
+| [`price_add.py`](src/horspc/price_add.py) | Saisie guidée d'un relevé manuel (commande `price add`). |
+
+**Relevé des prix : [`src/horspc/prices/`](src/horspc/prices/)**
+
+| Chemin | Rôle |
+|---|---|
+| [`fetch.py`](src/horspc/prices/fetch.py) | Requêtes : robots.txt, blocages (400, 403, 429, défi) sans aucun contournement. |
+| [`sources.py`](src/horspc/prices/sources.py) | Lecture des fiches (JSON-LD), des catégories et des sitemaps de chaque source. |
+| [`matching.py`](src/horspc/prices/matching.py) | Correspondance stricte : titre, plateforme, édition standard, boîte avec code. |
+| [`scraper.py`](src/horspc/prices/scraper.py) | Découverte et relevé par édition, cache `discovered.json`, bilan du run. |
+| [`trust.py`](src/horspc/prices/trust.py) | Plateforme de confiance : neuf, vendeur pro, UE, livrable en France. |
+| [`selection.py`](src/horspc/prices/selection.py) | Choix de la meilleure offre : fraîcheur, format, prix port compris. |
+| [`manual.py`](src/horspc/prices/manual.py) | Fournisseur de prix : relevés manuels et automatiques, par édition. |
+| [`base.py`](src/horspc/prices/base.py) | Interface commune des fournisseurs de prix (`Offer`, `PriceProvider`). |
+| [`probe.py`](src/horspc/prices/probe.py) | Diagnostic `scrape_dry_run` des sources vu depuis GitHub Actions. |
+
+**Site publié : [`site/`](site/)**
+
+| Chemin | Rôle |
+|---|---|
+| [`index.html`](site/index.html) | Catalogue rendu au build dans des zones `<!--horspc:…-->`. |
+| [`faq.html`](site/faq.html), [`methodologie.html`](site/methodologie.html) | FAQ et méthodologie des prix ; la méthodologie sert de gabarit aux pages de jeu. |
+| [`mentions-legales.html`](site/mentions-legales.html), [`confidentialite.html`](site/confidentialite.html) | Pages légales. |
+| [`jeux/`](site/jeux/) | Une page par jeu, plus les redirections des anciens slugs (généré, versionné). |
+| [`data.json`](site/data.json) | Données du catalogue validées (généré, versionné). |
+| [`covers/`](site/covers/), [`screens/`](site/screens/) | Jaquettes et captures IGDB en WebP (généré, versionné). |
+| [`sitemap.xml`](site/sitemap.xml) | Plan du site avec dates de modification réelles (généré, versionné). |
+| [`style.css`](site/style.css) | Styles, thèmes clair et sombre, polices auto-hébergées. |
+| [`app.js`](site/app.js) | Filtres, tris et prix par console du catalogue. |
+| [`game.js`](site/game.js) | Pages de jeu : retour au catalogue, bande-annonce chargée seulement au clic. |
+| [`theme.js`](site/theme.js) | Bascule du thème clair ou sombre, sur toutes les pages. |
+| [`consent.js`](site/consent.js) | Bandeau de consentement GA4 conforme CNIL. |
+| [`fonts/`](site/fonts/) | Polices Bricolage Grotesque et IBM Plex Sans (SIL OFL 1.1). |
+| [`og-image.png`](site/og-image.png), [`favicon.svg`](site/favicon.svg) | Image de partage 1200 × 630 et icônes (avec `favicon-32.png`, `apple-touch-icon.png`). |
+
+**Tests : [`tests/`](tests/)**
+
+| Chemin | Rôle |
+|---|---|
+| [`tests/`](tests/) | Tests pytest : réseau simulé avec respx, navigateur headless pour le consentement. |
+| [`tests/fixtures/`](tests/fixtures/) | Réponses IGDB et extraits de pages marchandes figés. |
+
+**Documentation et outils : [`docs/`](docs/), [`scripts/`](scripts/)**
+
+| Chemin | Rôle |
+|---|---|
+| [`docs/sources.md`](docs/sources.md) | Cadre légal et analyse des sources de prix, avec preuves datées. |
+| [`docs/maquette/`](docs/maquette/) | Maquette de référence du front (non publiée). |
+| [`docs/catalogue.jpg`](docs/catalogue.jpg) | Capture du catalogue affichée en tête de ce README. |
+| [`scripts/og_image.py`](scripts/og_image.py) | Génère `site/og-image.png` avec les polices et les tokens du site. |
+
+**Automatisation : [`.github/`](.github/)**
+
+| Chemin | Rôle |
+|---|---|
+| [`workflows/ci.yml`](.github/workflows/ci.yml) | Lint et tests à chaque push et pull request. |
+| [`workflows/update.yml`](.github/workflows/update.yml) | Build hebdomadaire, relevé, commit des données, déploiement Pages et alertes. |
+| [`workflows/discord.yml`](.github/workflows/discord.yml) | Notifications Discord des issues, pull requests et releases. |
+| [`dependabot.yml`](.github/dependabot.yml) | Mises à jour hebdomadaires des actions et des dépendances Python (uv). |
+
+**Racine**
+
+| Chemin | Rôle |
+|---|---|
+| [`pyproject.toml`](pyproject.toml) | Métadonnées, dépendances, configuration de ruff et pytest. |
+| [`uv.lock`](uv.lock) | Versions exactes des dépendances, installées avec `uv sync --frozen`. |
+| [`.python-version`](.python-version) | Version de Python utilisée (3.12). |
+| [`.env.example`](.env.example) | Modèle des variables d'environnement locales (identifiants IGDB). |
+| [`LICENSE`](LICENSE) | Licence MIT du code et de la documentation. |
+| [`NOTICE`](NOTICE) | Contenus exclus de la licence : jaquettes, marques, données IGDB, polices. |
 
 ## Lancer en local
 
