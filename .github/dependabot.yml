@@ -1,0 +1,27 @@
+# Mises à jour automatiques des dépendances (https://docs.github.com/code-security/dependabot).
+# Les actions sont épinglées par SHA de commit : Dependabot met à jour le SHA et le commentaire
+# de version. Mineures et correctifs regroupés en une PR par écosystème ; majeures à part.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    groups:
+      actions-mineures:
+        update-types: ["minor", "patch"]
+    commit-message:
+      prefix: "ci"
+
+  # Écosystème uv : lit pyproject.toml et uv.lock.
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    groups:
+      python-mineures:
+        update-types: ["minor", "patch"]
+    commit-message:
+      prefix: "chore"

@@ -2,6 +2,7 @@
 
 import ast
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -376,3 +377,29 @@ def test_script_alerte_releve(tmp_path: Path, blocked: dict[str, str], expected:
         assert (
             "leclerc (HTTP 403)" in result.stdout and "Secret DISCORD_WEBHOOK_URL" in result.stdout
         )
+
+
+# --- Supply chain ------------------------------------------------------------------------------
+
+PINNED = re.compile(r"^[\w.-]+/[\w./-]+@[0-9a-f]{40} # v\d+(\.\d+)*$")
+
+
+@pytest.mark.parametrize("path", sorted(WORKFLOW.parent.glob("*.yml")), ids=lambda p: p.name)
+def test_toutes_les_actions_epinglees_par_sha(path: Path) -> None:
+    lines = [
+        line.split("uses:", 1)[1].strip()
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if re.match(r"^\s*(-\s+)?uses:", line)
+    ]
+    loose = [u for u in lines if not PINNED.match(u)]
+    assert loose == [], loose  # SHA de commit complet + version en commentaire
+
+
+def test_dependabot_actions_et_uv_hebdomadaire() -> None:
+    config = yaml.safe_load((WORKFLOW.parents[1] / "dependabot.yml").read_text(encoding="utf-8"))
+    by_ecosystem = {u["package-ecosystem"]: u for u in config["updates"]}
+    assert set(by_ecosystem) == {"github-actions", "uv"}
+    for update in by_ecosystem.values():
+        assert update["schedule"]["interval"] == "weekly"
+        (group,) = update["groups"].values()
+        assert group["update-types"] == ["minor", "patch"]
