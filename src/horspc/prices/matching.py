@@ -77,9 +77,15 @@ EAN_RE = re.compile(r"^\d{8}$|^\d{12,14}$")
 # Boîte sans disque ni cartouche, qui ne contient qu'un code de téléchargement. Dans le nom, la
 # mention suffit ; dans la description, seules des formules explicites comptent (« un code de
 # téléchargement » seul y décrit souvent un bonus ou un pack console : Mario Kart World).
-_CODE_BOX_NAME = re.compile(
+# Boîte physique contenant un code : neutralisée pour comparer les titres (« GTA VI (Code in a
+# Box) »). Un « code de téléchargement » seul est souvent un code envoyé sans boîte par un vendeur
+# de place de marché (« Astro Bot PS5 [Code de téléchargement] ») : il reste un mot refusé.
+_BOXED_CODE = re.compile(
     r"\bcode\s*-?\s*in\s*-?\s*a\s*-?\s*box\b|\bcode dans (?:la|une) boite\b"
-    r"|\bcode de telechargement\b|\b(?:digital|download) code\b|\bboite avec code\b"
+    r"|\bboite avec code\b"
+)
+_CODE_BOX_NAME = re.compile(
+    _BOXED_CODE.pattern + r"|\bcode de telechargement\b|\b(?:digital|download) code\b"
 )
 _CODE_BOX_DESCRIPTION = re.compile(
     r"\bcode\s*-?\s*in\s*-?\s*a\s*-?\s*box\b|\bcode dans (?:la|une) boite\b"
@@ -104,8 +110,8 @@ def is_code_box(name: str, description: str = "") -> bool:
 
 
 def _without_code_box(name: str) -> str:
-    """Nom sans la mention code-in-a-box : le format est relevé à part, pas le titre."""
-    return _CODE_BOX_NAME.sub(" ", _plain(name))
+    """Nom sans la mention de boîte avec code : le format est relevé à part, pas le titre."""
+    return _BOXED_CODE.sub(" ", _plain(name))
 
 
 def tokens(text: str) -> list[str]:
@@ -150,13 +156,25 @@ def _platform_words(words: list[str]) -> set[int]:
 
 
 def title_matches(
-    product_name: str, title: str, platform: Platform, extra_fillers: Iterable[str] = ()
+    product_name: str,
+    title: str,
+    platform: Platform,
+    extra_fillers: Iterable[str] = (),
+    url_platforms: set[Platform] | None = None,
 ) -> bool:
-    """Nom de produit = titre + plateforme + édition standard, sans autre mot significatif."""
+    """Nom de produit = titre + plateforme + édition standard, sans autre mot significatif.
+
+    `extra_fillers` : mots tolérés en plus (éditeurs et studios IGDB du jeu, marque du site).
+    `url_platforms` : plateformes citées par le slug de l'URL, retenues seulement si le nom du
+    produit n'en cite aucune (Pixmania : « Sony Interactive Entertainment SAROS »).
+    """
     words = tokens(_without_code_box(product_name))
+    named = platforms_in(words)
+    if not named and url_platforms is not None:
+        named = url_platforms
     # Exactement la plateforme de l'entrée : un nom citant aussi PS5 ou Switch 2 (bundle,
     # multi-plateforme, autre édition) est ambigu et rejeté, ce qui sépare les EAN par console.
-    if platforms_in(words) != {platform}:
+    if named != {platform}:
         return False
     wanted = tokens(title)
     platform_idx = _platform_words(words)
@@ -169,6 +187,12 @@ def title_matches(
     if any(w in EDITION_WORDS for w in leftover):
         return False
     return not leftover
+
+
+def url_platforms(url: str) -> set[Platform]:
+    """Plateformes citées par le dernier segment d'une URL (« saros-ps5-528089.html »)."""
+    slug = url.rstrip("/").rsplit("/", 1)[-1].removesuffix(".html")
+    return platforms_in(tokens(slug.replace("-", " ")))
 
 
 def is_ean(value: str) -> bool:

@@ -174,9 +174,14 @@ def run(
             for slug, info in (igdb_results or {}).items()
             if info is not None
         }
+        companies = {
+            slug: [*info.publishers, *info.developers]
+            for slug, info in (igdb_results or {}).items()
+            if info is not None
+        }
         discovered = scraper.load_discovered(discovered_path)
         bot = scraper.Scraper(scraper.load_config(sources_path), fetcher)
-        new, report = bot.run(catalog.games, names, discovered, now.date())
+        new, report = bot.run(catalog.games, names, discovered, now.date(), companies)
         history += new
         log.info("Relevé automatique : %d prix, sources bloquées : %s", report.ok, report.blocked)
     site_dir = output_path.parent

@@ -66,7 +66,15 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
   disponibilité, frais de port, retour sous 14 jours en France) ; vendeur réel dans le HTML.
 - **Découverte** : sitemaps produits (`products-N.xml`, slugs lisibles), correspondance stricte
   titre + plateforme + édition standard, puis `gtin13` lu sur la fiche. **Source des EAN** du
-  catalogue depuis la désactivation de Boulanger.
+  catalogue depuis la désactivation de Boulanger. Les noms de produits omettent parfois la
+  plateforme (« Sony Interactive Entertainment SAROS ») : celle du slug de l'URL est alors
+  retenue si elle est unique. Les fiches « [Code de téléchargement] » (codes envoyés sans boîte
+  par un vendeur de la place de marché) ne sont jamais rattachées.
+- **Limite** : les EAN de Pixmania sont souvent ceux d'imports et ne correspondent pas toujours à
+  ceux de Leclerc, qui ne s'ouvre que par EAN. Constat du 25/10/2026 à cache vide : Mario Kart
+  World et Zelda Tears of the Kingdom n'ont que le prix Pixmania ; Astro Bot (« Microids Astro
+  Bot ») et GTA VI n'ont aucun chemin de découverte. Un nouveau jeu peut donc n'avoir que le prix
+  Pixmania, ou aucun prix.
 
 ## Sources désactivées
 

@@ -712,3 +712,113 @@ def test_fiche_d_une_autre_console_refusee_au_releve(fetcher: Fetcher) -> None:
     )
     assert observations == []
     assert any(e["detail"].startswith("autre produit") for e in report.events)
+
+
+# --- Pixmania : nom sans plateforme ---------------------------------------------------------------
+
+PIX = "https://www.pixmania.com/fr/fr/"
+
+
+@pytest.mark.parametrize(
+    ("name", "slug", "title", "platform", "companies", "expected"),
+    [
+        # Noms réels relevés le 25/10/2026.
+        ("Sony Interactive Entertainment SAROS", "saros-ps5-528089", "Saros", "ps5", [], True),
+        (
+            "Sony Interactive Entertainment SAROS",
+            "saros-ps5-528089",
+            "Saros",
+            "ps5",
+            ["Sony Interactive Entertainment", "Housemarque"],
+            True,
+        ),
+        # Microids n'est ni éditeur ni studio d'Astro Bot dans IGDB : refusé sur le nom.
+        (
+            "Microids Astro Bot",
+            "astro-bot-ps5-305180",
+            "Astro Bot",
+            "ps5",
+            ["Sony Interactive Entertainment", "Team Asobi"],
+            False,
+        ),
+        # Éditeur IGDB toléré.
+        ("Microids Astro Bot", "astro-bot-ps5-305180", "Astro Bot", "ps5", ["Microids"], True),
+        # Négatifs : autre jeu, édition collector, slug multi-plateforme, autre console.
+        ("Sony Interactive Entertainment SAROS", "saros-ps5-528089", "Astro Bot", "ps5", [], False),
+        ("SAROS Collector", "saros-collector-ps5-528090", "Saros", "ps5", [], False),
+        ("SAROS", "saros-ps5-xbox-series-528091", "Saros", "ps5", [], False),
+        ("SAROS", "saros-528092", "Saros", "ps5", [], False),  # slug sans plateforme
+        ("GTA VI", "gta-vi-ps5-528093", "GTA VI", "xbox_series", [], False),
+        # Le nom cite une plateforme : le slug n'est pas consulté.
+        ("Saros (Switch 2)", "saros-ps5-528094", "Saros", "ps5", [], False),
+    ],
+)
+def test_nom_pixmania_sans_plateforme(
+    name: str, slug: str, title: str, platform: str, companies: list, expected: bool
+) -> None:
+    from horspc.prices.matching import title_matches, url_platforms
+
+    url = f"{PIX}{slug}.html"
+    assert title_matches(name, title, platform, companies, url_platforms(url)) is expected
+
+
+@respx.mock
+def test_decouverte_saros_et_astro_bot_cache_vide(fetcher: Fetcher) -> None:
+    mock_robots()
+    saros_url, astro_url = f"{PIX}saros-ps5-528089.html", f"{PIX}astro-bot-ps5-305180.html"
+    respx.get(src.PIXMANIA_SITEMAP).respond(
+        text="<sitemapindex><sitemap><loc>https://feeds.pixmania.com/sitemap/FR/"
+        "sitemap-products-1.xml</loc></sitemap></sitemapindex>"
+    )
+    respx.get("https://feeds.pixmania.com/sitemap/FR/sitemap-products-1.xml").respond(
+        text=f"<urlset><url><loc>{saros_url}</loc></url><url><loc>{astro_url}</loc></url></urlset>"
+    )
+    respx.get(saros_url).respond(
+        text=pixmania_page("Sony Interactive Entertainment SAROS", "0711719026990")
+    )
+    respx.get(astro_url).respond(text=pixmania_page("Microids Astro Bot", "0711719591818"))
+    saros = GameEntry(slug="saros", title="Saros", platforms=["ps5"])
+    astro = GameEntry(slug="astro-bot", title="Astro Bot", platforms=["ps5"])
+    companies = {
+        "saros": ["Sony Interactive Entertainment", "Housemarque"],
+        "astro-bot": ["Sony Interactive Entertainment", "Team Asobi"],
+    }
+    discovered = empty()
+    Scraper({"pixmania": True}, fetcher).run([saros, astro], {}, discovered, TODAY, companies)
+    assert discovered["games"]["saros"]["sources"] == {"pixmania": saros_url}
+    assert discovered["games"]["saros"]["eans"] == ["0711719026990"]
+    # « Microids » inconnu d'IGDB et aucun EAN connu : pas de rattachement.
+    assert discovered["games"]["astro-bot"]["sources"] == {}
+
+    # Avec l'EAN déjà connu (cache), la fiche est reconnue par son EAN.
+    discovered["games"]["astro-bot"] = {"eans": ["0711719591818"], "sources": {}, "checked": {}}
+    Scraper({"pixmania": True}, fetcher).run([astro], {}, discovered, TODAY, companies)
+    assert discovered["games"]["astro-bot"]["sources"] == {"pixmania": astro_url}
+
+
+@pytest.mark.parametrize(
+    ("name", "title", "platform"),
+    [
+        # Fiches réelles Pixmania (25/10/2026) : codes envoyés sans boîte, jamais rattachés.
+        ("Astro Bot   PS5 [Code de téléchargement]", "Astro Bot", "ps5"),
+        ("pokemon scarlet switch code de telechargement 511760", "Pokémon Scarlet", "switch"),
+        (
+            "Pokémon Écarlate : Le trésor enfoui de la Zone Zéro DLC SWITCH "
+            "[Code de téléchargement]",
+            "Pokémon Écarlate",
+            "switch",
+        ),
+        ("Super Mario Odyssey Switch Digital Code", "Super Mario Odyssey", "switch"),
+    ],
+)
+def test_code_de_telechargement_sans_boite_refuse(name: str, title: str, platform: str) -> None:
+    from horspc.prices.matching import title_matches
+
+    assert not title_matches(name, title, platform)
+
+
+def test_boite_avec_code_toujours_reconnue() -> None:
+    from horspc.prices.matching import title_matches
+
+    assert title_matches("Grand Theft Auto VI (Code in a Box) (PS5)", "Grand Theft Auto VI", "ps5")
+    assert title_matches("Saros PS5 (code dans la boîte)", "Saros", "ps5")

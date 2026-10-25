@@ -26,7 +26,7 @@ from pydantic import ValidationError
 from horspc.models import GameEntry, Platform, ScrapedObservation
 from horspc.prices import sources as src
 from horspc.prices.fetch import Disallowed, Fetcher, SourceBlocked
-from horspc.prices.matching import is_code_box, title_matches
+from horspc.prices.matching import is_code_box, title_matches, url_platforms
 from horspc.prices.trust import rejection
 
 log = logging.getLogger(__name__)
@@ -148,6 +148,7 @@ class Scraper:
         self._pixmania_locs: list[str] | None = None
         self._gone: set[str] = set()
         self._pages: dict[str, src.ProductPage | None] = {}
+        self._companies: dict[str, list[str]] = {}
 
     # --- Run complet -----------------------------------------------------------------
 
@@ -157,7 +158,11 @@ class Scraper:
         names: dict[str, list[str]],
         discovered: dict[str, Any],
         today: date,
+        companies: dict[str, list[str]] | None = None,
     ) -> tuple[list[ScrapedObservation], Report]:
+        """`names` : noms alternatifs IGDB ; `companies` : éditeurs et studios IGDB, tolérés
+        dans les noms de produits (« Sony Interactive Entertainment SAROS »)."""
+        self._companies = companies or {}
         observations: list[ScrapedObservation] = []
         for game in games:
             entry = discovered["games"].setdefault(
@@ -196,7 +201,7 @@ class Scraper:
         page = self._product(source, url)
         if page is None:
             return None
-        if not self._same_game(page, titles, game.platforms[0], entry):
+        if not self._same_game(page, titles, game, entry, source, url):
             self.fetcher.record(source, "rejected", url, f"autre produit : {page.name}")
             return None
         if page.price is None:
@@ -259,14 +264,27 @@ class Scraper:
             self.fetcher.record(source, "broken", url, str(exc))
             return None
 
-    @staticmethod
     def _same_game(
-        page: src.ProductPage, titles: list[str], platform: Platform, entry: dict[str, Any]
+        self,
+        page: src.ProductPage,
+        titles: list[str],
+        game: GameEntry,
+        entry: dict[str, Any],
+        source: str,
+        url: str,
     ) -> bool:
-        """EAN identique, ou titre + plateforme + édition standard."""
+        """EAN identique, ou titre + plateforme + édition standard.
+
+        Sur Pixmania, un nom sans plateforme prend celle du slug de l'URL ; les éditeurs et
+        studios IGDB du jeu sont tolérés dans le nom.
+        """
         if page.eans & set(entry["eans"]):
             return True
-        return any(title_matches(page.name, t, platform) for t in titles)
+        extra = self._companies.get(game.slug, [])
+        slug_platforms = url_platforms(url) if source == "pixmania" else None
+        return any(
+            title_matches(page.name, t, game.platforms[0], extra, slug_platforms) for t in titles
+        )
 
     # --- Découverte ----------------------------------------------------------------------
 
@@ -355,7 +373,7 @@ class Scraper:
         ]
         for url in candidates[:MAX_CANDIDATES]:
             page = self._product("pixmania", url)
-            if page is not None and self._same_game(page, titles, platform, entry):
+            if page is not None and self._same_game(page, titles, game, entry, "pixmania", url):
                 for ean in page.eans:
                     self._add_ean(entry, ean)
                 entry["sources"]["pixmania"] = url
