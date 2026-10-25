@@ -388,7 +388,7 @@ Sécurité de `discord.yml` : `permissions: {}`, aucun checkout (le code d'une P
 
 ## Crédits
 
-- Dates de sortie, statut PC et jaquettes : [IGDB.com](https://www.igdb.com), attribution dans les mentions légales, la FAQ et les pages de jeu (résumé IGDB). Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs ; une demande de retrait peut être faite via une issue GitHub (lien dans le pied de page).
+- Dates de sortie, statut PC et jaquettes : [IGDB.com](https://www.igdb.com), attribution dans le pied de page commun de chaque page (« Données de jeux et jaquettes via IGDB.com »), ainsi que dans les mentions légales, la FAQ et les pages de jeu (résumé IGDB). Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs ; une demande de retrait peut être faite via une issue GitHub (lien dans le pied de page).
 - Polices auto-hébergées (aucun appel à Google Fonts) : Bricolage Grotesque et IBM Plex Sans, sous licence SIL Open Font License 1.1 (`site/fonts/OFL-*.txt`).
 - HorsPC n'est affilié à aucun constructeur, éditeur ni marchand.
 - Licence : [MIT](LICENSE) pour le code et la documentation ; jaquettes, captures (`site/covers/`, `site/screens/`), noms de jeux, marques et données IGDB en sont exclus (voir [`NOTICE`](NOTICE)).

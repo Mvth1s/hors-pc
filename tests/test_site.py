@@ -213,3 +213,15 @@ def test_og_image_et_polices_presentes() -> None:
     css = (SITE / "style.css").read_text(encoding="utf-8")
     fonts = re.findall(r"url\(([^)]+)\)", css)
     assert fonts and all((SITE / f.strip("'\"")).is_file() for f in fonts)
+
+
+def test_attribution_igdb_dans_le_pied_de_page_de_chaque_page() -> None:
+    pages = [
+        p
+        for p in sorted(SITE.glob("*.html")) + sorted(SITE.glob("jeux/*/index.html"))
+        if 'http-equiv="refresh"' not in p.read_text(encoding="utf-8")
+    ]
+    for page in pages:
+        foot = footer_of(page)
+        assert "Données de jeux et jaquettes via" in foot, page
+        assert '<a href="https://www.igdb.com" target="_blank" rel="noopener noreferrer">' in foot

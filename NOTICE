@@ -15,9 +15,9 @@ pour HorsPC. Les contenus suivants en sont EXCLUS et restent la propriété de l
    constructeur, éditeur ni marchand.
 
 3. Données de jeux (dates de sortie, statut PC, résumés, studios, éditeurs, identifiants) :
-   fournies par IGDB.com (Twitch Interactive), sous les conditions de l'API IGDB. L'attribution
-   à IGDB.com figure dans les mentions légales (site/mentions-legales.html) et la FAQ du site,
-   et sur chaque page de jeu dont le résumé vient d'IGDB.
+   fournies par IGDB.com (Twitch Interactive), sous les conditions de l'API IGDB. Attribution
+   dans le pied de page de chaque page du site : « Données de jeux et jaquettes via IGDB.com »,
+   ainsi que dans les mentions légales, la FAQ et les pages de jeu dont le résumé vient d'IGDB.
 
 4. Polices auto-hébergées (site/fonts/) : Bricolage Grotesque et IBM Plex Sans, sous licence
    SIL Open Font License 1.1 (site/fonts/OFL-*.txt).
