@@ -1,0 +1,82 @@
+name: Audit des sources
+
+# Contrôle mensuel des sources de prix depuis les IP de GitHub (robots.txt, TDMRep, blocages,
+# CGU, JSON-LD). Un changement ouvre une issue à relire ; aucune source n'est activée ni
+# désactivée automatiquement (data/sources.config.yaml n'est jamais modifié).
+on:
+  schedule:
+    - cron: "23 5 1 * *" # le 1er de chaque mois, 05:23 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: sources-audit
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write # commit du seul fichier d'état data/sources.audit.json
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0
+        with:
+          enable-cache: true
+      - name: Installe les dépendances
+        run: uv sync --frozen
+      - name: Audit des sources
+        run: |
+          uv run python -m horspc sources-audit \
+            --changes "$RUNNER_TEMP/audit-changes.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Commite l'état de référence
+        run: |
+          if [ -z "$(git status --porcelain -- data/sources.audit.json)" ]; then
+            echo "état inchangé"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/sources.audit.json
+          git commit -m "chore(data): audit mensuel des sources"
+          git pull --rebase
+          git push
+      - name: Issue « changements à relire »
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          changes="$RUNNER_TEMP/audit-changes.md"
+          if [ ! -f "$changes" ]; then
+            echo "Aucun changement depuis le dernier audit"
+            exit 0
+          fi
+          gh label create sources-audit --color 1D4ED8 \
+            --description "Audit mensuel des sources de prix" --force
+          # Une seule issue ouverte à la fois : les audits suivants y ajoutent un commentaire.
+          open=$(gh issue list --label sources-audit --state open --json number --jq '.[0].number // empty')
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body-file "$changes"
+          else
+            gh issue create --label sources-audit \
+              --title "Audit des sources : changements à relire" --body-file "$changes"
+          fi
+      - name: Notification Discord
+        continue-on-error: true
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ ! -f "$RUNNER_TEMP/audit-changes.md" ]; then
+            exit 0
+          fi
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "Secret DISCORD_WEBHOOK_URL absent : pas de notification"
+            exit 0
+          fi
+          payload=$(jq -n --arg content "🔎 HorsPC : l'audit des sources a relevé des changements à relire (issue « sources-audit »). $RUN_URL" \
+            '{content: $content, allowed_mentions: {parse: []}}')
+          curl --fail --silent --show-error --max-time 20 \
+            -H "Content-Type: application/json" -d "$payload" "$DISCORD_WEBHOOK_URL" \
+            || echo "::warning::notification Discord non envoyée"

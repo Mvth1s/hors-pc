@@ -158,10 +158,56 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
 | LDLC, Rue du Commerce | Hors périmètre | Aucun jeu de console dans les sitemaps échantillonnés ; recherche interdite (`Disallow: /recherche/`) |
 | Easy Cash | Hors périmètre | Surtout de l'occasion ; recherche interdite (`Disallow: *q=*`) |
 
+## Contacts officiels pour une demande d'autorisation
+
+Coordonnées reprises des pages légales des enseignes, avec leur source. Ces pages renvoient 403
+ou ne s'affichent qu'en JavaScript pour un outil automatisé : elles ont été lues telles
+qu'indexées par un moteur de recherche le 25/10/2026, sans contournement. **À vérifier sur la
+page avant tout envoi** ; adresser le courrier au service juridique de la société.
+
+| Enseigne | Société et adresse | Canal | Source |
+|---|---|---|---|
+| Boulanger | Boulanger SA, siège à Lesquin (Nord), RCS Lille B 347 384 570 | Formulaire de contact du site | [Mentions légales](https://www.boulanger.com/evenement/infos-legales), [contact](https://www.boulanger.com/evenement/contact) |
+| Micromania | Micromania SAS, 955 route des Lucioles, 06560 Valbonne, RCS Grasse (le numéro diffère selon les documents du site) | Courrier au siège | [CGV](https://www.micromania.fr/cgv.html) |
+| Cdiscount | Cdiscount SA, 120-126 quai de Bacalan, 33000 Bordeaux, RCS Bordeaux 424 059 822 | Courrier au service juridique, à cette adresse | [Mentions légales (PDF)](https://www.cdiscount.com/resources/imagesok/cgv/ml.pdf) |
+| Fnac | Fnac Direct SA, Le Flavia, Ivry-sur-Seine, RCS Créteil B 377 853 536 | Courrier au siège | [Mentions légales](https://www.fnac.com/entreprise/mentions_legales.aspx), [CGV de la place de marché](https://www4.fnac.com/Help/cgv-fnac-marketplace) |
+| Darty | Établissements Darty et Fils SAS, ZAC Port d'Ivry, 9 rue des Bateaux-Lavoirs, 94200 Ivry-sur-Seine, RCS Créteil B 542 086 616 (d'autres documents du site indiquent Bondy, RCS Bobigny) | Courrier au siège | [Informations légales](https://www.darty.com/achat/informations/informations_legales.html) |
+| Cultura | SOCULTUR SAS, 17 rue Archimède, 33691 Mérignac Cedex, RCS Bordeaux 519 780 795 | Courrier au siège | [CGV de cultura.com](https://www.cultura.com/mentions-legales/cultura-cgv/cgv-cultura-com-en-vigueur-du-22-juillet-2025-au-31-aout-2025.html) |
+
+## Audit mensuel
+
+Le workflow [`sources-audit.yml`](../.github/workflows/sources-audit.yml) (le 1er de chaque mois,
+ou à la demande) contrôle chaque enseigne de ce document, listée dans
+[`data/sources.audit.yaml`](../data/sources.audit.yaml), depuis les IP de GitHub Actions :
+
+- robots.txt : statut HTTP, empreinte des règles qui s'appliquent à HorsPC, verdict sur nos chemins
+  (catégories, fiches, recherche) ;
+- TDMRep : `/.well-known/tdmrep.json` (seulement s'il s'agit de JSON), en-tête et meta
+  `tdm-reservation` de l'accueil ;
+- accueil et fiche connue : statut HTTP, page de défi ; pour les sites qui s'opposent à la fouille,
+  aucune fiche n'est demandée ;
+- CGU et CGV : empreinte des paragraphes qui parlent d'extraction, de robots, d'aspiration, de
+  fouille ou de reproduction. Un changement signifie « à relire », jamais une interprétation ;
+  une page illisible un mois donné garde sa dernière empreinte ;
+- sources actives : JSON-LD toujours lisible sur une fiche.
+
+L'état de référence est [`data/sources.audit.json`](../data/sources.audit.json), commité par le bot.
+Un changement ouvre l'issue « Audit des sources : changements à relire » (label `sources-audit`,
+une seule ouverte à la fois) et envoie un message Discord. **Aucune source n'est activée ni
+désactivée automatiquement** : la décision reste humaine, dans `data/sources.config.yaml`.
+
+Mêmes règles que le relevé : User-Agent identifiable, 1 requête par seconde par hôte, aucun
+contournement ; une page interdite par robots.txt n'est pas demandée, et une enseigne qui bloque
+n'est plus sollicitée pendant l'audit (environ 100 requêtes au total).
+
+Limite : les CGU d'E.Leclerc, d'eBay, de LDLC et de Rue du Commerce ne s'affichent qu'en
+JavaScript ; leur texte n'est pas lisible sans navigateur et leurs changements ne sont pas
+détectés (aucune clause trouvée).
+
 ## Demande d'autorisation (modèle de mail)
 
-Pour les sites bloqués (Micromania, Fnac, Darty, Cdiscount, Cultura), à envoyer au service juridique
-ou au contact presse/partenariats :
+Pour les sites bloqués (Micromania, Fnac, Darty, Cdiscount, Cultura, Boulanger), à envoyer aux
+contacts officiels ci-dessus :
 
 > Objet : Demande d'autorisation de relevé de prix automatisé, projet non commercial HorsPC
 >

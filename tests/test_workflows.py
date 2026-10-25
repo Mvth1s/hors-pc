@@ -403,3 +403,44 @@ def test_dependabot_actions_et_uv_hebdomadaire() -> None:
         assert update["schedule"]["interval"] == "weekly"
         (group,) = update["groups"].values()
         assert group["update-types"] == ["minor", "patch"]
+
+
+# --- Audit mensuel des sources --------------------------------------------------------------
+
+AUDIT = WORKFLOW.parent / "sources-audit.yml"
+
+
+def audit_workflow() -> dict[str, Any]:
+    return yaml.safe_load(AUDIT.read_text(encoding="utf-8"))
+
+
+def test_audit_mensuel_et_manuel() -> None:
+    wf = audit_workflow()
+    assert wf[True] == {"schedule": [{"cron": "23 5 1 * *"}], "workflow_dispatch": None}
+
+
+def test_audit_permissions_minimales() -> None:
+    wf = audit_workflow()
+    assert wf["permissions"] == {}
+    (job,) = wf["jobs"].values()
+    assert job["permissions"] == {"contents": "write", "issues": "write"}
+
+
+def test_audit_ne_commite_que_l_etat_et_ne_touche_pas_a_la_config() -> None:
+    steps = audit_workflow()["jobs"]["audit"]["steps"]
+    script = "\n".join(s.get("run", "") for s in steps)
+    assert "git add data/sources.audit.json" in script
+    assert script.count("git add") == 1
+    assert "sources.config" not in script
+    for step in steps:
+        assert "${{" not in step.get("run", ""), step.get("name")
+
+
+def test_audit_une_seule_issue_ouverte_et_discord_non_bloquant() -> None:
+    steps = {s.get("name"): s for s in audit_workflow()["jobs"]["audit"]["steps"]}
+    issue = steps["Issue « changements à relire »"]["run"]
+    assert "gh issue list --label sources-audit --state open" in issue
+    assert "gh issue comment" in issue and "gh issue create" in issue
+    discord = steps["Notification Discord"]
+    assert discord["continue-on-error"] is True
+    assert "allowed_mentions: {parse: []}" in discord["run"]

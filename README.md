@@ -16,7 +16,7 @@ Catalogue des jeux console absents du PC (PS5, Switch, Switch 2, Xbox Series), a
 - **Rendu statique et SEO** : HTML complet au build (catalogue lisible sans JS, une page par jeu), JSON-LD `VideoGame` / `Offer` / `AggregateOffer` / `BreadcrumbList`, sitemap avec `lastmod` réels. Preuves : [`src/horspc/render.py`](src/horspc/render.py), [`tests/test_render.py`](tests/test_render.py), section [SEO et rendu statique](#seo-et-rendu-statique).
 - **Relevé de prix automatisé et légal** : exception de fouille de textes et de données (TDM) avec une analyse par source, robots.txt interprété selon la RFC 9309 (jokers, règle la plus longue) et relu à chaque run, 1 requête par seconde par site, aucun contournement (une source qui bloque est arrêtée pour le run), règle de plateforme de confiance. Preuves : [`docs/sources.md`](docs/sources.md), [`src/horspc/robots.py`](src/horspc/robots.py), [`src/horspc/prices/fetch.py`](src/horspc/prices/fetch.py), [`src/horspc/prices/trust.py`](src/horspc/prices/trust.py), [`tests/test_robots.py`](tests/test_robots.py), [`tests/test_scraper.py`](tests/test_scraper.py) (pages figées, aucun appel réseau).
 - **Consentement CNIL testé en navigateur headless** : aucune requête Google avant accord ni après refus, vérifié avec Playwright sur l'accueil, les pages légales, la FAQ et une page de jeu. Preuves : [`site/consent.js`](site/consent.js), [`tests/test_consent.py`](tests/test_consent.py), section [Mesure d'audience](#mesure-daudience-ga4-conforme-cnil).
-- **Alertes** : Discord si le build planifié échoue ou si une source de prix est bloquée (sans faire échouer le build), issue « Données obsolètes » si `data.json` vieillit, diagnostic `scrape_dry_run` de ce que voient les IP de GitHub Actions. Preuves : jobs `notify` et `freshness` d'[`update.yml`](.github/workflows/update.yml), [`.github/workflows/discord.yml`](.github/workflows/discord.yml), [`src/horspc/prices/probe.py`](src/horspc/prices/probe.py).
+- **Alertes** : Discord si le build planifié échoue ou si une source de prix est bloquée (sans faire échouer le build), issue « Données obsolètes » si `data.json` vieillit, diagnostic `scrape_dry_run` de ce que voient les IP de GitHub Actions, audit mensuel des sources (robots.txt, TDMRep, blocages, CGU) qui ouvre une issue à relire sans jamais activer ni désactiver une source. Preuves : jobs `notify` et `freshness` d'[`update.yml`](.github/workflows/update.yml), [`.github/workflows/discord.yml`](.github/workflows/discord.yml), [`.github/workflows/sources-audit.yml`](.github/workflows/sources-audit.yml), [`src/horspc/prices/probe.py`](src/horspc/prices/probe.py), [`src/horspc/audit.py`](src/horspc/audit.py).
 - **Schéma de données versionné et validé** : entrées YAML et sortie `data.json` (v6, éditions par console) validées par Pydantic v2 ; un `data.json` précédent d'un autre schéma est refusé. Preuves : [`src/horspc/models.py`](src/horspc/models.py), [`tests/test_build.py`](tests/test_build.py), section [Schéma de `site/data.json`](#schéma-de-sitedatajson-v6).
 - **Sécurité des workflows** : permissions minimales par job (`permissions: {}` pour les notifications), toutes les actions épinglées par SHA de commit complet, `actions/*` compris (version en commentaire, mises à jour par [Dependabot](.github/dependabot.yml) avec les dépendances Python via l'écosystème `uv`), aucune expression `${{ github.event.* }}` dans les blocs `run` (événement lu avec `jq`), webhook Discord facultatif. Preuves : [`.github/workflows/`](.github/workflows/), tests `test_discord_*` et `test_toutes_les_actions_epinglees_par_sha` de [`tests/test_workflows.py`](tests/test_workflows.py).
 
@@ -61,7 +61,7 @@ Un push sur `main` qui touche `site/`, `src/` ou `data/` passe par les mêmes li
 | Jeux au catalogue | 50 (57 éditions par console) |
 | Jeux avec au moins une offre | 39 / 50 (43 éditions sur 57 ; 8 éditions en rupture affichée) |
 | Sources de prix actives | E.Leclerc, Pixmania (Boulanger désactivé, voir [`docs/sources.md`](docs/sources.md)) |
-| Tests | 527 (pytest, réseau simulé avec respx, navigateur headless pour le consentement) |
+| Tests | 636 (pytest, réseau simulé avec respx, navigateur headless pour le consentement) |
 
 ## Documentation
 
@@ -94,6 +94,7 @@ hors-pc/
 │   ├── prices.manual.yaml     # corrections d'urgence (prioritaires)
 │   ├── prices.scraped.jsonl   # historique des relevés (généré)
 │   ├── redirects.yaml         # anciens slugs → slug actuel
+│   ├── sources.audit.yaml     # enseignes de l'audit mensuel
 │   └── sources.config.yaml    # sources de prix activées
 ├── docs/
 │   ├── catalogue.jpg          # capture du README
@@ -105,6 +106,7 @@ hors-pc/
 │   └── workflows/
 │       ├── ci.yml             # lint + tests (push, PR)
 │       ├── discord.yml        # notifications (issues, PR, releases)
+│       ├── sources-audit.yml  # audit mensuel des sources
 │       └── update.yml         # build hebdo, relevé, Pages, alertes
 ├── .gitignore
 ├── LICENSE                    # MIT (code et documentation)
@@ -137,6 +139,7 @@ hors-pc/
 │   └── theme.js               # bascule du thème
 ├── src/
 │   └── horspc/
+│       ├── audit.py           # audit mensuel des sources
 │       ├── build.py           # fusion, validation, data.json
 │       ├── candidates.py      # candidats IGDB sans version PC
 │       ├── covers.py          # jaquettes et captures IGDB
@@ -164,6 +167,7 @@ hors-pc/
 │   ├── conftest.py
 │   ├── fixtures/              # réponses IGDB, pages marchandes figées
 │   ├── __init__.py
+│   ├── test_audit.py
 │   ├── test_build.py
 │   ├── test_candidates.py
 │   ├── test_consent.py
@@ -448,6 +452,7 @@ Tout passe par GitHub Actions et le secret `DISCORD_WEBHOOK_URL` (plus de webhoo
 - **Activité du dépôt** (`.github/workflows/discord.yml`) : issues ouvertes, fermées ou rouvertes, nouveaux commentaires, PR ouvertes, fermées, fusionnées ou rouvertes (`pull_request_target`), versions publiées. Message en embed : type d'événement, numéro et titre, auteur, lien, extrait du corps ; couleur selon l'action (vert ouverture, rouge fermeture, orange réouverture, violet fusion). Les issues et commentaires créés par `github-actions[bot]` (alerte de fraîcheur) sont ignorés.
 - **Échec du build planifié ou manuel** : le job `notify` d'`update.yml` (`if: failure()`, événements `schedule` et `workflow_dispatch`) poste le nom du workflow, l'événement et le lien du run. Un échec sur un simple push n'envoie rien : la CI le signale déjà sur le commit. Pour tester cette alerte : Actions › Mise à jour › Run workflow, en cochant `test_notification` ; la première étape du build échoue alors volontairement, avant tout build, commit et déploiement.
 - **Relevé des prix incomplet** : après le build complet, l'étape « Alerte Discord si une source est bloquée ou cassée » lit le bilan du relevé (`horspc scrape-report`) et poste un message si une source a été bloquée (401, 403, 429, page de défi) ou si une fiche n'a plus de JSON-LD exploitable. Cette étape ne fait jamais échouer le build (`continue-on-error`, envoi en échec simplement signalé) : les autres sources et le site sont mis à jour normalement. Le même bilan est écrit dans le résumé du run.
+- **Audit mensuel des sources** ([`sources-audit.yml`](.github/workflows/sources-audit.yml), le 1er du mois ou à la demande) : `uv run python -m horspc sources-audit` contrôle, depuis les IP de GitHub, robots.txt, TDMRep, blocages, empreinte des clauses des CGU et JSON-LD des sources actives pour chaque enseigne de [`data/sources.audit.yaml`](data/sources.audit.yaml). L'état de référence `data/sources.audit.json` est commité par le bot ; un changement ouvre l'issue « Audit des sources : changements à relire » (label `sources-audit`, une seule ouverte) et envoie un message Discord, sinon un résumé va dans le résumé du run. Aucune source n'est activée ni désactivée automatiquement. Détails et contacts officiels pour une demande d'autorisation : [`docs/sources.md`](docs/sources.md#audit-mensuel).
 
 Sécurité de `discord.yml` : `permissions: {}`, aucun checkout (le code d'une PR, même venant d'un fork, n'est jamais exécuté avec `pull_request_target`), aucune expression `${{ github.event.* }}` dans les scripts (l'événement est lu par `jq` dans `$GITHUB_EVENT_PATH` et le JSON construit par `jq`), `allowed_mentions: {parse: []}`, titres tronqués à 256 caractères et extraits à 300. `tests/test_workflows.py` vérifie ces règles et le contenu des embeds.
 

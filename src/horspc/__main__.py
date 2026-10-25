@@ -10,7 +10,7 @@ from pathlib import Path
 import yaml
 from pydantic import ValidationError
 
-from horspc import build, candidates, price_add, stale
+from horspc import audit, build, candidates, price_add, stale
 from horspc.http import USER_AGENT, HttpClient
 from horspc.igdb import IgdbClient
 from horspc.prices import probe, scraper
@@ -103,6 +103,24 @@ def cmd_scrape_probe(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_sources_audit(args: argparse.Namespace) -> int:
+    """Audit des sources : état écrit dans --state, changements dans --changes (s'il y en a),
+    résumé Markdown sur la sortie standard. Ne modifie jamais sources.config.yaml."""
+    today = datetime.now(UTC).date()
+    registry = audit.load_registry(args.registry)
+    previous = audit.load_state(args.state)
+    auditor = audit.Auditor.create()
+    try:
+        current, changes = audit.audit_and_compare(registry, auditor, previous, today)
+    finally:
+        auditor.close()
+    audit.write_state(args.state, current)
+    if changes and args.changes:
+        args.changes.write_text(audit.changes_markdown(changes, registry, today), encoding="utf-8")
+    print(audit.summary_markdown(current, changes, registry, previous is None), end="")
+    return 0
+
+
 def cmd_stale(args: argparse.Namespace) -> int:
     today = date.today()
     try:
@@ -169,6 +187,12 @@ def main(argv: list[str] | None = None) -> int:
 
     cmd = sub.add_parser("scrape-probe", help="diagnostic des sources, sans rien écrire")
     cmd.set_defaults(func=cmd_scrape_probe)
+
+    cmd = sub.add_parser("sources-audit", help="audit des sources de prix (robots, TDM, CGU)")
+    cmd.add_argument("--registry", type=Path, default=build.ROOT / "data" / "sources.audit.yaml")
+    cmd.add_argument("--state", type=Path, default=build.ROOT / "data" / "sources.audit.json")
+    cmd.add_argument("--changes", type=Path, help="écrit les changements à relire (Markdown)")
+    cmd.set_defaults(func=cmd_sources_audit)
 
     cmd = sub.add_parser("stale", help="liste les jeux sans prix ou au relevé trop ancien")
     cmd.set_defaults(func=cmd_stale)

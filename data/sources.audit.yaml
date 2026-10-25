@@ -1,0 +1,191 @@
+# Enseignes contrôlées par l'audit mensuel (`horspc sources-audit`), reprises de docs/sources.md.
+#
+# Champs : name, status (retenue | désactivée | exclue), reason (motif court), home (accueil),
+#   product (fiche produit connue, facultatif), paths (chemins dont on veut le verdict robots.txt),
+#   terms (pages de CGU / CGV dont on suit les clauses), active (source du relevé : JSON-LD vérifié
+#   sur `product`, avec le nom du lecteur de prices/sources.py).
+# Enseignes qui s'opposent à la fouille : pas de fiche produit, seulement robots.txt, TDMRep,
+# l'accueil et leurs conditions (c'est là qu'une levée de l'opposition apparaîtrait).
+# L'audit ne modifie jamais data/sources.config.yaml : la décision reste humaine.
+
+leclerc:
+  name: E.Leclerc
+  status: retenue
+  reason: aucune opposition
+  active: leclerc
+  home: https://www.e.leclerc/
+  product: https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336
+  paths: ["/cat/jeux-ps5", "/cat/jeux-switch-2?page=2", "/fp/x-0045496312336", "/recherche?q=x"]
+  terms:
+    - https://www.e.leclerc/i/conditions-generales-de-vente
+    - https://www.e.leclerc/i/conditions-generales-d-utilisation
+pixmania:
+  name: Pixmania
+  status: retenue
+  reason: aucune opposition
+  active: pixmania
+  home: https://www.pixmania.com/fr/fr/
+  product: https://www.pixmania.com/fr/fr/mario-kart-world-switch-2-397665.html
+  paths: ["/fr/fr/mario-kart-world-switch-2-397665.html", "/fr/fr/search/x"]
+  terms: ["https://www.pixmania.com/fr/fr/conditions-generales-d-utilisation.html"]
+boulanger:
+  name: Boulanger
+  status: désactivée
+  reason: HTTP 400 depuis GitHub Actions
+  home: https://www.boulanger.com/
+  product: https://www.boulanger.com/ref/1220885
+  paths: ["/c/jeu-playstation-5", "/ref/1220885", "/resultats?tr=x"]
+  terms: ["https://www.boulanger.com/evenement/conditions-generales-vente-boulanger"]
+
+playstation-store:
+  name: PlayStation Store
+  status: exclue
+  reason: opposition (conditions d'utilisation)
+  home: https://store.playstation.com/fr-fr/pages/latest
+  terms: ["https://www.playstation.com/fr-fr/legal/website-terms-of-use/"]
+nintendo:
+  name: Nintendo (eShop)
+  status: exclue
+  reason: opposition (robots.txt)
+  home: https://www.nintendo.com/fr-fr/
+  paths: ["/fr-fr/Jeux/"]
+ledenicheur:
+  name: leDénicheur
+  status: exclue
+  reason: opposition (CGU)
+  home: https://ledenicheur.fr/
+  terms: ["https://ledenicheur.fr/information/conditions-generales-dutilisation"]
+amazon:
+  name: Amazon
+  status: exclue
+  reason: opposition (conditions d'utilisation)
+  home: https://www.amazon.fr/
+  terms: ["https://www.amazon.fr/gp/help/customer/display.html?nodeId=201909000"]
+auchan:
+  name: Auchan
+  status: exclue
+  reason: opposition (CGU, robots.txt)
+  home: https://www.auchan.fr/
+  paths: ["/recherche?text=x"]
+  terms: ["https://www.auchan.fr/cgu/ep-cgu"]
+carrefour:
+  name: Carrefour
+  status: exclue
+  reason: opposition (CGV, CGU place de marché)
+  home: https://www.carrefour.fr/
+  terms:
+    - https://www.carrefour.fr/conditions-generales-ventes
+    - https://www.carrefour.fr/conditions-generales-utilisation-marketplace
+ebay:
+  name: eBay
+  status: exclue
+  reason: opposition, occasion
+  home: https://www.ebay.fr/
+  terms: ["https://www.ebay.fr/help/policies/member-behaviour-policies/user-agreement?id=4259"]
+microsoft-store:
+  name: Microsoft / Xbox Store
+  status: exclue
+  reason: opposition (contrat de services)
+  home: https://www.xbox.com/fr-FR
+  terms: ["https://www.microsoft.com/fr-fr/servicesagreement"]
+rakuten:
+  name: Rakuten France
+  status: exclue
+  reason: non vérifiable (CGU en 403)
+  home: https://fr.shopping.rakuten.com/
+  terms: ["https://fr.shopping.rakuten.com/newhelp/conditions-generales-dutilisation"]
+
+cdiscount:
+  name: Cdiscount
+  status: exclue
+  reason: bloqué (403 Cloudflare)
+  home: https://www.cdiscount.com/
+  product: https://www.cdiscount.com/jeux-pc-video-console/nintendo-switch/mario-kart-world-jeu-nintendo-switch-2/f-10328-ninns2mkworld.html
+fnac:
+  name: Fnac
+  status: exclue
+  reason: bloqué (403 Akamai)
+  home: https://www.fnac.com/
+  product: https://www.fnac.com/a21590928/Ghost-of-Yotei-PS5-Jeu-video-Playstation-5
+darty:
+  name: Darty
+  status: exclue
+  reason: bloqué (403 Akamai)
+  home: https://www.darty.com/
+  product: https://www.darty.com/nav/achat/ref/MC121424408.html
+cultura:
+  name: Cultura
+  status: exclue
+  reason: bloqué (403 DataDome)
+  home: https://www.cultura.com/
+  product: https://www.cultura.com/p-ghost-of-yotei-12140797.html
+micromania:
+  name: Micromania
+  status: exclue
+  reason: bloqué (défi Imperva)
+  home: https://www.micromania.fr/
+  product: https://www.micromania.fr/p/ghost-of-yotei-150141.html
+intermarche:
+  name: Intermarché
+  status: exclue
+  reason: bloqué (403 DataDome)
+  home: https://www.intermarche.com/
+  product: https://www.intermarche.com/produit/jeu-switch-51-worldwide-games-a-partir-de-12-ans/0045496426323
+king-jouet:
+  name: King Jouet
+  status: exclue
+  reason: bloqué (403 DataDome)
+  home: https://www.king-jouet.com/
+maxi-toys:
+  name: Maxi Toys
+  status: exclue
+  reason: bloqué (403 DataDome)
+  home: https://www.maxitoys.fr/
+super-u:
+  name: Super U
+  status: exclue
+  reason: bloqué (403 Cloudflare)
+  home: https://www.coursesu.com/
+  product: https://www.coursesu.com/p/jeu-nintendo-switch-super-mario-odyssey/7523150.html
+smyths:
+  name: Smyths Toys
+  status: exclue
+  reason: bloqué (défi Imperva)
+  home: https://www.smythstoys.com/
+gamecash:
+  name: Gamecash
+  status: exclue
+  reason: bloqué (403)
+  home: https://www.gamecash.fr/
+
+joueclub:
+  name: JouéClub
+  status: exclue
+  reason: hors périmètre
+  home: https://www.joueclub.fr/
+  terms: ["https://www.joueclub.fr/contenu/conditions-generales-de-vente.html"]
+lagranderecre:
+  name: La Grande Récré
+  status: exclue
+  reason: hors périmètre
+  home: https://www.lagranderecre.fr/
+  terms: ["https://www.lagranderecre.fr/informations-legales/conditions-generales-de-vente.html"]
+ldlc:
+  name: LDLC
+  status: exclue
+  reason: hors périmètre
+  home: https://www.ldlc.com/
+  paths: ["/recherche/x/"]
+  terms: ["https://www.ldlc.com/aide/58-nos-conditions-generales-de-vente/"]
+rueducommerce:
+  name: Rue du Commerce
+  status: exclue
+  reason: hors périmètre
+  home: https://www.rueducommerce.fr/
+  paths: ["/recherche/x"]
+  terms: ["https://www.rueducommerce.fr/aide/1044-nos-conditions-generales-de-vente/"]
+easycash:
+  name: Easy Cash
+  status: exclue
+  reason: hors périmètre (occasion)
+  home: https://www.easycash.fr/
