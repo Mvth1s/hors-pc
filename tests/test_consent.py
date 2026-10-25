@@ -236,3 +236,22 @@ def test_retour_sans_historique_mene_au_catalogue(base_url: str, browser: object
     page.wait_for_url(base_url)
     assert page.get_attribute('[data-platform="all"]', "aria-pressed") == "true"
     context.close()
+
+
+def test_filtre_console_affiche_le_prix_de_ses_editions(base_url: str, browser: object) -> None:
+    context = browser.new_context()
+    context.route(
+        "**/*", lambda r: r.continue_() if r.request.url.startswith(base_url) else r.abort()
+    )
+    page = context.new_page()
+    page.goto(base_url)
+    gta = page.locator('article[data-title="Grand Theft Auto VI"]')
+    assert gta.locator('.price-view[data-view="all"]').is_visible()
+    page.click('[data-platform="xbox_series"]')
+    # Édition Xbox Series sans relevé : son bloc remplace la meilleure offre (PS5).
+    assert gta.locator('.price-view[data-view="xbox_series"]').is_visible()
+    assert not gta.locator('.price-view[data-view="all"]').is_visible()
+    assert "Pas encore de prix relevé" in gta.inner_text()
+    page.click('[data-platform="all"]')
+    assert gta.locator('.price-view[data-view="all"]').is_visible()
+    context.close()

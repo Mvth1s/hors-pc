@@ -13,8 +13,8 @@ from pathlib import Path
 from typing import Any
 from xml.sax.saxutils import escape as xml_escape
 
-from horspc.models import DataFile, GameOut, OfferOut
-from horspc.prices.selection import RECENT_DAYS
+from horspc.models import DataFile, EditionOut, GameOut, OfferOut
+from horspc.prices.selection import RECENT_DAYS, edition_offer_key
 
 SITE_URL = "https://mvth1s.github.io/hors-pc/"
 OG_IMAGE = "og-image.png"  # 1200 x 630, image de partage générique
@@ -58,6 +58,14 @@ FORMATS = {
     "physical": "Physique",
     "code_box": "Boîte avec code de téléchargement",
     "digital": "Démat",
+}
+# Libellés courts des cartes (la page de jeu garde le libellé complet).
+FORMATS_SHORT = FORMATS | {"code_box": "Code dans la boîte"}
+# Filtres console du catalogue, comme PLATFORM_FILTERS dans app.js.
+FILTER_GROUPS: dict[str, tuple[str, ...]] = {
+    "ps5": ("ps5",),
+    "switch2": ("switch", "switch2"),
+    "xbox_series": ("xbox_series",),
 }
 STOPWORDS = {"the", "of", "a", "an", "le", "la", "les", "de", "du", "des", "et"}
 ARROW = (
@@ -281,10 +289,23 @@ def _initials(title: str) -> str:
     return "".join(w[0] for w in words[:2]).upper()
 
 
+# Libellés courts des badges sur les cartes mobiles (le nom complet reste lu à l'écran).
+CONSOLES_SHORT = {"xbox_series": "Xbox"}
+
+
 def _consoles(game: GameOut) -> str:
-    return "".join(
-        f'<span class="console {CONSOLES[p][1]}">{CONSOLES[p][0]}</span>' for p in game.platforms
-    )
+    badges = []
+    for p in game.platforms:
+        name, cls = CONSOLES[p]
+        short = CONSOLES_SHORT.get(p)
+        label = (
+            f'<span class="c-long">{name}</span><span class="c-short" aria-hidden="true">'
+            f"{short}</span>"
+            if short
+            else name
+        )
+        badges.append(f'<span class="console {cls}">{label}</span>')
+    return "".join(badges)
 
 
 def _cover(game: GameOut, color: int, prefix: str, lazy: bool) -> str:
@@ -305,8 +326,12 @@ def _cover(game: GameOut, color: int, prefix: str, lazy: bool) -> str:
     )
 
 
-def _price_block(game: GameOut, with_cta: bool) -> str:
-    offer = game.best_offer
+def _price_block(game: GameOut, with_cta: bool, offer: OfferOut | None = None) -> str:
+    """Bloc prix d'une offre (par défaut la meilleure toutes éditions).
+
+    Pour un jeu à plusieurs éditions, la console de l'offre est précisée (« sur PS5 »).
+    """
+    offer = offer if offer is not None else game.best_offer
     if offer is None:
         return '<div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div>'
     launch = (
@@ -326,6 +351,8 @@ def _price_block(game: GameOut, with_cta: bool) -> str:
     else:
         shipping = f" · + {_euros(offer.shipping_cents)} de port"
     where = f"{_e(merchant_label(offer))}, relevé le {_fr(offer.observed_at)}{shipping}"
+    if len(game.editions) > 1:
+        where = f"Sur {CONSOLES[offer.platform][0]} · {where}"
     source = (
         f'<p class="source old"><span class="warn-dot" aria-hidden="true"></span>'
         f"<span>{where}. Prix à vérifier.</span></p>"
@@ -351,29 +378,82 @@ def merchant_label(offer: OfferOut) -> str:
     return offer.merchant if offer.seller is None else f"{offer.seller} via {offer.merchant}"
 
 
+def best_edition_offer(offers: list[OfferOut]) -> OfferOut | None:
+    """Meilleure offre parmi des éditions (même ordre que best_offer au build)."""
+    return min(
+        offers,
+        key=lambda o: edition_offer_key(
+            o.stale,
+            o.format,
+            o.price_cents,
+            o.shipping_cents,
+            o.observed_at,
+            o.merchant,
+            o.platform,
+        ),
+        default=None,
+    )
+
+
+def filter_views(game: GameOut) -> dict[str, OfferOut | None]:
+    """Offre affichée par filtre console, pour un jeu à plusieurs éditions (sinon vide)."""
+    if len(game.editions) < 2:
+        return {}
+    views: dict[str, OfferOut | None] = {}
+    for key, platforms in FILTER_GROUPS.items():
+        editions = [e for e in game.editions if e.platform in platforms]
+        if editions:
+            views[key] = best_edition_offer([e.offer for e in editions if e.offer])
+    return views
+
+
+def _sort_values(offer: OfferOut | None) -> dict[str, Any]:
+    return {
+        "price": None if offer is None else offer.price_cents + (offer.shipping_cents or 0),
+        "discount": None if offer is None else offer.discount_pct,
+        "format": "" if offer is None else FORMATS_SHORT[offer.format],
+    }
+
+
 def _sort_attrs(game: GameOut) -> str:
-    offer = game.best_offer
-    price = "" if offer is None else str(offer.price_cents + (offer.shipping_cents or 0))
-    discount = "" if offer is None or offer.discount_pct is None else str(offer.discount_pct)
+    best = _sort_values(game.best_offer)
+    price = "" if best["price"] is None else str(best["price"])
+    discount = "" if best["discount"] is None else str(best["discount"])
     release = game.release_date.isoformat() if game.release_date else ""
+    views = filter_views(game)
+    # Prix, réduction et format par filtre console : app.js les utilise pour l'affichage et le tri.
+    data_views = (
+        f" data-views='{_a(json.dumps({k: _sort_values(o) for k, o in views.items()}))}'"
+        if views
+        else ""
+    )
     return (
         f'data-platforms="{" ".join(game.platforms)}" data-status="{game.pc_status}" '
         f'data-price="{price}" data-discount="{discount}" data-release="{release}" '
-        f'data-title="{_a(game.title)}"'
+        f'data-title="{_a(game.title)}"{data_views}'
     )
 
 
 def both_formats(game: GameOut) -> bool:
     """« Physique et numérique » seulement si les deux preuves existent ; aucun autre badge.
 
-    Par édition : numérique = store officiel ou Amazon Digital (IGDB) ; physique = entrée
-    Physical (IGDB) ou offre physique neuve relevée (une boîte avec code ne compte pas).
+    Par édition : numérique = store officiel ou Amazon Digital (IGDB) ; physique = offre
+    physique neuve relevée, ou entrée Physical (IGDB) non contredite par les relevés récents.
     """
-    return any(
-        e.sold_digital
-        and (e.listed_physical or (e.offer is not None and e.offer.format == "physical"))
-        for e in game.editions
-    )
+    return any(e.sold_digital and _physical_proof(e) for e in game.editions)
+
+
+def _physical_proof(edition: EditionOut) -> bool:
+    """Offre physique relevée, ou entrée Physical IGDB que les relevés ne contredisent pas.
+
+    Si la meilleure offre récente (moins de 30 jours) est une boîte avec code, aucun relevé
+    récent n'est physique (le physique passe avant à la sélection) : l'entrée IGDB est ignorée.
+    """
+    offer = edition.offer
+    if offer is not None and offer.format == "physical":
+        return True
+    contradicted = offer is not None and not offer.stale and offer.format == "code_box"
+    return edition.listed_physical and not contradicted
 
 
 def is_upcoming(game: GameOut, today: date) -> bool:
@@ -406,14 +486,24 @@ def _card(game: GameOut, index: int, today: date) -> str:
         release = "À venir"
     else:
         release = f"Sortie le {_fr(game.release_date)}"
-    fmt = FORMATS[game.best_offer.format] if game.best_offer else ""
+    fmt = FORMATS_SHORT[game.best_offer.format] if game.best_offer else ""
+    # Une vue de prix par filtre console (jeux à plusieurs éditions) ; sans JS, seule la
+    # meilleure offre toutes éditions est visible.
+    prices = f'<div class="price-view" data-view="all">{_price_block(game, True)}</div>'
+    for key, offer in filter_views(game).items():
+        block = (
+            _price_block(game, True, offer)
+            if offer
+            else '<div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div>'
+        )
+        prices += f'<div class="price-view" data-view="{key}" hidden>{block}</div>'
     return (
         f'<article class="card" {_sort_attrs(game)}>'
         f"{_cover(game, index, '', lazy=index >= 4)}"
         f'<div class="body">{_badges(game, today)}'
         f'<h2 class="title"><a href="{GAMES_DIR}/{game.slug}/">{_e(game.title)}</a></h2>'
-        f'<p class="sub"><span>{release}</span><span>{fmt}</span></p>'
-        f"{_price_block(game, with_cta=True)}</div></article>"
+        f'<p class="sub"><span>{release}</span><span class="fmt">{fmt}</span></p>'
+        f"{prices}</div></article>"
     )
 
 
@@ -447,8 +537,9 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
         else "jamais sorti sur PC"
     )
     if game.best_offer:
+        on = f" sur {CONSOLES[game.best_offer.platform][0]}" if len(game.editions) > 1 else ""
         description += (
-            f". Meilleur prix relevé : {_euros(game.best_offer.price_cents)} chez "
+            f". Meilleur prix relevé{on} : {_euros(game.best_offer.price_cents)} chez "
             f"{merchant_label(game.best_offer)} le {_fr(game.best_offer.observed_at)}."
         )
     else:
@@ -503,10 +594,50 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
     <dl class="facts">{dl}</dl>
   </section>
 </article>
-{_summary_section(game)}{_trailer_section(game)}{_gallery_section(game)}</main>"""
+{_editions_section(game)}{_summary_section(game)}{_trailer_section(game)}{_gallery_section(game)}</main>"""
     page = template.replace("<!--horspc:game-head-->", head)
     page = page.replace("<!--horspc:game-main-->", main)
     return _set_footer_date(page, generated)
+
+
+def _editions_section(game: GameOut) -> str:
+    """Tableau « Prix par édition » (jeux à plusieurs éditions) : une ligne par console."""
+    if len(game.editions) < 2:
+        return ""
+    rows = []
+    for edition in game.editions:
+        console = f'<th scope="row">{CONSOLES[edition.platform][0]}</th>'
+        offer = edition.offer
+        if offer is None:
+            rows.append(
+                f'<tr>{console}<td class="no-offer" colspan="5">Pas encore de prix relevé</td></tr>'
+            )
+            continue
+        price = _euros(offer.price_cents)
+        if offer.shipping_cents:
+            price += f" <small>+ {_euros(offer.shipping_cents)} de port</small>"
+        stale = ' <span class="old-tag">Prix à vérifier</span>' if offer.stale else ""
+        link = (
+            f'<a class="cta small" href="{_a(str(offer.url))}" rel="noopener nofollow" '
+            f'target="_blank">Voir l\'offre{ARROW}</a>'
+        )
+        rows.append(
+            f"<tr>{console}"
+            f'<td data-label="Prix">{price}</td>'
+            f'<td data-label="Format">{FORMATS[offer.format]}</td>'
+            f'<td data-label="Marchand">{_e(merchant_label(offer))}</td>'
+            f'<td data-label="Relevé le">{_fr(offer.observed_at)}{stale}</td>'
+            f"<td>{link}</td></tr>"
+        )
+    return (
+        '<section class="game-section" aria-labelledby="editions">'
+        '<h2 id="editions">Prix par édition</h2>'
+        '<table class="editions"><thead><tr><th scope="col">Console</th>'
+        '<th scope="col">Prix</th><th scope="col">Format</th><th scope="col">Marchand</th>'
+        '<th scope="col">Relevé le</th><th scope="col"><span class="visually-hidden">Lien'
+        "</span></th></tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table></section>\n"
+    )
 
 
 def _breadcrumb(game: GameOut, url: str) -> dict[str, Any]:
@@ -623,9 +754,19 @@ def _videogame(game: GameOut, url: str) -> dict[str, Any]:
         data["author"] = [{"@type": "Organization", "name": n} for n in game.developers]
     if game.publishers:
         data["publisher"] = [{"@type": "Organization", "name": n} for n in game.publishers]
-    offer = game.best_offer
     # Une offre non vérifiée depuis 30 jours n'est plus publiée : son prix n'est plus garanti.
-    if offer and not offer.stale:
+    fresh = [e.offer for e in game.editions if e.offer is not None and not e.offer.stale]
+    if len(fresh) > 1:
+        prices = [o.price_cents for o in fresh]
+        data["offers"] = {
+            "@type": "AggregateOffer",
+            "lowPrice": f"{min(prices) / 100:.2f}",
+            "highPrice": f"{max(prices) / 100:.2f}",
+            "offerCount": len(fresh),
+            "priceCurrency": "EUR",
+        }
+    elif fresh:
+        offer = fresh[0]
         data["offers"] = {
             "@type": "Offer",
             "price": f"{offer.price_cents / 100:.2f}",

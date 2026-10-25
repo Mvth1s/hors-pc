@@ -74,7 +74,8 @@ color-scheme:light;container-type:inline-size;background:var(--bg);color:var(--i
 .hp .status.fmt{background:var(--surface-2);color:var(--ink)}
 .hp .badges{display:flex;flex-wrap:wrap;gap:6px}
 .hp .title{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px;line-height:1.15;letter-spacing:-0.01em}
-.hp .sub{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--muted);margin:0}
+.hp .sub{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;font-size:13px;color:var(--muted);margin:0}
+.hp .sub span{white-space:nowrap}
 .hp .price-block{display:flex;flex-direction:column;gap:4px;padding-top:10px;border-top:1px dashed var(--line)}
 .hp .was{font-size:13px;color:var(--muted)}
 .hp .was s{color:var(--muted);text-decoration-thickness:1.5px}
@@ -120,6 +121,10 @@ color-scheme:light;container-type:inline-size;background:var(--bg);color:var(--i
 .hp .initials{font-size:38px}
 .hp .cover-tag{display:none}
 .hp .cover .console{height:20px;padding:0 6px;font-size:11px}
+.hp .card .covers{gap:3px}
+.hp .card .cover .console{height:17px;padding:0 4px;font-size:10px;border-radius:4px;letter-spacing:0}
+.hp .card .c-long{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.hp .card .c-short{display:inline}
 .hp .body{padding:12px 12px 12px 14px;gap:8px}
 .hp .title{font-size:17px}
 .hp .sub{flex-direction:column;gap:2px;font-size:12px}
@@ -141,6 +146,7 @@ color-scheme:light;container-type:inline-size;background:var(--bg);color:var(--i
 .hp.is-dark .icon-sun{display:block}
 .hp .covers{position:absolute;top:10px;left:10px;display:flex;gap:4px;flex-wrap:wrap}
 .hp .covers .console{position:static}
+.hp .c-short{display:none}
 .hp .cover.has-img{background:var(--surface-2)}
 .hp .cover.has-img::before{display:none}
 .hp .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
@@ -280,4 +286,23 @@ html:not(.js) .hp .toolbar,html:not(.js) .hp #theme-toggle{display:none}
 @container (max-width:640px){
 .hp .gallery{grid-template-columns:1fr}
 .hp .game-section h2{font-size:20px}
+}
+/* --- Prix par édition (page de jeu) --- */
+.hp .editions{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:14px}
+.hp .editions th,.hp .editions td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+.hp .editions thead th{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--surface-2)}
+.hp .editions tbody tr:last-child th,.hp .editions tbody tr:last-child td{border-bottom:0}
+.hp .editions tbody th{font-weight:700;white-space:nowrap}
+.hp .editions small{color:var(--muted)}
+.hp .editions .no-offer{color:var(--muted)}
+.hp .editions .cta.small{display:inline-flex;margin:0;height:36px;padding:0 14px;font-size:13px;white-space:nowrap}
+.hp .old-tag{display:inline-block;margin-left:6px;font-size:12px;color:var(--warn-ink);background:var(--warn-bg);border-radius:6px;padding:1px 6px}
+@container (max-width:640px){
+.hp .editions thead{display:none}
+.hp .editions,.hp .editions tbody,.hp .editions tr,.hp .editions th,.hp .editions td{display:block;width:100%}
+.hp .editions tr{padding:12px 14px;border-bottom:1px solid var(--line)}
+.hp .editions tbody tr:last-child{border-bottom:0}
+.hp .editions th,.hp .editions td{padding:3px 0;border:0}
+.hp .editions td[data-label]::before{content:attr(data-label) " : ";color:var(--muted)}
+.hp .editions td:last-child{padding-top:8px}
 }

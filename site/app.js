@@ -30,11 +30,34 @@ function esc(value) {
   })[c]);
 }
 
-/** Valeur de tri d'une fiche, null si absente (placée en fin de liste). */
+/** Vues par filtre console (jeux à plusieurs éditions) : prix, réduction et format. */
+function views(card) {
+  if (!card.dataset.views) return {};
+  try { return JSON.parse(card.dataset.views); } catch { return {}; }
+}
+
+/** Valeur de tri d'une fiche, null si absente (placée en fin de liste). Avec un filtre console,
+ * le prix et la réduction sont ceux des éditions de cette console. */
 function sortValue(card, key) {
+  const view = views(card)[state.platform];
+  if (view && (key === "price" || key === "discount")) return view[key] ?? null;
   const raw = card.dataset[key];
   if (!raw) return null;
   return key === "release" ? raw : Number(raw);
+}
+
+/** Affiche le bloc prix du filtre console actif (sinon la meilleure offre toutes éditions). */
+function showPriceView(card) {
+  const blocks = card.querySelectorAll(".price-view");
+  if (blocks.length < 2) return;
+  const all = views(card);
+  const key = Object.hasOwn(all, state.platform) ? state.platform : "all";
+  for (const block of blocks) block.hidden = block.dataset.view !== key;
+  const fmt = card.querySelector(".sub .fmt");
+  if (fmt) {
+    fmt.dataset.all ??= fmt.textContent; // format de la meilleure offre toutes éditions
+    fmt.textContent = key === "all" ? fmt.dataset.all : all[key].format;
+  }
 }
 
 function byKey(key, desc) {
@@ -83,6 +106,7 @@ function render() {
   const all = cards().sort(SORTS[state.sort]);
   let visible = 0;
   for (const card of all) {
+    showPriceView(card);
     card.hidden = !matches(card);
     if (!card.hidden) visible += 1;
     grid.appendChild(card); // réordonne sans recréer les fiches

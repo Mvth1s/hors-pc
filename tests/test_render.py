@@ -24,6 +24,12 @@ def jsonld(text: str) -> list[dict[str, Any]]:
     return [json.loads(b) for b in blocks]
 
 
+XBOX_BADGE = (
+    '<span class="console xb"><span class="c-long">Xbox Series</span>'
+    '<span class="c-short" aria-hidden="true">Xbox</span></span>'
+)
+
+
 def game_jsonld(text: str) -> dict[str, Any]:
     """JSON-LD VideoGame d'une page de jeu (à côté de son BreadcrumbList)."""
     (game,) = [d for d in jsonld(text) if d["@type"] == "VideoGame"]
@@ -428,7 +434,7 @@ def test_jeu_a_venir_badge_date_et_statut_pc(site: Path) -> None:
 def test_xbox_series_badge_et_jsonld(site: Path) -> None:
     render(site, [game("halo", platforms=("xbox_series",))])
     index = (site / "index.html").read_text(encoding="utf-8")
-    assert '<span class="console xb">Xbox Series</span>' in index
+    assert XBOX_BADGE in index
     data = game_jsonld((site / GAMES_DIR / "halo" / "index.html").read_text(encoding="utf-8"))
     assert data["gamePlatform"] == ["Xbox Series X|S"]
 
@@ -454,8 +460,9 @@ def test_boite_avec_code_affichee(site: Path) -> None:
     box = offer(date(2026, 10, 20), stale=False) | {"format": "code_box"}
     render(site, [game("gta", offer=box)])
     index = (site / "index.html").read_text(encoding="utf-8")
-    assert "<span>Boîte avec code de téléchargement</span>" in index
-    assert "<span>Physique</span>" not in index
+    # Libellé court sur la carte, complet sur la page.
+    assert '<span class="fmt">Code dans la boîte</span>' in index
+    assert "Physique</span>" not in index
     page = (site / GAMES_DIR / "gta" / "index.html").read_text(encoding="utf-8")
     assert "<dt>Format de l'offre</dt><dd>Boîte avec code de téléchargement</dd>" in page
 
@@ -498,3 +505,124 @@ def test_ancien_slug_redirige_hors_sitemap(site: Path) -> None:
     sitemap = (site / "sitemap.xml").read_text(encoding="utf-8")
     assert "gta-xbox" not in sitemap and target in sitemap
     assert not (site / GAMES_DIR / "inconnu").exists()  # cible absente : pas de redirection
+
+
+# --- Éditions -------------------------------------------------------------------------------
+
+
+def multi(**kw: Any) -> dict[str, Any]:
+    """GTA VI à deux éditions : PS5 relevée à 60 €, Xbox Series à 55 €, ou sans offre."""
+    day = date(2026, 10, 20)
+    offers = {
+        "ps5": offer(day, stale=False, price=6000) | {"format": "code_box"},
+        "xbox_series": offer(day, stale=False, price=5500),
+    }
+    return game("gta", platforms=("ps5", "xbox_series"), offers=offers) | kw
+
+
+def card(index: str, title: str) -> str:
+    return re.search(
+        rf'<article class="card"[^>]*data-title="{title}".*?</article>', index, re.S
+    ).group(0)
+
+
+def test_carte_multi_editions_vues_par_filtre(site: Path) -> None:
+    render(site, [multi()])
+    html_card = card((site / "index.html").read_text(encoding="utf-8"), "Gta")
+    assert html_card.count('<span class="console ps">PS5</span>') == 1
+    assert XBOX_BADGE in html_card
+    # Meilleure offre toutes éditions (5,50 € sur Xbox), avec sa console.
+    default = re.search(r'data-view="all">(.*?)<div class="price-view"', html_card, re.S).group(1)
+    assert "55<small>,00" in default and "Sur Xbox Series · Amazon" in default
+    views = json.loads(html.unescape(re.search(r"data-views='([^']+)'", html_card).group(1)))
+    assert views == {
+        "ps5": {"price": 6000, "discount": 24, "format": "Code dans la boîte"},
+        "xbox_series": {"price": 5500, "discount": 24, "format": "Physique"},
+    }
+    assert 'data-view="ps5" hidden' in html_card and 'data-view="switch2"' not in html_card
+
+
+def test_carte_une_edition_sans_vue_ni_mention(site: Path) -> None:
+    render(site, [game("astro", offer=offer(date(2026, 10, 20), stale=False))])
+    html_card = card((site / "index.html").read_text(encoding="utf-8"), "Astro")
+    assert "data-views" not in html_card and "Sur PS5" not in html_card
+
+
+def test_page_prix_par_edition(site: Path) -> None:
+    render(site, [multi(), game("solo", platforms=("ps5", "xbox_series"))])
+    page = (site / GAMES_DIR / "gta" / "index.html").read_text(encoding="utf-8")
+    table = re.search(r'<table class="editions">.*?</table>', page, re.S).group(0)
+    assert '<th scope="row">PS5</th><td data-label="Prix">60,00\xa0€</td>' in table
+    assert '<td data-label="Format">Boîte avec code de téléchargement</td>' in table
+    assert table.count("Voir l'offre") == 2
+    solo = (site / GAMES_DIR / "solo" / "index.html").read_text(encoding="utf-8")
+    assert solo.count("Pas encore de prix relevé</td>") == 2
+    data = game_jsonld(page)
+    assert data["gamePlatform"] == ["PlayStation 5", "Xbox Series X|S"]
+    assert data["offers"] == {
+        "@type": "AggregateOffer",
+        "lowPrice": "55.00",
+        "highPrice": "60.00",
+        "offerCount": 2,
+        "priceCurrency": "EUR",
+    }
+
+
+def test_une_seule_edition_a_jour_offer_simple(site: Path) -> None:
+    day = date(2026, 10, 20)
+    offers = {"ps5": offer(day, stale=False), "xbox_series": offer(date(2026, 7, 1), stale=True)}
+    render(site, [game("gta", platforms=("ps5", "xbox_series"), offers=offers)])
+    data = game_jsonld((site / GAMES_DIR / "gta" / "index.html").read_text(encoding="utf-8"))
+    assert data["offers"]["@type"] == "Offer"
+
+
+def test_filtres_python_et_app_js_identiques() -> None:
+    from horspc.render import FILTER_GROUPS
+
+    app = (SITE / "app.js").read_text(encoding="utf-8")
+    for key, platforms in FILTER_GROUPS.items():
+        listed = ", ".join(f'"{p}"' for p in platforms)
+        assert re.search(rf"{key}: \{{ label: \"[^\"]+\", platforms: \[{listed}\] \}}", app), key
+
+
+def test_tableau_editions_absent_pour_une_seule_edition(site: Path) -> None:
+    render(site, [game("astro", offer=offer(date(2026, 10, 20), stale=False))])
+    page = (site / GAMES_DIR / "astro" / "index.html").read_text(encoding="utf-8")
+    assert "Prix par édition" not in page and 'class="editions"' not in page
+
+
+def test_badge_xbox_court_sur_mobile_nom_complet_lu() -> None:
+    from horspc.render import CONSOLES_SHORT
+
+    assert CONSOLES_SHORT == {"xbox_series": "Xbox"}
+    css = (SITE / "style.css").read_text(encoding="utf-8")
+    mobile = css.split("@container (max-width:640px)")[1].split("}\n}")[0]
+    assert ".hp .card .c-short{display:inline}" in mobile
+    assert ".hp .card .c-long{position:absolute" in mobile  # masqué visuellement, pas aux lecteurs
+    assert ".hp .c-short{display:none}" in css  # desktop inchangé
+
+
+@pytest.mark.parametrize(
+    ("offer_format", "stale", "badge"),
+    [
+        ("code_box", False, False),  # GTA VI : relevés récents tous en boîte avec code
+        ("code_box", True, True),  # relevé ancien : il ne contredit plus IGDB
+        ("physical", False, True),
+    ],
+)
+def test_preuve_physique_igdb_contredite_par_les_releves(
+    site: Path, offer_format: str, stale: bool, badge: bool
+) -> None:
+    observed = date(2026, 7, 1) if stale else date(2026, 10, 20)
+    box = offer(observed, stale=stale) | {"format": offer_format}
+    gta = game(
+        "gta",
+        platforms=("ps5", "xbox_series"),
+        offers={"ps5": box},
+        sold_digital=True,
+        listed_physical=True,
+    )
+    gta["editions"][1]["sold_digital"] = gta["editions"][1]["listed_physical"] = False
+    render(site, [gta])
+    index = (site / "index.html").read_text(encoding="utf-8")
+    assert ('<span class="status fmt">Physique et numérique</span>' in index) is badge

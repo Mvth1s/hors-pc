@@ -21,6 +21,26 @@ RECENT_DAYS = 30
 FORMAT_RANK = {"physical": 0, "code_box": 1, "digital": 2}
 
 
+def edition_offer_key(
+    stale: bool,
+    offer_format: str,
+    price_cents: int,
+    shipping_cents: int | None,
+    observed_at: date,
+    merchant: str,
+    platform: str,
+) -> tuple[bool, int, int, int, str, str]:
+    """Ordre entre offres de plusieurs éditions : à jour, format, prix port compris, récence."""
+    return (
+        stale,
+        FORMAT_RANK[offer_format],
+        price_cents + (shipping_cents or 0),
+        -observed_at.toordinal(),
+        merchant,
+        platform,
+    )
+
+
 @dataclass(frozen=True)
 class Selection:
     observation: PriceObservation

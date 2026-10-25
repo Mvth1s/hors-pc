@@ -18,7 +18,7 @@ from horspc.igdb import IgdbClient, IgdbError, IgdbGame
 from horspc.models import Catalog, DataFile, GameOut, ScrapedObservation, to_cents
 from horspc.prices import ManualPriceProvider, Offer, PriceProvider, scraper
 from horspc.prices.fetch import Fetcher
-from horspc.prices.selection import FORMAT_RANK
+from horspc.prices.selection import edition_offer_key
 
 log = logging.getLogger(__name__)
 
@@ -327,11 +327,12 @@ def best_offer(offers: list[dict[str, Any]]) -> dict[str, Any] | None:
         return None
     return min(
         offers,
-        key=lambda o: (
+        key=lambda o: edition_offer_key(
             o["stale"],
-            FORMAT_RANK[o["format"]],
-            o["price_cents"] + (o["shipping_cents"] or 0),
-            -o["observed_at"].toordinal(),
+            o["format"],
+            o["price_cents"],
+            o["shipping_cents"],
+            o["observed_at"],
             o["merchant"],
             o["platform"],
         ),
