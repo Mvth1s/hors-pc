@@ -6,6 +6,7 @@ Catalogue des jeux console absents du PC (PS5, Switch, Switch 2, Xbox Series), a
 
 [![CI](https://github.com/Mvth1s/hors-pc/actions/workflows/ci.yml/badge.svg)](https://github.com/Mvth1s/hors-pc/actions/workflows/ci.yml)
 [![Mise à jour](https://github.com/Mvth1s/hors-pc/actions/workflows/update.yml/badge.svg)](https://github.com/Mvth1s/hors-pc/actions/workflows/update.yml)
+[![Licence MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
 ![Catalogue HorsPC : filtres par console et statut PC, cartes avec jaquette, badges et meilleur prix relevé](docs/catalogue.jpg)
 
@@ -387,6 +388,7 @@ Sécurité de `discord.yml` : `permissions: {}`, aucun checkout (le code d'une P
 
 ## Crédits
 
-- Dates de sortie, statut PC et jaquettes : [IGDB.com](https://www.igdb.com), attribution visible dans le pied de page du site. Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs ; une demande de retrait peut être faite via une issue GitHub (lien dans le pied de page).
+- Dates de sortie, statut PC et jaquettes : [IGDB.com](https://www.igdb.com), attribution dans les mentions légales, la FAQ et les pages de jeu (résumé IGDB). Les jaquettes et noms de jeux appartiennent à leurs éditeurs respectifs ; une demande de retrait peut être faite via une issue GitHub (lien dans le pied de page).
 - Polices auto-hébergées (aucun appel à Google Fonts) : Bricolage Grotesque et IBM Plex Sans, sous licence SIL Open Font License 1.1 (`site/fonts/OFL-*.txt`).
 - HorsPC n'est affilié à aucun constructeur, éditeur ni marchand.
+- Licence : [MIT](LICENSE) pour le code et la documentation ; jaquettes, captures (`site/covers/`, `site/screens/`), noms de jeux, marques et données IGDB en sont exclus (voir [`NOTICE`](NOTICE)).

@@ -1,8 +1,10 @@
 [project]
 name = "horspc"
 version = "0.1.0"
-description = "Catalogue des exclusivités PS5, Switch et Switch 2 absentes sur PC, avec les prix les plus bas en France."
+description = "Catalogue des jeux console absents du PC (PS5, Switch, Switch 2, Xbox Series), avec les prix les plus bas en France."
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "NOTICE"]
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "httpx>=0.28",
