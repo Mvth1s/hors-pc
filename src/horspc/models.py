@@ -26,7 +26,8 @@ PcStatus = Literal["none", "announced", "released"]
 PcStatusSource = Literal["igdb", "manual"]
 SummarySource = Literal["igdb", "manual"]
 ReleaseDateSource = Literal["igdb", "manual"]
-OfferFormat = Literal["physical", "digital"]
+# code_box : boîte sans disque ni cartouche, contenant seulement un code de téléchargement.
+OfferFormat = Literal["physical", "code_box", "digital"]
 Condition = Literal["new"]
 
 MerchantCategory = Literal[
@@ -250,7 +251,7 @@ class ScrapedObservation(_Input):
     seller: str = Field(min_length=1)
     price: Euros
     shipping: EurosOrZero | None
-    format: Literal["physical"]
+    format: Literal["physical", "code_box"]
     condition: Condition
     url: HttpUrl
     ean: str | None = Field(default=None, pattern=r"^\d{8,14}$")

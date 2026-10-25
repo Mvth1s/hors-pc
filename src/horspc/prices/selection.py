@@ -1,4 +1,4 @@
-"""Règle de sélection : physique neuf le moins cher, sinon démat officiel."""
+"""Règle de sélection : physique neuf, sinon boîte avec code, sinon démat officiel."""
 
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -18,7 +18,8 @@ class PriceObservation(Protocol):
 
 
 RECENT_DAYS = 30
-_FORMAT_RANK = {"physical": 0, "digital": 1}
+# Physique d'abord, puis boîte avec code, puis démat.
+_FORMAT_RANK = {"physical": 0, "code_box": 1, "digital": 2}
 
 
 @dataclass(frozen=True)
@@ -57,7 +58,8 @@ def select_best(
     """Choisit l'offre à afficher parmi l'historique des relevés d'un jeu.
 
     Parmi les relevés de moins de `max_age_days` jours : physique neuf le moins cher, à
-    défaut démat le moins cher. Sans relevé récent : le plus récent, marqué `stale`.
+    défaut boîte avec code la moins chère, à défaut démat le moins cher. Sans relevé récent :
+    le plus récent, marqué `stale`.
     """
     current = latest_per_offer(observations)
     if not current:

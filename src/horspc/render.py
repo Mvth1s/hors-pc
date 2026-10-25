@@ -54,7 +54,11 @@ STATUSES = {
     "none": ("Exclusif console", "status ex"),
     "announced": ("Portage PC annoncé", "status port"),
 }
-FORMATS = {"physical": "Physique", "digital": "Démat"}
+FORMATS = {
+    "physical": "Physique",
+    "code_box": "Boîte avec code de téléchargement",
+    "digital": "Démat",
+}
 STOPWORDS = {"the", "of", "a", "an", "le", "la", "les", "de", "du", "des", "et"}
 ARROW = (
     '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
@@ -437,6 +441,8 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
         ("Sortie", _release_fact(game, generated)),
         ("Statut PC", label),
     ]
+    if game.offer:
+        facts.append(("Format de l'offre", FORMATS[game.offer.format]))
     if game.developers:
         facts.append(
             ("Studio" + ("s" if len(game.developers) > 1 else ""), _e(", ".join(game.developers)))

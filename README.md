@@ -94,6 +94,7 @@ Un jeu dont `release_date` est future reste au catalogue (tant qu'aucune version
 Chaque build complet (cron du lundi et `workflow_dispatch`, jamais sur push ni `--offline`) relève les prix sur les sources activées dans `data/sources.config.yaml` : **E.Leclerc, Pixmania** (Boulanger désactivé : HTTP 400 depuis les IP de GitHub Actions). Cadre légal, preuves et sources exclues : [docs/sources.md](docs/sources.md). Aucune saisie : ni prix, ni URL, ni EAN.
 
 - **Découverte** (sans URL saisie, uniquement par des chemins autorisés par robots.txt) : sitemaps produits de Pixmania (slugs lisibles, EAN lu dans le `gtin13` de la fiche), puis fiche E.Leclerc ouverte directement par l'EAN (`/fp/x-<EAN>`, le site redirige vers la fiche). La recherche interne de Leclerc est interdite par son robots.txt et ses sitemaps ne contiennent que des URL `/fp/<EAN>`, sans titre : c'est pourquoi l'EAN vient de Pixmania (ou du cache, pour les EAN trouvés via Boulanger avant sa désactivation). Les EAN (un ensemble par jeu : Mario Kart World en a deux selon les enseignes) et les URL sont mis en cache dans `data/discovered.json` ; une recherche infructueuse n'est relancée qu'après 14 jours, une fiche disparue (404) est recherchée à nouveau.
+- **Boîte avec code** : un produit dont le nom mentionne « code in a box », « code dans la boîte », « code de téléchargement », « digital code »…, ou dont la description JSON-LD dit explicitement que la boîte ne contient qu'un code (« ne contiendra qu'un code », « aucun disque ne sera inclus »), prend le format `code_box`, affiché « Boîte avec code de téléchargement ». Une simple mention d'un code dans la description (bonus, pack console) ne suffit pas.
 - **Correspondance stricte** : même EAN, ou titre + plateforme + édition standard (aucun mot en trop hors liste blanche : « deluxe », « collector », « pack », « steelbook »… rejettent l'offre). Les noms alternatifs IGDB (`alternative_names`) sont acceptés comme titres (« GTA VI »).
 - **Lecture** : JSON-LD `Product`/`Offer` (prix, devise, état, disponibilité, `gtin13`) ; vendeur dans le JSON-LD (Leclerc) ou le HTML (Boulanger, Pixmania).
 - **Règle de plateforme de confiance** (`prices/trust.py`) : neuf, livrable en France, vendeur professionnel (l'enseigne, ou un vendeur de la place de marché de Pixmania, réservée aux pros), plateforme établie dans l'UE, jamais de revendeur de clés. Offre refusée sinon, ou sans vendeur identifié, ou indisponible.
@@ -140,7 +141,7 @@ Sont refusés à la validation, avec un message explicite : les marketplaces (`r
 ### Règle de sélection
 
 1. Pour chaque couple (marchand, format), seul le relevé le plus récent compte.
-2. Parmi les relevés de **moins de 30 jours** : le **physique neuf** le moins cher ; à défaut, le **démat officiel** le moins cher.
+2. Parmi les relevés de **moins de 30 jours** : le **physique neuf** le moins cher ; à défaut, la **boîte avec code de téléchargement** (`code_box`) la moins chère ; à défaut, le **démat officiel** le moins cher.
 3. La comparaison porte sur `price + shipping` quand le port est connu, sinon sur `price` seul.
 4. Sans relevé récent : le relevé le plus récent, marqué `stale: true` (« Prix à vérifier » sur le site).
 5. Égalité : relevé le plus récent, puis ordre alphabétique du marchand.

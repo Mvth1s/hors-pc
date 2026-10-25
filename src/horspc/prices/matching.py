@@ -74,6 +74,39 @@ EDITION_WORDS = frozenset(
 )
 EAN_RE = re.compile(r"^\d{8}$|^\d{12,14}$")
 
+# Boîte sans disque ni cartouche, qui ne contient qu'un code de téléchargement. Dans le nom, la
+# mention suffit ; dans la description, seules des formules explicites comptent (« un code de
+# téléchargement » seul y décrit souvent un bonus ou un pack console : Mario Kart World).
+_CODE_BOX_NAME = re.compile(
+    r"\bcode\s*-?\s*in\s*-?\s*a\s*-?\s*box\b|\bcode dans (?:la|une) boite\b"
+    r"|\bcode de telechargement\b|\b(?:digital|download) code\b|\bboite avec code\b"
+)
+_CODE_BOX_DESCRIPTION = re.compile(
+    r"\bcode\s*-?\s*in\s*-?\s*a\s*-?\s*box\b|\bcode dans (?:la|une) boite\b"
+    r"|ne contien(?:t|dra) qu.un code"
+    r"|contien(?:t|dra) (?:uniquement|seulement) un code"
+    r"|aucun (?:disque|cartouche|support physique) (?:ne sera |n.est )?inclus"
+    r"|contains only a (?:download|digital) code|no disc (?:is )?included"
+)
+
+
+def _plain(text: str) -> str:
+    """Minuscules sans accents, pour chercher des formules (« boîte » → « boite »)."""
+    ascii_text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
+    return re.sub(r"\s+", " ", ascii_text.lower())
+
+
+def is_code_box(name: str, description: str = "") -> bool:
+    """Offre « boîte avec code de téléchargement » (nom du produit, puis description)."""
+    return bool(
+        _CODE_BOX_NAME.search(_plain(name)) or _CODE_BOX_DESCRIPTION.search(_plain(description))
+    )
+
+
+def _without_code_box(name: str) -> str:
+    """Nom sans la mention code-in-a-box : le format est relevé à part, pas le titre."""
+    return _CODE_BOX_NAME.sub(" ", _plain(name))
+
 
 def tokens(text: str) -> list[str]:
     """Mots en minuscules, sans accents ni ponctuation (« Pokémon » donne pokemon)."""
@@ -117,7 +150,7 @@ def title_matches(
     product_name: str, title: str, platform: Platform, extra_fillers: Iterable[str] = ()
 ) -> bool:
     """Nom de produit = titre + plateforme + édition standard, sans autre mot significatif."""
-    words = tokens(product_name)
+    words = tokens(_without_code_box(product_name))
     if platform not in platforms_in(words):
         return False
     if platform == "switch" and "switch2" in platforms_in(words):

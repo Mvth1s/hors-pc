@@ -573,3 +573,67 @@ def test_ean_en_cache_reste_valable_sans_boulanger(fetcher: Fetcher) -> None:
     enabled = {"leclerc": True, "boulanger": False, "pixmania": False}
     observations, _ = Scraper(enabled, fetcher).run([MKW], {}, discovered, TODAY)
     assert [o.merchant for o in observations] == ["leclerc"]
+
+
+# --- Boîte avec code de téléchargement --------------------------------------------------------
+
+GTA_BOULANGER_DESCRIPTION = (  # extrait réel, 25/10/2026
+    "Grand Theft Auto VI La boîte de ce produit ne contiendra qu&#39;un code de téléchargement "
+    "permettant de lancer le préchargement à partir du 12 novembre. Aucun disque ne sera inclus "
+    "dans la boîte."
+)
+MKW_BOULANGER_DESCRIPTION = (  # extrait réel : le code concerne le pack console, pas ce jeu
+    "Découvrez également le pack Nintendo Switch 2 + Mario Kart World*1, qui inclut la console "
+    "et un code de téléchargement pour Mario Kart World, disponible le 5 juin"
+)
+
+
+@pytest.mark.parametrize(
+    ("name", "description", "expected"),
+    [
+        ("Grand Theft Auto VI (Code in a Box) (PS5)", "", True),  # E.Leclerc
+        ("Jeu PS5 TAKE 2 GTA VI", GTA_BOULANGER_DESCRIPTION, True),  # Boulanger
+        ("Grand Theft Auto VI - Code-in-a-Box PS5", "", True),
+        ("Assassin's Creed Shadows PS5 (code dans la boîte)", "", True),
+        ("EA Sports FC 26 PS5 - Code de téléchargement", "", True),
+        ("Jeu Switch 2 NINTENDO Mario Kart World", MKW_BOULANGER_DESCRIPTION, False),
+        ("Mario Kart World (NINTENDO SWITCH 2)", "", False),  # E.Leclerc
+        ("Microids Astro Bot", "", False),  # Pixmania
+        ("Sony Gran Turismo 7 Standard (PlayStation 5)", "", False),
+    ],
+)
+def test_boite_avec_code_detectee(name: str, description: str, expected: bool) -> None:
+    from horspc.prices.matching import is_code_box
+
+    assert is_code_box(name, src._description({"description": description})) is expected
+
+
+def test_titre_reconnu_malgre_la_mention_code_in_a_box() -> None:
+    from horspc.prices.matching import title_matches
+
+    assert title_matches("Grand Theft Auto VI (Code in a Box) (PS5)", "Grand Theft Auto VI", "ps5")
+    assert not title_matches("Grand Theft Auto VI (Code in a Box) (PS5)", "GTA VI", "xbox_series")
+
+
+@respx.mock
+def test_releve_boite_avec_code(fetcher: Fetcher) -> None:
+    mock_robots()
+    code_box = page("leclerc.html").replace(
+        '"name": "Mario Kart World (NINTENDO SWITCH 2)"',
+        '"name": "Mario Kart World (Code in a Box) (NINTENDO SWITCH 2)"',
+    )
+    mock_sites(leclerc=code_box)
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"leclerc": LECLERC_FP}, "checked": {}
+    }}}  # fmt: skip
+    (obs,) = Scraper({"leclerc": True}, fetcher).run([MKW], {}, discovered, TODAY)[0]
+    assert obs.format == "code_box"
+
+
+def test_physique_prioritaire_sur_la_boite_avec_code() -> None:
+    box = scraped(format="code_box", price="40.00")
+    physical = scraped(merchant="pixmania", seller="ShopVite", url=PIXMANIA_FP, price="90.89")
+    offer = ManualPriceProvider([], [box, physical]).get_best_offer(MKW, TODAY)
+    assert (offer.format, offer.merchant) == ("physical", "Pixmania")
+    offer = ManualPriceProvider([], [box]).get_best_offer(MKW, TODAY)
+    assert offer.format == "code_box"

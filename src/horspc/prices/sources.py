@@ -46,6 +46,7 @@ class ProductPage:
     available: bool | None
     seller: str | None
     shipping: Decimal | None = None
+    description: str = ""  # texte brut, pour repérer une boîte avec code
 
 
 @dataclass
@@ -158,6 +159,12 @@ def _seller_name(offer: dict[str, Any]) -> str | None:
     return str(seller).strip() or None if seller else None
 
 
+def _description(product: dict[str, Any]) -> str:
+    """Description JSON-LD en texte brut (entités parfois doublement encodées, balises HTML)."""
+    text = html.unescape(html.unescape(str(product.get("description") or "")))
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text)).strip()
+
+
 def _text(page: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", page)))
 
@@ -174,6 +181,7 @@ def parse_leclerc(page: str) -> ProductPage:
     offer = own[0] if own else {}
     return ProductPage(
         name=html.unescape(str(product.get("name", ""))),
+        description=_description(product),
         eans=_eans(product),
         price=_decimal(offer.get("price")),
         currency=offer.get("priceCurrency"),
@@ -189,6 +197,7 @@ def parse_boulanger(page: str) -> ProductPage:
     seller = re.search(r'data-analytics_product_seller="([^"]+)"', page)
     return ProductPage(
         name=html.unescape(str(product.get("name", ""))),
+        description=_description(product),
         eans=_eans(product),
         price=_decimal(offer.get("price") or offer.get("lowPrice")),
         currency=offer.get("priceCurrency"),
@@ -208,6 +217,7 @@ def parse_pixmania(page: str) -> ProductPage:
     )
     return ProductPage(
         name=html.unescape(str(product.get("name", ""))),
+        description=_description(product),
         eans=_eans(product),
         price=_decimal(offer.get("price") or offer.get("lowPrice")),
         currency=offer.get("priceCurrency"),

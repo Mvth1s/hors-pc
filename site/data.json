@@ -507,7 +507,7 @@
         "price_cents": 6000,
         "shipping_cents": null,
         "discount_pct": null,
-        "format": "physical",
+        "format": "code_box",
         "condition": "new",
         "merchant": "E.Leclerc",
         "seller": null,

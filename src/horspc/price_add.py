@@ -18,7 +18,7 @@ from horspc.models import MERCHANTS, Catalog, PriceObservation
 Ask = Callable[[str], str]
 Say = Callable[[str], None]
 
-FORMAT_LABELS = {"physical": "physique", "digital": "démat"}
+FORMAT_LABELS = {"physical": "physique", "code_box": "boîte avec code", "digital": "démat"}
 
 
 class Aborted(Exception):

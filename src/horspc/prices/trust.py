@@ -106,7 +106,7 @@ def rejection(
         return f"{platform.name} : pas de livraison en France"
     if condition != "new":
         return f"article non neuf ({condition})"
-    if offer_format != "physical":
+    if offer_format not in ("physical", "code_box"):
         return "seuls les stores officiels vendent du démat (pas de source automatique)"
     if not seller:
         return "vendeur non identifié"

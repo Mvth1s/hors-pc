@@ -7,7 +7,7 @@ from decimal import Decimal
 from horspc.models import MERCHANTS, Catalog, GameEntry, PriceObservation
 from horspc.prices.selection import RECENT_DAYS, latest_per_offer, select_best
 
-FORMAT_LABELS = {"physical": "physique", "digital": "démat"}
+FORMAT_LABELS = {"physical": "physique", "code_box": "boîte avec code", "digital": "démat"}
 
 
 @dataclass(frozen=True)

@@ -409,3 +409,13 @@ def test_positionnement_jeux_console_absents_du_pc() -> None:
     index = (SITE / "index.html").read_text(encoding="utf-8")
     assert "<title>HorsPC, les jeux console absents du PC</title>" in index
     assert "Xbox Series" in re.search(r'<p class="tagline">(.*?)</p>', index).group(1)
+
+
+def test_boite_avec_code_affichee(site: Path) -> None:
+    box = offer(date(2026, 10, 20), stale=False) | {"format": "code_box"}
+    render(site, [game("gta", offer=box)])
+    index = (site / "index.html").read_text(encoding="utf-8")
+    assert "<span>Boîte avec code de téléchargement</span>" in index
+    assert "<span>Physique</span>" not in index
+    page = (site / GAMES_DIR / "gta" / "index.html").read_text(encoding="utf-8")
+    assert "<dt>Format de l'offre</dt><dd>Boîte avec code de téléchargement</dd>" in page

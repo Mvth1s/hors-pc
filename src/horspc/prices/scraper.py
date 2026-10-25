@@ -26,7 +26,7 @@ from pydantic import ValidationError
 from horspc.models import GameEntry, Platform, ScrapedObservation
 from horspc.prices import sources as src
 from horspc.prices.fetch import Disallowed, Fetcher, SourceBlocked
-from horspc.prices.matching import title_matches
+from horspc.prices.matching import is_code_box, title_matches
 from horspc.prices.trust import rejection
 
 log = logging.getLogger(__name__)
@@ -208,7 +208,8 @@ class Scraper:
         if page.available is False:
             self.fetcher.record(source, "rejected", url, "indisponible")
             return None
-        reason = rejection(source, page.seller, page.condition or "?", "physical")
+        offer_format = "code_box" if is_code_box(page.name, page.description) else "physical"
+        reason = rejection(source, page.seller, page.condition or "?", offer_format)
         if reason:
             self.fetcher.record(source, "rejected", url, reason)
             return None
@@ -219,7 +220,7 @@ class Scraper:
                 seller=page.seller,
                 price=page.price,
                 shipping=page.shipping,
-                format="physical",
+                format=offer_format,
                 condition="new",
                 url=url,
                 ean=next(iter(sorted(page.eans & set(entry["eans"]))), None),
