@@ -29,6 +29,7 @@ def games_api(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json=DATA["recent"])
     assert "sort total_rating_count desc" in body and "total_rating_count >= 20" in body
     assert "game_type = (0,8,9)" in body and "version_parent = null" in body
+    assert "platforms = (130,167,169,508)" in body  # Switch, PS5, Xbox Series, Switch 2
     return httpx.Response(200, json=DATA["popular"])
 
 
@@ -60,6 +61,7 @@ def test_filtres(igdb: IgdbClient) -> None:
         "portage-annule",
         "remake-jeu-pc",
         "remaster-portage-annonce",
+        "exclu-xbox",
     ]
     exclu, annonce, annule, *_ = popular
     assert (exclu.platforms, exclu.total_rating_count, exclu.notes) == (["ps5"], 900, [])
@@ -118,3 +120,10 @@ def test_parent_game_controle_pour_remaster_pas_pour_remake(igdb: IgdbClient) ->
     assert "remake-jeu-pc" in slugs
     remaster = next(c for c in popular if c.slug == "remaster-portage-annonce")
     assert remaster.notes == ["portage PC annoncé via « jeu d'origine Original » (igdb 1911)"]
+
+
+def test_xbox_series_meme_exclusion_pc(igdb: IgdbClient) -> None:
+    popular, _ = run(igdb)
+    xbox = next(c for c in popular if c.slug == "exclu-xbox")
+    assert (xbox.platforms, xbox.notes) == (["xbox_series"], [])
+    assert "xbox-et-pc" not in [c.slug for c in popular]  # sorti sur PC : écarté
