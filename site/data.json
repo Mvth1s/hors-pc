@@ -1,6 +1,6 @@
 {
   "schema_version": 5,
-  "generated_at": "2026-10-24T23:41:04Z",
+  "generated_at": "2026-10-25T10:05:45Z",
   "currency": "EUR",
   "games": [
     {
@@ -14,7 +14,7 @@
       "launch_price_cents": 6999,
       "igdb_id": 303811,
       "igdb_url": "https://www.igdb.com/games/astro-bot",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/astro-bot.webp",
       "cover_image_id": "coba3k",
       "pc_status": "none",
@@ -46,6 +46,8 @@
         }
       ],
       "trailer_youtube_id": "wHMNQzLG_Jg",
+      "sold_digital": true,
+      "listed_physical": true,
       "offer": {
         "price_cents": 5490,
         "shipping_cents": null,
@@ -71,7 +73,7 @@
       "launch_price_cents": 7999,
       "igdb_id": 317627,
       "igdb_url": "https://www.igdb.com/games/ghost-of-yotei",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/ghost-of-yotei.webp",
       "cover_image_id": "co9coo",
       "pc_status": "none",
@@ -103,6 +105,8 @@
         }
       ],
       "trailer_youtube_id": "7z7kqwuf0a8",
+      "sold_digital": true,
+      "listed_physical": true,
       "offer": {
         "price_cents": 5499,
         "shipping_cents": null,
@@ -128,7 +132,7 @@
       "launch_price_cents": null,
       "igdb_id": 331215,
       "igdb_url": "https://www.igdb.com/games/saros",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/saros.webp",
       "cover_image_id": "coajye",
       "pc_status": "none",
@@ -160,6 +164,8 @@
         }
       ],
       "trailer_youtube_id": "rK4W-hBrSZs",
+      "sold_digital": true,
+      "listed_physical": true,
       "offer": {
         "price_cents": 6999,
         "shipping_cents": null,
@@ -185,7 +191,7 @@
       "launch_price_cents": 7999,
       "igdb_id": 101006,
       "igdb_url": "https://www.igdb.com/games/gran-turismo-7",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/gran-turismo-7.webp",
       "cover_image_id": "co2g84",
       "pc_status": "none",
@@ -217,6 +223,8 @@
         }
       ],
       "trailer_youtube_id": "OyAbx6S_VCA",
+      "sold_digital": true,
+      "listed_physical": true,
       "offer": {
         "price_cents": 3895,
         "shipping_cents": 499,
@@ -242,7 +250,7 @@
       "launch_price_cents": 8999,
       "igdb_id": 338067,
       "igdb_url": "https://www.igdb.com/games/mario-kart-world",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/mario-kart-world.webp",
       "cover_image_id": "cob9s9",
       "pc_status": "none",
@@ -274,6 +282,8 @@
         }
       ],
       "trailer_youtube_id": "3pE23YTYEZM",
+      "sold_digital": false,
+      "listed_physical": true,
       "offer": {
         "price_cents": 6625,
         "shipping_cents": null,
@@ -299,7 +309,7 @@
       "launch_price_cents": null,
       "igdb_id": 338106,
       "igdb_url": "https://www.igdb.com/games/donkey-kong-bananza",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/donkey-kong-bananza.webp",
       "cover_image_id": "cobd1q",
       "pc_status": "none",
@@ -331,6 +341,8 @@
         }
       ],
       "trailer_youtube_id": "mIddsPkdX9U",
+      "sold_digital": false,
+      "listed_physical": true,
       "offer": {
         "price_cents": 5895,
         "shipping_cents": null,
@@ -356,7 +368,7 @@
       "launch_price_cents": 6999,
       "igdb_id": 119388,
       "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-tears-of-the-kingdom",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/zelda-tears-of-the-kingdom.webp",
       "cover_image_id": "co5vmg",
       "pc_status": "none",
@@ -388,6 +400,8 @@
         }
       ],
       "trailer_youtube_id": "3fr1Z07AV00",
+      "sold_digital": true,
+      "listed_physical": true,
       "offer": {
         "price_cents": 5149,
         "shipping_cents": null,
@@ -413,7 +427,7 @@
       "launch_price_cents": 5999,
       "igdb_id": 191931,
       "igdb_url": "https://www.igdb.com/games/pokemon-scarlet",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/pokemon-ecarlate.webp",
       "cover_image_id": "co5sfi",
       "pc_status": "none",
@@ -445,6 +459,8 @@
         }
       ],
       "trailer_youtube_id": "1VTsaSNRVbY",
+      "sold_digital": true,
+      "listed_physical": true,
       "offer": {
         "price_cents": 4416,
         "shipping_cents": null,
@@ -470,7 +486,7 @@
       "launch_price_cents": null,
       "igdb_id": 52189,
       "igdb_url": "https://www.igdb.com/games/grand-theft-auto-vi",
-      "igdb_fetched_at": "2026-10-24T23:41:04Z",
+      "igdb_fetched_at": "2026-10-25T10:05:45Z",
       "cover_url": "covers/grand-theft-auto-vi.webp",
       "cover_image_id": "cocv1v",
       "pc_status": "none",
@@ -503,6 +519,8 @@
         }
       ],
       "trailer_youtube_id": "QdBZY2fkU-0",
+      "sold_digital": true,
+      "listed_physical": true,
       "offer": {
         "price_cents": 6000,
         "shipping_cents": null,

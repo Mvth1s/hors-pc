@@ -32,7 +32,9 @@ GAME_FIELDS = (
     "name,url,platforms,release_dates.platform,release_dates.date,"
     "release_dates.release_region,release_dates.status,cover.image_id,summary,"
     "involved_companies.developer,involved_companies.publisher,involved_companies.company.name,"
-    "screenshots.image_id,videos.video_id,videos.name,alternative_names.name"
+    "screenshots.image_id,videos.video_id,videos.name,alternative_names.name,"
+    "external_games.external_game_source.name,external_games.game_release_format.format,"
+    "external_games.platform.slug"
 )
 MAX_SCREENSHOTS = 4
 
@@ -45,6 +47,16 @@ CANCELLED = "Cancelled"
 
 
 YOUTUBE_ID = re.compile(r"[A-Za-z0-9_-]{11}")
+
+# Preuves de format (external_games, lus par nom). Stores officiels : vente numérique ; sans
+# plateforme sur l'entrée, celle du store. « Microsoft » (aussi un store PC) ne compte qu'avec une
+# plateforme Xbox explicite.
+OFFICIAL_STORES: dict[str, str | None] = {
+    "Playstation Store US": "ps5",
+    "Xbox Marketplace": "series-x-s",
+    "Microsoft": None,
+}
+AMAZON = "Amazon"
 
 
 class IgdbError(Exception):
@@ -64,6 +76,8 @@ class IgdbGame:
     screenshot_ids: tuple[str, ...] = ()
     trailer_id: str | None = None
     alternative_names: tuple[str, ...] = ()  # pour reconnaître les fiches marchandes
+    sold_digital: bool = False  # store officiel ou Amazon Digital sur une plateforme du jeu
+    listed_physical: bool = False  # entrée Physical sur une plateforme du jeu
 
 
 @dataclass(frozen=True)
@@ -142,6 +156,7 @@ class IgdbClient:
                 alternative_names=tuple(
                     a["name"] for a in (row.get("alternative_names") or []) if a.get("name")
                 ),
+                **format_proofs(row, game.platforms),
             )
             if game.igdb_id is None:
                 log.info("IGDB : %s → %d (%s)", game.slug, row["id"], row.get("name"))
@@ -325,3 +340,20 @@ def pc_status(row: dict[str, Any], pc_id: int, refs: ReleaseRefs, now: datetime)
         if "date" in rd and rd["date"] <= now_ts and status_ok:
             return "released"
     return "announced"
+
+
+def format_proofs(row: dict[str, Any], platforms: Sequence[Platform]) -> dict[str, bool]:
+    """Ventes numérique et physique attestées par external_games pour les plateformes du jeu."""
+    slugs = {PLATFORM_SLUGS[p] for p in platforms}
+    digital = physical = False
+    for ext in row.get("external_games") or []:
+        source = (ext.get("external_game_source") or {}).get("name")
+        fmt = (ext.get("game_release_format") or {}).get("format")
+        slug = (ext.get("platform") or {}).get("slug") or OFFICIAL_STORES.get(source or "")
+        if slug not in slugs:
+            continue
+        if source in OFFICIAL_STORES or (source == AMAZON and fmt == "Digital"):
+            digital = True
+        if fmt == "Physical":
+            physical = True
+    return {"sold_digital": digital, "listed_physical": physical}

@@ -352,6 +352,16 @@ def _sort_attrs(game: GameOut) -> str:
     )
 
 
+def both_formats(game: GameOut) -> bool:
+    """« Physique et numérique » seulement si les deux preuves existent ; aucun autre badge.
+
+    Numérique : store officiel ou Amazon Digital (IGDB). Physique : entrée Physical (IGDB) ou
+    offre physique neuve relevée ; une boîte avec code ne prouve pas une édition physique.
+    """
+    physical = game.listed_physical or (game.offer is not None and game.offer.format == "physical")
+    return game.sold_digital and physical
+
+
 def is_upcoming(game: GameOut, today: date) -> bool:
     """« À venir » : date de sortie future (s'ajoute au statut PC, ne le remplace pas)."""
     return game.release_date is not None and game.release_date > today
@@ -364,6 +374,8 @@ def _badges(game: GameOut, today: date) -> str:
     """
     label, cls = STATUSES[game.pc_status]
     badges = f'<span class="{cls}">{label}</span>'
+    if both_formats(game):
+        badges += '<span class="status fmt">Physique et numérique</span>'
     if is_upcoming(game, today):
         badges += (
             f'<span class="status soon" data-release="{game.release_date.isoformat()}">'

@@ -336,6 +336,9 @@ class GameOut(_Output):
     summary_source: SummarySource | None
     screenshots: list[ScreenshotOut] = Field(max_length=4)
     trailer_youtube_id: str | None = Field(pattern=r"^[A-Za-z0-9_-]{11}$")
+    # Preuves IGDB (external_games) pour le badge « Physique et numérique ».
+    sold_digital: bool = False
+    listed_physical: bool = False
     offer: OfferOut | None
 
     @model_validator(mode="after")

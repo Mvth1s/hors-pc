@@ -419,3 +419,28 @@ def test_boite_avec_code_affichee(site: Path) -> None:
     assert "<span>Physique</span>" not in index
     page = (site / GAMES_DIR / "gta" / "index.html").read_text(encoding="utf-8")
     assert "<dt>Format de l'offre</dt><dd>Boîte avec code de téléchargement</dd>" in page
+
+
+@pytest.mark.parametrize(
+    ("fields", "offer_format", "badge"),
+    [
+        ({"sold_digital": True, "listed_physical": True}, None, True),
+        ({"sold_digital": True}, "physical", True),  # offre physique relevée = preuve
+        ({"sold_digital": True}, "code_box", False),  # une boîte avec code ne prouve rien
+        ({"sold_digital": True}, None, False),
+        ({"listed_physical": True}, "physical", False),  # jamais « Physique uniquement »
+    ],
+)
+def test_badge_physique_et_numerique(
+    site: Path, fields: dict, offer_format: str | None, badge: bool
+) -> None:
+    extra = (
+        {}
+        if offer_format is None
+        else {"offer": offer(date(2026, 10, 20), stale=False) | {"format": offer_format}}
+    )
+    render(site, [game("jeu", **fields, **extra)])
+    for path in (site / "index.html", site / GAMES_DIR / "jeu" / "index.html"):
+        text = path.read_text(encoding="utf-8")
+        assert ('<span class="status fmt">Physique et numérique</span>' in text) is badge
+        assert "Numérique uniquement" not in text and "Physique uniquement" not in text

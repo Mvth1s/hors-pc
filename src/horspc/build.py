@@ -248,6 +248,8 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
             "summary": info.summary,
             "summary_source": None if info.summary is None else "igdb",
             "trailer_youtube_id": info.trailer_id,
+            "sold_digital": info.sold_digital,
+            "listed_physical": info.listed_physical,
         }
     if prev is not None:
         # Une valeur manuelle retirée de games.yaml ne doit pas survivre au build suivant.
@@ -265,6 +267,8 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
             "summary": prev.summary if prev.summary_source == "igdb" else None,
             "summary_source": "igdb" if prev.summary_source == "igdb" else None,
             "trailer_youtube_id": prev.trailer_youtube_id,
+            "sold_digital": prev.sold_digital,
+            "listed_physical": prev.listed_physical,
         }
     return {
         "release_date": None,
@@ -279,6 +283,8 @@ def _igdb_fields(info: IgdbGame | None, prev: GameOut | None, now: datetime) -> 
         "summary": None,
         "summary_source": None,
         "trailer_youtube_id": None,
+        "sold_digital": False,
+        "listed_physical": False,
     }
 
 

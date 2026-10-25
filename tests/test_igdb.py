@@ -182,3 +182,51 @@ def test_pc_status_selon_les_statuts(
     api.post(GAMES_URL).respond(json=load_fixture("igdb_games.json"))
     result = igdb.fetch_games([entry(slug, slug, ["ps5"], igdb_id)], NOW)
     assert result[slug].pc_status == expected
+
+
+def ext(source: str, fmt: str | None = None, platform: str | None = None) -> dict:
+    entry: dict = {"external_game_source": {"name": source}}
+    if fmt:
+        entry["game_release_format"] = {"format": fmt}
+    if platform:
+        entry["platform"] = {"slug": platform}
+    return entry
+
+
+@pytest.mark.parametrize(
+    ("externals", "platforms", "expected"),
+    [
+        # Formes réelles (25/10/2026). Gran Turismo 7 : PS Store US (sans plateforme) + Amazon PS5.
+        (
+            [ext("Playstation Store US"), ext("Amazon", "Physical", "ps5")],
+            ["ps5"],
+            (True, True),
+        ),
+        # Mario Kart World : seulement Amazon Physical, pas d'eShop dans IGDB.
+        ([ext("Amazon", "Physical", "switch-2")], ["switch2"], (False, True)),
+        # Zelda TOTK : Amazon Digital (code) et Physical sur Switch.
+        (
+            [ext("Amazon", "Digital", "switch"), ext("Amazon", "Physical", "switch")],
+            ["switch"],
+            (True, True),
+        ),
+        # Une autre plateforme ne prouve rien (GT7 sur PS4, Zelda sur Switch pour une entrée S2).
+        ([ext("Amazon", "Physical", "ps4--1")], ["ps5"], (False, False)),
+        # GTA VI, entrée Xbox : le PS Store et l'Amazon PS5 ne comptent pas.
+        (
+            [ext("Playstation Store US"), ext("Amazon", "Physical", "ps5")],
+            ["xbox_series"],
+            (False, False),
+        ),
+        ([ext("Xbox Marketplace")], ["xbox_series"], (True, False)),
+        # « Microsoft » est aussi un store PC : compté seulement avec une plateforme Xbox.
+        ([ext("Microsoft")], ["xbox_series"], (False, False)),
+        ([ext("Microsoft", None, "series-x-s")], ["xbox_series"], (True, False)),
+        ([ext("Steam"), ext("Amazon", None, "ps5")], ["ps5"], (False, False)),
+    ],
+)
+def test_preuves_de_format(externals: list, platforms: list, expected: tuple) -> None:
+    from horspc.igdb import format_proofs
+
+    proofs = format_proofs({"external_games": externals}, platforms)
+    assert (proofs["sold_digital"], proofs["listed_physical"]) == expected
