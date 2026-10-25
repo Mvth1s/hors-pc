@@ -167,3 +167,49 @@ def test_pages_de_jeux_sans_iframe_ni_ressource_youtube() -> None:
         external = [u for u in parse(page).loaded if is_external(u)]
         assert external == [], page.parent.name
         assert '<script src="../../game.js" defer></script>' in text
+
+
+# --- Fichiers locaux référencés ---------------------------------------------------------------
+
+SITE_URL = "https://mvth1s.github.io/hors-pc/"
+
+
+def local_references(page: Path) -> set[str]:
+    """Cibles locales d'une page : src, href, og:image et twitter:image (URL du site ramenée à
+    un chemin local), sans les liens externes, ancres, mailto ni paramètres."""
+    text = page.read_text(encoding="utf-8")
+    refs = re.findall(r'\b(?:src|href)="([^"]+)"', text)
+    refs += re.findall(r'<meta (?:property|name)="(?:og|twitter):image" content="([^"]+)"', text)
+    found = set()
+    for ref in map(html.unescape, refs):
+        if ref.startswith(SITE_URL):
+            target = SITE / ref.removeprefix(SITE_URL)
+        elif re.match(r"^(?:[a-z]+:|//|#)", ref):
+            continue  # externe, mailto, ancre
+        else:
+            target = page.parent / ref
+        path = target.as_posix().split("#")[0].split("?")[0]
+        if path.endswith("/") or Path(path).is_dir():
+            path = path.rstrip("/") + "/index.html"
+        found.add(path)
+    return found
+
+
+ALL_PAGES = sorted(SITE.glob("*.html")) + sorted(SITE.glob("jeux/*/index.html"))
+
+
+@pytest.mark.parametrize("page", ALL_PAGES, ids=lambda p: str(p.relative_to(SITE)))
+def test_fichiers_references_presents(page: Path) -> None:
+    missing = [ref for ref in sorted(local_references(page)) if not Path(ref).is_file()]
+    assert missing == [], missing
+
+
+def test_og_image_et_polices_presentes() -> None:
+    from horspc.render import OG_IMAGE
+
+    assert (SITE / OG_IMAGE).is_file()
+    index = (SITE / "index.html").read_text(encoding="utf-8")
+    assert f'<meta property="og:image" content="{SITE_URL}{OG_IMAGE}">' in index
+    css = (SITE / "style.css").read_text(encoding="utf-8")
+    fonts = re.findall(r"url\(([^)]+)\)", css)
+    assert fonts and all((SITE / f.strip("'\"")).is_file() for f in fonts)
