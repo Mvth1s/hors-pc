@@ -213,10 +213,15 @@ html:not(.js) .hp .toolbar,html:not(.js) .hp #theme-toggle{display:none}
 .hp .card[hidden]{display:none}
 .hp .title a{color:inherit;text-decoration:none}
 .hp .title a:hover{text-decoration:underline}
-.hp .breadcrumb{font-size:13px;color:var(--muted);padding:20px 0 12px}
-.hp .breadcrumb a{color:var(--ink)}
-.hp .game{display:grid;grid-template-columns:264px 1fr;gap:32px;align-items:start;padding-bottom:40px}
+/* Page de jeu : un seul conteneur centré pour le bloc principal et les sections. */
+.hp .game-page{max-width:1180px}
+.hp .game-top{margin:0;padding:20px 0 16px}
+.hp .back-btn{height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.hp .back-btn:hover{border-color:var(--ink)}
+.hp .game{display:grid;grid-template-columns:264px minmax(0,1fr) 340px;gap:32px;align-items:start;padding-bottom:40px}
 .hp .game .cover{border-radius:14px;border:1px solid var(--line)}
+.hp .game-facts{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.hp .game-facts h2{margin:0 0 12px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .hp .game-body{display:flex;flex-direction:column;gap:12px;min-width:0}
 .hp .game-body h1{margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:40px;line-height:1.1;letter-spacing:-0.02em}
 .hp .game-body h2{margin:16px 0 0;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
@@ -224,7 +229,11 @@ html:not(.js) .hp .toolbar,html:not(.js) .hp #theme-toggle{display:none}
 .hp .facts{display:grid;grid-template-columns:max-content 1fr;gap:6px 20px;margin:0;font-size:14px}
 .hp .facts dt{color:var(--muted)}
 .hp .facts dd{margin:0}
-.hp .facts a,.hp .back{color:var(--ink)}
+.hp .facts a{color:var(--ink)}
+@container (max-width:1040px){
+.hp .game{grid-template-columns:220px minmax(0,1fr);gap:24px}
+.hp .game-facts{grid-column:1 / -1}
+}
 @container (max-width:640px){
 .hp .game{grid-template-columns:1fr;gap:20px}
 .hp .game .cover{width:auto;max-width:220px;margin:0;align-self:start}
@@ -257,11 +266,11 @@ html:not(.js) .hp .toolbar,html:not(.js) .hp #theme-toggle{display:none}
 .hp .card:hover,.hp .card:focus-within{transform:none}
 }
 /* --- Page de jeu : résumé, bande-annonce, galerie --- */
-.hp .game-section{max-width:900px;padding-bottom:32px}
+.hp .game-section{padding-bottom:32px}
 .hp .game-section h2{margin:0 0 12px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.02em}
 .hp .game-section p{margin:0 0 10px;line-height:1.6}
 .hp .game-note{font-size:12px;color:var(--muted)}
-.hp .trailer{position:relative;aspect-ratio:16/9;max-width:940px;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.hp .trailer{position:relative;aspect-ratio:16/9;width:100%;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--line)}
 .hp .trailer img,.hp .trailer iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
 .hp .trailer-play{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:rgba(0,0,0,.72);color:#fff;display:grid;place-items:center;cursor:pointer;padding-left:5px}
 .hp .trailer-play:hover,.hp .trailer-play:focus-visible{background:#C81E1E}

@@ -1,5 +1,5 @@
-// HorsPC : pages de jeu. Badge « À venir » expiré côté client ; bande-annonce sans requête vers
-// YouTube avant le clic : la façade (image + bouton) est remplacée par l'iframe youtube-nocookie.com.
+// HorsPC : pages de jeu. Retour au catalogue avec history.back() si possible ; badge « À venir »
+// expiré côté client ; bande-annonce sans requête vers YouTube avant le clic (façade, puis iframe).
 "use strict";
 
 (() => {
@@ -8,6 +8,21 @@
   for (const badge of document.querySelectorAll(".status.soon[data-release]")) {
     if (badge.dataset.release <= today) badge.remove();
   }
+
+  // Retour : history.back() si l'on vient du catalogue de ce site (filtres et défilement
+  // retrouvés), sinon le lien mène simplement au catalogue.
+  const back = document.querySelector("[data-back]");
+  back?.addEventListener("click", (event) => {
+    const catalogue = new URL(back.getAttribute("href"), window.location.href);
+    let from;
+    try { from = new URL(document.referrer); } catch { return; }
+    const sameCatalogue = from.origin === catalogue.origin &&
+      [catalogue.pathname, `${catalogue.pathname}index.html`].includes(from.pathname);
+    if (sameCatalogue && window.history.length > 1) {
+      event.preventDefault();
+      window.history.back();
+    }
+  });
 
   const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
 

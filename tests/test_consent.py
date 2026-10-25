@@ -201,3 +201,38 @@ def test_bande_annonce_chargee_seulement_au_clic(nav: Recorder) -> None:
     assert any("youtube-nocookie.com/embed/" in u for u in youtube(nav))
     # Seuls des domaines YouTube après le clic, aucune requête Google Analytics (refusé).
     assert set(nav.external()) <= set(youtube(nav))
+
+
+# --- Bouton « Retour au catalogue » des pages de jeu -------------------------------------------
+
+
+def test_retour_au_catalogue_retrouve_les_filtres(base_url: str, browser: object) -> None:
+    context = browser.new_context()
+    context.route(
+        "**/*", lambda r: r.continue_() if r.request.url.startswith(base_url) else r.abort()
+    )
+    page = context.new_page()
+    page.goto(base_url)
+    page.click('[data-platform="switch2"]')
+    page.evaluate("window.scrollTo(0, 400)")
+    page.click('article[data-title="Mario Kart World"] .title a')
+    page.wait_for_url("**/jeux/mario-kart-world/")
+    page.click("[data-back]")
+    # history.back() : retour à l'URL du catalogue filtré (le lien mènerait à « ./ »).
+    page.wait_for_url(base_url + "?console=switch2")
+    pressed = page.get_attribute('[data-platform="switch2"]', "aria-pressed")
+    assert pressed == "true"
+    context.close()
+
+
+def test_retour_sans_historique_mene_au_catalogue(base_url: str, browser: object) -> None:
+    context = browser.new_context()
+    context.route(
+        "**/*", lambda r: r.continue_() if r.request.url.startswith(base_url) else r.abort()
+    )
+    page = context.new_page()
+    page.goto(base_url + "jeux/mario-kart-world/")  # arrivée directe (moteur, lien partagé)
+    page.click("[data-back]")
+    page.wait_for_url(base_url)
+    assert page.get_attribute('[data-platform="all"]', "aria-pressed") == "true"
+    context.close()

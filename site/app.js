@@ -97,6 +97,21 @@ function render() {
     btn.setAttribute("aria-pressed", String(btn.dataset.status === state.status));
   }
   $("sort").value = state.sort;
+  syncUrl();
+}
+
+/** Filtres et tri dans l'URL (sans nouvelle entrée d'historique) : le retour depuis une page de
+ * jeu les retrouve, même si le navigateur recharge le catalogue. */
+function syncUrl() {
+  const params = new URLSearchParams();
+  if (state.platform !== "all") params.set("console", state.platform);
+  if (state.status !== "all") params.set("statut", state.status);
+  if (state.sort !== "price") params.set("tri", state.sort);
+  const query = params.toString();
+  const url = window.location.pathname + (query ? `?${query}` : "") + window.location.hash;
+  if (url !== window.location.pathname + window.location.search + window.location.hash) {
+    window.history.replaceState(window.history.state, "", url);
+  }
 }
 
 function renderFreshness() {
@@ -146,9 +161,15 @@ function bindEvents() {
 }
 
 function init() {
-  // Liens du pied de page : ./?console=ps5, switch2 ou xbox_series activent le filtre.
-  const consoleParam = new URLSearchParams(window.location.search).get("console");
-  if (Object.hasOwn(PLATFORM_FILTERS, consoleParam ?? "")) state.platform = consoleParam;
+  // Liens du pied de page (./?console=ps5…) et retour depuis une page de jeu : l'URL porte
+  // les filtres et le tri.
+  const params = new URLSearchParams(window.location.search);
+  const consoleParam = params.get("console") ?? "";
+  const statusParam = params.get("statut") ?? "";
+  const sortParam = params.get("tri") ?? "";
+  if (Object.hasOwn(PLATFORM_FILTERS, consoleParam)) state.platform = consoleParam;
+  if (Object.hasOwn(STATUSES, statusParam)) state.status = statusParam;
+  if (Object.hasOwn(SORTS, sortParam)) state.sort = sortParam;
   bindEvents();
   expireUpcoming();
   renderFreshness();

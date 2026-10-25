@@ -24,6 +24,12 @@ def jsonld(text: str) -> list[dict[str, Any]]:
     return [json.loads(b) for b in blocks]
 
 
+def game_jsonld(text: str) -> dict[str, Any]:
+    """JSON-LD VideoGame d'une page de jeu (à côté de son BreadcrumbList)."""
+    (game,) = [d for d in jsonld(text) if d["@type"] == "VideoGame"]
+    return game
+
+
 def canonical(text: str) -> str:
     return re.search(r'<link rel="canonical" href="([^"]+)">', text).group(1)
 
@@ -106,12 +112,16 @@ def test_page_jeu(page: Path) -> None:
     text = page.read_text(encoding="utf-8")
     slug = page.parent.name
     assert canonical(text) == f"{SITE_URL}{GAMES_DIR}/{slug}/"
-    (game,) = jsonld(text)
+    game = game_jsonld(text)
     assert game["@type"] == "VideoGame"
     assert game["url"] == canonical(text)
     assert game["image"].startswith(SITE_URL)
     assert set(game["gamePlatform"]) <= set(SCHEMA_PLATFORMS.values())
-    assert 'href="../../"' in text  # lien vers le catalogue
+    assert '<a class="back-btn" href="../../" data-back>← Retour au catalogue</a>' in text
+    assert "Fil d'Ariane" not in text and 'class="back"' not in text
+    (crumbs,) = [d for d in jsonld(text) if d["@type"] == "BreadcrumbList"]
+    assert [i["item"] for i in crumbs["itemListElement"]] == [SITE_URL, canonical(text)]
+    assert text.count('class="game-facts"') == 1
 
 
 def test_footer_des_pages_de_jeux() -> None:
@@ -201,7 +211,7 @@ def test_offre_valide_et_offre_perimee(site: Path) -> None:
             game("sans-prix"),
         ],
     )
-    (fresh,) = jsonld((site / GAMES_DIR / "frais" / "index.html").read_text(encoding="utf-8"))
+    fresh = game_jsonld((site / GAMES_DIR / "frais" / "index.html").read_text(encoding="utf-8"))
     assert fresh["offers"] == {
         "@type": "Offer",
         "price": "53.30",
@@ -213,7 +223,7 @@ def test_offre_valide_et_offre_perimee(site: Path) -> None:
         "seller": {"@type": "Organization", "name": "Amazon"},
     }
     for slug in ("ancien", "sans-prix"):
-        (data,) = jsonld((site / GAMES_DIR / slug / "index.html").read_text(encoding="utf-8"))
+        data = game_jsonld((site / GAMES_DIR / slug / "index.html").read_text(encoding="utf-8"))
         assert "offers" not in data
     stale_page = (site / GAMES_DIR / "ancien" / "index.html").read_text(encoding="utf-8")
     assert "Prix à vérifier" in stale_page
@@ -344,7 +354,7 @@ def test_page_jeu_enrichie(site: Path) -> None:
     assert 'data-youtube-id="wHMNQzLG_Jg"' in text
     assert "La lecture charge YouTube (Google), qui peut déposer des cookies." in text
     assert "<iframe" not in text
-    (data,) = jsonld(text)
+    data = game_jsonld(text)
     assert data["author"] == [{"@type": "Organization", "name": "Team Asobi"}]
     assert data["publisher"][0]["name"] == "Sony Interactive Entertainment"
     assert data["description"] == "First line.\nSecond line."
@@ -390,7 +400,7 @@ def test_xbox_series_badge_et_jsonld(site: Path) -> None:
     render(site, [game("halo", platforms=["xbox_series"])])
     index = (site / "index.html").read_text(encoding="utf-8")
     assert '<span class="console xb">Xbox Series</span>' in index
-    (data,) = jsonld((site / GAMES_DIR / "halo" / "index.html").read_text(encoding="utf-8"))
+    data = game_jsonld((site / GAMES_DIR / "halo" / "index.html").read_text(encoding="utf-8"))
     assert data["gamePlatform"] == ["Xbox Series X|S"]
 
 

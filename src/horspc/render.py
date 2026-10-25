@@ -446,6 +446,8 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
         + _social(title, description, url, cover, "website")
         + "\n"
         + _jsonld(_videogame(game, url))
+        + "\n"
+        + _jsonld(_breadcrumb(game, url))
         + '\n<script src="../../game.js" defer></script>'
     )
     facts = [
@@ -470,10 +472,10 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
             ("Fiche IGDB", f'<a href="{_a(str(game.igdb_url))}" rel="noopener">IGDB.com</a>')
         )
     dl = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in facts)
+    # game.js remplace le lien par history.back() si le visiteur vient du catalogue (filtres
+    # et position conservés).
     main = f"""<main class="wrap game-page">
-<nav class="breadcrumb" aria-label="Fil d'Ariane">
-  <a href="../../">Catalogue</a> \u203a {_e(game.title)}
-</nav>
+<p class="game-top"><a class="back-btn" href="../../" data-back>← Retour au catalogue</a></p>
 <article class="game">
   {_cover(game, 0, "../../", lazy=False)}
   <div class="game-body">
@@ -481,15 +483,28 @@ def _game_page(template: str, game: GameOut, url: str, generated: date) -> str:
     <h1>{_e(game.title)}</h1>
     <h2>Offre retenue</h2>
     {_price_block(game, with_cta=True)}
-    <h2>Informations</h2>
-    <dl class="facts">{dl}</dl>
-    <p><a class="back" href="../../">← Retour au catalogue</a></p>
   </div>
+  <section class="game-facts" aria-labelledby="informations">
+    <h2 id="informations">Informations</h2>
+    <dl class="facts">{dl}</dl>
+  </section>
 </article>
 {_summary_section(game)}{_trailer_section(game)}{_gallery_section(game)}</main>"""
     page = template.replace("<!--horspc:game-head-->", head)
     page = page.replace("<!--horspc:game-main-->", main)
     return _set_footer_date(page, generated)
+
+
+def _breadcrumb(game: GameOut, url: str) -> dict[str, Any]:
+    """Fil d'Ariane pour les moteurs (la page affiche un bouton de retour à la place)."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Catalogue", "item": SITE_URL},
+            {"@type": "ListItem", "position": 2, "name": game.title, "item": url},
+        ],
+    }
 
 
 def _release_fact(game: GameOut, today: date) -> str:
