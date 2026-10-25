@@ -70,9 +70,15 @@
   launch_price_source: https://www.phonandroid.com/pokemon-ecarlate-et-pokemon-violet-ou-les-acheter-au-meilleur-prix.html
 
 # Sortie le 19/11/2026 sur PS5 et Xbox Series (IGDB 52189). Une entrée = une référence :
-# l'édition PS5 est retenue ; l'édition Xbox Series serait une seconde entrée.
+# une entrée par console, chacune avec ses propres EAN (data/discovered.json).
 - slug: grand-theft-auto-vi
   title: Grand Theft Auto VI
   platforms: [ps5]
+  igdb_id: 52189
+  launch_price: null
+
+- slug: grand-theft-auto-vi-xbox-series
+  title: Grand Theft Auto VI
+  platforms: [xbox_series]
   igdb_id: 52189
   launch_price: null

@@ -637,3 +637,78 @@ def test_physique_prioritaire_sur_la_boite_avec_code() -> None:
     assert (offer.format, offer.merchant) == ("physical", "Pixmania")
     offer = ManualPriceProvider([], [box]).get_best_offer(MKW, TODAY)
     assert offer.format == "code_box"
+
+
+# --- Une entrée par console : EAN séparés ---------------------------------------------------------
+
+GTA_PS5 = GameEntry(slug="gta-vi", title="Grand Theft Auto VI", platforms=["ps5"])
+GTA_XBOX = GameEntry(slug="gta-vi-xbox", title="Grand Theft Auto VI", platforms=["xbox_series"])
+EAN_GTA_PS5 = "5026555439824"
+EAN_GTA_XBOX = "5026555368278"  # EAN fictif pour le test
+
+
+def pixmania_page(name: str, ean: str) -> str:
+    return (
+        page("pixmania.html")
+        .replace('"name": "Mario Kart World (Switch 2)"', f'"name": "{name}"')
+        .replace(EAN_PIXMANIA, ean)
+    )
+
+
+@respx.mock
+def test_ean_ps5_et_xbox_jamais_melanges(fetcher: Fetcher) -> None:
+    mock_robots()
+    base = "https://www.pixmania.com/fr/fr/"
+    urls = {
+        "ps5": base + "grand-theft-auto-vi-ps5-610001.html",
+        "xbox": base + "grand-theft-auto-vi-xbox-series-x-s-610002.html",
+        "both": base + "grand-theft-auto-vi-ps5-xbox-series-610003.html",
+    }
+    sitemap = "".join(f"<url><loc>{u}</loc></url>" for u in urls.values())
+    respx.get(src.PIXMANIA_SITEMAP).respond(
+        text="<sitemapindex><sitemap><loc>https://feeds.pixmania.com/sitemap/FR/"
+        "sitemap-products-1.xml</loc></sitemap></sitemapindex>"
+    )
+    respx.get("https://feeds.pixmania.com/sitemap/FR/sitemap-products-1.xml").respond(
+        text=f"<urlset>{sitemap}</urlset>"
+    )
+    respx.get(urls["ps5"]).respond(text=pixmania_page("Grand Theft Auto VI (PS5)", EAN_GTA_PS5))
+    respx.get(urls["xbox"]).respond(
+        text=pixmania_page("Grand Theft Auto VI (Xbox Series X|S)", EAN_GTA_XBOX)
+    )
+    both = respx.get(urls["both"]).respond(text="<html/>")
+    for ean in (EAN_GTA_PS5, EAN_GTA_XBOX):
+        respx.get(src.leclerc_url(ean)).respond(404)
+    discovered = empty()
+    names = {"gta-vi": ["GTA VI"], "gta-vi-xbox": ["GTA VI"]}
+    enabled = {"leclerc": True, "pixmania": True}
+    observations, _ = Scraper(enabled, fetcher).run([GTA_PS5, GTA_XBOX], names, discovered, TODAY)
+    games = discovered["games"]
+    assert (games["gta-vi"]["eans"], games["gta-vi"]["sources"]) == (
+        [EAN_GTA_PS5],
+        {"pixmania": urls["ps5"]},
+    )
+    assert (games["gta-vi-xbox"]["eans"], games["gta-vi-xbox"]["sources"]) == (
+        [EAN_GTA_XBOX],
+        {"pixmania": urls["xbox"]},
+    )
+    assert not both.called  # nom citant deux consoles : ambigu, jamais ouvert
+    assert {(o.slug, o.ean) for o in observations} == {
+        ("gta-vi", EAN_GTA_PS5),
+        ("gta-vi-xbox", EAN_GTA_XBOX),
+    }
+
+
+@respx.mock
+def test_fiche_d_une_autre_console_refusee_au_releve(fetcher: Fetcher) -> None:
+    mock_robots()
+    url = "https://www.pixmania.com/fr/fr/grand-theft-auto-vi-ps5-610001.html"
+    respx.get(url).respond(text=pixmania_page("Grand Theft Auto VI (PS5)", EAN_GTA_PS5))
+    discovered = {"schema": 1, "games": {"gta-vi-xbox": {
+        "eans": [EAN_GTA_XBOX], "sources": {"pixmania": url}, "checked": {}
+    }}}  # fmt: skip
+    observations, report = Scraper({"pixmania": True}, fetcher).run(
+        [GTA_XBOX], {"gta-vi-xbox": ["GTA VI"]}, discovered, TODAY
+    )
+    assert observations == []
+    assert any(e["detail"].startswith("autre produit") for e in report.events)

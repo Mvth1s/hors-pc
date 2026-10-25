@@ -141,8 +141,11 @@ def _platform_words(words: list[str]) -> set[int]:
             out |= {i, i + 1} if nxt == "2" else {i}
         elif word == "xbox" and nxt == "series":
             out |= {i, i + 1}
-            if i + 2 < len(words) and words[i + 2] in ("x", "s"):
-                out.add(i + 2)
+            # « Series X », « Series S », « Series X|S » (tokens x puis s).
+            j = i + 2
+            while j < len(words) and j <= i + 3 and words[j] in ("x", "s"):
+                out.add(j)
+                j += 1
     return out
 
 
@@ -151,9 +154,9 @@ def title_matches(
 ) -> bool:
     """Nom de produit = titre + plateforme + édition standard, sans autre mot significatif."""
     words = tokens(_without_code_box(product_name))
-    if platform not in platforms_in(words):
-        return False
-    if platform == "switch" and "switch2" in platforms_in(words):
+    # Exactement la plateforme de l'entrée : un nom citant aussi PS5 ou Switch 2 (bundle,
+    # multi-plateforme, autre édition) est ambigu et rejeté, ce qui sépare les EAN par console.
+    if platforms_in(words) != {platform}:
         return False
     wanted = tokens(title)
     platform_idx = _platform_words(words)
