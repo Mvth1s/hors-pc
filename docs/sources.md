@@ -43,14 +43,39 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
 - **Réponse** : 200, fiche réelle, sans défi.
 - **Données** : JSON-LD `Product` avec `gtin`, `Offer` (prix, `EUR`, `InStock`, `NewCondition`,
   `seller: E.Leclerc`) et `AggregateOffer` pour la place de marché.
-- **Découverte** : la recherche interne est interdite (L3), mais `/fp/<slug>-<EAN>` redirige vers la
-  fiche quel que soit le slug : la fiche s'ouvre par l'EAN (`/fp/x-<EAN>`).
+- **Découverte par catégories** (depuis le 25/10/2026) : la recherche interne est interdite
+  (`Disallow: /recherche`, L3), mais les pages catégories de jeux par console sont listées dans le
+  sitemap de navigation (`/sitemap/sitemap-navigation-1.xml`, via `/sitemap/sitemap-index.xml`) :
+  `/cat/jeux-ps5`, `/cat/jeux-switch`, `/cat/jeux-switch-2`, `/cat/jeux-xbox-series`.
+  - **robots.txt** : groupe `User-agent: *` (L2) ; aucune règle ne vise `/cat/…` ni `?page=N`.
+    `Disallow: /catalogue` (L5) ne concerne que les chemins commençant par `/catalogue`, et
+    `Disallow: /lp/*page=` (L24) que `/lp/`. Le tri et les filtres sont interdits
+    (`/*property_facet`, `/*sortOrder=`, `/*sortKey=`, `/*availability_status=`…, L14 à L23) :
+    aucun de ces paramètres n'est utilisé.
+  - **Rendu** : HTML complet côté serveur (environ 850 Ko par page) ; chaque carte donne le nom du
+    produit (attribut `title`) et l'EAN, en fin de lien `/fp/<slug>-<EAN>`. Correspondance stricte
+    sur ce nom (plateforme, édition standard, code in a box, éditeurs IGDB), puis `gtin13`, offre
+    et vendeur vérifiés sur la fiche ; fiche physique avec offre préférée.
+  - **Pagination** : `?page=N`, 40 cartes par page, jusqu'à une page vide. Relevé du 25/10/2026 :
+    51 pages (PS5), 57 (Switch), 8 (Switch 2), 22 (Xbox Series).
+  - **Pagination instable** : certaines pages répètent la précédente (Switch 2 : pages 3 et 4
+    identiques), si bien que des produits n'apparaissent pas ; le paramètre `xrf` des liens du site
+    n'y change rien et le tri est interdit. Mesure : 20 des 23 fiches déjà connues par EAN
+    figurent dans les catégories, les 3 absentes étant en rupture. Un produit manqué est recherché
+    à nouveau 14 jours plus tard ; il est aussi rattrapé par Pixmania puis Leclerc par EAN.
+  - **Volume** : une catégorie n'est lue que si une de ses éditions attend une découverte, au plus
+    une fois par run. Au pire 138 pages, soit environ 2 min 20 à 1 requête par seconde et 115 Mo,
+    plus le sitemap de navigation (2,2 Mo) ; un run où tout est déjà trouvé ne lit aucune
+    catégorie.
+- **Découverte par EAN** : `/fp/<slug>-<EAN>` redirige vers la fiche quel que soit le slug : la
+  fiche s'ouvre par l'EAN (`/fp/x-<EAN>`), pour les EAN venus de Pixmania.
   **Correction (25/10/2026)** : une première version de ce document indiquait que les sitemaps
   produits donnaient titre et EAN. C'est faux : les 78 sitemaps produits (environ 9 Mo chacun) ne
-  contiennent que des URL `/fp/<EAN>`, sans titre. Ils ne permettent donc pas de trouver un jeu par
-  son titre. L'EAN vient de Pixmania (fiche trouvée par les sitemaps, `gtin13`), puis la fiche
-  Leclerc est ouverte par cet EAN et son `gtin13` est vérifié. Les EAN déjà trouvés via Boulanger
-  avant sa désactivation restent en cache (`data/discovered.json`) et valables.
+  contiennent que des URL `/fp/<EAN>`, sans titre.
+- **Rupture** : une fiche sans offre en ligne est conservée et relevée à chaque run ; le site
+  affiche « En rupture chez E.Leclerc, constaté le … » tant qu'aucune autre offre n'existe.
+- **Vendeurs tiers** : une fiche qui n'a que des offres de la place de marché (`AggregateOffer`
+  sans `Offer` de l'enseigne) est écartée.
 
 ### Pixmania (`www.pixmania.com`)
 
@@ -71,10 +96,10 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
   retenue si elle est unique. Les fiches « [Code de téléchargement] » (codes envoyés sans boîte
   par un vendeur de la place de marché) ne sont jamais rattachées.
 - **Limite** : les EAN de Pixmania sont souvent ceux d'imports et ne correspondent pas toujours à
-  ceux de Leclerc, qui ne s'ouvre que par EAN. Constat du 25/10/2026 à cache vide : Mario Kart
-  World et Zelda Tears of the Kingdom n'ont que le prix Pixmania ; Astro Bot (« Microids Astro
-  Bot ») et GTA VI n'ont aucun chemin de découverte. Un nouveau jeu peut donc n'avoir que le prix
-  Pixmania, ou aucun prix.
+  ceux de Leclerc (Mario Kart World : `0045496312329` contre `0045496312336`). Depuis la
+  découverte par catégories, Leclerc ne dépend plus de ces EAN ; un jeu absent des catégories
+  (pagination instable, rupture) et vendu sous un autre EAN chez Pixmania peut encore n'avoir que
+  le prix Pixmania.
 
 ## Sources désactivées
 
