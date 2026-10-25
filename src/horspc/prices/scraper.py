@@ -57,6 +57,21 @@ def write_discovered(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
 
 
+def out_of_stock(discovered: dict[str, Any]) -> dict[tuple[str, str], tuple[str, date]]:
+    """Ruptures constatées par édition : (slug, plateforme) → (source, date du constat).
+
+    Si plusieurs sources sont en rupture, la plus récente est retenue.
+    """
+    found = {}
+    for slug, editions in discovered.get("games", {}).items():
+        for platform, entry in editions.items():
+            ruptures = entry.get("out_of_stock") or {}
+            if ruptures:
+                source = max(ruptures, key=lambda s: (ruptures[s], s))
+                found[(slug, platform)] = (source, date.fromisoformat(ruptures[source]))
+    return found
+
+
 def load_history(path: Path) -> list[ScrapedObservation]:
     if not path.exists():
         return []
@@ -193,6 +208,7 @@ class Scraper:
                     elif url in self._gone:
                         del entry["sources"][source]
                         entry["checked"].pop(source, None)
+                        entry.get("out_of_stock", {}).pop(source, None)
         events = [e.__dict__ for e in self.fetcher.events]
         broken = sorted(
             {f"{e.source} : {e.url}" for e in self.fetcher.events if e.kind == "broken"}
@@ -222,6 +238,7 @@ class Scraper:
             self.fetcher.record(source, "rejected", url, "offres de vendeurs tiers seulement")
             return None
         if page.price is None:
+            self._out_of_stock(entry, source, today)
             self.fetcher.record(
                 source,
                 "rejected",
@@ -233,6 +250,7 @@ class Scraper:
             self.fetcher.record(source, "rejected", url, f"prix hors euros ({page.currency})")
             return None
         if page.available is False:
+            self._out_of_stock(entry, source, today)
             self.fetcher.record(source, "rejected", url, "indisponible")
             return None
         offer_format = "code_box" if is_code_box(page.name, page.description) else "physical"
@@ -257,8 +275,17 @@ class Scraper:
         except ValidationError as exc:
             self.fetcher.record(source, "rejected", url, str(exc.errors()[0]["msg"]))
             return None
+        ruptures = entry.get("out_of_stock", {})
+        ruptures.pop(source, None)  # de retour en stock
+        if not ruptures:
+            entry.pop("out_of_stock", None)
         self.fetcher.record(source, "ok", url, f"{page.price} € ({page.seller})")
         return obs
+
+    @staticmethod
+    def _out_of_stock(entry: dict[str, Any], source: str, today: date) -> None:
+        """Fiche trouvée mais sans offre en ligne : rupture, avec la date du dernier constat."""
+        entry.setdefault("out_of_stock", {})[source] = today.isoformat()
 
     def _product(self, source: str, url: str) -> src.ProductPage | None:
         """Fiche lue une seule fois par run (la découverte et le relevé la partagent)."""
@@ -397,13 +424,22 @@ class Scraper:
             for item in self._leclerc_listing(platform)
             if any(title_matches(item.name, t, platform, extra) for t in titles)
         ]
+        # Physique avant boîte avec code ; une fiche avec offre avant une fiche en rupture,
+        # retenue seulement à défaut (sa rupture est alors affichée).
+        candidates.sort(key=lambda item: is_code_box(item.name))
+        fallback = None
         for item in candidates[:MAX_CANDIDATES]:
             page = self._product("leclerc", item.url)
-            if page is not None and item.ean in page.eans:
-                self._add_ean(entry, item.ean)
-                entry["sources"]["leclerc"] = item.url
-                log.info("Découverte : %s/%s → Leclerc %s", game.slug, platform, item.url)
-                return
+            if page is None or item.ean not in page.eans:
+                continue
+            if page.price is not None and not page.third_party_only:
+                fallback = item
+                break
+            fallback = fallback or item
+        if fallback is not None:
+            self._add_ean(entry, fallback.ean)
+            entry["sources"]["leclerc"] = fallback.url
+            log.info("Découverte : %s/%s → Leclerc %s", game.slug, platform, fallback.url)
 
     def _leclerc_listing(self, platform: Platform) -> list[src.ListingItem]:
         """Produits d'une catégorie Leclerc, lue au plus une fois par run (?page=N jusqu'à une

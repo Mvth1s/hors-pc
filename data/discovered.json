@@ -3,10 +3,18 @@
     "animal-crossing-new-horizons": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496425425"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/animal-crossing-new-horizons-switch-0045496425425"
+        }
       }
     },
     "astral-chain": {
@@ -18,6 +26,9 @@
         "eans": [
           "0045496424688"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/astral-chain-switch-0045496424688",
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-astral-chain-standard-nintendo-switch-231520.html"
@@ -44,6 +55,7 @@
     "code-violet": {
       "ps5": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [],
@@ -53,6 +65,7 @@
     "crash-team-racing-nitro-fueled": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [],
@@ -62,6 +75,7 @@
     "demon-s-souls": {
       "ps5": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [],
@@ -88,15 +102,21 @@
     "fire-emblem-fortune-s-weave": {
       "switch2": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496314637"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/fire-emblem-fortune-s-weave-nintendo-switch-2-0045496314637"
+        }
       }
     },
     "fire-emblem-three-houses": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [],
@@ -123,6 +143,7 @@
     "god-of-war-sons-of-sparta": {
       "ps5": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [],
@@ -163,10 +184,15 @@
       },
       "xbox_series": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "5026555370103"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/grand-theft-auto-vi-code-in-a-box-xbox-series-5026555370103"
+        }
       }
     },
     "kirby-air-riders": {
@@ -208,6 +234,9 @@
         "eans": [
           "0045496421625"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/kirby-star-allies-switch-0045496421625",
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-kirby-star-allies-standard-nintendo-switch-231390.html"
@@ -217,10 +246,15 @@
     "luigi-s-mansion-3": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496425258"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/luigi-s-mansion-3-switch-0045496425258"
+        }
       }
     },
     "mario-kart-world": {
@@ -244,21 +278,32 @@
     "mario-rabbids-kingdom-battle": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "3307216024354"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-the-lapins-cretins-kingdom-battle-switch-3307216024354"
+        }
       }
     },
     "mario-tennis-aces": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [
+          "0045496421984",
           "0045496422011"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
         "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-tennis-aces-switch-0045496421984",
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-mario-tennis-aces-standard-nintendo-switch-231540.html"
         }
       }
@@ -266,10 +311,15 @@
     "marvel-s-wolverine": {
       "ps5": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0711719073239"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/marvel-s-wolverine-ps5-0711719073239"
+        }
       }
     },
     "metroid-dread": {
@@ -281,6 +331,9 @@
         "eans": [
           "0045496428471"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/metroid-dread-switch-0045496428471",
           "pixmania": "https://www.pixmania.com/fr/fr/metroid-dread-jeu-switch-90467.html"
@@ -290,42 +343,64 @@
     "metroid-prime-4-beyond": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [
+          "0045496513207",
           "0045496513245"
         ],
         "sources": {
+          "leclerc": "https://www.e.leclerc/fp/metroid-prime-4-beyond-switch-0045496513207",
           "pixmania": "https://www.pixmania.com/fr/fr/metroid-prime-4-beyond-switch-540920.html"
         }
       },
       "switch2": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496313388"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/metroid-prime-4-beyond-nintendo-switch-2-edition-nintendo-switch-2-0045496313388"
+        }
       }
     },
     "metroid-prime-remastered": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496478926"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/metroid-prime-remastered-switch-0045496478926"
+        }
       }
     },
     "nhl-27": {
       "ps5": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "5030943125572"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/ea-sports-nhl-27-ps5-5030943125572"
+        }
       },
       "xbox_series": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [],
@@ -335,19 +410,32 @@
     "orbitals": {
       "switch2": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496314514"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/orbitals-nintendo-switch-2-0045496314514"
+        }
       }
     },
     "paper-mario-the-origami-king": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496426422"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/paper-mario-the-origami-king-switch-0045496426422"
+        }
       }
     },
     "pikmin-4": {
@@ -359,6 +447,9 @@
         "eans": [
           "0045496479305"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/pikmin-4-switch-0045496479305",
           "pixmania": "https://www.pixmania.com/fr/fr/pikmin-4-switch-171084.html"
@@ -391,6 +482,9 @@
         "eans": [
           "0045496428280"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/legendes-pokemon-arceus-switch-0045496428280",
           "pixmania": "https://www.pixmania.com/fr/fr/legendes-pokemon-arceus-jeu-nintendo-switch-97162.html"
@@ -400,37 +494,55 @@
     "pokemon-legends-z-a": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496512996"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/legendes-pokemon-z-a-switch-0045496512996"
+        }
       },
       "switch2": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496313050"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/legendes-pokemon-z-a-nintendo-switch-2-edition-nintendo-switch-2-0045496313050"
+        }
       }
     },
     "pokemon-let-s-go-pikachu": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496423124"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pokemon-let-s-go-pikachu-switch-0045496423124"
+        }
       }
     },
     "pokemon-sword": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [
-          "0045496424749"
+          "0045496424749",
+          "0045496424763"
         ],
         "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pokemon-epee-switch-0045496424763",
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-pokemon-sword-standard-nintendo-switch-231469.html"
         }
       }
@@ -438,10 +550,18 @@
     "rhythm-heaven-groove": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496513610"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/rhythm-paradise-groove-switch-0045496513610"
+        }
       }
     },
     "saros": {
@@ -479,10 +599,15 @@
     "splatoon-raiders": {
       "switch2": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496314316"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/splatoon-raiders-nintendo-switch-2-0045496314316"
+        }
       }
     },
     "super-mario-bros-wonder": {
@@ -494,6 +619,9 @@
         "eans": [
           "0045496479794"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/super-mario-bros-wonder-switch-0045496479794",
           "pixmania": "https://www.pixmania.com/fr/fr/super-mario-bros-wonder-switch-197078.html"
@@ -503,21 +631,32 @@
     "super-mario-maker-2": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496424350"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-mario-maker-2-switch-0045496424350"
+        }
       }
     },
     "super-mario-odyssey": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [
-          "0045496420864"
+          "0045496420864",
+          "0045496420888"
         ],
         "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-mario-odyssey-switch-0045496420888",
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-super-mario-odyssey-switch-standard-nintendo-switch-231507.html"
         }
       }
@@ -585,19 +724,29 @@
     "the-legend-of-zelda-link-s-awakening": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496424442"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-link-s-awakening-switch-0045496424442"
+        }
       }
     },
     "tomodachi-life-living-the-dream": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496513542"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/tomodachi-life-une-vie-de-reve-switch-0045496513542"
+        }
       }
     },
     "unicorn-overlord": {
@@ -609,6 +758,9 @@
         "eans": [
           "5055277052929"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-ps5-5055277052929",
           "pixmania": "https://www.pixmania.com/fr/fr/unicorn-overlord-ps5-252363.html"
@@ -616,22 +768,39 @@
       },
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "5055277052998"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-switch-5055277052998"
+        }
       },
       "xbox_series": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "5055277053063"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-25"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-xbox-series-5055277053063"
+        }
       }
     },
     "xenoblade-chronicles-2": {
       "switch": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [
@@ -645,10 +814,15 @@
     "yoshi-and-the-mysterious-book": {
       "switch2": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
-        "eans": [],
-        "sources": {}
+        "eans": [
+          "0045496314125"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/yoshi-and-the-mysterious-book-nintendo-switch-2-0045496314125"
+        }
       }
     },
     "zelda-tears-of-the-kingdom": {
@@ -671,12 +845,15 @@
       },
       "switch2": {
         "checked": {
+          "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
         },
         "eans": [
-          "0045496312572"
+          "0045496312572",
+          "0045496312589"
         ],
         "sources": {
+          "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-nintendo-switch-2-edition-nintendo-switch-2-0045496312589",
           "pixmania": "https://www.pixmania.com/fr/fr/the-legend-of-zelda-tears-of-the-kingdom-switch-2-397668.html"
         }
       }

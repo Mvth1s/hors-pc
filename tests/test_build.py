@@ -94,7 +94,13 @@ def test_schema_complet_et_offre() -> None:
     }
     assert astro["platforms"] == ["ps5"]
     assert astro["editions"] == [
-        {"platform": "ps5", "offer": offer, "sold_digital": False, "listed_physical": False}
+        {
+            "platform": "ps5",
+            "offer": offer,
+            "sold_digital": False,
+            "listed_physical": False,
+            "out_of_stock": None,
+        }
     ]
     assert astro["best_offer"] == offer
     saros = dumped["games"][1]
@@ -235,6 +241,7 @@ def run(workdir: Path, igdb: IgdbClient | None) -> DataFile:
         prices_path=workdir / "prices.yaml",
         output_path=workdir / "data.json",
         scraped_path=workdir / "prices.scraped.jsonl",
+        discovered_path=workdir / "discovered.json",
     )
 
 

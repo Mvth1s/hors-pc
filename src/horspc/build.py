@@ -4,7 +4,7 @@ import json
 import logging
 import os
 from collections.abc import Iterable
-from datetime import datetime
+from datetime import date, datetime
 from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 from typing import Any
@@ -19,6 +19,7 @@ from horspc.models import Catalog, DataFile, GameOut, ScrapedObservation, to_cen
 from horspc.prices import ManualPriceProvider, Offer, PriceProvider, scraper
 from horspc.prices.fetch import Fetcher
 from horspc.prices.selection import edition_offer_key
+from horspc.prices.trust import PLATFORMS
 
 log = logging.getLogger(__name__)
 
@@ -78,6 +79,7 @@ def build_data(
     generated_at: datetime | None = None,
     cover_ids: dict[str, str | None] | None = None,
     screen_ids: dict[str, tuple[str, ...]] | None = None,
+    ruptures: dict[tuple[str, str], tuple[str, date]] | None = None,
 ) -> DataFile:
     """Assemble et valide le contenu de data.json.
 
@@ -85,8 +87,10 @@ def build_data(
     du data.json précédent. `generated_at` vaut `now` par défaut ; `now` sert toujours au
     calcul de `offer.stale`. `cover_ids` donne, par slug, l'image_id de la jaquette présente
     dans site/covers/ (absent ou None : pas de jaquette) ; `screen_ids`, les image_id des
-    captures présentes dans site/screens/<slug>/.
+    captures présentes dans site/screens/<slug>/. `ruptures` : par (slug, plateforme), la
+    source et la date d'une fiche trouvée sans offre en ligne (affichée sans autre offre).
     """
+    ruptures = ruptures or {}
     cover_ids = cover_ids or {}
     screen_ids = screen_ids or {}
     games = []
@@ -124,6 +128,11 @@ def build_data(
                         None if offer is None else _offer_fields(offer, entry["launch_price_cents"])
                     ),
                     **_proofs(info, prev, platform),
+                    "out_of_stock": (
+                        None
+                        if offer is not None or (game.slug, platform) not in ruptures
+                        else _rupture(*ruptures[(game.slug, platform)])
+                    ),
                 }
             )
         entry["editions"] = editions
@@ -233,6 +242,9 @@ def run(
         generated_at,
         {u.slug: u.image_id for u in updates},
         {u.slug: u.image_ids for u in screen_updates},
+        scraper.out_of_stock(
+            discovered if discovered is not None else scraper.load_discovered(discovered_path)
+        ),
     )
     write_data(data, output_path)
     if discovered is not None:
@@ -318,6 +330,10 @@ def _proofs(info: IgdbGame | None, prev: GameOut | None, platform: str) -> dict[
     if old is None:
         return {"sold_digital": False, "listed_physical": False}
     return {"sold_digital": old.sold_digital, "listed_physical": old.listed_physical}
+
+
+def _rupture(source: str, day: date) -> dict[str, Any]:
+    return {"merchant": PLATFORMS[source].name, "observed_at": day}
 
 
 def best_offer(offers: list[dict[str, Any]]) -> dict[str, Any] | None:

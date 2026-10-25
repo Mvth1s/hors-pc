@@ -239,19 +239,33 @@ def test_retour_sans_historique_mene_au_catalogue(base_url: str, browser: object
 
 
 def test_filtre_console_affiche_le_prix_de_ses_editions(base_url: str, browser: object) -> None:
+    games = json.loads((SITE / "data.json").read_text(encoding="utf-8"))["games"]
+    # Un jeu avec une offre ailleurs mais aucune sur Xbox Series (choisi dans les données).
+    target = next(
+        (
+            g
+            for g in games
+            if g["best_offer"]
+            and any(e["platform"] == "xbox_series" and not e["offer"] for e in g["editions"])
+        ),
+        None,
+    )
+    if target is None:
+        pytest.skip("aucun jeu sans offre Xbox Series dans data.json")
     context = browser.new_context()
     context.route(
         "**/*", lambda r: r.continue_() if r.request.url.startswith(base_url) else r.abort()
     )
     page = context.new_page()
     page.goto(base_url)
-    gta = page.locator('article[data-title="Grand Theft Auto VI"]')
-    assert gta.locator('.price-view[data-view="all"]').is_visible()
+    card = page.locator(f'article[data-title="{target["title"]}"]')
+    assert card.locator('.price-view[data-view="all"]').is_visible()
     page.click('[data-platform="xbox_series"]')
-    # Édition Xbox Series sans relevé : son bloc remplace la meilleure offre (PS5).
-    assert gta.locator('.price-view[data-view="xbox_series"]').is_visible()
-    assert not gta.locator('.price-view[data-view="all"]').is_visible()
-    assert "Pas encore de prix relevé" in gta.inner_text()
+    # Édition Xbox Series sans offre : son bloc remplace la meilleure offre.
+    assert card.locator('.price-view[data-view="xbox_series"]').is_visible()
+    assert not card.locator('.price-view[data-view="all"]').is_visible()
+    text = card.inner_text()
+    assert "Pas encore de prix relevé" in text or "En rupture chez" in text
     page.click('[data-platform="all"]')
-    assert gta.locator('.price-view[data-view="all"]').is_visible()
+    assert card.locator('.price-view[data-view="all"]').is_visible()
     context.close()

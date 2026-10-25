@@ -1013,3 +1013,64 @@ def test_fiche_avec_vendeurs_tiers_seulement_ecartee_sans_alerte(fetcher: Fetche
     assert ("rejected", "offres de vendeurs tiers seulement") in {
         (e["kind"], e["detail"]) for e in report.events
     }
+
+
+@respx.mock
+def test_rupture_memorisee_puis_effacee_au_retour_du_stock(fetcher: Fetcher) -> None:
+    from horspc.prices.scraper import out_of_stock
+
+    mock_robots()
+    no_offer = page("leclerc.html").replace('"offers"', '"offres"')
+    route = respx.get(LECLERC_FP)
+    route.side_effect = [
+        httpx.Response(200, text=no_offer),
+        httpx.Response(200, text=page("leclerc.html")),
+    ]
+    discovered = {"schema": 2, "games": {"mario-kart-world": {"switch2": {
+        "eans": [EAN_LECLERC], "sources": {"leclerc": LECLERC_FP}, "checked": {}
+    }}}}  # fmt: skip
+    Scraper({"leclerc": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    entry = discovered["games"]["mario-kart-world"]["switch2"]
+    assert entry["out_of_stock"] == {"leclerc": TODAY.isoformat()}
+    assert entry["sources"] == {"leclerc": LECLERC_FP}  # la fiche reste relevée
+    assert out_of_stock(discovered) == {("mario-kart-world", "switch2"): ("leclerc", TODAY)}
+    later = date.fromordinal(TODAY.toordinal() + 7)
+    observations, _ = Scraper({"leclerc": True}, fetcher).run([MKW], {}, discovered, later)
+    assert [o.price for o in observations] == [Decimal("66.25")]
+    assert "out_of_stock" not in entry and out_of_stock(discovered) == {}
+
+
+@respx.mock
+def test_categorie_prefere_le_physique_avec_offre(fetcher: Fetcher) -> None:
+    mock_robots()
+    base = "https://www.e.leclerc/fp/"
+    box = base + "mario-kart-world-code-in-a-box-nintendo-switch-2-0045496300001"
+    rupture = base + "mario-kart-world-nintendo-switch-2-0045496300002"
+    ok = base + "mario-kart-world-nintendo-switch-2-0045496300003"
+    cards = "".join(
+        f'<a href="{u.removeprefix("https://www.e.leclerc")}" data-product-card-title '
+        f'title="{n}">{n}</a>'
+        for u, n in (
+            (box, "Mario Kart World (Code in a Box) (NINTENDO SWITCH 2)"),
+            (rupture, "Mario Kart World (NINTENDO SWITCH 2)"),
+            (ok, "Mario Kart World (NINTENDO SWITCH 2)"),
+        )
+    )
+    respx.get(src.LECLERC_SITEMAP).respond(text=page("leclerc_sitemap_index.xml"))
+    respx.get("https://www.e.leclerc/sitemap/sitemap-navigation-1.xml").respond(
+        text=page("leclerc_sitemap_navigation.xml")
+    )
+    respx.route(host="www.e.leclerc", path__startswith="/cat/").mock(
+        side_effect=lambda r: httpx.Response(
+            200, text=cards if r.url.params.get("page", "1") == "1" else "<html/>"
+        )
+    )
+    fiche = page("leclerc.html")
+    respx.get(box).respond(text=fiche.replace(EAN_LECLERC, "0045496300001"))
+    respx.get(rupture).respond(
+        text=fiche.replace(EAN_LECLERC, "0045496300002").replace('"offers"', '"offres"')
+    )
+    respx.get(ok).respond(text=fiche.replace(EAN_LECLERC, "0045496300003"))
+    discovered = empty()
+    Scraper({"leclerc": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert discovered["games"]["mario-kart-world"]["switch2"]["sources"] == {"leclerc": ok}

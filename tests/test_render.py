@@ -626,3 +626,39 @@ def test_preuve_physique_igdb_contredite_par_les_releves(
     render(site, [gta])
     index = (site / "index.html").read_text(encoding="utf-8")
     assert ('<span class="status fmt">Physique et numérique</span>' in index) is badge
+
+
+def test_rupture_affichee_a_la_place_de_pas_encore_de_prix(site: Path) -> None:
+    rupture = {"merchant": "E.Leclerc", "observed_at": "2026-10-25"}
+    solo = game("solo")
+    solo["editions"][0]["out_of_stock"] = rupture
+    duo = game(
+        "duo", platforms=("ps5", "xbox_series"), offers={"ps5": offer(date(2026, 10, 20), False)}
+    )
+    duo["editions"][1]["out_of_stock"] = rupture
+    render(site, [solo, duo])
+    text = "En rupture chez E.Leclerc, constaté le 25/10/2026"
+    index = (site / "index.html").read_text(encoding="utf-8")
+    assert f'<p class="no-price out">{text}.</p>' in card(index, "Solo")
+    duo_card = card(index, "Duo")
+    xbox = re.search(r'data-view="xbox_series" hidden>(.*?)</div></div>', duo_card, re.S).group(1)
+    assert text in xbox  # vue du filtre Xbox Series
+    page = (site / GAMES_DIR / "solo" / "index.html").read_text(encoding="utf-8")
+    assert text in page and "Pas encore de prix relevé" not in page
+    table = (site / GAMES_DIR / "duo" / "index.html").read_text(encoding="utf-8")
+    assert f'<td class="no-offer" colspan="5">{text}</td>' in table
+
+
+def test_rupture_et_offre_incompatibles() -> None:
+    from horspc.models import EditionOut
+
+    with pytest.raises(ValueError, match="sans offre"):
+        EditionOut.model_validate(
+            {
+                "platform": "ps5",
+                "offer": offer(date(2026, 10, 20), False) | {"platform": "ps5"},
+                "sold_digital": False,
+                "listed_physical": False,
+                "out_of_stock": {"merchant": "E.Leclerc", "observed_at": "2026-10-25"},
+            }
+        )

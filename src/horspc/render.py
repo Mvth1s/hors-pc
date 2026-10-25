@@ -333,7 +333,7 @@ def _price_block(game: GameOut, with_cta: bool, offer: OfferOut | None = None) -
     """
     offer = offer if offer is not None else game.best_offer
     if offer is None:
-        return '<div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div>'
+        return _no_price_block(game.editions)
     launch = (
         f'<span class="was">Lancement <s>{_euros(game.launch_price_cents)}</s></span>'
         if game.launch_price_cents
@@ -371,6 +371,21 @@ def _price_block(game: GameOut, with_cta: bool, offer: OfferOut | None = None) -
         f'<div class="price-block">{launch}<div class="price-row">'
         f'<span class="price">{big}</span>{discount}</div></div>{source}{cta}'
     )
+
+
+def no_price_text(editions: list[EditionOut]) -> str:
+    """« En rupture chez E.Leclerc, constaté le JJ/MM/AAAA » si une fiche est en rupture, sinon
+    « Pas encore de prix relevé » (constat le plus récent parmi ces éditions)."""
+    ruptures = [e.out_of_stock for e in editions if e.out_of_stock is not None]
+    if not ruptures:
+        return "Pas encore de prix relevé"
+    latest = max(ruptures, key=lambda r: r.observed_at)
+    return f"En rupture chez {_e(latest.merchant)}, constaté le {_fr(latest.observed_at)}"
+
+
+def _no_price_block(editions: list[EditionOut]) -> str:
+    cls = "no-price out" if any(e.out_of_stock for e in editions) else "no-price"
+    return f'<div class="price-block"><p class="{cls}">{no_price_text(editions)}.</p></div>'
 
 
 def merchant_label(offer: OfferOut) -> str:
@@ -491,11 +506,8 @@ def _card(game: GameOut, index: int, today: date) -> str:
     # meilleure offre toutes éditions est visible.
     prices = f'<div class="price-view" data-view="all">{_price_block(game, True)}</div>'
     for key, offer in filter_views(game).items():
-        block = (
-            _price_block(game, True, offer)
-            if offer
-            else '<div class="price-block"><p class="no-price">Pas encore de prix relevé.</p></div>'
-        )
+        group = [e for e in game.editions if e.platform in FILTER_GROUPS[key]]
+        block = _price_block(game, True, offer) if offer else _no_price_block(group)
         prices += f'<div class="price-view" data-view="{key}" hidden>{block}</div>'
     return (
         f'<article class="card" {_sort_attrs(game)}>'
@@ -609,9 +621,8 @@ def _editions_section(game: GameOut) -> str:
         console = f'<th scope="row">{CONSOLES[edition.platform][0]}</th>'
         offer = edition.offer
         if offer is None:
-            rows.append(
-                f'<tr>{console}<td class="no-offer" colspan="5">Pas encore de prix relevé</td></tr>'
-            )
+            text = no_price_text([edition])
+            rows.append(f'<tr>{console}<td class="no-offer" colspan="5">{text}</td></tr>')
             continue
         price = _euros(offer.price_cents)
         if offer.shipping_cents:

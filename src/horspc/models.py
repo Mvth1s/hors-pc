@@ -342,9 +342,17 @@ class ScreenshotOut(_Output):
     url: str = Field(pattern=r"^screens/[a-z0-9-]+/[A-Za-z0-9_-]+\.webp$")
 
 
+class OutOfStockOut(_Output):
+    """Fiche trouvée mais sans offre en ligne lors du dernier relevé."""
+
+    merchant: str = Field(min_length=1)
+    observed_at: date
+
+
 class EditionOut(_Output):
     platform: Platform
     offer: OfferOut | None
+    out_of_stock: OutOfStockOut | None = None  # seulement sans offre
     # Preuves IGDB (external_games) pour le badge « Physique et numérique ».
     sold_digital: bool
     listed_physical: bool
@@ -353,6 +361,8 @@ class EditionOut(_Output):
     def _offer_platform(self) -> "EditionOut":
         if self.offer is not None and self.offer.platform != self.platform:
             raise ValueError("offre d'une autre édition")
+        if self.offer is not None and self.out_of_stock is not None:
+            raise ValueError("out_of_stock n'est renseigné que pour une édition sans offre")
         return self
 
 
