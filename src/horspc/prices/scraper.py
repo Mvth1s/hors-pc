@@ -1,11 +1,12 @@
 """Relevé automatique des prix : découverte des fiches (cache data/discovered.json) puis relevé.
 
 Découverte, sans URL saisie, uniquement par des chemins autorisés par robots.txt :
-1. EAN de l'édition standard : pages catégories Boulanger (nom, éditeur et EAN par produit),
-   correspondance stricte titre + plateforme + édition standard, puis EAN confirmé par le
-   `gtin13` de la fiche ;
-2. E.Leclerc : fiche ouverte directement par l'EAN (`/fp/x-<EAN>`), EAN vérifié ;
-3. Pixmania : sitemaps produits (slugs), correspondance stricte, puis EAN ou nom vérifié.
+1. E.Leclerc : pages catégories de la console (nom et EAN de chaque carte), correspondance
+   stricte titre + plateforme + édition standard, puis `gtin13` vérifié sur la fiche ;
+2. Pixmania : sitemaps produits (slugs), correspondance stricte, puis EAN ou nom vérifié ;
+3. E.Leclerc par EAN (`/fp/x-<EAN>`) pour les EAN venus de Pixmania, EAN vérifié ;
+(Boulanger, désactivé : pages catégories, EAN confirmé par le `gtin13` de la fiche.)
+Une catégorie n'est lue que si une édition attend une découverte, au plus une fois par run.
 Les URL trouvées sont mises en cache ; une recherche infructueuse n'est relancée qu'après
 RETRY_DAYS jours.
 """
@@ -153,6 +154,7 @@ class Scraper:
         self.fetcher = fetcher
         self._listings: dict[str, list[src.ListingItem]] = {}
         self._pixmania_locs: list[str] | None = None
+        self._leclerc_cats: dict[Platform, str] | None = None
         self._gone: set[str] = set()
         self._pages: dict[str, src.ProductPage | None] = {}
         self._companies: dict[str, list[str]] = {}
@@ -215,6 +217,9 @@ class Scraper:
             return None
         if not self._same_game(page, titles, game, platform, entry, source, url):
             self.fetcher.record(source, "rejected", url, f"autre produit : {page.name}")
+            return None
+        if page.third_party_only:
+            self.fetcher.record(source, "rejected", url, "offres de vendeurs tiers seulement")
             return None
         if page.price is None:
             self.fetcher.record(
@@ -317,20 +322,28 @@ class Scraper:
         entry: dict[str, Any],
         today: date,
     ) -> None:
-        # Boulanger et Pixmania apportent les EAN dont Leclerc a besoin : ils passent d'abord.
-        steps = {
-            "boulanger": lambda: self._discover_boulanger(game, titles, platform, entry),
-            "pixmania": lambda: self._discover_pixmania(game, titles, platform, entry),
-            "leclerc": lambda: self._discover_leclerc(game, platform, entry),
-        }
-        for source, step in steps.items():
-            if source not in self.enabled or source in entry["sources"]:
-                continue
-            if source == "leclerc" and not entry["eans"]:
-                continue
-            if self._due(entry, source, today):
+        def due(source: str) -> bool:
+            return (
+                source in self.enabled
+                and source not in entry["sources"]
+                and self._due(entry, source, today)
+            )
+
+        # Ordre : Leclerc par catégorie, Pixmania, puis Leclerc par les EAN venus de Pixmania.
+        leclerc = due("leclerc")
+        if leclerc:
+            self._discover_leclerc_category(game, titles, platform, entry)
+        for source, step in (
+            ("boulanger", lambda: self._discover_boulanger(game, titles, platform, entry)),
+            ("pixmania", lambda: self._discover_pixmania(game, titles, platform, entry)),
+        ):
+            if due(source):
                 step()
                 entry["checked"][source] = today.isoformat()
+        if leclerc and "leclerc" not in entry["sources"] and entry["eans"]:
+            self._discover_leclerc(game, platform, entry)
+        if leclerc:
+            entry["checked"]["leclerc"] = today.isoformat()
 
     def _add_ean(self, entry: dict[str, Any], ean: str) -> None:
         if ean not in entry["eans"]:
@@ -374,6 +387,62 @@ class Scraper:
                 items.update((i.url, i) for i in new)
             self._listings[category] = list(items.values())
         return self._listings[category]
+
+    def _discover_leclerc_category(
+        self, game: GameEntry, titles: list[str], platform: Platform, entry: dict[str, Any]
+    ) -> None:
+        extra = self._companies.get(game.slug, [])
+        candidates = [
+            item
+            for item in self._leclerc_listing(platform)
+            if any(title_matches(item.name, t, platform, extra) for t in titles)
+        ]
+        for item in candidates[:MAX_CANDIDATES]:
+            page = self._product("leclerc", item.url)
+            if page is not None and item.ean in page.eans:
+                self._add_ean(entry, item.ean)
+                entry["sources"]["leclerc"] = item.url
+                log.info("Découverte : %s/%s → Leclerc %s", game.slug, platform, item.url)
+                return
+
+    def _leclerc_listing(self, platform: Platform) -> list[src.ListingItem]:
+        """Produits d'une catégorie Leclerc, lue au plus une fois par run (?page=N jusqu'à une
+        page vide). L'ordre n'est pas stable : un produit manqué l'est rarement deux fois."""
+        key = f"leclerc:{platform}"
+        if key not in self._listings:
+            url = self._leclerc_categories().get(platform)
+            items: dict[str, src.ListingItem] = {}
+            for number in range(1, src.LECLERC_MAX_PAGES + 1) if url else ():
+                try:
+                    page = self.fetcher.get(
+                        "leclerc", url + (f"?page={number}" if number > 1 else "")
+                    )
+                except (SourceBlocked, Disallowed, httpx.HTTPError):
+                    break
+                found = src.leclerc_listing(page.text)
+                if not found:
+                    break  # page vide : fin de la catégorie
+                items.update((i.url, i) for i in found)  # doublons de pagination ignorés
+            self._listings[key] = list(items.values())
+        return self._listings[key]
+
+    def _leclerc_categories(self) -> dict[Platform, str]:
+        """Catégories retrouvées dans le sitemap de navigation (une lecture par run)."""
+        if self._leclerc_cats is None:
+            self._leclerc_cats = {}
+            try:
+                index = self.fetcher.get("leclerc", src.LECLERC_SITEMAP).content
+                for child in src.sitemap_locs(index):
+                    if "navigation" in child:
+                        locs = src.sitemap_locs(self.fetcher.get("leclerc", child).content)
+                        self._leclerc_cats.update(src.leclerc_category_urls(locs))
+            except (SourceBlocked, Disallowed, httpx.HTTPError):
+                pass
+            for platform in src.LECLERC_CATEGORIES:
+                if platform not in self._leclerc_cats:
+                    detail = f"catégorie {src.LECLERC_CATEGORIES[platform]} absente du sitemap"
+                    self.fetcher.record("leclerc", "broken", src.LECLERC_SITEMAP, detail)
+        return self._leclerc_cats
 
     def _discover_leclerc(self, game: GameEntry, platform: Platform, entry: dict[str, Any]) -> None:
         for ean in entry["eans"]:

@@ -59,7 +59,9 @@ def mock_robots(**overrides: str) -> None:
         respx.get(f"https://{host}/robots.txt").respond(text=text)
 
 
-def mock_sites(leclerc: str | None = None, boulanger: str | None = None) -> dict[str, respx.Route]:
+def mock_sites(
+    leclerc: str | None = None, boulanger: str | None = None, categories: bool = True
+) -> dict[str, respx.Route]:
     routes = {
         "listing": respx.route(host="www.boulanger.com", path="/c/jeu-switch").respond(
             text=page("boulanger_listing.html")
@@ -76,8 +78,31 @@ def mock_sites(leclerc: str | None = None, boulanger: str | None = None) -> dict
             "https://feeds.pixmania.com/sitemap/FR/sitemap-products-1.xml"
         ).respond(text=page("pixmania_sitemap_products.xml")),
         "pixmania": respx.get(PIXMANIA_FP).respond(text=page("pixmania.html")),
+        **mock_leclerc_categories(categories),
     }
     return routes
+
+
+def category_page(request: httpx.Request, filled: bool = True) -> httpx.Response:
+    """/cat/jeux-switch-2 : pages 1 et 2 figées, puis page vide ; autres catégories vides."""
+    number = request.url.params.get("page", "1")
+    if filled and request.url.path == "/cat/jeux-switch-2" and number in ("1", "2"):
+        return httpx.Response(200, text=page(f"leclerc_category_p{number}.html"))
+    return httpx.Response(200, text=page("leclerc_category_empty.html"))
+
+
+def mock_leclerc_categories(filled: bool = True) -> dict[str, respx.Route]:
+    return {
+        "leclerc_sitemap": respx.get(src.LECLERC_SITEMAP).respond(
+            text=page("leclerc_sitemap_index.xml")
+        ),
+        "leclerc_navigation": respx.get(
+            "https://www.e.leclerc/sitemap/sitemap-navigation-1.xml"
+        ).respond(text=page("leclerc_sitemap_navigation.xml")),
+        "leclerc_categories": respx.route(host="www.e.leclerc", path__startswith="/cat/").mock(
+            side_effect=lambda request: category_page(request, filled)
+        ),
+    }
 
 
 def empty() -> dict:
@@ -554,9 +579,23 @@ def test_400_sur_une_page_bloque_la_source_sans_nouvel_essai(fetcher: Fetcher) -
 
 
 @respx.mock
+def test_decouverte_leclerc_categorie_puis_pixmania(fetcher: Fetcher) -> None:
+    mock_robots()
+    mock_sites()
+    discovered = empty()
+    enabled = {"leclerc": True, "boulanger": False, "pixmania": True}
+    observations, _ = Scraper(enabled, fetcher).run([MKW], {}, discovered, TODAY)
+    entry = discovered["games"]["mario-kart-world"]["switch2"]
+    # Leclerc par sa catégorie, puis Pixmania : chacun apporte son EAN.
+    assert entry["sources"] == {"leclerc": LECLERC_FP, "pixmania": PIXMANIA_FP}
+    assert entry["eans"] == [EAN_PIXMANIA, EAN_LECLERC]
+    assert {o.merchant for o in observations} == {"leclerc", "pixmania"}
+
+
+@respx.mock
 def test_decouverte_sans_boulanger_pixmania_puis_leclerc(fetcher: Fetcher) -> None:
     mock_robots()
-    routes = mock_sites()
+    routes = mock_sites(categories=False)  # absent de la catégorie : Leclerc par EAN
     respx.get(src.leclerc_url(EAN_PIXMANIA)).respond(301, headers={"Location": LECLERC_FP})
     discovered = empty()
     enabled = {"leclerc": True, "boulanger": False, "pixmania": True}
@@ -666,6 +705,7 @@ def pixmania_page(name: str, ean: str) -> str:
 @respx.mock
 def test_ean_ps5_et_xbox_jamais_melanges(fetcher: Fetcher) -> None:
     mock_robots()
+    mock_leclerc_categories()
     base = "https://www.pixmania.com/fr/fr/"
     urls = {
         "ps5": base + "grand-theft-auto-vi-ps5-610001.html",
@@ -883,3 +923,93 @@ def test_cache_de_decouverte_ancien_schema_refuse(tmp_path: Path) -> None:
     path.write_text('{"schema": 1, "games": {}}', encoding="utf-8")
     with pytest.raises(ValueError, match="2 attendu"):
         load_discovered(path)
+
+
+# --- E.Leclerc : découverte par catégories ------------------------------------------------------
+
+DK = GameEntry(
+    slug="donkey-kong-bananza", title="Donkey Kong Bananza", editions=[{"platform": "switch2"}]
+)
+TOTK = GameEntry(
+    slug="zelda-tears-of-the-kingdom",
+    title="The Legend of Zelda: Tears of the Kingdom",
+    editions=[{"platform": "switch2"}],
+)
+DK_FP = "https://www.e.leclerc/fp/donkey-kong-bananza-nintendo-switch-2-0045496312770"
+
+
+def test_cartes_de_categorie_leclerc() -> None:
+    items = src.leclerc_listing(page("leclerc_category_p1.html"))
+    assert [(i.ean, i.name) for i in items][:2] == [
+        ("0045496312336", "Mario Kart World (NINTENDO SWITCH 2)"),
+        ("0196388879953", "Call Of Duty : Modern Warfare 4 (Code in a Box) (NINTENDO SWITCH 2)"),
+    ]
+    assert items[0].url == LECLERC_FP
+    assert src.leclerc_listing(page("leclerc_category_empty.html")) == []
+    locs = src.sitemap_locs(page("leclerc_sitemap_navigation.xml").encode())
+    assert src.leclerc_category_urls(locs)["switch2"] == "https://www.e.leclerc/cat/jeux-switch-2"
+
+
+@respx.mock
+def test_decouverte_leclerc_par_categorie(fetcher: Fetcher) -> None:
+    mock_robots()
+    routes = mock_leclerc_categories()
+    dk_page = (
+        page("leclerc.html")
+        .replace(EAN_LECLERC, "0045496312770")
+        .replace("Mario Kart World", "Donkey Kong : Bananza")
+    )
+    dk = respx.get(DK_FP).respond(text=dk_page)
+    collector = respx.get(url__regex=r".*edition-collector.*").respond(text="<html/>")
+    discovered = empty()
+    observations, _ = Scraper({"leclerc": True}, fetcher).run([DK], {}, discovered, TODAY)
+    entry = discovered["games"]["donkey-kong-bananza"]["switch2"]
+    assert entry["sources"] == {"leclerc": DK_FP} and entry["eans"] == ["0045496312770"]
+    assert [o.merchant for o in observations] == ["leclerc"] and dk.call_count == 1
+    assert not collector.called  # édition collector : refusée sur le nom de la carte
+    pages = [c.request.url.params.get("page", "1") for c in routes["leclerc_categories"].calls]
+    assert pages == ["1", "2", "3"]  # jusqu'à la page vide
+    assert all(
+        "sort" not in str(c.request.url) and "facet" not in str(c.request.url)
+        for c in routes["leclerc_categories"].calls
+    )
+
+
+@respx.mock
+def test_categorie_lue_une_fois_et_seulement_si_besoin(fetcher: Fetcher) -> None:
+    mock_robots()
+    routes = mock_leclerc_categories()
+    respx.get(DK_FP).respond(text=page("leclerc.html").replace(EAN_LECLERC, "0045496312770"))
+    totk = "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-nintendo-switch-2-edition-nintendo-switch-2-0045496312589"
+    respx.get(totk).respond(text=page("leclerc.html").replace(EAN_LECLERC, "0045496312589"))
+    respx.get(LECLERC_FP).respond(text=page("leclerc.html"))
+    discovered = empty()
+    discovered["games"]["mario-kart-world"] = {
+        "switch2": {"eans": [EAN_LECLERC], "sources": {"leclerc": LECLERC_FP}, "checked": {}}
+    }
+    Scraper({"leclerc": True}, fetcher).run([MKW, DK, TOTK], {}, discovered, TODAY)
+    # Deux éditions à découvrir, une seule lecture de la catégorie (3 pages) ; MKW, déjà trouvé,
+    # passe directement par sa fiche.
+    assert routes["leclerc_categories"].call_count == 3
+    assert routes["leclerc_sitemap"].call_count == 1
+    assert discovered["games"]["zelda-tears-of-the-kingdom"]["switch2"]["sources"] == {
+        "leclerc": totk
+    }
+    routes["leclerc_categories"].reset()
+    Scraper({"leclerc": True}, fetcher).run([MKW, DK, TOTK], {}, discovered, TODAY)
+    assert not routes["leclerc_categories"].called  # tout est trouvé : aucune catégorie lue
+
+
+@respx.mock
+def test_fiche_avec_vendeurs_tiers_seulement_ecartee_sans_alerte(fetcher: Fetcher) -> None:
+    mock_robots()
+    marketplace = page("leclerc.html").replace('"@type": "Offer"', '"@type": "Demande"')
+    mock_sites(leclerc=marketplace)
+    discovered = {"schema": 2, "games": {"mario-kart-world": {"switch2": {
+        "eans": [EAN_LECLERC], "sources": {"leclerc": LECLERC_FP}, "checked": {}
+    }}}}  # fmt: skip
+    observations, report = Scraper({"leclerc": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert observations == [] and not report.needs_attention
+    assert ("rejected", "offres de vendeurs tiers seulement") in {
+        (e["kind"], e["detail"]) for e in report.events
+    }

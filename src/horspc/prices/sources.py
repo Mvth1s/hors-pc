@@ -1,7 +1,9 @@
 """Lecture des pages des sources automatiques (JSON-LD d'abord) et découverte de leurs fiches.
 
 Sources (voir docs/sources.md) :
-- E.Leclerc : fiche `/fp/<slug>-<EAN>` (le slug est libre : l'EAN suffit), JSON-LD avec vendeur ;
+- E.Leclerc : pages catégories `/cat/jeux-…?page=N` (nom et EAN de chaque produit), trouvées
+  dans le sitemap de navigation ; fiche `/fp/<slug>-<EAN>` (le slug est libre : l'EAN suffit),
+  JSON-LD avec vendeur ;
 - Boulanger : pages catégories `/c/jeu-…?numPage=N` (nom, éditeur, EAN dans l'URL de l'image),
   fiche `/ref/<id>` (JSON-LD `Offer` + `gtin13`, vendeur dans le HTML) ;
 - Pixmania : sitemaps produits (slugs lisibles), fiche avec JSON-LD `AggregateOffer` + `gtin13`,
@@ -16,10 +18,21 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from typing import Any
+from urllib.parse import urlsplit
 
 from horspc.models import Platform
 
 LECLERC = "https://www.e.leclerc"
+LECLERC_SITEMAP = "https://www.e.leclerc/sitemap/sitemap-index.xml"
+# Catégories de jeux par console, retrouvées par leur chemin dans le sitemap de navigation
+# (pas de recherche interne : `Disallow: /recherche`). Ni tri ni filtre : interdits par robots.txt.
+LECLERC_CATEGORIES: dict[Platform, str] = {
+    "ps5": "/cat/jeux-ps5",
+    "switch": "/cat/jeux-switch",
+    "switch2": "/cat/jeux-switch-2",
+    "xbox_series": "/cat/jeux-xbox-series",
+}
+LECLERC_MAX_PAGES = 100  # garde-fou : 57 pages au plus constatées (Switch, 25/10/2026)
 BOULANGER = "https://www.boulanger.com"
 PIXMANIA = "https://www.pixmania.com"
 PIXMANIA_SITEMAP = "https://feeds.pixmania.com/sitemap/FR/sitemap.xml"
@@ -47,6 +60,7 @@ class ProductPage:
     seller: str | None
     shipping: Decimal | None = None
     description: str = ""  # texte brut, pour repérer une boîte avec code
+    third_party_only: bool = False  # seulement des offres de vendeurs tiers (Leclerc)
 
 
 @dataclass
@@ -176,8 +190,6 @@ def parse_leclerc(page: str) -> ProductPage:
     product = _product(page)
     offers = _offers(product)
     own = [o for o in offers if "Offer" in _types(o)]
-    if offers and not own:
-        raise MissingData("JSON-LD Offer absent (seulement AggregateOffer)")
     offer = own[0] if own else {}
     return ProductPage(
         name=html.unescape(str(product.get("name", ""))),
@@ -188,6 +200,8 @@ def parse_leclerc(page: str) -> ProductPage:
         condition=_condition(offer.get("itemCondition")),
         available=_available(offer.get("availability")),
         seller=_seller_name(offer),
+        # Place de marché seule (AggregateOffer sans Offer de l'enseigne) : écartée au relevé.
+        third_party_only=bool(offers) and not own,
     )
 
 
@@ -232,6 +246,27 @@ PARSERS = {"leclerc": parse_leclerc, "boulanger": parse_boulanger, "pixmania": p
 
 
 # --- Découverte ------------------------------------------------------------------------------
+
+
+def leclerc_category_urls(locs: list[str]) -> dict[Platform, str]:
+    """URL des catégories de jeux présentes dans le sitemap de navigation."""
+    paths = {urlsplit(loc).path.rstrip("/"): loc for loc in locs}
+    return {p: paths[path] for p, path in LECLERC_CATEGORIES.items() if path in paths}
+
+
+def leclerc_listing(page: str) -> list[ListingItem]:
+    """Produits d'une page catégorie Leclerc : fiche, EAN (fin du lien) et nom (`title`)."""
+    items: dict[str, ListingItem] = {}
+    for tag in re.findall(r"<a\b[^>]*data-product-card-title[^>]*>", page):
+        href = re.search(r'href="(/fp/[a-z0-9-]+-(\d{8,14}))"', tag)
+        title = re.search(r'title="([^"]+)"', tag)
+        if href and title and href.group(1) not in items:
+            items[href.group(1)] = ListingItem(
+                url=LECLERC + href.group(1),
+                ean=normalize_ean(href.group(2)),
+                name=html.unescape(title.group(1)).strip(),
+            )
+    return list(items.values())
 
 
 def leclerc_url(ean: str) -> str:
