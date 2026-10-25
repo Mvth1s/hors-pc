@@ -60,17 +60,33 @@ def test_robots_vide_tout_autorise() -> None:
     assert parse("<!DOCTYPE html><html>…</html>").allowed("https://x.fr/tout")
 
 
-@pytest.mark.parametrize(("status", "allowed"), [(404, True), (403, True), (503, False)])
-def test_robots_injoignable(http: HttpClient, status: int, allowed: bool) -> None:
+@pytest.mark.parametrize(
+    ("status", "unverifiable"),
+    [
+        (404, None),
+        (410, None),
+        (400, "robots.txt non vérifiable (HTTP 400)"),  # Boulanger depuis GitHub Actions
+        (403, "robots.txt non vérifiable (HTTP 403)"),
+        (503, "robots.txt non vérifiable (HTTP 503)"),
+    ],
+)
+def test_seuls_404_et_410_valent_aucune_regle(
+    http: HttpClient, status: int, unverifiable: str | None
+) -> None:
     with respx.mock:
         respx.get("https://x.fr/robots.txt").respond(status)
-        assert RobotsCache(http).get("https://x.fr/a").allowed("https://x.fr/a") is allowed
+        robots = RobotsCache(http).get("https://x.fr/a")
+    assert robots.unverifiable == unverifiable
+    assert robots.absent is (unverifiable is None)
+    assert robots.allowed("https://x.fr/a") is (unverifiable is None)
 
 
 def test_robots_erreur_reseau_tout_interdit(http: HttpClient) -> None:
     with respx.mock:
         respx.get("https://x.fr/robots.txt").mock(side_effect=httpx.ConnectError("hors ligne"))
-        assert not RobotsCache(http).get("https://x.fr/a").allowed("https://x.fr/a")
+        robots = RobotsCache(http).get("https://x.fr/a")
+    assert not robots.allowed("https://x.fr/a")
+    assert robots.unverifiable == "robots.txt non vérifiable (ConnectError)"
 
 
 def test_robots_lu_une_fois_par_hote(http: HttpClient) -> None:

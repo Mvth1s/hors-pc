@@ -521,3 +521,55 @@ def test_diagnostic_sans_fiche_connue_utilise_la_fiche_temoin() -> None:
     assert probe.probe_urls("boulanger", {"games": {}}) == [
         ("catégorie", "https://www.boulanger.com/c/jeu-playstation-5")
     ]
+
+
+# --- Sources inaccessibles depuis GitHub Actions --------------------------------------------------
+
+
+@respx.mock
+@pytest.mark.parametrize("status", [400, 403, 500])
+def test_robots_non_verifiable_aucune_requete_vers_la_source(fetcher: Fetcher, status: int) -> None:
+    respx.get("https://www.boulanger.com/robots.txt").respond(status)
+    routes = mock_sites()
+    _, report = Scraper({"boulanger": True}, fetcher).run([MKW], {}, empty(), TODAY)
+    assert report.blocked == {"boulanger": f"robots.txt non vérifiable (HTTP {status})"}
+    assert not routes["listing"].called and not routes["boulanger"].called
+
+
+@respx.mock
+def test_400_sur_une_page_bloque_la_source_sans_nouvel_essai(fetcher: Fetcher) -> None:
+    mock_robots()
+    route = respx.get(LECLERC_FP).respond(400)
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"leclerc": LECLERC_FP}, "checked": {}
+    }}}  # fmt: skip
+    _, report = Scraper({"leclerc": True}, fetcher).run([MKW], {}, discovered, TODAY)
+    assert route.call_count == 1 and report.blocked == {"leclerc": "HTTP 400"}
+
+
+@respx.mock
+def test_decouverte_sans_boulanger_pixmania_puis_leclerc(fetcher: Fetcher) -> None:
+    mock_robots()
+    routes = mock_sites()
+    respx.get(src.leclerc_url(EAN_PIXMANIA)).respond(301, headers={"Location": LECLERC_FP})
+    discovered = empty()
+    enabled = {"leclerc": True, "boulanger": False, "pixmania": True}
+    observations, _ = Scraper(enabled, fetcher).run([MKW], {}, discovered, TODAY)
+    entry = discovered["games"]["mario-kart-world"]
+    assert entry["eans"] == [EAN_PIXMANIA]  # EAN lu sur la fiche Pixmania (gtin13)
+    assert not routes["listing"].called and not routes["boulanger"].called
+    # La fiche Leclerc ouverte par cet EAN porte un autre gtin13 : elle n'est pas retenue.
+    assert set(entry["sources"]) == {"pixmania"}
+    assert [o.merchant for o in observations] == ["pixmania"]
+
+
+@respx.mock
+def test_ean_en_cache_reste_valable_sans_boulanger(fetcher: Fetcher) -> None:
+    mock_robots()
+    mock_sites()
+    discovered = {"schema": 1, "games": {"mario-kart-world": {
+        "eans": [EAN_LECLERC], "sources": {"boulanger": BOULANGER_REF}, "checked": {}
+    }}}  # fmt: skip
+    enabled = {"leclerc": True, "boulanger": False, "pixmania": False}
+    observations, _ = Scraper(enabled, fetcher).run([MKW], {}, discovered, TODAY)
+    assert [o.merchant for o in observations] == ["leclerc"]

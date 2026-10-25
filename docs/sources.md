@@ -17,7 +17,8 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
   1. un site est **exclu** s'il a exprimé une opposition : robots.txt (Disallow sur les chemins
      utiles, réserve TDM), fichier `/.well-known/tdmrep.json`, en-tête ou meta `tdm-reservation`,
      ou CGU interdisant l'extraction ou les robots ;
-  2. un site est **exclu** s'il bloque nos requêtes (403, 429, captcha, défi anti-bot) : aucun
+  2. un site est **exclu** s'il bloque nos requêtes (400, 403, 429, captcha, défi anti-bot, ou
+     robots.txt non vérifiable : tout code autre que 200, 404 ou 410) : aucun
      contournement (pas de proxy, pas de changement d'User-Agent, pas de navigateur headless pour
      passer un défi, pas de résolution de captcha) ;
   3. robots.txt est relu à chaque run et interprété selon la RFC 9309 (jokers `*` et `$`, règle la
@@ -47,11 +48,35 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
   **Correction (25/10/2026)** : une première version de ce document indiquait que les sitemaps
   produits donnaient titre et EAN. C'est faux : les 78 sitemaps produits (environ 9 Mo chacun) ne
   contiennent que des URL `/fp/<EAN>`, sans titre. Ils ne permettent donc pas de trouver un jeu par
-  son titre. L'EAN vient de Boulanger (pages catégories, EAN confirmé par le `gtin13` de la fiche)
-  ou de Pixmania (fiche trouvée par les sitemaps, `gtin13`), puis la fiche Leclerc est ouverte par
-  cet EAN et son `gtin13` est vérifié.
+  son titre. L'EAN vient de Pixmania (fiche trouvée par les sitemaps, `gtin13`), puis la fiche
+  Leclerc est ouverte par cet EAN et son `gtin13` est vérifié. Les EAN déjà trouvés via Boulanger
+  avant sa désactivation restent en cache (`data/discovered.json`) et valables.
 
-### Boulanger (`www.boulanger.com`) : retenu par interprétation
+### Pixmania (`www.pixmania.com`)
+
+- **Exploitant** : PIXMANIA GROUP, SAS, 22 rue Curnonsky, 75017 Paris, RCS Paris 910 199 835
+  (CGU, art. 2) : établi dans l'UE.
+- **Vendeurs** : place de marché réservée aux professionnels (CGU, définitions : « Vendeur(s)
+  désigne(nt) tout(s) professionnel(s) qui propose(nt) à la vente des Produits sur la Marketplace »).
+- **robots.txt** : `User-Agent: *` (L67), `Disallow: */search/*` (L68) ; fiches produit autorisées.
+- **CGU** (mise à jour du 03/04/2026) : aucune clause sur l'extraction, les robots ou la fouille.
+- **TDMRep** : absent.
+- **Réponse** : 200, fiche réelle.
+- **Données** : JSON-LD `Product` avec `gtin13`, `AggregateOffer` (prix, `EUR`, `NewCondition`,
+  disponibilité, frais de port, retour sous 14 jours en France) ; vendeur réel dans le HTML.
+- **Découverte** : sitemaps produits (`products-N.xml`, slugs lisibles), correspondance stricte
+  titre + plateforme + édition standard, puis `gtin13` lu sur la fiche. **Source des EAN** du
+  catalogue depuis la désactivation de Boulanger.
+
+## Sources désactivées
+
+### Boulanger (`www.boulanger.com`) : désactivé, bloque les IP de GitHub Actions
+
+- **Constat (25/10/2026)** : le diagnostic `scrape_dry_run` lancé depuis GitHub Actions reçoit
+  **HTTP 400** sur robots.txt, sur la page catégorie et sur la fiche, alors que les mêmes URL
+  répondent 200 depuis une connexion résidentielle. C'est un filtrage des IP de GitHub Actions :
+  conformément à la règle 2, la source est désactivée (`enabled: false`) et n'est pas contournée.
+- L'analyse juridique ci-dessous reste valable si la source redevient accessible.
 
 - **robots.txt** : `User-agent: *` (L8), `Allow: /` (L10), `Disallow: /resultats*` (recherche) ;
   fiches `/ref/<id>` et pages catégories `/c/...` autorisées.
@@ -72,21 +97,7 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
   `/c/jeu-xbox-one` (Xbox, dont Series), paginées par `?numPage=N` (40 produits par page), rendues
   côté serveur. Chaque carte donne le nom, l'éditeur, l'état (`neuf`, reconditionné…) et l'EAN
   (dans l'URL de l'image `/Boulanger/<EAN>_h_f_l_…`), puis l'EAN est vérifié par le `gtin13` de la
-  fiche. C'est la source principale des EAN du catalogue.
-
-### Pixmania (`www.pixmania.com`)
-
-- **Exploitant** : PIXMANIA GROUP, SAS, 22 rue Curnonsky, 75017 Paris, RCS Paris 910 199 835
-  (CGU, art. 2) : établi dans l'UE.
-- **Vendeurs** : place de marché réservée aux professionnels (CGU, définitions : « Vendeur(s)
-  désigne(nt) tout(s) professionnel(s) qui propose(nt) à la vente des Produits sur la Marketplace »).
-- **robots.txt** : `User-Agent: *` (L67), `Disallow: */search/*` (L68) ; fiches produit autorisées.
-- **CGU** (mise à jour du 03/04/2026) : aucune clause sur l'extraction, les robots ou la fouille.
-- **TDMRep** : absent.
-- **Réponse** : 200, fiche réelle.
-- **Données** : JSON-LD `Product` avec `gtin13`, `AggregateOffer` (prix, `EUR`, `NewCondition`,
-  disponibilité, frais de port, retour sous 14 jours en France) ; vendeur réel dans le HTML.
-- **Découverte** : sitemaps produits (`products-N.xml`, slugs lisibles), puis EAN vérifié.
+  fiche. C'était la source principale des EAN du catalogue avant sa désactivation.
 
 ## Sources exclues
 

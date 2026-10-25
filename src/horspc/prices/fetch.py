@@ -3,8 +3,9 @@
 - robots.txt (RFC 9309) relu à chaque run : une URL interdite n'est jamais demandée ;
 - au plus une requête par seconde et par hôte, User-Agent identifiable, timeouts ;
 - nouvel essai sur 5xx uniquement ;
-- 403, 429, captcha ou défi anti-bot : la source est marquée bloquée pour le run et n'est plus
-  sollicitée (pas de nouvel essai, pas de changement d'User-Agent, pas de proxy, pas de navigateur).
+- 400, 401, 403, 429, captcha ou défi anti-bot, ou robots.txt non vérifiable : la source est
+  marquée bloquée pour le run et n'est plus sollicitée (pas de nouvel essai, pas de changement
+  d'User-Agent, pas de proxy, pas de navigateur).
 """
 
 import logging
@@ -19,7 +20,8 @@ from horspc.robots import RobotsCache
 log = logging.getLogger(__name__)
 
 SERVER_ERRORS = frozenset({500, 502, 503, 504})
-BLOCK_STATUSES = frozenset({401, 403, 429})
+# 400 : réponse de Boulanger aux IP de GitHub Actions (constaté le 25/10/2026).
+BLOCK_STATUSES = frozenset({400, 401, 403, 429})
 # Marqueurs de pages de défi : volontairement stricts (un simple mot « captcha » dans un script
 # de page normale ne suffit pas).
 CHALLENGE_MARKERS = (
@@ -65,9 +67,12 @@ class Fetcher:
         """Page autorisée par robots.txt ; lève Disallowed, SourceBlocked ou httpx.HTTPError."""
         if source in self.blocked:
             raise SourceBlocked(self.blocked[source])
-        allowed, rule = self.robots.get(url).verdict(url)
+        robots = self.robots.get(url)
+        if robots.unverifiable:
+            self._block(source, url, robots.unverifiable)
+        allowed, rule = robots.verdict(url)
         if not allowed:
-            detail = rule.raw if rule else "robots.txt injoignable"
+            detail = rule.raw if rule else "robots.txt non vérifiable"
             self.record(source, "disallowed", url, detail)
             raise Disallowed(detail)
         try:
@@ -78,7 +83,7 @@ class Fetcher:
                 self._block(source, url, f"HTTP {status}")
             raise
         final = str(response.url)
-        if final != url and not self.robots.get(final).allowed(final):
+        if final != url and not self.robots.get(final).allowed(final):  # non vérifiable compris
             # Redirection vers un chemin interdit : la page n'est pas exploitée.
             self.record(source, "disallowed", final, "redirection vers un chemin interdit")
             raise Disallowed(final)

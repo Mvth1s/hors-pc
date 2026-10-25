@@ -7,8 +7,8 @@ leclerc:
   enabled: true
   reason: "Aucune opposition (robots.txt, TDMRep, CGV art. 16) ; JSON-LD avec vendeur et gtin."
 boulanger:
-  enabled: true
-  reason: "CGV art. 9 vise la reproduction du site : seuls des faits sont publiés (interprétation, docs/sources.md)."
+  enabled: false
+  reason: "Bloque les IP de GitHub Actions (HTTP 400), constaté le 25/10/2026."
 pixmania:
   enabled: true
   reason: "Place de marché de vendeurs pros, PIXMANIA GROUP SAS (Paris) ; aucune clause d'opposition."

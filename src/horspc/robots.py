@@ -27,11 +27,14 @@ class Robots:
     """Règles applicables à notre robot pour un hôte."""
 
     rules: list[Rule] = field(default_factory=list)
-    disallow_all: bool = False  # robots.txt injoignable (5xx, erreur réseau) : tout interdit
+    # Motif si le robots.txt n'a pas pu être vérifié (4xx hors 404/410, 5xx, réseau) : tout
+    # est alors interdit et la source n'est pas sollicitée.
+    unverifiable: str | None = None
+    absent: bool = False  # 404 ou 410 : aucune règle, tout autorisé
 
     def verdict(self, url: str) -> tuple[bool, Rule | None]:
         """(autorisé, règle appliquée) pour une URL de cet hôte."""
-        if self.disallow_all:
+        if self.unverifiable:
             return False, None
         parts = urlsplit(url)
         path = _normalize(parts.path or "/") + (f"?{parts.query}" if parts.query else "")
@@ -108,8 +111,12 @@ class RobotsCache:
         try:
             response = self._http.request("GET", f"{origin}/robots.txt")
         except httpx.HTTPStatusError as exc:
-            # RFC 9309 § 2.3.1.3 : 4xx = pas de restriction ; 5xx = tout interdire.
-            return Robots(disallow_all=exc.response.status_code >= 500)
-        except httpx.HTTPError:
-            return Robots(disallow_all=True)
+            status = exc.response.status_code
+            # Seule l'absence avérée (404, 410) vaut « aucune règle ». La RFC 9309 tolère tout
+            # 4xx, mais un 400 ou un 403 signale surtout un filtrage : on ne présume rien.
+            if status in (404, 410):
+                return Robots(absent=True)
+            return Robots(unverifiable=f"robots.txt non vérifiable (HTTP {status})")
+        except httpx.HTTPError as exc:
+            return Robots(unverifiable=f"robots.txt non vérifiable ({type(exc).__name__})")
         return parse(response.text)

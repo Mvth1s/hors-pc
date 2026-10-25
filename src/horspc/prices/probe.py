@@ -63,10 +63,12 @@ def probe(fetcher: Fetcher, enabled: list[str], discovered: dict[str, Any]) -> l
             if origin not in seen:
                 seen.add(origin)
                 robots = fetcher.robots.get(url)
-                if robots.disallow_all:
-                    state = "injoignable (5xx ou réseau) : tout interdit"
+                if robots.unverifiable:
+                    state = f"{robots.unverifiable} : source non sollicitée"
+                elif robots.absent:
+                    state = "absent (404 ou 410) : aucune règle, tout autorisé"
                 elif not robots.rules:
-                    state = "aucune règle (ou absent) : tout autorisé"
+                    state = "lu, aucune règle pour HorsPC : tout autorisé"
                 else:
                     state = f"lu ({len(robots.rules)} règles pour HorsPC)"
                 rows.append(ProbeRow(source, "robots.txt", f"{origin}/robots.txt", state, ""))
