@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-10-25T16:03:48Z",
+  "generated_at": "2026-10-26T13:04:41Z",
   "currency": "EUR",
   "games": [
     {
@@ -22,7 +22,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/astro-bot-ps5-0711719591818",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -41,7 +41,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/astro-bot-ps5-0711719591818",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -50,7 +50,7 @@
       "launch_price_cents": 6999,
       "igdb_id": 303811,
       "igdb_url": "https://www.igdb.com/games/astro-bot",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/astro-bot.webp",
       "cover_image_id": "coba3k",
       "pc_status": "none",
@@ -102,7 +102,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/ghost-of-yotei-ps5-0711719020240",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -121,7 +121,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/ghost-of-yotei-ps5-0711719020240",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -130,7 +130,7 @@
       "launch_price_cents": 7999,
       "igdb_id": 317627,
       "igdb_url": "https://www.igdb.com/games/ghost-of-yotei",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/ghost-of-yotei.webp",
       "cover_image_id": "co9coo",
       "pc_status": "none",
@@ -182,7 +182,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/saros-ps5-0711719026990",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -201,7 +201,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/saros-ps5-0711719026990",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -210,7 +210,7 @@
       "launch_price_cents": null,
       "igdb_id": 331215,
       "igdb_url": "https://www.igdb.com/games/saros",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/saros.webp",
       "cover_image_id": "coajye",
       "pc_status": "none",
@@ -262,7 +262,7 @@
             "merchant": "Pixmania",
             "seller": "Globale Multimedia",
             "url": "https://www.pixmania.com/fr/fr/sony-gran-turismo-7-standard-playstation-5-106722.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -281,7 +281,7 @@
         "merchant": "Pixmania",
         "seller": "Globale Multimedia",
         "url": "https://www.pixmania.com/fr/fr/sony-gran-turismo-7-standard-playstation-5-106722.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -290,7 +290,7 @@
       "launch_price_cents": 7999,
       "igdb_id": 101006,
       "igdb_url": "https://www.igdb.com/games/gran-turismo-7",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/gran-turismo-7.webp",
       "cover_image_id": "co2g84",
       "pc_status": "none",
@@ -342,7 +342,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -361,7 +361,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -370,7 +370,7 @@
       "launch_price_cents": 8999,
       "igdb_id": 338067,
       "igdb_url": "https://www.igdb.com/games/mario-kart-world",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/mario-kart-world.webp",
       "cover_image_id": "cob9s9",
       "pc_status": "none",
@@ -422,7 +422,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/donkey-kong-bananza-nintendo-switch-2-0045496312770",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -441,7 +441,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/donkey-kong-bananza-nintendo-switch-2-0045496312770",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -450,7 +450,7 @@
       "launch_price_cents": null,
       "igdb_id": 338106,
       "igdb_url": "https://www.igdb.com/games/donkey-kong-bananza",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/donkey-kong-bananza.webp",
       "cover_image_id": "cobd1q",
       "pc_status": "none",
@@ -503,7 +503,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-switch-0045496478735",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -523,7 +523,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-nintendo-switch-2-edition-nintendo-switch-2-0045496312589",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -542,7 +542,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-switch-0045496478735",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -551,7 +551,7 @@
       "launch_price_cents": 6999,
       "igdb_id": 119388,
       "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-tears-of-the-kingdom",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/zelda-tears-of-the-kingdom.webp",
       "cover_image_id": "co5vmg",
       "pc_status": "none",
@@ -603,7 +603,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/pokemon-ecarlate-switch-0045496510732",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -622,7 +622,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/pokemon-ecarlate-switch-0045496510732",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -631,7 +631,7 @@
       "launch_price_cents": 5999,
       "igdb_id": 191931,
       "igdb_url": "https://www.igdb.com/games/pokemon-scarlet",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/pokemon-ecarlate.webp",
       "cover_image_id": "co5sfi",
       "pc_status": "none",
@@ -684,7 +684,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/grand-theft-auto-vi-code-in-a-box-ps5-5026555439824",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -704,7 +704,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/grand-theft-auto-vi-code-in-a-box-xbox-series-5026555370103",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -723,7 +723,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/grand-theft-auto-vi-code-in-a-box-ps5-5026555439824",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -732,7 +732,7 @@
       "launch_price_cents": null,
       "igdb_id": 52189,
       "igdb_url": "https://www.igdb.com/games/grand-theft-auto-vi",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/grand-theft-auto-vi.webp",
       "cover_image_id": "cocv1v",
       "pc_status": "none",
@@ -787,7 +787,7 @@
       "launch_price_cents": null,
       "igdb_id": 134606,
       "igdb_url": "https://www.igdb.com/games/demons-souls",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/demon-s-souls.webp",
       "cover_image_id": "co2kj9",
       "pc_status": "none",
@@ -839,7 +839,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/marvel-s-wolverine-ps5-0711719073239",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -858,7 +858,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/marvel-s-wolverine-ps5-0711719073239",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -867,7 +867,7 @@
       "launch_price_cents": null,
       "igdb_id": 168667,
       "igdb_url": "https://www.igdb.com/games/marvels-wolverine",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/marvel-s-wolverine.webp",
       "cover_image_id": "cob5mk",
       "pc_status": "none",
@@ -921,7 +921,7 @@
             "merchant": "Pixmania",
             "seller": "Shopelya",
             "url": "https://www.pixmania.com/fr/fr/unicorn-overlord-ps5-252363.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -934,7 +934,7 @@
           "offer": null,
           "out_of_stock": {
             "merchant": "E.Leclerc",
-            "observed_at": "2026-10-25"
+            "observed_at": "2026-10-26"
           },
           "sold_digital": true,
           "listed_physical": true
@@ -944,7 +944,7 @@
           "offer": null,
           "out_of_stock": {
             "merchant": "E.Leclerc",
-            "observed_at": "2026-10-25"
+            "observed_at": "2026-10-26"
           },
           "sold_digital": false,
           "listed_physical": true
@@ -960,7 +960,7 @@
         "merchant": "Pixmania",
         "seller": "Shopelya",
         "url": "https://www.pixmania.com/fr/fr/unicorn-overlord-ps5-252363.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -969,7 +969,7 @@
       "launch_price_cents": null,
       "igdb_id": 68353,
       "igdb_url": "https://www.igdb.com/games/unicorn-overlord--1",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/unicorn-overlord.webp",
       "cover_image_id": "co7310",
       "pc_status": "none",
@@ -1024,7 +1024,7 @@
       "launch_price_cents": null,
       "igdb_id": 328275,
       "igdb_url": "https://www.igdb.com/games/code-violet",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/code-violet.webp",
       "cover_image_id": "coa6dd",
       "pc_status": "none",
@@ -1078,7 +1078,7 @@
       "launch_price_cents": null,
       "igdb_id": 389443,
       "igdb_url": "https://www.igdb.com/games/god-of-war-sons-of-sparta",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/god-of-war-sons-of-sparta.webp",
       "cover_image_id": "cobigb",
       "pc_status": "none",
@@ -1131,7 +1131,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/ea-sports-nhl-27-ps5-5030943125572",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1157,7 +1157,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/ea-sports-nhl-27-ps5-5030943125572",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1166,7 +1166,7 @@
       "launch_price_cents": null,
       "igdb_id": 408771,
       "igdb_url": "https://www.igdb.com/games/nhl-27",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/nhl-27.webp",
       "cover_image_id": "coclmw",
       "pc_status": "none",
@@ -1218,7 +1218,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/the-legend-of-zelda-breath-of-the-wild-switch-0045496420024",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1237,7 +1237,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/the-legend-of-zelda-breath-of-the-wild-switch-0045496420024",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1246,7 +1246,7 @@
       "launch_price_cents": null,
       "igdb_id": 7346,
       "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-breath-of-the-wild",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/the-legend-of-zelda-breath-of-the-wild.webp",
       "cover_image_id": "co3p2d",
       "pc_status": "none",
@@ -1298,7 +1298,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/super-mario-odyssey-switch-0045496420888",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1317,7 +1317,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/super-mario-odyssey-switch-0045496420888",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1326,7 +1326,7 @@
       "launch_price_cents": null,
       "igdb_id": 26758,
       "igdb_url": "https://www.igdb.com/games/super-mario-odyssey",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/super-mario-odyssey.webp",
       "cover_image_id": "co1mxf",
       "pc_status": "none",
@@ -1378,7 +1378,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/super-smash-bros-ultimate-switch-0045496422868",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1397,7 +1397,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/super-smash-bros-ultimate-switch-0045496422868",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1406,7 +1406,7 @@
       "launch_price_cents": null,
       "igdb_id": 90101,
       "igdb_url": "https://www.igdb.com/games/super-smash-bros-ultimate",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/super-smash-bros-ultimate.webp",
       "cover_image_id": "co2255",
       "pc_status": "none",
@@ -1452,7 +1452,7 @@
           "offer": null,
           "out_of_stock": {
             "merchant": "E.Leclerc",
-            "observed_at": "2026-10-25"
+            "observed_at": "2026-10-26"
           },
           "sold_digital": true,
           "listed_physical": true
@@ -1464,7 +1464,7 @@
       "launch_price_cents": null,
       "igdb_id": 109462,
       "igdb_url": "https://www.igdb.com/games/animal-crossing-new-horizons",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/animal-crossing-new-horizons.webp",
       "cover_image_id": "co3wls",
       "pc_status": "none",
@@ -1518,7 +1518,7 @@
       "launch_price_cents": null,
       "igdb_id": 26845,
       "igdb_url": "https://www.igdb.com/games/fire-emblem-three-houses",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/fire-emblem-three-houses.webp",
       "cover_image_id": "co1n8t",
       "pc_status": "none",
@@ -1570,7 +1570,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/the-legend-of-zelda-link-s-awakening-switch-0045496424442",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1589,7 +1589,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/the-legend-of-zelda-link-s-awakening-switch-0045496424442",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1598,7 +1598,7 @@
       "launch_price_cents": null,
       "igdb_id": 115284,
       "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-links-awakening--1",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/the-legend-of-zelda-link-s-awakening.webp",
       "cover_image_id": "co1qve",
       "pc_status": "none",
@@ -1650,7 +1650,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/pokemon-epee-switch-0045496424763",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1669,7 +1669,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/pokemon-epee-switch-0045496424763",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1678,7 +1678,7 @@
       "launch_price_cents": null,
       "igdb_id": 37382,
       "igdb_url": "https://www.igdb.com/games/pokemon-sword",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/pokemon-sword.webp",
       "cover_image_id": "co1zk2",
       "pc_status": "none",
@@ -1730,7 +1730,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/luigi-s-mansion-3-switch-0045496425258",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1749,7 +1749,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/luigi-s-mansion-3-switch-0045496425258",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1758,7 +1758,7 @@
       "launch_price_cents": null,
       "igdb_id": 109455,
       "igdb_url": "https://www.igdb.com/games/luigis-mansion-3",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/luigi-s-mansion-3.webp",
       "cover_image_id": "co22a9",
       "pc_status": "none",
@@ -1811,7 +1811,7 @@
             "merchant": "Pixmania",
             "seller": "123consommables",
             "url": "https://www.pixmania.com/fr/fr/super-mario-bros-wonder-switch-197078.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1830,7 +1830,7 @@
         "merchant": "Pixmania",
         "seller": "123consommables",
         "url": "https://www.pixmania.com/fr/fr/super-mario-bros-wonder-switch-197078.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1839,7 +1839,7 @@
       "launch_price_cents": null,
       "igdb_id": 254339,
       "igdb_url": "https://www.igdb.com/games/super-mario-bros-wonder",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/super-mario-bros-wonder.webp",
       "cover_image_id": "co6nnl",
       "pc_status": "none",
@@ -1891,7 +1891,7 @@
             "merchant": "Pixmania",
             "seller": "123consommables",
             "url": "https://www.pixmania.com/fr/fr/legendes-pokemon-arceus-jeu-nintendo-switch-97162.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1910,7 +1910,7 @@
         "merchant": "Pixmania",
         "seller": "123consommables",
         "url": "https://www.pixmania.com/fr/fr/legendes-pokemon-arceus-jeu-nintendo-switch-97162.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -1919,7 +1919,7 @@
       "launch_price_cents": null,
       "igdb_id": 144054,
       "igdb_url": "https://www.igdb.com/games/pokemon-legends-arceus",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/pokemon-legends-arceus.webp",
       "cover_image_id": "co3d03",
       "pc_status": "none",
@@ -1972,7 +1972,7 @@
             "merchant": "Pixmania",
             "seller": "UNILABS",
             "url": "https://www.pixmania.com/fr/fr/metroid-dread-jeu-switch-90467.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -1991,7 +1991,7 @@
         "merchant": "Pixmania",
         "seller": "UNILABS",
         "url": "https://www.pixmania.com/fr/fr/metroid-dread-jeu-switch-90467.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2000,7 +2000,7 @@
       "launch_price_cents": null,
       "igdb_id": 15698,
       "igdb_url": "https://www.igdb.com/games/metroid-dread",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/metroid-dread.webp",
       "cover_image_id": "coba9g",
       "pc_status": "none",
@@ -2047,7 +2047,7 @@
           "offer": null,
           "out_of_stock": {
             "merchant": "E.Leclerc",
-            "observed_at": "2026-10-25"
+            "observed_at": "2026-10-26"
           },
           "sold_digital": true,
           "listed_physical": true
@@ -2059,7 +2059,7 @@
       "launch_price_cents": null,
       "igdb_id": 115276,
       "igdb_url": "https://www.igdb.com/games/super-mario-maker-2",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/super-mario-maker-2.webp",
       "cover_image_id": "co21vy",
       "pc_status": "none",
@@ -2111,7 +2111,7 @@
             "merchant": "Pixmania",
             "seller": "ZONA DE JUEGO",
             "url": "https://www.pixmania.com/fr/fr/nintendo-xenoblade-chronicles-2-standard-multilingue-nintendo-switch-155283.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2130,7 +2130,7 @@
         "merchant": "Pixmania",
         "seller": "ZONA DE JUEGO",
         "url": "https://www.pixmania.com/fr/fr/nintendo-xenoblade-chronicles-2-standard-multilingue-nintendo-switch-155283.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2139,7 +2139,7 @@
       "launch_price_cents": null,
       "igdb_id": 26766,
       "igdb_url": "https://www.igdb.com/games/xenoblade-chronicles-2",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/xenoblade-chronicles-2.webp",
       "cover_image_id": "cob8r2",
       "pc_status": "none",
@@ -2191,7 +2191,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/mario-the-lapins-cretins-kingdom-battle-switch-3307216024354",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2210,7 +2210,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/mario-the-lapins-cretins-kingdom-battle-switch-3307216024354",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2219,7 +2219,7 @@
       "launch_price_cents": null,
       "igdb_id": 28414,
       "igdb_url": "https://www.igdb.com/games/mario-plus-rabbids-kingdom-battle",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/mario-rabbids-kingdom-battle.webp",
       "cover_image_id": "co2274",
       "pc_status": "none",
@@ -2272,7 +2272,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/super-mario-party-switch-0045496422950",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2291,7 +2291,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/super-mario-party-switch-0045496422950",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2300,7 +2300,7 @@
       "launch_price_cents": null,
       "igdb_id": 103339,
       "igdb_url": "https://www.igdb.com/games/super-mario-party",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/super-mario-party.webp",
       "cover_image_id": "cobaa9",
       "pc_status": "none",
@@ -2353,7 +2353,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/pokemon-let-s-go-pikachu-switch-0045496423124",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2372,7 +2372,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/pokemon-let-s-go-pikachu-switch-0045496423124",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2381,7 +2381,7 @@
       "launch_price_cents": null,
       "igdb_id": 25877,
       "igdb_url": "https://www.igdb.com/games/pokemon-lets-go-pikachu",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/pokemon-let-s-go-pikachu.webp",
       "cover_image_id": "co1zjy",
       "pc_status": "none",
@@ -2433,7 +2433,7 @@
             "merchant": "Pixmania",
             "seller": "Arboremedia",
             "url": "https://www.pixmania.com/fr/fr/nintendo-astral-chain-standard-nintendo-switch-231520.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2452,7 +2452,7 @@
         "merchant": "Pixmania",
         "seller": "Arboremedia",
         "url": "https://www.pixmania.com/fr/fr/nintendo-astral-chain-standard-nintendo-switch-231520.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2461,7 +2461,7 @@
       "launch_price_cents": null,
       "igdb_id": 115283,
       "igdb_url": "https://www.igdb.com/games/astral-chain",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/astral-chain.webp",
       "cover_image_id": "cobd39",
       "pc_status": "none",
@@ -2515,7 +2515,7 @@
       "launch_price_cents": null,
       "igdb_id": 113113,
       "igdb_url": "https://www.igdb.com/games/crash-team-racing-nitro-fueled",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/crash-team-racing-nitro-fueled.webp",
       "cover_image_id": "co2wvy",
       "pc_status": "none",
@@ -2568,7 +2568,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/kirby-et-le-monde-oublie-switch-0045496429287",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2587,7 +2587,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/kirby-et-le-monde-oublie-switch-0045496429287",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2596,7 +2596,7 @@
       "launch_price_cents": null,
       "igdb_id": 172427,
       "igdb_url": "https://www.igdb.com/games/kirby-and-the-forgotten-land",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/kirby-and-the-forgotten-land.webp",
       "cover_image_id": "co3vlw",
       "pc_status": "none",
@@ -2648,7 +2648,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/splatoon-3-switch-0045496510657",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2667,7 +2667,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/splatoon-3-switch-0045496510657",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2676,7 +2676,7 @@
       "launch_price_cents": null,
       "igdb_id": 143613,
       "igdb_url": "https://www.igdb.com/games/splatoon-3",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/splatoon-3.webp",
       "cover_image_id": "co59x3",
       "pc_status": "none",
@@ -2721,7 +2721,7 @@
           "offer": null,
           "out_of_stock": {
             "merchant": "E.Leclerc",
-            "observed_at": "2026-10-25"
+            "observed_at": "2026-10-26"
           },
           "sold_digital": true,
           "listed_physical": true
@@ -2733,7 +2733,7 @@
       "launch_price_cents": null,
       "igdb_id": 81145,
       "igdb_url": "https://www.igdb.com/games/mario-tennis-aces",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/mario-tennis-aces.webp",
       "cover_image_id": "co1tfw",
       "pc_status": "none",
@@ -2779,7 +2779,7 @@
           "offer": null,
           "out_of_stock": {
             "merchant": "E.Leclerc",
-            "observed_at": "2026-10-25"
+            "observed_at": "2026-10-26"
           },
           "sold_digital": true,
           "listed_physical": true
@@ -2791,7 +2791,7 @@
       "launch_price_cents": null,
       "igdb_id": 236663,
       "igdb_url": "https://www.igdb.com/games/metroid-prime-remastered",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/metroid-prime-remastered.webp",
       "cover_image_id": "cobbn9",
       "pc_status": "none",
@@ -2844,7 +2844,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/orbitals-nintendo-switch-2-0045496314514",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2863,7 +2863,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/orbitals-nintendo-switch-2-0045496314514",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2872,7 +2872,7 @@
       "launch_price_cents": null,
       "igdb_id": 381237,
       "igdb_url": "https://www.igdb.com/games/orbitals--1",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/orbitals.webp",
       "cover_image_id": "coc9r6",
       "pc_status": "none",
@@ -2924,7 +2924,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/fire-emblem-fortune-s-weave-nintendo-switch-2-0045496314637",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -2943,7 +2943,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/fire-emblem-fortune-s-weave-nintendo-switch-2-0045496314637",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -2952,7 +2952,7 @@
       "launch_price_cents": null,
       "igdb_id": 366896,
       "igdb_url": "https://www.igdb.com/games/fire-emblem-fortunes-weave",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/fire-emblem-fortune-s-weave.webp",
       "cover_image_id": "coc7ma",
       "pc_status": "none",
@@ -3004,7 +3004,7 @@
             "merchant": "Pixmania",
             "seller": "NET GAMES RETRO",
             "url": "https://www.pixmania.com/fr/fr/kirby-air-riders-switch-2-532926.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3023,7 +3023,7 @@
         "merchant": "Pixmania",
         "seller": "NET GAMES RETRO",
         "url": "https://www.pixmania.com/fr/fr/kirby-air-riders-switch-2-532926.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3032,7 +3032,7 @@
       "launch_price_cents": null,
       "igdb_id": 338105,
       "igdb_url": "https://www.igdb.com/games/kirby-air-riders",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/kirby-air-riders.webp",
       "cover_image_id": "coaauz",
       "pc_status": "none",
@@ -3078,7 +3078,7 @@
           "offer": null,
           "out_of_stock": {
             "merchant": "E.Leclerc",
-            "observed_at": "2026-10-25"
+            "observed_at": "2026-10-26"
           },
           "sold_digital": false,
           "listed_physical": false
@@ -3090,7 +3090,7 @@
       "launch_price_cents": null,
       "igdb_id": 337031,
       "igdb_url": "https://www.igdb.com/games/rhythm-heaven-groove",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/rhythm-heaven-groove.webp",
       "cover_image_id": "cobwkn",
       "pc_status": "none",
@@ -3143,7 +3143,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/splatoon-raiders-nintendo-switch-2-0045496314316",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3162,7 +3162,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/splatoon-raiders-nintendo-switch-2-0045496314316",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3171,7 +3171,7 @@
       "launch_price_cents": null,
       "igdb_id": 348977,
       "igdb_url": "https://www.igdb.com/games/splatoon-raiders",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/splatoon-raiders.webp",
       "cover_image_id": "cobyho",
       "pc_status": "none",
@@ -3223,7 +3223,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/yoshi-and-the-mysterious-book-nintendo-switch-2-0045496314125",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3242,7 +3242,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/yoshi-and-the-mysterious-book-nintendo-switch-2-0045496314125",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3251,7 +3251,7 @@
       "launch_price_cents": null,
       "igdb_id": 366883,
       "igdb_url": "https://www.igdb.com/games/yoshi-and-the-mysterious-book",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/yoshi-and-the-mysterious-book.webp",
       "cover_image_id": "cobr0r",
       "pc_status": "none",
@@ -3304,7 +3304,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/legendes-pokemon-z-a-switch-0045496512996",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3324,7 +3324,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/legendes-pokemon-z-a-nintendo-switch-2-edition-nintendo-switch-2-0045496313050",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3343,7 +3343,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/legendes-pokemon-z-a-switch-0045496512996",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3352,7 +3352,7 @@
       "launch_price_cents": null,
       "igdb_id": 288327,
       "igdb_url": "https://www.igdb.com/games/pokemon-legends-z-a",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/pokemon-legends-z-a.webp",
       "cover_image_id": "co9wzc",
       "pc_status": "none",
@@ -3405,7 +3405,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/metroid-prime-4-beyond-switch-0045496513207",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3425,7 +3425,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/metroid-prime-4-beyond-nintendo-switch-2-edition-nintendo-switch-2-0045496313388",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3444,7 +3444,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/metroid-prime-4-beyond-switch-0045496513207",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3453,7 +3453,7 @@
       "launch_price_cents": null,
       "igdb_id": 37136,
       "igdb_url": "https://www.igdb.com/games/metroid-prime-4-beyond",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/metroid-prime-4-beyond.webp",
       "cover_image_id": "cob9xh",
       "pc_status": "none",
@@ -3506,7 +3506,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/the-legend-of-zelda-echoes-of-wisdom-switch-0045496512415",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3525,7 +3525,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/the-legend-of-zelda-echoes-of-wisdom-switch-0045496512415",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3534,7 +3534,7 @@
       "launch_price_cents": null,
       "igdb_id": 306149,
       "igdb_url": "https://www.igdb.com/games/the-legend-of-zelda-echoes-of-wisdom",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/the-legend-of-zelda-echoes-of-wisdom.webp",
       "cover_image_id": "co8d9b",
       "pc_status": "none",
@@ -3588,7 +3588,7 @@
             "merchant": "Pixmania",
             "seller": "ASD",
             "url": "https://www.pixmania.com/fr/fr/pikmin-4-switch-171084.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3607,7 +3607,7 @@
         "merchant": "Pixmania",
         "seller": "ASD",
         "url": "https://www.pixmania.com/fr/fr/pikmin-4-switch-171084.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3616,7 +3616,7 @@
       "launch_price_cents": null,
       "igdb_id": 59843,
       "igdb_url": "https://www.igdb.com/games/pikmin-4",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/pikmin-4.webp",
       "cover_image_id": "coba9h",
       "pc_status": "none",
@@ -3666,7 +3666,7 @@
             "merchant": "E.Leclerc",
             "seller": null,
             "url": "https://www.e.leclerc/fp/tomodachi-life-une-vie-de-reve-switch-0045496513542",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3685,7 +3685,7 @@
         "merchant": "E.Leclerc",
         "seller": null,
         "url": "https://www.e.leclerc/fp/tomodachi-life-une-vie-de-reve-switch-0045496513542",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3694,7 +3694,7 @@
       "launch_price_cents": null,
       "igdb_id": 337036,
       "igdb_url": "https://www.igdb.com/games/tomodachi-life-living-the-dream",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/tomodachi-life-living-the-dream.webp",
       "cover_image_id": "cobdqd",
       "pc_status": "none",
@@ -3739,7 +3739,7 @@
           "offer": null,
           "out_of_stock": {
             "merchant": "E.Leclerc",
-            "observed_at": "2026-10-25"
+            "observed_at": "2026-10-26"
           },
           "sold_digital": true,
           "listed_physical": true
@@ -3751,7 +3751,7 @@
       "launch_price_cents": null,
       "igdb_id": 133923,
       "igdb_url": "https://www.igdb.com/games/paper-mario-the-origami-king",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/paper-mario-the-origami-king.webp",
       "cover_image_id": "cob89j",
       "pc_status": "none",
@@ -3804,7 +3804,7 @@
             "merchant": "Pixmania",
             "seller": "ZONA DE JUEGO",
             "url": "https://www.pixmania.com/fr/fr/nintendo-kirby-star-allies-standard-nintendo-switch-231390.html",
-            "observed_at": "2026-10-25",
+            "observed_at": "2026-10-26",
             "source": "scraped",
             "stale": false
           },
@@ -3823,7 +3823,7 @@
         "merchant": "Pixmania",
         "seller": "ZONA DE JUEGO",
         "url": "https://www.pixmania.com/fr/fr/nintendo-kirby-star-allies-standard-nintendo-switch-231390.html",
-        "observed_at": "2026-10-25",
+        "observed_at": "2026-10-26",
         "source": "scraped",
         "stale": false
       },
@@ -3832,7 +3832,7 @@
       "launch_price_cents": null,
       "igdb_id": 37137,
       "igdb_url": "https://www.igdb.com/games/kirby-star-allies",
-      "igdb_fetched_at": "2026-10-25T16:03:48Z",
+      "igdb_fetched_at": "2026-10-26T13:04:41Z",
       "cover_url": "covers/kirby-star-allies.webp",
       "cover_image_id": "co8ezz",
       "pc_status": "none",
