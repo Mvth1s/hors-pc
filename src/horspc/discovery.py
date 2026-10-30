@@ -577,7 +577,7 @@ def discover(
                     }
                 continue
             # Règle stricte des jeux découverts : le PC dans platforms suffit à écarter.
-            where = candidates.pc_listed(row, ctx)
+            where = candidates.pc_listed(row, ctx.pc_id)
             if where is not None:
                 pc_listed[row["id"]] = where
                 continue
@@ -598,13 +598,7 @@ def discover(
                 )
             )
     # Jeux de games.yaml : même détection, simple avertissement (le build l'émettra en WARNING).
-    curated_pc_listed = {}
-    by_id = {c.igdb_id: c for c in curated}
-    for rows, _ in _details(igdb, sorted(curated_ids), with_editions=False):
-        for row in rows:
-            where = candidates.pc_listed(row, ctx)
-            if where is not None:
-                curated_pc_listed[by_id[row["id"]].slug] = where
+    curated_pc_listed = curated_pc_warnings(igdb, curated, ctx.pc_id)
     localized = localized_titles(igdb, [g.igdb_id for g in kept])
     for game in kept:
         game.title, game.title_source = display_title(
@@ -625,6 +619,19 @@ def discover(
         curated_pc_listed,
         wrong_type_ids,
     )
+
+
+def curated_pc_warnings(igdb: IgdbClient, curated: list[CuratedGame], pc_id: int) -> dict[str, str]:
+    """Jeux de games.yaml dont le PC figure dans les plateformes IGDB (fiche, fiches liées,
+    jeu d'origine), même sans date PC : slug → où. Simple signalement, jamais une exclusion."""
+    by_id = {c.igdb_id: c for c in curated}
+    found = {}
+    for rows, _ in _details(igdb, sorted(by_id), with_editions=False):
+        for row in rows:
+            where = candidates.pc_listed(row, pc_id)
+            if where is not None and row.get("id") in by_id:
+                found[by_id[row["id"]].slug] = where
+    return found
 
 
 def _details(

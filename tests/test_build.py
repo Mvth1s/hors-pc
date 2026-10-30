@@ -620,7 +620,6 @@ def test_build_complet_avec_decouverte(
     def fake_refresh(igdb, bot, curated, previous, excluded, now, max_new, cache):
         calls.append(([c.slug for c in curated], previous, excluded, max_new))
         result = discovery.Result([], Counter(), {}, set(), set(), Counter(), [], {}, [])
-        result.curated_pc_listed = {"saros": "sur la fiche"}
         return discovery.Refresh(found, ["ghost-of-yotei"], {}, 0, True, result)
 
     monkeypatch.setattr(discovery, "refresh", fake_refresh)
@@ -634,6 +633,7 @@ def test_build_complet_avec_decouverte(
             ("platforms", "igdb_platforms.json"),
             ("release_date_regions", "igdb_release_regions.json"),
             ("release_date_statuses", "igdb_release_statuses.json"),
+            ("game_types", "igdb_game_types.json"),
         ]:
             respx.post(f"{API_URL}/{endpoint}").respond(json=load_fixture(fixture))
         respx.post(f"{API_URL}/games").respond(json=load_fixture("igdb_games.json"))
@@ -659,7 +659,9 @@ def test_build_complet_avec_decouverte(
         "en-attente",
         "ghost-of-yotei",
     ]
-    assert "saros a le PC dans ses plateformes (sur la fiche)" in caplog.text
+    # astro-bot (igdb 255340) : PC absent des plateformes, aucun avertissement. Ghost of Yōtei,
+    # renvoyé par le faux IGDB pour toute requête, n'est pas un jeu curé : ignoré.
+    assert "a le PC dans ses plateformes" not in caplog.text
 
 
 def test_data_json_v6_migre_en_v7(workdir: Path, caplog: pytest.LogCaptureFixture) -> None:
@@ -686,3 +688,25 @@ def test_origine_des_jeux_dans_data_json() -> None:
         ("saros", "curated"),
         ("ghost-of-yotei", "discovered"),
     ]
+
+
+def test_avertissement_pc_pour_un_jeu_cure(http: HttpClient, caplog) -> None:
+    cat = build.merge_catalog(
+        [{"slug": "ghost", "title": "Ghost", "editions": [{"platform": "ps5"}], "igdb_id": 250634}],
+        [],
+        [],
+        NOW,
+    )
+    with respx.mock:
+        respx.post(TOKEN_URL).respond(json=load_fixture("igdb_token.json"))
+        for endpoint, fixture in [
+            ("platforms", "igdb_platforms.json"),
+            ("release_date_regions", "igdb_release_regions.json"),
+            ("release_date_statuses", "igdb_release_statuses.json"),
+            ("game_types", "igdb_game_types.json"),
+        ]:
+            respx.post(f"{API_URL}/{endpoint}").respond(json=load_fixture(fixture))
+        respx.post(f"{API_URL}/games").respond(json=load_fixture("igdb_games.json"))
+        build._warn_pc_listed(IgdbClient("id", "secret", http), cat)
+    assert "ghost a le PC dans ses plateformes (sur la fiche)" in caplog.text
+    assert [r.levelname for r in caplog.records] == ["WARNING"]

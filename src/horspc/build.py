@@ -15,7 +15,7 @@ from pydantic import ValidationError
 
 from horspc import covers, discovery, render
 from horspc.http import HttpClient
-from horspc.igdb import IgdbClient, IgdbError, IgdbGame
+from horspc.igdb import PC_SLUG, IgdbClient, IgdbError, IgdbGame
 from horspc.models import (
     Catalog,
     DataFile,
@@ -269,6 +269,8 @@ def run(
             igdb_results = igdb.fetch_games(catalog.games, now)
         except IgdbError as exc:
             log.warning("%s ; champs IGDB repris du data.json précédent", exc)
+        else:
+            _warn_pc_listed(igdb, curated)
     history = scraper.load_history(scraped_path)
     discovered = None
     report = None
@@ -367,14 +369,29 @@ def _refresh_discovered(
     except (httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
         log.warning("Découverte impossible (%s) : catalogue découvert inchangé", exc)
         return None
-    for slug, where in sorted(refreshed.result.curated_pc_listed.items()):
+    return refreshed
+
+
+def _warn_pc_listed(igdb: IgdbClient, curated: Catalog) -> None:
+    """WARNING pour un jeu de games.yaml dont le PC figure dans les plateformes IGDB sans date
+    de sortie PC (règle d'exclusion des jeux découverts, ici simple signalement)."""
+    refs = [
+        discovery.CuratedGame(g.igdb_id, g.slug, g.title, tuple(g.platforms))
+        for g in curated.games
+        if g.igdb_id is not None and g.pc_override is None
+    ]
+    try:
+        found = discovery.curated_pc_warnings(igdb, refs, igdb.platform_ids()[PC_SLUG])
+    except (httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
+        log.warning("Contrôle des plateformes PC impossible (%s)", exc)
+        return
+    for slug, where in sorted(found.items()):
         log.warning(
-            "IGDB : %s a le PC dans ses plateformes (%s) sans date de sortie PC : à vérifier, "
+            "IGDB : %s a le PC dans ses plateformes (%s) sans sortie PC datée : à vérifier, "
             "pc_override si besoin",
             slug,
             where,
         )
-    return refreshed
 
 
 def _visible(catalog: Catalog, provider: PriceProvider, today: date) -> Catalog:

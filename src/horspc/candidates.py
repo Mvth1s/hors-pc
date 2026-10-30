@@ -212,7 +212,7 @@ def evaluate(
     )
 
 
-def pc_listed(row: dict[str, Any], ctx: Context) -> str | None:
+def pc_listed(row: dict[str, Any], pc_id: int) -> str | None:
     """Où le PC figure dans `platforms` (fiche, fiches liées, jeu d'origine d'un Remaster ou
     d'un Port), même sans date de sortie PC ; None s'il n'y figure nulle part."""
     game_type = (row.get("game_type") or {}).get("type", "?")
@@ -222,7 +222,7 @@ def pc_listed(row: dict[str, Any], ctx: Context) -> str | None:
         + [(rel, f"via « {rel.get('name')} »") for r in RELATED for rel in row.get(r) or []]
         + ([(parent, f"via le jeu d'origine « {parent.get('name')} »")] if parent else [])
     ):
-        if ctx.pc_id in (entry.get("platforms") or []):
+        if pc_id in (entry.get("platforms") or []):
             return label
     return None
 
