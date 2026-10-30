@@ -177,7 +177,11 @@ def fetch_index(igdb: IgdbClient) -> dict[int, IndexedGame]:
     games: dict[int, IndexedGame] = {}
     for row in _cursor(igdb, f"platforms = ({ids}) & version_parent = null", INDEX_FIELDS):
         names = [row.get("name") or ""]
-        names += [a["name"] for a in row.get("alternative_names") or [] if a.get("name")]
+        # Noms alternatifs en écriture non latine ignorés : réduits à l'ASCII, il n'en resterait
+        # que des mots isolés (« R », « 2026 ») qui fausseraient le rapprochement.
+        names += [
+            a["name"] for a in row.get("alternative_names") or [] if _latin(a.get("name") or "")
+        ]
         games[row["id"]] = IndexedGame(
             igdb_id=row["id"],
             name=row.get("name") or "",
@@ -205,6 +209,12 @@ def fetch_index(igdb: IgdbClient) -> dict[int, IndexedGame]:
         if parent is not None:
             parent.platforms |= {console[p] for p in row.get("platforms") or [] if p in console}
     return games
+
+
+def _latin(name: str) -> bool:
+    """Nom non vide dont toutes les lettres sont latines (accents compris)."""
+    letters = [c for c in name if c.isalpha()]
+    return bool(letters) and all("LATIN" in unicodedata.name(c, "") for c in letters)
 
 
 def _cursor(igdb: IgdbClient, where: str, fields: str) -> Iterator[dict[str, Any]]:

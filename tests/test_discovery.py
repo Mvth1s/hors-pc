@@ -145,6 +145,8 @@ INDEX = [
         "alternative_names": [
             {"name": "Viejo Juego", "comment": "Spanish title"},
             {"name": "Vieux Jeu", "comment": "French title"},
+            {"name": "オールドゲーム", "comment": "Japanese title"},
+            {"name": "올드 R", "comment": "Korean title"},
         ],
     },
     {"id": 8, "name": "Multi Game", "platforms": [PS5, PC], "game_type": {"type": "Main Game"}},
@@ -312,6 +314,12 @@ def test_filtre_pc_types_curation_et_exclusions(igdb: IgdbClient, api: respx.Moc
     assert report["site_bytes_added"] == 2 * (
         discovery.COVER_BYTES + discovery.SCREEN_BYTES + discovery.PAGE_BYTES
     )
+
+
+def test_noms_alternatifs_non_latins_ignores(igdb: IgdbClient, api: respx.MockRouter) -> None:
+    index = discovery.fetch_index(igdb)
+    assert index[7].names == ("Old Game", "Viejo Juego", "Vieux Jeu")
+    assert not discovery._latin("スーパー R") and discovery._latin("Pokémon Écarlate")
 
 
 # --- Titre affiché et motifs d'échec --------------------------------------------------------
