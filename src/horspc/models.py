@@ -446,6 +446,7 @@ class EditionOut(_Output):
 class GameOut(_Output):
     slug: Slug
     title: str
+    origin: GameOrigin  # curated : games.yaml ; discovered : découverte automatique (v7)
     platforms: list[Platform] = Field(min_length=1)  # dérivé des éditions (filtres)
     editions: list[EditionOut] = Field(min_length=1)
     best_offer: OfferOut | None  # meilleure offre toutes éditions
@@ -501,9 +502,9 @@ class GameOut(_Output):
 
 
 class DataFile(_Output):
-    """Contenu de site/data.json (schéma v6 : éditions par jeu)."""
+    """Contenu de site/data.json (schéma v7 : origine du jeu, curé ou découvert)."""
 
-    schema_version: Literal[6] = 6
+    schema_version: Literal[7] = 7
     generated_at: UtcDatetime
     currency: Literal["EUR"] = "EUR"
     games: list[GameOut]

@@ -79,6 +79,15 @@ def merge_catalog(
     )
 
 
+# Seule migration admise : v6 → v7 ajoute `origin`, tous les jeux d'un data.json v6 étant curés.
+MIGRATABLE_VERSION = 6
+
+
+def _migrate_v6(raw: dict[str, Any]) -> dict[str, Any]:
+    games = [{**g, "origin": "curated"} if isinstance(g, dict) else g for g in raw["games"]]
+    return {**raw, "schema_version": 7, "games": games}
+
+
 class PreviousDataError(Exception):
     """data.json précédent présent mais inutilisable (JSON invalide, schéma ou contenu refusé)."""
 
@@ -97,6 +106,10 @@ def load_previous(path: Path) -> DataFile | None:
         raise PreviousDataError(f"{path} n'est pas un JSON valide : {exc}") from exc
     expected = DataFile.model_fields["schema_version"].default
     version = raw.get("schema_version") if isinstance(raw, dict) else None
+    if version == MIGRATABLE_VERSION and isinstance(raw.get("games"), list):
+        raw = _migrate_v6(raw)
+        version = expected
+        log.warning("%s en schema_version 6 : migré en %d (origin: curated)", path, expected)
     if version != expected:
         raise PreviousDataError(
             f"{path} est en schema_version {version!r}, {expected} attendu : "
@@ -137,6 +150,7 @@ def build_data(
         entry = {
             "slug": game.slug,
             "title": game.title,
+            "origin": "discovered" if game.slug in catalog.discovered else "curated",
             "platforms": game.platforms,
             "launch_price_cents": _cents(game.launch_price),
             **_cover_fields(game.slug, cover_ids.get(game.slug)),

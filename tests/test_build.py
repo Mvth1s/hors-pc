@@ -72,7 +72,7 @@ ASTRO = IgdbGame(255340, "https://www.igdb.com/games/astro-bot", date(2024, 9, 6
 def test_schema_complet_et_offre() -> None:
     data = make(catalog(), {"astro-bot": ASTRO, "saros": None})
     dumped = data.model_dump(mode="json")
-    assert dumped["schema_version"] == 6
+    assert dumped["schema_version"] == 7
     assert dumped["generated_at"] == "2026-10-26T06:17:42Z"
     assert dumped["currency"] == "EUR"
     astro = dumped["games"][0]
@@ -371,7 +371,7 @@ def test_release_date_manuelle_precedente_non_reprise() -> None:
     assert (saros.release_date, saros.release_date_source) == (None, None)
 
 
-@pytest.mark.parametrize("version", [5, None, 7])
+@pytest.mark.parametrize("version", [5, None, 8])
 def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: int | None) -> None:
     raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
     if version is None:
@@ -379,7 +379,7 @@ def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: 
     else:
         raw["schema_version"] = version
     (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
-    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 6 attendu"):
+    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 7 attendu"):
         run(workdir, None)
 
 
@@ -403,7 +403,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
         ]
     )
     assert code == 1
-    assert "schema_version 2, 6 attendu" in capsys.readouterr().err
+    assert "schema_version 2, 7 attendu" in capsys.readouterr().err
     assert (workdir / "data.json").read_bytes() == before
 
 
@@ -412,7 +412,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
     [
         ("{pas du json", "n'est pas un JSON valide"),
         (
-            '{"schema_version": 6, "generated_at": "hier", "currency": "EUR", "games": []}',
+            '{"schema_version": 7, "generated_at": "hier", "currency": "EUR", "games": []}',
             "refusé par le modèle",
         ),
     ],
@@ -660,3 +660,29 @@ def test_build_complet_avec_decouverte(
         "ghost-of-yotei",
     ]
     assert "saros a le PC dans ses plateformes (sur la fiche)" in caplog.text
+
+
+def test_data_json_v6_migre_en_v7(workdir: Path, caplog: pytest.LogCaptureFixture) -> None:
+    raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
+    raw["schema_version"] = 6
+    for game in raw["games"]:
+        del game["origin"]
+    (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
+    migrated = build.load_previous(workdir / "data.json")
+    assert migrated is not None and migrated.schema_version == 7
+    assert {g.origin for g in migrated.games} == {"curated"}
+    assert "migré en 7" in caplog.text
+    data = run(workdir, None)
+    assert data.schema_version == 7
+    written = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
+    assert written["schema_version"] == 7 and written["games"][0]["origin"] == "curated"
+
+
+def test_origine_des_jeux_dans_data_json() -> None:
+    cat = build.merge_catalog(GAMES, [discovered("ghost-of-yotei", 250634)], [], NOW)
+    data = build.build_data(cat, build.price_provider(cat), None, {}, NOW)
+    assert [(g.slug, g.origin) for g in data.games] == [
+        ("astro-bot", "curated"),
+        ("saros", "curated"),
+        ("ghost-of-yotei", "discovered"),
+    ]

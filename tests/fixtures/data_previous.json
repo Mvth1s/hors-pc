@@ -1,11 +1,12 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "generated_at": "2026-10-19T06:17:40Z",
   "currency": "EUR",
   "games": [
     {
       "slug": "astro-bot",
       "title": "Astro Bot",
+      "origin": "curated",
       "platforms": [
         "ps5"
       ],
@@ -38,6 +39,7 @@
     {
       "slug": "saros",
       "title": "Saros",
+      "origin": "curated",
       "platforms": [
         "ps5"
       ],
