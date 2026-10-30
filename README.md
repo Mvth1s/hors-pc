@@ -1,6 +1,6 @@
 # HorsPC
 
-Catalogue des jeux console absents du PC (PS5, Switch, Switch 2, Xbox Series), avec le prix le plus bas relevé en France, mis à jour chaque semaine par un pipeline GitHub Actions et publié en site statique.
+Catalogue des jeux console absents du PC (PS5, Switch, Switch 2, Xbox Series), avec le prix le plus bas relevé en France, mis à jour chaque semaine par un pipeline GitHub Actions et publié en site statique. Le catalogue combine une liste curée et une découverte automatique dans les rayons des enseignes relevées.
 
 **Site : <https://mvth1s.github.io/hors-pc/>**
 
@@ -17,7 +17,8 @@ Catalogue des jeux console absents du PC (PS5, Switch, Switch 2, Xbox Series), a
 - **Relevé de prix automatisé et légal** : exception de fouille de textes et de données (TDM) avec une analyse par source, robots.txt interprété selon la RFC 9309 (jokers, règle la plus longue) et relu à chaque run, 1 requête par seconde par site, aucun contournement (une source qui bloque est arrêtée pour le run), règle de plateforme de confiance. Preuves : [`docs/sources.md`](docs/sources.md), [`src/horspc/robots.py`](src/horspc/robots.py), [`src/horspc/prices/fetch.py`](src/horspc/prices/fetch.py), [`src/horspc/prices/trust.py`](src/horspc/prices/trust.py), [`tests/test_robots.py`](tests/test_robots.py), [`tests/test_scraper.py`](tests/test_scraper.py) (pages figées, aucun appel réseau).
 - **Consentement CNIL testé en navigateur headless** : aucune requête Google avant accord ni après refus, vérifié avec Playwright sur l'accueil, les pages légales, la FAQ et une page de jeu. Preuves : [`site/consent.js`](site/consent.js), [`tests/test_consent.py`](tests/test_consent.py), section [Mesure d'audience](#mesure-daudience-ga4-conforme-cnil).
 - **Alertes** : Discord si le build planifié échoue ou si une source de prix est bloquée (sans faire échouer le build), issue « Données obsolètes » si `data.json` vieillit, diagnostic `scrape_dry_run` de ce que voient les IP de GitHub Actions, audit mensuel des sources (robots.txt, TDMRep, blocages, CGU) qui ouvre une issue à relire sans jamais activer ni désactiver une source. Preuves : jobs `notify` et `freshness` d'[`update.yml`](.github/workflows/update.yml), [`.github/workflows/discord.yml`](.github/workflows/discord.yml), [`.github/workflows/sources-audit.yml`](.github/workflows/sources-audit.yml), [`src/horspc/prices/probe.py`](src/horspc/prices/probe.py), [`src/horspc/audit.py`](src/horspc/audit.py).
-- **Schéma de données versionné et validé** : entrées YAML et sortie `data.json` (v6, éditions par console) validées par Pydantic v2 ; un `data.json` précédent d'un autre schéma est refusé. Preuves : [`src/horspc/models.py`](src/horspc/models.py), [`tests/test_build.py`](tests/test_build.py), section [Schéma de `site/data.json`](#schéma-de-sitedatajson-v6).
+- **Schéma de données versionné et validé** : entrées YAML et sortie `data.json` (v7, éditions par console, origine curée ou découverte) validées par Pydantic v2 ; un `data.json` précédent d'un autre schéma est refusé (seul le v6 est migré). Preuves : [`src/horspc/models.py`](src/horspc/models.py), [`tests/test_build.py`](tests/test_build.py), section [Schéma de `site/data.json`](#schéma-de-sitedatajson-v7).
+- **Découverte automatique du catalogue** : produits des rayons Leclerc et Pixmania rattachés à IGDB par correspondance stricte (jamais devinée), filtre « sans version PC », cache d'identification, plafond par run. Preuves : [`src/horspc/discovery.py`](src/horspc/discovery.py), [`tests/test_discovery.py`](tests/test_discovery.py), section [Découverte automatique du catalogue](#découverte-automatique-du-catalogue).
 - **Sécurité des workflows** : permissions minimales par job (`permissions: {}` pour les notifications), toutes les actions épinglées par SHA de commit complet, `actions/*` compris (version en commentaire, mises à jour par [Dependabot](.github/dependabot.yml) avec les dépendances Python via l'écosystème `uv`), aucune expression `${{ github.event.* }}` dans les blocs `run` (événement lu avec `jq`), webhook Discord facultatif. Preuves : [`.github/workflows/`](.github/workflows/), tests `test_discord_*` et `test_toutes_les_actions_epinglees_par_sha` de [`tests/test_workflows.py`](tests/test_workflows.py).
 
 ## Architecture (vue d'ensemble)
@@ -31,12 +32,14 @@ flowchart LR
     end
     subgraph Données versionnées
         GY["data/games.yaml"]
+        GD["data/games.discovered.yaml<br/>+ discovery.cache.json"]
         DISC["data/discovered.json"]
         HIST["data/prices.scraped.jsonl"]
     end
     CRON(["cron lundi 06:17 UTC<br/>ou workflow_dispatch"]) --> CI["ruff + pytest<br/>bloquants"]
     CI --> BUILD["build Python<br/>src/horspc"]
     GY --> BUILD
+    BUILD <--> GD
     IGDB --> BUILD
     LEC -->|"robots.txt RFC 9309, 1 req/s"| BUILD
     PIX -->|"robots.txt RFC 9309, 1 req/s"| BUILD
@@ -70,10 +73,11 @@ Catalogue web des **jeux console absents du PC** (PS5, Switch, Switch 2, Xbox Se
 - [Architecture](#architecture) (arborescence du code)
 - [Lancer en local](#lancer-en-local)
 - [Ajouter un jeu](#ajouter-un-jeu) ([candidats IGDB](#trouver-des-candidats))
+- [Découverte automatique du catalogue](#découverte-automatique-du-catalogue)
 - [Jeux à venir](#jeux-à-venir)
 - [Prix : relevé automatique](#prix--relevé-automatique)
 - [Correction d'urgence : prix manuel](#correction-durgence--prix-manuel) ([règle de sélection](#règle-de-sélection))
-- [Schéma de `site/data.json`](#schéma-de-sitedatajson-v6) ([jaquettes](#jaquettes))
+- [Schéma de `site/data.json`](#schéma-de-sitedatajson-v7) ([jaquettes](#jaquettes))
 - [Mise à jour automatique et seuils de fraîcheur](#mise-à-jour-automatique-et-seuils-de-fraîcheur) ([configuration du dépôt](#configuration-du-dépôt-github))
 - [SEO et rendu statique](#seo-et-rendu-statique)
 - [Mesure d'audience (GA4, conforme CNIL)](#mesure-daudience-ga4-conforme-cnil)
@@ -84,13 +88,16 @@ Catalogue web des **jeux console absents du PC** (PS5, Switch, Switch 2, Xbox Se
 
 ## Architecture
 
-Flux de données : [`data/games.yaml`](data/games.yaml) + IGDB + relevé automatique ([`data/prices.scraped.jsonl`](data/prices.scraped.jsonl)) + [`data/prices.manual.yaml`](data/prices.manual.yaml) → [`build.py`](src/horspc/build.py) → validation Pydantic → [`site/data.json`](site/data.json) → [`render.py`](src/horspc/render.py) → HTML statique ; [`site/app.js`](site/app.js) filtre, trie et affiche les prix par console dans le navigateur, sans lire `data.json`.
+Flux de données : [`data/games.yaml`](data/games.yaml) + [`data/games.discovered.yaml`](data/games.discovered.yaml) (découverte automatique) + IGDB + relevé automatique ([`data/prices.scraped.jsonl`](data/prices.scraped.jsonl)) + [`data/prices.manual.yaml`](data/prices.manual.yaml) → [`build.py`](src/horspc/build.py) → validation Pydantic → [`site/data.json`](site/data.json) → [`render.py`](src/horspc/render.py) → HTML statique ; [`site/app.js`](site/app.js) filtre, trie et affiche les prix par console dans le navigateur, sans lire `data.json`.
 
 ```text
 hors-pc/
 ├── data/                      # données d'entrée et cache du relevé
 │   ├── discovered.json        # EAN et fiches par édition (généré)
-│   ├── games.yaml             # jeux et éditions (source de vérité)
+│   ├── discovery.cache.json   # rattachements produit → IGDB (généré)
+│   ├── discovery.exclude.yaml # faux positifs de la découverte
+│   ├── games.discovered.yaml  # jeux découverts dans les rayons (généré)
+│   ├── games.yaml             # jeux curés (prioritaires)
 │   ├── prices.manual.yaml     # corrections d'urgence (prioritaires)
 │   ├── prices.scraped.jsonl   # historique des relevés (généré)
 │   ├── redirects.yaml         # anciens slugs → slug actuel
@@ -143,11 +150,12 @@ hors-pc/
 │       ├── build.py           # fusion, validation, data.json
 │       ├── candidates.py      # candidats IGDB sans version PC
 │       ├── covers.py          # jaquettes et captures IGDB
+│       ├── discovery.py       # découverte du catalogue dans les rayons
 │       ├── http.py            # client HTTP (UA, retries, 1 req/s)
 │       ├── igdb.py            # client IGDB v4
 │       ├── __init__.py
 │       ├── __main__.py        # CLI
-│       ├── models.py          # modèles Pydantic (schéma v6)
+│       ├── models.py          # modèles Pydantic (schéma v7)
 │       ├── price_add.py       # saisie d'un relevé manuel
 │       ├── prices/            # relevé automatique des prix
 │       │   ├── base.py        # interface des fournisseurs
@@ -199,7 +207,7 @@ python3 -m http.server -d site 8000   # puis http://localhost:8000
 
 Les identifiants IGDB sont ceux d'une application Twitch (<https://dev.twitch.tv/console/apps>). Sans identifiants, `uv run python -m horspc build --offline` reprend les champs IGDB et le `generated_at` du `data.json` existant (ou l'heure courante s'il n'existe pas).
 
-Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent présent mais mal formé (JSON invalide, `schema_version` différent du schéma courant, ou contenu refusé par le modèle ; seul un fichier absent est toléré) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
+Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent présent mais mal formé (JSON invalide, `schema_version` différent du schéma courant, ou contenu refusé par le modèle ; seul un fichier absent est toléré, et un fichier v6 est migré en v7 avec un WARNING) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
 
 Tests et lint :
 
@@ -209,6 +217,8 @@ uv run ruff check . && uv run ruff format --check .
 ```
 
 ## Ajouter un jeu
+
+La plupart des jeux arrivent seuls, par la [découverte automatique](#découverte-automatique-du-catalogue). `games.yaml` sert aux jeux à suivre avant leur mise en rayon (GTA VI) et aux corrections : une entrée de `games.yaml` est prioritaire sur un jeu découvert de même `igdb_id` ou de même slug, et seule elle accepte `launch_price`, `pc_override`, `release_date_override` et `description_fr`.
 
 **Règle : une entrée de `games.yaml` = un jeu, avec une édition par console sans version PC.** Chaque édition a ses propres EAN, fiches et offres (GTA VI : `ps5` et `xbox_series` ; Zelda Tears of the Kingdom : `switch` et `switch2`, la « Nintendo Switch 2 Edition »). Le site affiche une carte par jeu.
 
@@ -238,6 +248,38 @@ Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot →
 - Exclusion PC avec la même logique que `pc_status`, appliquée à la fiche, à ses fiches liées (`remasters`, `remakes`, `ports`, `expanded_games`, `standalone_expansions`) et à ses éditions, ainsi qu'au jeu d'origine (`parent_game`) pour un Remaster ou un Port (même jeu), mais pas pour un Remake (autre jeu) : seul un jeu **released** sur PC est écarté ; un portage annoncé reste candidat, signalé en commentaire.
 - Première sortie sur PS5, Switch, Switch 2 ou Xbox Series (les originaux PS4, Wii U, GBA… ressortis sur ces consoles sont écartés, sauf `--include-legacy`). `platforms` reprend les consoles de cette première sortie.
 - Deux sections : les plus notés (`total_rating_count`, seuil `--min-ratings`), puis « Sorties récentes » des 365 derniers jours triées par `hypes`, sans seuil (le champ `follows` n'est plus renseigné par IGDB).
+
+## Découverte automatique du catalogue
+
+À chaque build complet (cron et `workflow_dispatch`, avec IGDB et relevé), [`discovery.py`](src/horspc/discovery.py) met à jour [`data/games.discovered.yaml`](data/games.discovered.yaml) sans aucune saisie, à partir des sources de prix déjà actives (aucune nouvelle source) :
+
+1. **Récolte** : les cartes des pages catégories E.Leclerc (nom, EAN, fiche) et les URL des sitemaps produits Pixmania dont le slug cite exactement une console cible. C'est le même `Scraper` que le relevé, donc les mêmes règles (robots.txt RFC 9309, 1 requête par seconde et par hôte, source arrêtée au premier blocage) et les mêmes pages lues une seule fois par run. Aucune fiche n'est ouverte à ce stade. Les produits d'occasion ou reconditionnés sont écartés.
+2. **Identification** : un index IGDB des fiches présentes sur PS5, Switch, Switch 2 ou Xbox Series (environ 35 000 au 30/10/2026, hors éditions, noms alternatifs en écriture latine compris) est lu par lots de 500. Un produit est rattaché à un jeu par `title_matches`, la règle stricte du relevé des prix : titre ou nom alternatif, plus la plateforme, plus l'édition standard, sans mot en trop hors éditeurs et studios IGDB. Les éditions spéciales, packs, accessoires et cartes prépayées ne correspondent donc à aucun jeu. Si plusieurs jeux correspondent, celui dont le titre couvre strictement le plus de mots du nom l'emporte ; toute autre égalité est **écartée et journalisée, jamais devinée**. Les éditions IGDB (« Nintendo Switch 2 Edition ») ajoutent leur plateforme au jeu parent.
+3. **Filtre** : types Main Game, Remake ou Remaster, avec la logique de `candidates` (fiche, fiches liées, éditions, jeu d'origine d'un Remaster ou d'un Port) : un jeu sorti sur PC est écarté. Pour les jeux découverts, la règle est plus stricte : le PC présent dans les plateformes IGDB (fiche, fiches liées, jeu d'origine) suffit, même sans date. Pour un jeu de `games.yaml`, la même détection donne seulement un WARNING au build. Un jeu sorti d'abord ailleurs (PS4…) est gardé : seul le statut PC exclut.
+4. **Titre** (jamais le nom marchand) : localisation IGDB « Europe » ; à défaut, nom alternatif qui a servi au rapprochement avec un produit Leclerc ; à défaut, nom alternatif commenté « French title » ; sinon nom IGDB. IGDB n'a pas de région France ; 115 titres sur 131 restent en anglais au 30/10/2026 (titres français via Wikidata : [issue #8](https://github.com/Mvth1s/hors-pc/issues/8)).
+5. **Mise à jour** : un jeu connu est revérifié à chaque build complet (statut PC, règle stricte, exclusions, passage dans `games.yaml`) et retiré s'il ne passe plus. Absent des rayons **4 runs complets consécutifs**, il est retiré ; un run où une source est bloquée ou vide ne compte pas. Les nouveaux jeux entrent au plus **300 par run** (`--max-new`), sorties à venir et récentes d'abord, puis les plus notés ; le reste attend le run suivant. Le slug est celui d'IGDB, figé à la première découverte et suffixé par l'`igdb_id` s'il est déjà pris.
+6. **Affichage** : un jeu découvert n'apparaît sur le site (et dans `data.json`, `origin: discovered`) qu'avec une **offre relevée de moins de 30 jours**, acceptée par la règle de confiance. Sinon il reste en attente dans `games.discovered.yaml`. Il a une jaquette et une seule capture.
+
+- **Cache** ([`data/discovery.cache.json`](data/discovery.cache.json)) : un produit rattaché (URL + console) ne l'est plus jamais à nouveau ; un produit sans correspondance ou ambigu est réessayé après 14 jours ; les verdicts définitifs (sorti sur PC, type non retenu) évitent de redemander ces fiches. Sans produit à identifier, seules les fiches utiles sont lues, pas l'index complet. Les produits qui ne sont plus en rayon sont oubliés.
+- **Faux positifs** : [`data/discovery.exclude.yaml`](data/discovery.exclude.yaml) (`igdb_id`, `reason`, `date`, validé par Pydantic) écarte un jeu de la découverte, par exemple Tales of Symphonia Remastered, dont IGDB ne relie pas l'original sorti sur PC.
+- **IGDB** : `api.igdb.com` est interrogé à 4 requêtes par seconde (limite documentée) ; `images.igdb.com` et les enseignes restent à 1 requête par seconde. IGDB indisponible pendant la découverte : la liste précédente est gardée, le build continue.
+- **Mesure sans écriture** : `uv run python -m horspc discover --dry-run [--report bilan.json] [--kept jeux.tsv] [--sample 40]` compte ce qui serait retenu (motifs d'écart avec exemples, jeux curés introuvables, estimation des coûts, offres d'un échantillon de fiches) sans rien écrire dans `data/` ni `site/`.
+
+Mesures du 30/10/2026 (dry-run, puis deux builds complets réels hors dépôt) :
+
+| Indicateur | Valeur |
+|---|---|
+| Produits en rayon | environ 7 530 (Leclerc 1 930, Pixmania 5 600) |
+| Rattachés, ambigus écartés, sans correspondance | environ 3 250, 40, 4 240 |
+| Jeux identifiés, dont déjà curés | environ 1 680, dont 44 |
+| Écartés : sortis sur PC, PC dans les plateformes, type non retenu | environ 1 275, 25, 210 |
+| **Retenus** | **130**, dont **99 affichés** (offre à jour) et 31 en attente |
+| Titres : localisation Europe, nom Leclerc, « French title », nom IGDB | 1, 10, 5, 114 |
+| Durée du build complet | 15,5 min au premier run (fiches et images des 130 jeux), 6,4 min ensuite |
+| Taille de `site/` | 16 → 26 Mo (jaquette + 1 capture + page par jeu découvert) |
+| `data/discovery.cache.json` | 1,7 Mo, une ligne par produit en rayon |
+
+Écartés après mesure : une édition « Day One » ou « Launch Edition » comptée comme édition standard (38 jeux joignables seulement ainsi, dont 1 sans version PC) ; SPARQL Wikidata (`Disallow: /sparql`). Seuil d'alerte pour l'historique git : au-delà de 500 Mo de pack (ou 50 Mo par mois), passer les images en `actions/cache`.
 
 ## Jeux à venir
 
@@ -304,19 +346,20 @@ Sont refusés à la validation, avec un message explicite : les marketplaces (`r
 
 `discount_pct` = `round(100 × (1 − price / launch_price))`, port exclu ; `null` sans prix de lancement. Le badge n'est affiché que si la réduction est positive.
 
-## Schéma de `site/data.json` (v6)
+## Schéma de `site/data.json` (v7)
 
 Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le formatage (`53,30 €`, `JJ/MM/AAAA`) est fait par le front. Le modèle de référence est `DataFile` dans `src/horspc/models.py`.
 
 ```json
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "generated_at": "2026-10-26T06:17:42Z",
   "currency": "EUR",
   "games": [
     {
       "slug": "astro-bot",
       "title": "Astro Bot",
+      "origin": "curated",
       "platforms": ["ps5"],
       "release_date": "2024-09-06",
       "release_date_source": "igdb",
@@ -363,6 +406,7 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 - L'identifiant de la plateforme PC n'est pas codé en dur : il est lu via l'endpoint `platforms` d'IGDB (slug `win`).
 - Si IGDB est injoignable, les champs IGDB (dont `igdb_fetched_at`) sont repris du `data.json` précédent ; le build n'échoue pas.
 - `editions[].sold_digital` / `editions[].listed_physical` : preuves IGDB tirées d'`external_games` pour la plateforme de l'édition (vente sur un store officiel ou Amazon au format Digital ; entrée au format Physical). Le badge « Physique et numérique » n'est affiché que si `sold_digital` est vrai **et** qu'une preuve physique existe (`listed_physical`, ou une offre `physical` relevée ; une `code_box` ne compte pas). Aucun autre badge de format (jamais « Numérique uniquement » ni « Physique uniquement ») : l'absence d'une entrée IGDB ne prouve pas l'absence d'une édition. Champs ajoutés en v5 avec `false` par défaut.
+- `origin` (v7) : `curated` pour un jeu de `games.yaml`, `discovered` pour un jeu de la [découverte automatique](#découverte-automatique-du-catalogue). Un `data.json` précédent en v6 est migré à la lecture (`origin: curated`, tous ses jeux venant de `games.yaml`) avec un WARNING : le `data.json` versionné reste ainsi lisible par le build hors ligne du push jusqu'au build complet suivant. Toute autre version est refusée.
 - `editions` (v6) : une par console, avec son offre (`null` sans relevé) et ses preuves de format ; `platforms` en est dérivé (filtres) ; `best_offer` est la meilleure offre toutes éditions, avec sa `platform` : à jour avant « Prix à vérifier », puis physique, boîte avec code, démat, puis prix port compris.
 - `offer.seller` : vendeur professionnel d'une place de marché (« ShopVite » sur Pixmania), `null` quand l'enseigne vend elle-même ; `offer.source` : `scraped` (relevé automatique) ou `manual` (correction d'urgence). Ajoutés en v5.
 - `cover_url` : chemin relatif `covers/<slug>.webp`, ou `null` sans jaquette ; `cover_image_id` : `image_id` IGDB de la jaquette présente sur disque. Ajoutés en v3. Le site ne charge jamais d'image depuis `images.igdb.com`.
@@ -383,6 +427,8 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 |---|---|---|---|---|
 | `schedule` (**lundi 06:17 UTC**) et `workflow_dispatch` | complet, avec IGDB (secrets) | oui, s'il a changé | oui | oui |
 | `push` sur `main` touchant `site/`, `src/` ou `data/` | `--offline` (sans IGDB ni secrets) | **jamais** | oui, avec le `data.json` ainsi généré | non |
+
+Le build complet commite aussi `data/discovered.json`, `data/prices.scraped.jsonl`, `data/games.discovered.yaml` et `data/discovery.cache.json` ; le job est borné à 90 minutes (`timeout-minutes`).
 
 Sur un push, le site est donc redéployé avec les prix et le code à jour, mais les champs IGDB viennent du `data.json` versionné. Ce `data.json` régénéré n'existe que dans l'artefact déployé : le dépôt n'est modifié que par le build planifié ou manuel. Le build `--offline` reprend aussi le `generated_at` du `data.json` versionné : un push ne rajeunit donc pas la date « Catalogue mis à jour le » et ne masque pas la bannière d'ancienneté, qui reflètent toujours le dernier build complet. Seul `offer.stale` est recalculé avec l'heure courante, si bien qu'un relevé peut passer en « Prix à vérifier » après un push.
 

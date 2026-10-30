@@ -34,6 +34,8 @@ jobs:
     # Le diagnostic scrape_dry_run remplace le build : rien n'est commité ni déployé.
     if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.scrape_dry_run) }}
     runs-on: ubuntu-24.04
+    # Build complet mesuré à 15,5 min au premier run de la découverte, 6,4 min ensuite (30/10/2026).
+    timeout-minutes: 90
     permissions:
       contents: write
     steps:
@@ -101,7 +103,7 @@ jobs:
       - name: Commite le site et les relevés s'ils ont changé
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
-          generated="site data/discovered.json data/prices.scraped.jsonl"
+          generated="site data/discovered.json data/prices.scraped.jsonl data/games.discovered.yaml data/discovery.cache.json"
           if [ -z "$(git status --porcelain -- $generated)" ]; then
             echo "site généré et relevés inchangés"
             exit 0

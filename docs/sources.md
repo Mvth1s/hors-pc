@@ -101,6 +101,29 @@ sans aucun contournement. L'état de chaque source est piloté par `data/sources
   (pagination instable, rupture) et vendu sous un autre EAN chez Pixmania peut encore n'avoir que
   le prix Pixmania.
 
+## Découverte du catalogue (même sources, mêmes règles)
+
+Depuis le 30/10/2026, le catalogue est aussi découvert automatiquement dans les rayons des sources
+actives ci-dessus (`horspc discover`, voir le README). **Aucune nouvelle source** : seuls les
+chemins déjà lus pour le relevé des prix sont utilisés, avec le même `Fetcher` (robots.txt relu,
+1 requête par seconde et par hôte, source arrêtée au premier blocage, aucun contournement) :
+
+| Source | Chemins lus | Volume par build complet (30/10/2026) |
+|---|---|---|
+| E.Leclerc | sitemap de navigation, puis `/cat/jeux-ps5`, `jeux-switch`, `jeux-switch-2`, `jeux-xbox-series` (`?page=N`, sans tri ni filtre) | environ 138 pages, 1 930 produits (nom, EAN, URL), environ 2 min 30 |
+| Pixmania | index et sitemaps produits (`feeds.pixmania.com`) | quelques fichiers, 194 160 URL, dont 5 598 citant une seule console cible |
+
+Les pages catégories Leclerc et les sitemaps Pixmania sont désormais lus à chaque build complet,
+et non plus seulement quand une édition attend une découverte. Ils sont lus une seule fois par
+run et partagés avec le relevé. Aucune fiche produit n'est ouverte pour identifier un jeu ; les
+fiches des jeux retenus sont ensuite relevées comme les autres. Build complet mesuré le
+30/10/2026 en régime établi : 318 requêtes vers Leclerc, 114 vers Pixmania, 6,4 min au total. Une absence de rayon n'est comptée que si toutes les sources ont été lues sans blocage.
+
+Hôtes vérifiés et non retenus pour les titres français : `query.wikidata.org` (`Disallow:
+/sparql`) et `www.wikidata.org` (`Disallow: /w/`, donc `api.php` et `rest.php` ; seul
+`/wiki/Special:EntityData/*.` est autorisé), relevés le 30/10/2026. Voie conforme à étudier
+(page Wikipédia liée par IGDB, puis QID, puis `Special:EntityData`) : issue #8.
+
 ## Sources désactivées
 
 ### Boulanger (`www.boulanger.com`) : désactivé, bloque les IP de GitHub Actions
