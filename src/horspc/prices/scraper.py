@@ -172,7 +172,7 @@ class Scraper:
         self._leclerc_cats: dict[Platform, str] | None = None
         self._gone: set[str] = set()
         self._pages: dict[str, src.ProductPage | None] = {}
-        self._companies: dict[str, list[str]] = {}
+        self.companies: dict[str, list[str]] = {}
 
     # --- Run complet -----------------------------------------------------------------
 
@@ -186,7 +186,7 @@ class Scraper:
     ) -> tuple[list[ScrapedObservation], Report]:
         """`names` : noms alternatifs IGDB ; `companies` : éditeurs et studios IGDB, tolérés
         dans les noms de produits (« Sony Interactive Entertainment SAROS »)."""
-        self._companies = companies or {}
+        self.companies = companies or {}
         observations: list[ScrapedObservation] = []
         for game in games:
             titles = [game.title, *names.get(game.slug, [])]
@@ -331,7 +331,7 @@ class Scraper:
         """
         if page.eans & set(entry["eans"]):
             return True
-        extra = self._companies.get(game.slug, [])
+        extra = self.companies.get(game.slug, [])
         slug_platforms = url_platforms(url) if source == "pixmania" else None
         return any(title_matches(page.name, t, platform, extra, slug_platforms) for t in titles)
 
@@ -418,7 +418,7 @@ class Scraper:
     def _discover_leclerc_category(
         self, game: GameEntry, titles: list[str], platform: Platform, entry: dict[str, Any]
     ) -> None:
-        extra = self._companies.get(game.slug, [])
+        extra = self.companies.get(game.slug, [])
         candidates = [
             item
             for item in self.leclerc_listing(platform)

@@ -182,7 +182,13 @@ def cmd_discover(args: argparse.Namespace) -> int:
         return 2
     now = datetime.now(UTC).replace(microsecond=0)
     games = yaml.safe_load(args.games.read_text(encoding="utf-8")) or []
-    curated = {g["igdb_id"] for g in games if g.get("igdb_id")}
+    curated = [
+        discovery.CuratedGame(
+            g["igdb_id"], g["slug"], g["title"], tuple(e["platform"] for e in g["editions"])
+        )
+        for g in games
+        if g.get("igdb_id")
+    ]
     excluded = {e.igdb_id for e in discovery.load_exclusions(args.exclude, now.date())}
     fetcher = Fetcher.create()
     timings: dict[str, float] = {}
@@ -202,7 +208,7 @@ def cmd_discover(args: argparse.Namespace) -> int:
         timings["sample_s"] = time.monotonic() - start
     finally:
         fetcher.close()
-    report = discovery.summary(result, sample)
+    report = discovery.summary(result, sample, args.max_new)
     report["timings"] = {k: round(v, 1) for k, v in timings.items()}
     report["blocked"] = dict(fetcher.blocked)
     text = json.dumps(report, ensure_ascii=False, indent=2)
@@ -266,6 +272,7 @@ def main(argv: list[str] | None = None) -> int:
     cmd.add_argument("--report", type=Path, help="écrit le bilan (JSON)")
     cmd.add_argument("--kept", type=Path, help="écrit la liste des jeux retenus (TSV)")
     cmd.add_argument("--sample", type=int, default=40, help="jeux dont les fiches sont ouvertes")
+    cmd.add_argument("--max-new", type=int, default=300, help="nouveaux jeux au plus par run")
     cmd.add_argument("--exclude", type=Path, default=build.ROOT / "data" / "discovery.exclude.yaml")
     cmd.add_argument("--games", type=Path, default=build.GAMES_PATH)
     cmd.set_defaults(func=cmd_discover)

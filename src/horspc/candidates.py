@@ -212,6 +212,21 @@ def evaluate(
     )
 
 
+def pc_listed(row: dict[str, Any], ctx: Context) -> str | None:
+    """Où le PC figure dans `platforms` (fiche, fiches liées, jeu d'origine d'un Remaster ou
+    d'un Port), même sans date de sortie PC ; None s'il n'y figure nulle part."""
+    game_type = (row.get("game_type") or {}).get("type", "?")
+    parent = row.get("parent_game") if game_type in SAME_GAME_TYPES else None
+    for entry, label in (
+        [(row, "sur la fiche")]
+        + [(rel, f"via « {rel.get('name')} »") for r in RELATED for rel in row.get(r) or []]
+        + ([(parent, f"via le jeu d'origine « {parent.get('name')} »")] if parent else [])
+    ):
+        if ctx.pc_id in (entry.get("platforms") or []):
+            return label
+    return None
+
+
 def _first_release(row: dict[str, Any], ctx: Context) -> tuple[date | None, list[Platform]]:
     """Date de première sortie et plateformes cibles sorties ce jour-là ([] si aucune)."""
     cancelled = ctx.refs.statuses[CANCELLED]
