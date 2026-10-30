@@ -229,8 +229,8 @@ contacts officiels ci-dessus :
 > Si vous préférez, je peux utiliser un flux ou une API que vous mettriez à disposition, ou une
 > plage d'adresses IP déterminée. Vous pouvez à tout moment me demander d'arrêter.
 >
-> Contact : Mathis Aguado (Mvth1s), mag.d3v+github@pm.me
+> Contact : Mvth1s, mag.d3v+horspc@pm.me
 >
 > Je vous remercie par avance de votre réponse.
 >
-> Mathis Aguado
+> Mvth1s
