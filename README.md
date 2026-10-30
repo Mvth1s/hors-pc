@@ -228,7 +228,7 @@ uv run ruff check . && uv run ruff format --check .
     source_url: https://…
 ```
 
-Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot → 255340`) et signale les correspondances approximatives : il est conseillé d'épingler alors l'`igdb_id`. Un jeu dont le `pc_status` passe à `released` reste dans `data.json` mais n'est plus affiché ; on peut ensuite le retirer de `games.yaml`.
+Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot → 255340`). Seule une correspondance exacte et unique du titre est retenue : sans correspondance exacte, ou avec plusieurs fiches au même titre, le jeu reste sans données IGDB et un WARNING invite à épingler l'`igdb_id` (aucun repli sur le premier résultat). Les fiches épinglées sont demandées par lots de 500 (limite d'IGDB par requête). Un jeu dont le `pc_status` passe à `released` reste dans `data.json` mais n'est plus affiché ; on peut ensuite le retirer de `games.yaml`.
 
 ### Trouver des candidats
 

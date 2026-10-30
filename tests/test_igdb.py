@@ -92,6 +92,40 @@ def test_recherche_par_titre_correspondance_exacte(igdb: IgdbClient, api: respx.
     assert "where platforms = (508)" in body
 
 
+def test_recherche_sans_correspondance_exacte_jamais_devinee(
+    igdb: IgdbClient, api: respx.MockRouter, caplog: pytest.LogCaptureFixture
+) -> None:
+    deluxe = [r for r in load_fixture("igdb_search_mario_kart.json") if r["id"] == 338999]
+    api.post(GAMES_URL).respond(json=deluxe)
+    result = igdb.fetch_games([entry("mario-kart-world", "Mario Kart World", ["switch2"])], NOW)
+    assert result == {"mario-kart-world": None}
+    assert "aucune correspondance exacte" in caplog.text
+
+
+def test_recherche_ambigue_jamais_devinee(
+    igdb: IgdbClient, api: respx.MockRouter, caplog: pytest.LogCaptureFixture
+) -> None:
+    row = load_fixture("igdb_search_mario_kart.json")[0]
+    api.post(GAMES_URL).respond(json=[row, {**row, "id": 999}])
+    result = igdb.fetch_games([entry("mario-kart-world", "Mario Kart World", ["switch2"])], NOW)
+    assert result == {"mario-kart-world": None}
+    assert "ambigu" in caplog.text
+
+
+def test_fiches_demandees_par_lots_de_500(igdb: IgdbClient, api: respx.MockRouter) -> None:
+    def respond(request: httpx.Request) -> httpx.Response:
+        body = request.content.decode()
+        ids = body.split("where id = (")[1].split(")")[0].split(",")
+        return httpx.Response(200, json=[{"id": int(i), "name": f"Jeu {i}"} for i in ids])
+
+    route = api.post(GAMES_URL).mock(side_effect=respond)
+    games = [entry(f"jeu-{i}", f"Jeu {i}", ["ps5"], i) for i in range(1, 502)]
+    result = igdb.fetch_games(games, NOW)
+    assert route.call_count == 2
+    assert all("limit 500;" in c.request.content.decode() for c in route.calls)
+    assert all(result[f"jeu-{i}"] is not None for i in range(1, 502))
+
+
 def test_jeu_introuvable(igdb: IgdbClient, api: respx.MockRouter) -> None:
     api.post(GAMES_URL).respond(json=[])
     assert igdb.fetch_games([entry("inconnu", "Inconnu", ["ps5"])], NOW) == {"inconnu": None}

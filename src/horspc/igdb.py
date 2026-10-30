@@ -37,6 +37,7 @@ GAME_FIELDS = (
     "external_games.platform.slug"
 )
 MAX_SCREENSHOTS = 4
+PAGE_LIMIT = 500  # maximum de résultats par requête IGDB
 
 # release_date console : seules ces régions et ces statuts (ou un statut absent) comptent.
 RELEASE_REGIONS = ("europe", "worldwide")
@@ -119,13 +120,14 @@ class IgdbClient:
         platform_ids = self.platform_ids()
         refs = self.release_refs()
         by_id: dict[int, dict[str, Any]] = {}
-        ids = [g.igdb_id for g in games if g.igdb_id is not None]
-        if ids:
+        ids = sorted({g.igdb_id for g in games if g.igdb_id is not None})
+        # IGDB renvoie au plus PAGE_LIMIT fiches par requête : identifiants envoyés par lots.
+        for start in range(0, len(ids), PAGE_LIMIT):
+            chunk = ",".join(map(str, ids[start : start + PAGE_LIMIT]))
             rows = self.query(
-                "games",
-                f"fields {GAME_FIELDS}; where id = ({','.join(map(str, ids))}); limit 500;",
+                "games", f"fields {GAME_FIELDS}; where id = ({chunk}); limit {PAGE_LIMIT};"
             )
-            by_id = {row["id"]: row for row in rows}
+            by_id.update((row["id"], row) for row in rows)
 
         result: dict[str, IgdbGame | None] = {}
         for game in games:
@@ -244,18 +246,26 @@ class IgdbClient:
             "games",
             f'search "{title}"; fields {GAME_FIELDS}; where platforms = ({ids}); limit 10;',
         )
-        if not rows:
-            return None
         wanted = _normalize(game.title)
-        exact = [r for r in rows if _normalize(r.get("name", "")) == wanted]
-        if not exact:
+        exact = {r["id"]: r for r in rows if _normalize(r.get("name", "")) == wanted}
+        if len(exact) == 1:
+            return next(iter(exact.values()))
+        # Jamais deviné : sans correspondance exacte unique, le jeu reste sans fiche IGDB.
+        if exact:
             log.warning(
-                "IGDB : correspondance approximative pour %s → %s (%s), à épingler via igdb_id",
+                "IGDB : %s ambigu (%s), à épingler via igdb_id",
+                game.slug,
+                ", ".join(f"{r['id']} {r.get('name')}" for r in exact.values()),
+            )
+        elif rows:
+            log.warning(
+                "IGDB : aucune correspondance exacte pour %s (premier résultat : %s %s), "
+                "à épingler via igdb_id",
                 game.slug,
                 rows[0]["id"],
                 rows[0].get("name"),
             )
-        return (exact or rows)[0]
+        return None
 
 
 def _companies(row: dict[str, Any], role: str) -> tuple[str, ...]:
