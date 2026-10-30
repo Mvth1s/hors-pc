@@ -19,6 +19,8 @@ log = logging.getLogger(__name__)
 
 TOKEN_URL = "https://id.twitch.tv/oauth2/token"
 API_URL = "https://api.igdb.com/v4"
+# Limite documentée d'IGDB : 4 requêtes par seconde (images.igdb.com reste à 1 req/s).
+HOST_INTERVALS = {"api.igdb.com": 0.25}
 
 PC_SLUG = "win"
 PLATFORM_SLUGS: dict[Platform, str] = {

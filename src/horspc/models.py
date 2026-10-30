@@ -315,6 +315,34 @@ class Catalog(_Input):
         return next(g.platforms[0] for g in self.games if g.slug == obs.slug)
 
 
+class DiscoveryExclusion(_Input):
+    """Faux positif de la découverte automatique (data/discovery.exclude.yaml)."""
+
+    igdb_id: PositiveInt
+    reason: str = Field(min_length=1)
+    date: date
+
+    @field_validator("date")
+    @classmethod
+    def _not_in_future(cls, value: date, info: ValidationInfo) -> date:
+        if value > _today(info):
+            raise ValueError("date est dans le futur")
+        return value
+
+
+class DiscoveryExclusions(_Input):
+    """Liste des exclusions, un igdb_id au plus une fois."""
+
+    exclusions: list[DiscoveryExclusion]
+
+    @model_validator(mode="after")
+    def _unique(self) -> "DiscoveryExclusions":
+        dup = sorted(i for i, n in Counter(e.igdb_id for e in self.exclusions).items() if n > 1)
+        if dup:
+            raise ValueError(f"igdb_id en double : {', '.join(map(str, dup))}")
+        return self
+
+
 # --- Sortie data.json ---------------------------------------------------------
 
 

@@ -3,6 +3,7 @@ import pytest
 import respx
 
 from horspc.http import USER_AGENT, HttpClient
+from horspc.igdb import HOST_INTERVALS
 
 
 @respx.mock
@@ -67,3 +68,18 @@ def test_une_requete_par_seconde_par_hote() -> None:
         client.request("GET", "https://b.example/")
         client.request("GET", "https://a.example/")
     assert sleeps == [pytest.approx(0.75)]
+
+
+@respx.mock
+def test_intervalle_propre_a_api_igdb() -> None:
+    """api.igdb.com à 4 req/s ; images.igdb.com et les autres hôtes restent à 1 req/s."""
+    sleeps: list[float] = []
+    respx.get("https://api.igdb.com/v4").respond(200)
+    respx.get("https://images.igdb.com/x.webp").respond(200)
+    with HttpClient(
+        sleep=sleeps.append, clock=lambda: 100.0, host_intervals=HOST_INTERVALS
+    ) as client:
+        for _ in range(2):
+            client.request("GET", "https://api.igdb.com/v4")
+            client.request("GET", "https://images.igdb.com/x.webp")
+    assert sleeps == [pytest.approx(0.25), pytest.approx(1.0)]

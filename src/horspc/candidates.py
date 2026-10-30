@@ -66,6 +66,18 @@ class Context:
     now: datetime
 
 
+def context(igdb: IgdbClient, now: datetime) -> Context:
+    """Identifiants IGDB (PC, consoles cibles, statuts, types retenus) lus par leur nom."""
+    platform_ids = igdb.platform_ids()
+    return Context(
+        pc_id=platform_ids[PC_SLUG],
+        console_ids={platform_ids[slug]: name for name, slug in PLATFORM_SLUGS.items()},
+        refs=igdb.release_refs(),
+        game_type_ids=list(igdb.ids_by_name("game_types", "type", GAME_TYPES).values()),
+        now=now,
+    )
+
+
 def find_candidates(
     igdb: IgdbClient,
     known_ids: set[int],
@@ -77,14 +89,7 @@ def find_candidates(
     include_legacy: bool = False,
 ) -> tuple[list[Candidate], list[Candidate]]:
     """Renvoie (candidats par total_rating_count, sorties récentes par hypes)."""
-    platform_ids = igdb.platform_ids()
-    ctx = Context(
-        pc_id=platform_ids[PC_SLUG],
-        console_ids={platform_ids[slug]: name for name, slug in PLATFORM_SLUGS.items()},
-        refs=igdb.release_refs(),
-        game_type_ids=list(igdb.ids_by_name("game_types", "type", GAME_TYPES).values()),
-        now=now,
-    )
+    ctx = context(igdb, now)
     base = (
         f"platforms = ({_ids(ctx.console_ids)}) & game_type = ({_ids(ctx.game_type_ids)})"
         f" & version_parent = null & first_release_date < {int(now.timestamp())}"
@@ -124,9 +129,9 @@ def _collect(
     kept: list[Candidate] = []
     for page in _pages(igdb, where, sort):
         rows = [r for r in page if r["id"] not in excluded_ids]
-        editions = _editions_by_parent(igdb, [r["id"] for r in rows])
+        editions = editions_by_parent(igdb, [r["id"] for r in rows])
         for row in rows:
-            candidate = _evaluate(row, editions.get(row["id"], []), ctx, include_legacy)
+            candidate = evaluate(row, editions.get(row["id"], []), ctx, include_legacy)
             if candidate is not None:
                 kept.append(candidate)
                 if len(kept) == limit:
@@ -148,7 +153,7 @@ def _pages(igdb: IgdbClient, where: str, sort: str) -> Iterator[list[dict[str, A
             return
 
 
-def _editions_by_parent(igdb: IgdbClient, ids: Sequence[int]) -> dict[int, list[dict[str, Any]]]:
+def editions_by_parent(igdb: IgdbClient, ids: Sequence[int]) -> dict[int, list[dict[str, Any]]]:
     """Éditions (version_parent) des jeux donnés : une édition PC compte comme une sortie PC."""
     result: dict[int, list[dict[str, Any]]] = {}
     for start in range(0, len(ids), PAGE_SIZE):
@@ -163,9 +168,12 @@ def _editions_by_parent(igdb: IgdbClient, ids: Sequence[int]) -> dict[int, list[
     return result
 
 
-def _evaluate(
+def evaluate(
     row: dict[str, Any], editions: list[dict[str, Any]], ctx: Context, include_legacy: bool
 ) -> Candidate | None:
+    """Candidat, ou None si le jeu est sorti sur PC (fiche, fiches liées, éditions, jeu
+    d'origine d'un Remaster ou d'un Port) ou, sans `include_legacy`, sorti d'abord ailleurs.
+    `row` doit porter les champs FIELDS ; partagé avec `horspc discover`."""
     notes = []
     game_type = (row.get("game_type") or {}).get("type", "?")
     parent = row.get("parent_game") if game_type in SAME_GAME_TYPES else None

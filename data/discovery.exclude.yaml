@@ -1,0 +1,8 @@
+# Faux positifs de la découverte automatique (`horspc discover`) : jeux IGDB à ne jamais
+# ajouter au catalogue découvert. Sans effet sur data/games.yaml.
+#
+# Champs :
+#   igdb_id  identifiant IGDB du jeu écarté (unique)
+#   reason   motif (produit mal rattaché, version PC non référencée par IGDB...)
+#   date     date de l'exclusion (AAAA-MM-JJ, pas dans le futur)
+[]

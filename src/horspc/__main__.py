@@ -1,18 +1,20 @@
-"""CLI : `uv run python -m horspc build [--offline] | stale | price add | candidates`."""
+"""CLI : `uv run python -m horspc build [--offline] | stale | price add | candidates | discover`."""
 
 import argparse
+import json
 import logging
 import os
 import sys
+import time
 from datetime import UTC, date, datetime
 from pathlib import Path
 
 import yaml
 from pydantic import ValidationError
 
-from horspc import audit, build, candidates, price_add, stale
+from horspc import audit, build, candidates, discovery, price_add, stale
 from horspc.http import USER_AGENT, HttpClient
-from horspc.igdb import IgdbClient
+from horspc.igdb import HOST_INTERVALS, IgdbClient
 from horspc.prices import probe, scraper
 from horspc.prices.fetch import Fetcher
 
@@ -41,7 +43,7 @@ def igdb_credentials() -> tuple[str, str] | None:
 
 def cmd_build(args: argparse.Namespace) -> int:
     now = datetime.now(UTC).replace(microsecond=0)
-    with HttpClient() as http:
+    with HttpClient(host_intervals=HOST_INTERVALS) as http:
         igdb = None
         if not args.offline:
             credentials = igdb_credentials()
@@ -147,7 +149,7 @@ def cmd_candidates(args: argparse.Namespace) -> int:
     games = yaml.safe_load(args.games.read_text(encoding="utf-8")) or []
     known = {g["igdb_id"] for g in games if g.get("igdb_id")}
     now = datetime.now(UTC).replace(microsecond=0)
-    with HttpClient() as http:
+    with HttpClient(host_intervals=HOST_INTERVALS) as http:
         popular, recent = candidates.find_candidates(
             IgdbClient(*credentials, http),
             known,
@@ -165,6 +167,50 @@ def cmd_candidates(args: argparse.Namespace) -> int:
         return 1
     args.output.write_text(text, encoding="utf-8")
     print(f"{len(popular)} candidats et {len(recent)} sorties récentes écrits dans {args.output}")
+    return 0
+
+
+def cmd_discover(args: argparse.Namespace) -> int:
+    """Découverte du catalogue dans les rayons des sources actives (dry-run : rien n'est écrit
+    dans data/ ni site/)."""
+    if not args.dry_run:
+        print("Seul --dry-run est disponible pour l'instant.", file=sys.stderr)
+        return 2
+    credentials = igdb_credentials()
+    if credentials is None:
+        print("IGDB_CLIENT_ID et IGDB_CLIENT_SECRET sont requis.", file=sys.stderr)
+        return 2
+    now = datetime.now(UTC).replace(microsecond=0)
+    games = yaml.safe_load(args.games.read_text(encoding="utf-8")) or []
+    curated = {g["igdb_id"] for g in games if g.get("igdb_id")}
+    excluded = {e.igdb_id for e in discovery.load_exclusions(args.exclude, now.date())}
+    fetcher = Fetcher.create()
+    timings: dict[str, float] = {}
+    try:
+        bot = scraper.Scraper(scraper.load_config(build.SOURCES_PATH), fetcher)
+        start = time.monotonic()
+        products, rejected = discovery.harvest(bot)
+        timings["harvest_s"] = time.monotonic() - start
+        with HttpClient(host_intervals=HOST_INTERVALS) as http:
+            start = time.monotonic()
+            result = discovery.discover(
+                IgdbClient(*credentials, http), products, rejected, curated, excluded, now
+            )
+            timings["igdb_s"] = time.monotonic() - start
+        start = time.monotonic()
+        sample = discovery.sample_offers(bot, result.kept, args.sample, now.date())
+        timings["sample_s"] = time.monotonic() - start
+    finally:
+        fetcher.close()
+    report = discovery.summary(result, sample)
+    report["timings"] = {k: round(v, 1) for k, v in timings.items()}
+    report["blocked"] = dict(fetcher.blocked)
+    text = json.dumps(report, ensure_ascii=False, indent=2)
+    if args.report:
+        args.report.write_text(text + "\n", encoding="utf-8")
+    if args.kept:
+        args.kept.write_text("\n".join(discovery.kept_rows(result)) + "\n", encoding="utf-8")
+    print(text)
     return 0
 
 
@@ -214,6 +260,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     cmd.add_argument("--output", type=Path, default=build.ROOT / "data" / "candidates.yaml")
     cmd.set_defaults(func=cmd_candidates)
+
+    cmd = sub.add_parser("discover", help="découvre le catalogue dans les rayons des sources")
+    cmd.add_argument("--dry-run", action="store_true", help="compte sans rien écrire")
+    cmd.add_argument("--report", type=Path, help="écrit le bilan (JSON)")
+    cmd.add_argument("--kept", type=Path, help="écrit la liste des jeux retenus (TSV)")
+    cmd.add_argument("--sample", type=int, default=40, help="jeux dont les fiches sont ouvertes")
+    cmd.add_argument("--exclude", type=Path, default=build.ROOT / "data" / "discovery.exclude.yaml")
+    cmd.add_argument("--games", type=Path, default=build.GAMES_PATH)
+    cmd.set_defaults(func=cmd_discover)
 
     for cmd in (sub.choices["build"], sub.choices["stale"], price_cmd, sub.choices["candidates"]):
         cmd.add_argument("--games", type=Path, default=build.GAMES_PATH)
