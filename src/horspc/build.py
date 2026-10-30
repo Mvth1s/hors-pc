@@ -9,13 +9,22 @@ from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 from typing import Any
 
+import httpx
 import yaml
 from pydantic import ValidationError
 
-from horspc import covers, render
+from horspc import covers, discovery, render
 from horspc.http import HttpClient
 from horspc.igdb import IgdbClient, IgdbError, IgdbGame
-from horspc.models import Catalog, DataFile, GameOut, ScrapedObservation, to_cents
+from horspc.models import (
+    Catalog,
+    DataFile,
+    DiscoveredGame,
+    GameEntry,
+    GameOut,
+    ScrapedObservation,
+    to_cents,
+)
 from horspc.prices import ManualPriceProvider, Offer, PriceProvider, scraper
 from horspc.prices.fetch import Fetcher
 from horspc.prices.selection import edition_offer_key
@@ -31,12 +40,41 @@ SCRAPED_PATH = ROOT / "data" / "prices.scraped.jsonl"
 DISCOVERED_PATH = ROOT / "data" / "discovered.json"
 SOURCES_PATH = ROOT / "data" / "sources.config.yaml"
 REDIRECTS_PATH = ROOT / "data" / "redirects.yaml"
+DISCOVERED_GAMES_PATH = ROOT / "data" / "games.discovered.yaml"
+EXCLUDE_PATH = ROOT / "data" / "discovery.exclude.yaml"
 
 
-def load_catalog(games_path: Path, prices_path: Path, now: datetime) -> Catalog:
-    """Lit et valide les deux fichiers YAML ; lève ValidationError si une entrée est refusée."""
+def load_catalog(
+    games_path: Path, prices_path: Path, now: datetime, discovered_path: Path | None = None
+) -> Catalog:
+    """Lit et valide games.yaml, prices.manual.yaml et, s'il est donné, games.discovered.yaml ;
+    lève ValidationError si une entrée est refusée."""
+    return merge_catalog(
+        _read_yaml(games_path),
+        discovery.load_discovered_games(discovered_path),
+        _read_yaml(prices_path),
+        now,
+    )
+
+
+def merge_catalog(
+    curated: list[Any], discovered: list[DiscoveredGame], observations: list[Any], now: datetime
+) -> Catalog:
+    """games.yaml d'abord : un jeu découvert de même igdb_id ou de même slug est ignoré."""
+    ids = {g.get("igdb_id") for g in curated if isinstance(g, dict)}
+    slugs = {g.get("slug") for g in curated if isinstance(g, dict)}
+    extra: list[GameEntry] = []
+    for game in discovered:
+        if game.igdb_id in ids or game.slug in slugs:
+            log.info("Découverte : %s ignoré, déjà dans games.yaml", game.slug)
+            continue
+        extra.append(game.entry())
     return Catalog.model_validate(
-        {"games": _read_yaml(games_path), "observations": _read_yaml(prices_path)},
+        {
+            "games": [*curated, *extra],
+            "observations": observations,
+            "discovered": frozenset(g.slug for g in extra),
+        },
         context={"today": now.date()},
     )
 
@@ -172,16 +210,34 @@ def run(
     discovered_path: Path = DISCOVERED_PATH,
     sources_path: Path = SOURCES_PATH,
     report_path: Path | None = None,
+    discovered_games_path: Path | None = None,
+    exclude_path: Path | None = None,
+    max_new: int = discovery.MAX_NEW,
 ) -> DataFile:
     """Build complet.
 
     Les jaquettes sont téléchargées avec `http` (build complet uniquement) et écrites dans
     site/covers/ seulement après data.json. Avec `fetcher`, les prix sont relevés sur les
-    sources activées ; sinon seul l'historique de prices.scraped.jsonl est lu. Lève
-    ValidationError si les entrées ou la sortie sont invalides, PreviousDataError si le
-    data.json précédent est mal formé.
+    sources activées ; sinon seul l'historique de prices.scraped.jsonl est lu. Avec `fetcher`,
+    IGDB et `discovered_games_path`, le catalogue découvert est mis à jour (rayons des sources)
+    puis fusionné à games.yaml ; un jeu découvert n'est affiché qu'avec une offre à jour
+    (moins de 30 jours). Lève ValidationError si les entrées ou la sortie sont invalides,
+    PreviousDataError si le data.json précédent est mal formé.
     """
-    catalog = load_catalog(games_path, prices_path, now)
+    curated_raw = _read_yaml(games_path)
+    observations_raw = _read_yaml(prices_path)
+    # Validation de games.yaml seul d'abord : une entrée refusée arrête le build avant tout appel.
+    curated = merge_catalog(curated_raw, [], [], now)
+    discovered_games = discovery.load_discovered_games(discovered_games_path)
+    bot = None if fetcher is None else scraper.Scraper(scraper.load_config(sources_path), fetcher)
+    refreshed = None
+    if bot is not None and igdb is not None and discovered_games_path is not None:
+        refreshed = _refresh_discovered(
+            igdb, bot, curated, discovered_games, exclude_path, now, max_new
+        )
+        if refreshed is not None:
+            discovered_games = refreshed.games
+    catalog = merge_catalog(curated_raw, discovered_games, observations_raw, now)
     previous_file = load_previous(output_path)
     previous = {} if previous_file is None else {g.slug: g for g in previous_file.games}
     igdb_results = None
@@ -211,14 +267,16 @@ def run(
             if info is not None
         }
         discovered = scraper.load_discovered(discovered_path)
-        bot = scraper.Scraper(scraper.load_config(sources_path), fetcher)
+        assert bot is not None
         new, report = bot.run(catalog.games, names, discovered, now.date(), companies)
         history += new
         log.info("Relevé automatique : %d prix, sources bloquées : %s", report.ok, report.blocked)
+    provider = price_provider(catalog, history)
+    shown = _visible(catalog, provider, now.date())
     site_dir = output_path.parent
     updates = []
     screen_updates = []
-    for game in catalog.games:
+    for game in shown.games:
         prev = previous.get(game.slug)
         prev_id = None if prev is None else prev.cover_image_id
         prev_screens = () if prev is None else tuple(s.image_id for s in prev.screenshots)
@@ -230,12 +288,13 @@ def run(
             updates.append(
                 covers.fetch_cover(http, site_dir, game.slug, info.cover_image_id, prev_id)
             )
-            screen_updates.append(
-                covers.fetch_screens(http, site_dir, game.slug, info.screenshot_ids)
-            )
+            screens = info.screenshot_ids
+            if game.slug in catalog.discovered:
+                screens = screens[: discovery.DISCOVERED_SCREENS]
+            screen_updates.append(covers.fetch_screens(http, site_dir, game.slug, screens))
     data = build_data(
-        catalog,
-        price_provider(catalog, history),
+        shown,
+        provider,
         igdb_results,
         previous,
         now,
@@ -250,6 +309,8 @@ def run(
     if discovered is not None:
         scraper.write_history(scraped_path, history)
         scraper.write_discovered(discovered_path, discovered)
+    if refreshed is not None and discovered_games_path is not None:
+        discovery.write_discovered_games(discovered_games_path, refreshed.games)
     if report is not None and report_path is not None:
         report_path.write_text(report.to_json() + "\n", encoding="utf-8")
     if igdb_results is not None and http is not None:
@@ -263,6 +324,55 @@ def run(
         log.warning("Pas de gabarit index.html dans %s : rendu HTML ignoré", site_dir)
     log.info("%s écrit : %d jeux", output_path, len(data.games))
     return data
+
+
+def _refresh_discovered(
+    igdb: IgdbClient,
+    bot: scraper.Scraper,
+    curated: Catalog,
+    previous: list[DiscoveredGame],
+    exclude_path: Path | None,
+    now: datetime,
+    max_new: int,
+) -> discovery.Refresh | None:
+    """Catalogue découvert mis à jour, ou None (liste précédente gardée) si IGDB échoue."""
+    excluded = {e.igdb_id for e in discovery.load_exclusions(exclude_path, now.date())}
+    refs = [
+        discovery.CuratedGame(g.igdb_id, g.slug, g.title, tuple(g.platforms))
+        for g in curated.games
+        if g.igdb_id is not None
+    ]
+    try:
+        refreshed = discovery.refresh(igdb, bot, refs, previous, excluded, now, max_new)
+    except (httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
+        log.warning("Découverte impossible (%s) : catalogue découvert inchangé", exc)
+        return None
+    for slug, where in sorted(refreshed.result.curated_pc_listed.items()):
+        log.warning(
+            "IGDB : %s a le PC dans ses plateformes (%s) sans date de sortie PC : à vérifier, "
+            "pc_override si besoin",
+            slug,
+            where,
+        )
+    return refreshed
+
+
+def _visible(catalog: Catalog, provider: PriceProvider, today: date) -> Catalog:
+    """Catalogue affiché : un jeu découvert n'y entre qu'avec une offre de moins de 30 jours
+    (relevé automatique accepté par la règle de confiance) ; sinon il reste en attente."""
+    games = [
+        g
+        for g in catalog.games
+        if g.slug not in catalog.discovered
+        or any(
+            (offer := provider.get_offer(g, p, today)) is not None and not offer.stale
+            for p in g.platforms
+        )
+    ]
+    pending = len(catalog.games) - len(games)
+    if pending:
+        log.info("Découverte : %d jeux en attente d'une offre à jour", pending)
+    return catalog.model_copy(update={"games": games})
 
 
 def discount_pct(price_cents: int, launch_price_cents: int | None) -> int | None:

@@ -66,6 +66,9 @@ def cmd_build(args: argparse.Namespace) -> int:
                 http=None if igdb is None else http,
                 fetcher=fetcher,
                 report_path=args.scrape_report,
+                discovered_games_path=args.discovered,
+                exclude_path=args.exclude,
+                max_new=args.max_new,
             )
         except ValidationError as exc:
             print(f"Validation refusée, data.json non écrit :\n{exc}", file=sys.stderr)
@@ -126,7 +129,9 @@ def cmd_sources_audit(args: argparse.Namespace) -> int:
 def cmd_stale(args: argparse.Namespace) -> int:
     today = date.today()
     try:
-        catalog = build.load_catalog(args.games, args.prices, datetime.now(UTC))
+        catalog = build.load_catalog(
+            args.games, args.prices, datetime.now(UTC), build.DISCOVERED_GAMES_PATH
+        )
     except ValidationError as exc:
         print(f"Fichiers YAML invalides :\n{exc}", file=sys.stderr)
         return 1
@@ -174,7 +179,10 @@ def cmd_discover(args: argparse.Namespace) -> int:
     """Découverte du catalogue dans les rayons des sources actives (dry-run : rien n'est écrit
     dans data/ ni site/)."""
     if not args.dry_run:
-        print("Seul --dry-run est disponible pour l'instant.", file=sys.stderr)
+        print(
+            "Seul --dry-run existe : la découverte réelle tourne dans `horspc build`.",
+            file=sys.stderr,
+        )
         return 2
     credentials = igdb_credentials()
     if credentials is None:
@@ -229,6 +237,11 @@ def main(argv: list[str] | None = None) -> int:
     cmd.add_argument("--no-scrape", action="store_true", help="sans relevé automatique des prix")
     cmd.add_argument("--scrape-report", type=Path, help="écrit le bilan du relevé (JSON)")
     cmd.add_argument("--output", type=Path, default=build.OUTPUT_PATH)
+    cmd.add_argument(
+        "--discovered", type=Path, default=build.DISCOVERED_GAMES_PATH, help="jeux découverts"
+    )
+    cmd.add_argument("--exclude", type=Path, default=build.EXCLUDE_PATH)
+    cmd.add_argument("--max-new", type=int, default=discovery.MAX_NEW, help="nouveaux jeux par run")
     cmd.set_defaults(func=cmd_build)
 
     cmd = sub.add_parser("scrape-report", help="résume un bilan de relevé (--scrape-report)")
@@ -272,7 +285,9 @@ def main(argv: list[str] | None = None) -> int:
     cmd.add_argument("--report", type=Path, help="écrit le bilan (JSON)")
     cmd.add_argument("--kept", type=Path, help="écrit la liste des jeux retenus (TSV)")
     cmd.add_argument("--sample", type=int, default=40, help="jeux dont les fiches sont ouvertes")
-    cmd.add_argument("--max-new", type=int, default=300, help="nouveaux jeux au plus par run")
+    cmd.add_argument(
+        "--max-new", type=int, default=discovery.MAX_NEW, help="nouveaux jeux au plus par run"
+    )
     cmd.add_argument("--exclude", type=Path, default=build.ROOT / "data" / "discovery.exclude.yaml")
     cmd.add_argument("--games", type=Path, default=build.GAMES_PATH)
     cmd.set_defaults(func=cmd_discover)

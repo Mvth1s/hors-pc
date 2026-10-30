@@ -14,6 +14,7 @@ from horspc import discovery
 from horspc.discovery import IndexedGame, Matcher, Product
 from horspc.http import HttpClient
 from horspc.igdb import API_URL, TOKEN_URL, IgdbClient
+from horspc.models import DiscoveredGame
 from horspc.prices.sources import ListingItem
 from tests.conftest import NOW, TODAY, load_fixture
 
@@ -85,8 +86,16 @@ def test_plateforme_du_rayon_quand_le_nom_n_en_cite_aucune() -> None:
 # --- Récolte -------------------------------------------------------------------------------
 
 
+class FakeFetcher:
+    def __init__(self, blocked: dict[str, str] | None = None) -> None:
+        self.blocked = blocked or {}
+
+
 class FakeScraper:
     enabled: ClassVar[list[str]] = ["leclerc", "pixmania"]
+
+    def __init__(self, blocked: dict[str, str] | None = None) -> None:
+        self.fetcher = FakeFetcher(blocked)
 
     def leclerc_listing(self, platform: str) -> list[ListingItem]:
         if platform != "ps5":
@@ -320,6 +329,96 @@ def test_noms_alternatifs_non_latins_ignores(igdb: IgdbClient, api: respx.MockRo
     index = discovery.fetch_index(igdb)
     assert index[7].names == ("Old Game", "Viejo Juego", "Vieux Jeu")
     assert not discovery._latin("スーパー R") and discovery._latin("Pokémon Écarlate")
+
+
+# --- Mise à jour de games.discovered.yaml ----------------------------------------------------
+
+
+def known(igdb_id: int, slug: str, platform: str = "ps5", missed: int = 0) -> DiscoveredGame:
+    return DiscoveredGame(
+        slug=slug,
+        title=slug,
+        title_source="nom_igdb",
+        igdb_id=igdb_id,
+        editions=[{"platform": platform}],
+        first_seen=date(2026, 9, 1),
+        last_seen=date(2026, 9, 1),
+        missed_runs=missed,
+    )
+
+
+CURATED = [discovery.CuratedGame(5, "curated-game", "Curated Game", ("ps5",))]
+
+
+def test_mise_a_jour_des_jeux_connus(igdb: IgdbClient, api: respx.MockRouter) -> None:
+    previous = [
+        known(1, "astro-bot", "switch", missed=2),  # en rayon : remis à zéro, éditions fusionnées
+        known(7, "old-game", "switch", missed=1),  # absent : une absence de plus
+        known(10, "missing-game", missed=3),  # absent pour la 4e fois : retiré
+        known(3, "remaster-x", "switch"),  # sorti sur PC (jeu d'origine) : retiré
+        known(5, "curated-game-2"),  # passé dans games.yaml : retiré
+        known(6, "false-positive"),  # exclu : retiré
+    ]
+    out = discovery.refresh(igdb, FakeScraper(), CURATED, previous, {6}, NOW)
+    assert out.complete
+    assert out.added == []
+    by_slug = {g.slug: g for g in out.games}
+    assert sorted(by_slug) == ["astro-bot", "old-game"]
+    astro = by_slug["astro-bot"]
+    assert (astro.title, astro.last_seen, astro.missed_runs) == ("Astro Bot (Europe)", TODAY, 0)
+    assert [e.platform for e in astro.editions] == ["ps5", "switch"]
+    assert astro.first_seen == date(2026, 9, 1)
+    assert (by_slug["old-game"].missed_runs, by_slug["old-game"].last_seen) == (
+        2,
+        date(2026, 9, 1),
+    )
+    assert out.removed == {
+        "missing-game": "absent des rayons 4 runs consécutifs",
+        "remaster-x": "sorti sur PC",
+        "curated-game-2": "présent dans games.yaml",
+        "false-positive": "discovery.exclude.yaml",
+    }
+
+
+def test_absence_non_comptee_si_une_source_est_bloquee(
+    igdb: IgdbClient, api: respx.MockRouter
+) -> None:
+    previous = [known(10, "missing-game", missed=3)]
+    out = discovery.refresh(igdb, FakeScraper({"pixmania": "HTTP 403"}), [], previous, set(), NOW)
+    assert not out.complete
+    assert {g.slug: g.missed_runs for g in out.games}["missing-game"] == 3
+
+
+def test_nouveau_jeu_ajoute_dans_la_limite_de_max_new(
+    igdb: IgdbClient, api: respx.MockRouter
+) -> None:
+    out = discovery.refresh(igdb, FakeScraper(), [], [], set(), NOW)
+    [astro] = out.games
+    assert out.added == ["astro-bot"]
+    assert (astro.slug, astro.igdb_id, astro.first_seen, astro.title_source) == (
+        "astro-bot",
+        1,
+        TODAY,
+        "localisation_eu",
+    )
+    capped = discovery.refresh(igdb, FakeScraper(), [], [], set(), NOW, max_new=0)
+    assert (capped.games, capped.capped) == ([], 1)
+
+
+def test_slug_deja_pris_suffixe_par_l_igdb_id(igdb: IgdbClient, api: respx.MockRouter) -> None:
+    curated = [discovery.CuratedGame(99, "astro-bot", "Astro Bot (curé)", ("ps5",))]
+    out = discovery.refresh(igdb, FakeScraper(), curated, [], set(), NOW)
+    assert out.added == ["astro-bot-1"]
+
+
+def test_fichier_genere_relu_a_l_identique(tmp_path: Path) -> None:
+    path = tmp_path / "games.discovered.yaml"
+    games = [known(7, "old-game", missed=1), known(1, "astro-bot")]
+    discovery.write_discovered_games(path, games)
+    assert path.read_text(encoding="utf-8").startswith("# Généré par la découverte")
+    assert discovery.load_discovered_games(path) == sorted(games, key=lambda g: g.slug)
+    discovery.write_discovered_games(path, [])
+    assert discovery.load_discovered_games(path) == []
 
 
 # --- Titre affiché et motifs d'échec --------------------------------------------------------

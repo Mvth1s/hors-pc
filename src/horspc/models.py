@@ -26,6 +26,11 @@ PcStatus = Literal["none", "announced", "released"]
 PcStatusSource = Literal["igdb", "manual"]
 SummarySource = Literal["igdb", "manual"]
 ReleaseDateSource = Literal["igdb", "manual"]
+GameOrigin = Literal["curated", "discovered"]
+# Source du titre d'un jeu découvert, par priorité (voir horspc.discovery.display_title).
+TitleSource = Literal["localisation_eu", "nom_leclerc", "titre_francais_igdb", "nom_igdb"]
+# Un jeu découvert absent des rayons ce nombre de runs consécutifs est retiré.
+MAX_MISSED_RUNS = 4
 # code_box : boîte sans disque ni cartouche, contenant seulement un code de téléchargement.
 OfferFormat = Literal["physical", "code_box", "digital"]
 Condition = Literal["new"]
@@ -282,11 +287,55 @@ class ScrapedObservation(_Input):
         return self
 
 
+class DiscoveredGame(_Input):
+    """Une entrée de data/games.discovered.yaml (générée par la découverte, jamais saisie)."""
+
+    slug: Slug
+    title: str = Field(min_length=1)
+    title_source: TitleSource
+    igdb_id: PositiveInt
+    editions: list[Edition] = Field(min_length=1)
+    first_seen: date
+    last_seen: date
+    missed_runs: int = Field(ge=0, lt=MAX_MISSED_RUNS)  # runs consécutifs absent des rayons
+
+    @field_validator("editions")
+    @classmethod
+    def _unique_platforms(cls, value: list[Edition]) -> list[Edition]:
+        if len({e.platform for e in value}) != len(value):
+            raise ValueError("édition en double pour une même plateforme")
+        return value
+
+    def entry(self) -> GameEntry:
+        """Entrée de catalogue : ni prix de lancement ni override (aucune saisie manuelle)."""
+        return GameEntry(
+            slug=self.slug, title=self.title, editions=self.editions, igdb_id=self.igdb_id
+        )
+
+
+class DiscoveredGames(_Input):
+    """Contenu de data/games.discovered.yaml : slug et igdb_id uniques."""
+
+    games: list[DiscoveredGame]
+
+    @model_validator(mode="after")
+    def _unique(self) -> "DiscoveredGames":
+        for name, values in (
+            ("slugs", [g.slug for g in self.games]),
+            ("igdb_id", [g.igdb_id for g in self.games]),
+        ):
+            dup = sorted(str(v) for v, n in Counter(values).items() if n > 1)
+            if dup:
+                raise ValueError(f"{name} en double dans games.discovered.yaml : {', '.join(dup)}")
+        return self
+
+
 class Catalog(_Input):
     """Jeux et observations, avec les contrôles croisés entre les deux fichiers."""
 
     games: list[GameEntry]
     observations: list[PriceObservation]
+    discovered: frozenset[str] = frozenset()  # slugs venus de games.discovered.yaml
 
     @model_validator(mode="after")
     def _consistency(self) -> "Catalog":

@@ -27,7 +27,16 @@ import yaml
 
 from horspc import candidates
 from horspc.igdb import PAGE_LIMIT, PLATFORM_SLUGS, IgdbClient
-from horspc.models import DiscoveryExclusion, DiscoveryExclusions, GameEntry, Platform
+from horspc.models import (
+    MAX_MISSED_RUNS,
+    DiscoveredGame,
+    DiscoveredGames,
+    DiscoveryExclusion,
+    DiscoveryExclusions,
+    Edition,
+    GameEntry,
+    Platform,
+)
 from horspc.prices import sources as src
 from horspc.prices.matching import (
     EDITION_WORDS,
@@ -119,6 +128,9 @@ class Discovered:
     companies: tuple[str, ...] = ()  # éditeurs et studios, tolérés dans les noms marchands
     title_source: str = "nom_igdb"
     notes: list[str] = field(default_factory=list)
+    igdb_slug: str = ""  # slug IGDB normalisé (slug du site à la première découverte)
+    first_release: date | None = None
+    rating_count: int = 0
 
 
 @dataclass
@@ -135,6 +147,7 @@ class Result:
     unmatched: dict[str, list[tuple[Product, str]]] = field(default_factory=dict)
     curated_missing: list[dict[str, Any]] = field(default_factory=list)
     curated_pc_listed: dict[str, str] = field(default_factory=dict)  # slug → où (WARNING)
+    wrong_type_ids: set[int] = field(default_factory=set)
 
 
 # --- Récolte -----------------------------------------------------------------------------
@@ -331,8 +344,8 @@ class Matcher:
 # --- Filtre ----------------------------------------------------------------------------------
 
 
-def load_exclusions(path: Path, today: date) -> list[DiscoveryExclusion]:
-    if not path.exists():
+def load_exclusions(path: Path | None, today: date) -> list[DiscoveryExclusion]:
+    if path is None or not path.exists():
         return []
     raw = yaml.safe_load(path.read_text(encoding="utf-8")) or []
     return DiscoveryExclusions.model_validate(
@@ -357,7 +370,10 @@ def discover(
     curated: list[CuratedGame],
     excluded_ids: set[int],
     now: datetime,
+    tracked: Iterable[int] = (),
 ) -> Result:
+    """`tracked` : igdb_id déjà découverts, évalués même sans produit en rayon ce run (le statut
+    PC est revérifié à chaque build complet)."""
     index = fetch_index(igdb)
     log.info("Index IGDB : %d fiches", len(index))
     matcher = Matcher(index)
@@ -380,16 +396,22 @@ def discover(
             groups[ident.igdb_id][product.platform].append(product)
 
     curated_ids = {c.igdb_id for c in curated}
-    found_curated = set(groups) & curated_ids
-    excluded = set(groups) & excluded_ids - found_curated
+    considered = set(groups) | set(tracked)
+    found_curated = considered & curated_ids
+    excluded = considered & excluded_ids - found_curated
     wrong_type: Counter[str] = Counter()
+    wrong_type_ids: set[int] = set()
     pending = []
-    for igdb_id in sorted(set(groups) - found_curated - excluded):
-        game_type = index[igdb_id].game_type
+    for igdb_id in sorted(considered - found_curated - excluded):
+        indexed = index.get(igdb_id)
+        game_type = (
+            "hors index (plus sur une console cible)" if indexed is None else indexed.game_type
+        )
         if game_type in candidates.GAME_TYPES:
             pending.append(igdb_id)
         else:
             wrong_type[game_type] += 1
+            wrong_type_ids.add(igdb_id)
 
     ctx = candidates.context(igdb, now)
     kept: list[Discovered] = []
@@ -417,6 +439,9 @@ def discover(
                     names=game.names,
                     companies=game.companies,
                     notes=evaluated.notes,
+                    igdb_slug=evaluated.slug,
+                    first_release=evaluated.first_release,
+                    rating_count=evaluated.total_rating_count or 0,
                 )
             )
     # Jeux de games.yaml : même détection, simple avertissement (le build l'émettra en WARNING).
@@ -445,6 +470,7 @@ def discover(
         dict(unmatched),
         _curated_missing(curated, found_curated, index, identifications),
         curated_pc_listed,
+        wrong_type_ids,
     )
 
 
@@ -597,6 +623,156 @@ def sample_offers(
         "fiches_opened": fiches,
         "rejections": dict(rejected.most_common()),
     }
+
+
+# --- Mise à jour de games.discovered.yaml (build complet) -------------------------------------
+
+MAX_NEW = 300  # nouveaux jeux au plus par run ; le reste attend le run suivant
+
+
+@dataclass
+class Refresh:
+    games: list[DiscoveredGame]
+    added: list[str]
+    removed: dict[str, str]  # slug → motif
+    capped: int  # jeux retenus mais reportés au run suivant (MAX_NEW)
+    complete: bool  # toutes les sources activées ont été lues : une absence compte
+    result: Result
+
+
+def load_discovered_games(path: Path | None) -> list[DiscoveredGame]:
+    if path is None or not path.exists():
+        return []
+    raw = yaml.safe_load(path.read_text(encoding="utf-8")) or []
+    return DiscoveredGames.model_validate({"games": raw}).games
+
+
+def write_discovered_games(path: Path, games: list[DiscoveredGame]) -> None:
+    header = (
+        "# Généré par la découverte automatique (horspc build), ne pas modifier à la main.\n"
+        "# Prioritaire : data/games.yaml (même igdb_id ou même slug). Faux positifs :\n"
+        "# data/discovery.exclude.yaml.\n"
+    )
+    rows = [g.model_dump(mode="json") for g in sorted(games, key=lambda g: g.slug)]
+    body = yaml.safe_dump(rows, allow_unicode=True, sort_keys=False, width=100) if rows else "[]\n"
+    path.write_text(header + body, encoding="utf-8")
+
+
+def refresh(
+    igdb: IgdbClient,
+    scraper: Scraper,
+    curated: list[CuratedGame],
+    previous: list[DiscoveredGame],
+    excluded_ids: set[int],
+    now: datetime,
+    max_new: int = MAX_NEW,
+) -> Refresh:
+    """Nouvelle liste des jeux découverts : jeux en rayon retenus, jeux connus revérifiés.
+
+    Un jeu connu sorti sur PC (ou PC dans platforms), exclu, passé dans games.yaml ou plus du
+    bon type est retiré ; absent des rayons, il est retiré au MAX_MISSED_RUNS-ième run complet
+    consécutif (un run où une source est bloquée ou vide ne compte pas).
+    """
+    today = now.date()
+    products, rejected = harvest(scraper)
+    sources = {p.source for p in products}
+    complete = all(s in sources and s not in scraper.fetcher.blocked for s in _harvested(scraper))
+    by_id = {g.igdb_id: g for g in previous}
+    result = discover(igdb, products, rejected, curated, excluded_ids, now, tracked=by_id)
+    kept = {g.igdb_id: g for g in result.kept}
+    curated_slugs = {c.slug for c in curated}
+    games: list[DiscoveredGame] = []
+    removed: dict[str, str] = {}
+    for old in previous:
+        found = kept.get(old.igdb_id)
+        reason = _removal_reason(old.igdb_id, result)
+        if reason is None and old.slug in curated_slugs:
+            reason = "slug repris par games.yaml"
+        if reason is not None:
+            removed[old.slug] = reason
+            continue
+        if found is not None and found.products:
+            platforms = sorted({e.platform for e in old.editions} | set(found.products))
+            games.append(
+                old.model_copy(
+                    update={
+                        "title": found.title,
+                        "title_source": found.title_source,
+                        "editions": [Edition(platform=p) for p in platforms],
+                        "last_seen": today,
+                        "missed_runs": 0,
+                    }
+                )
+            )
+            continue
+        missed = old.missed_runs + (1 if complete else 0)
+        if missed >= MAX_MISSED_RUNS:
+            removed[old.slug] = f"absent des rayons {missed} runs consécutifs"
+        else:
+            games.append(old.model_copy(update={"missed_runs": missed}))
+
+    # Nouveaux jeux : sorties à venir et récentes d'abord, puis les plus notés.
+    fresh = sorted(
+        (g for g in result.kept if g.igdb_id not in by_id and g.products),
+        key=lambda g: (-(g.first_release or date.max).toordinal(), -g.rating_count, g.igdb_id),
+    )
+    taken = {g.slug for g in games} | curated_slugs
+    added = []
+    for game in fresh[:max_new]:
+        slug = game.igdb_slug or f"igdb-{game.igdb_id}"
+        if slug in taken:
+            slug = f"{slug}-{game.igdb_id}"
+        taken.add(slug)
+        added.append(slug)
+        games.append(
+            DiscoveredGame(
+                slug=slug,
+                title=game.title,
+                title_source=game.title_source,
+                igdb_id=game.igdb_id,
+                editions=[Edition(platform=p) for p in game.products],
+                first_seen=today,
+                last_seen=today,
+                missed_runs=0,
+            )
+        )
+    for slug, reason in sorted(removed.items()):
+        log.info("Découverte : %s retiré (%s)", slug, reason)
+    log.info(
+        "Découverte : %d jeux (%d ajoutés, %d retirés, %d reportés), rayons %s",
+        len(games),
+        len(added),
+        len(removed),
+        max(0, len(fresh) - max_new),
+        "complets" if complete else "incomplets (absences non comptées)",
+    )
+    return Refresh(
+        sorted(games, key=lambda g: g.slug),
+        added,
+        removed,
+        max(0, len(fresh) - max_new),
+        complete,
+        result,
+    )
+
+
+def _harvested(scraper: Scraper) -> list[str]:
+    """Sources activées qui ont un rayon (catégories Leclerc, sitemaps Pixmania)."""
+    return [s for s in scraper.enabled if s in ("leclerc", "pixmania")]
+
+
+def _removal_reason(igdb_id: int, result: Result) -> str | None:
+    if igdb_id in result.pc_released:
+        return "sorti sur PC"
+    if igdb_id in result.pc_listed:
+        return f"PC dans les plateformes IGDB ({result.pc_listed[igdb_id]})"
+    if igdb_id in result.excluded:
+        return "discovery.exclude.yaml"
+    if igdb_id in result.curated:
+        return "présent dans games.yaml"
+    if igdb_id in result.wrong_type_ids:
+        return "type IGDB non retenu ou hors index"
+    return None
 
 
 # --- Rapport du dry-run ---------------------------------------------------------------------
