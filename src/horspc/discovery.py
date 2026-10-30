@@ -12,6 +12,7 @@
    jeu sorti sur PC est écarté.
 """
 
+import json
 import logging
 import random
 import re
@@ -182,13 +183,35 @@ def harvest(scraper: Scraper) -> tuple[list[Product], Counter[str]]:
 # --- Index IGDB et identification ----------------------------------------------------------
 
 
-def fetch_index(igdb: IgdbClient) -> dict[int, IndexedGame]:
-    """Fiches IGDB (hors éditions) présentes sur une plateforme cible, avec leurs noms."""
+def fetch_index(igdb: IgdbClient, only: Iterable[int] | None = None) -> dict[int, IndexedGame]:
+    """Fiches IGDB (hors éditions) présentes sur une plateforme cible, avec leurs noms.
+
+    `only` : seulement ces igdb_id (cache à jour, aucun produit à identifier) ; sinon tout
+    l'index (environ 35 000 fiches au 30/10/2026).
+    """
     platform_ids = igdb.platform_ids()
     console = {platform_ids[slug]: p for p, slug in PLATFORM_SLUGS.items()}
     ids = ",".join(map(str, sorted(console)))
     games: dict[int, IndexedGame] = {}
-    for row in _cursor(igdb, f"platforms = ({ids}) & version_parent = null", INDEX_FIELDS):
+    if only is None:
+        scopes = [""]
+    else:
+        wanted = sorted(set(only))
+        scopes = [
+            ",".join(map(str, wanted[i : i + PAGE_LIMIT]))
+            for i in range(0, len(wanted), PAGE_LIMIT)
+        ]
+    rows = (
+        row
+        for scope in scopes
+        for row in _cursor(
+            igdb,
+            f"platforms = ({ids}) & version_parent = null"
+            + (f" & id = ({scope})" if scope else ""),
+            INDEX_FIELDS,
+        )
+    )
+    for row in rows:
         names = [row.get("name") or ""]
         # Noms alternatifs en écriture non latine ignorés : réduits à l'ASCII, il n'en resterait
         # que des mots isolés (« R », « 2026 ») qui fausseraient le rapprochement.
@@ -215,9 +238,17 @@ def fetch_index(igdb: IgdbClient) -> dict[int, IndexedGame]:
             ),
         )
     # Une édition (« Nintendo Switch 2 Edition ») ajoute sa plateforme au jeu parent.
-    for row in _cursor(
-        igdb, f"platforms = ({ids}) & version_parent != null", "version_parent,platforms"
-    ):
+    parents = [""] if only is None else [s for s in scopes if s]
+    editions = (
+        row
+        for scope in parents
+        for row in _cursor(
+            igdb,
+            f"platforms = ({ids}) & version_parent " + (f"= ({scope})" if scope else "!= null"),
+            "version_parent,platforms",
+        )
+    )
+    for row in editions:
         parent = games.get(row.get("version_parent"))
         if parent is not None:
             parent.platforms |= {console[p] for p in row.get("platforms") or [] if p in console}
@@ -341,6 +372,79 @@ class Matcher:
         return None if best is None else best[1]
 
 
+# --- Cache d'identification (data/discovery.cache.json) ------------------------------------
+
+CACHE_SCHEMA = 1
+RETRY_DAYS = 14  # un produit sans correspondance ou ambigu est réidentifié après ce délai
+# Verdicts définitifs : une fiche sortie sur PC ou d'un type non retenu n'est plus redemandée.
+FINAL_VERDICTS = ("pc_released", "wrong_type")
+
+
+@dataclass
+class IdentifyCache:
+    """Produit (URL) → rattachement, et igdb_id → verdict définitif."""
+
+    products: dict[str, dict[str, Any]] = field(default_factory=dict)
+    games: dict[int, dict[str, str]] = field(default_factory=dict)
+
+    def lookup(self, product: Product, today: date) -> Identification | None:
+        """Rattachement en cache : définitif s'il a abouti, sinon valable RETRY_DAYS jours."""
+        entry = self.products.get(product.url)
+        if entry is None or entry.get("platform") != product.platform:
+            return None
+        if entry["status"] == "matched":
+            return Identification("matched", entry["igdb_id"], (), entry.get("name"))
+        checked = date.fromisoformat(entry["checked"])
+        if (today - checked).days < RETRY_DAYS:
+            return Identification(entry["status"])
+        return None
+
+    def store(self, product: Product, ident: Identification, today: date) -> None:
+        self.products[product.url] = {
+            "platform": product.platform,
+            "status": ident.status,
+            "igdb_id": ident.igdb_id,
+            "name": ident.name,
+            "checked": today.isoformat(),
+        }
+
+    def keep_only(self, urls: set[str]) -> None:
+        """Oublie les produits qui ne sont plus en rayon."""
+        self.products = {u: e for u, e in self.products.items() if u in urls}
+
+
+def load_cache(path: Path | None) -> IdentifyCache:
+    if path is None or not path.exists():
+        return IdentifyCache()
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if raw.get("schema") != CACHE_SCHEMA:
+        log.warning("%s : schéma %r, cache ignoré", path, raw.get("schema"))
+        return IdentifyCache()
+    return IdentifyCache(
+        products=raw.get("products", {}),
+        games={int(k): v for k, v in raw.get("games", {}).items()},
+    )
+
+
+def write_cache(path: Path, cache: IdentifyCache) -> None:
+    """Une ligne par entrée (diffs lisibles), clés triées."""
+
+    def block(items: dict[str, Any]) -> str:
+        lines = [
+            f"    {json.dumps(k, ensure_ascii=False)}: "
+            f"{json.dumps(v, ensure_ascii=False, sort_keys=True)}"
+            for k, v in sorted(items.items())
+        ]
+        return "{\n" + ",\n".join(lines) + "\n  }" if lines else "{}"
+
+    games = {str(k): v for k, v in sorted(cache.games.items())}
+    path.write_text(
+        f'{{\n  "schema": {CACHE_SCHEMA},\n  "games": {block(games)},\n'
+        f'  "products": {block(cache.products)}\n}}\n',
+        encoding="utf-8",
+    )
+
+
 # --- Filtre ----------------------------------------------------------------------------------
 
 
@@ -371,15 +475,43 @@ def discover(
     excluded_ids: set[int],
     now: datetime,
     tracked: Iterable[int] = (),
+    cache: IdentifyCache | None = None,
+    explain: bool = True,
 ) -> Result:
     """`tracked` : igdb_id déjà découverts, évalués même sans produit en rayon ce run (le statut
-    PC est revérifié à chaque build complet)."""
-    index = fetch_index(igdb)
-    log.info("Index IGDB : %d fiches", len(index))
-    matcher = Matcher(index)
-    identifications = {p: matcher.identify(p) for p in products}
+    PC est revérifié à chaque build complet). `cache` : rattachements et verdicts connus, mis
+    à jour ; sans produit à identifier, seules les fiches utiles sont lues (pas l'index
+    complet). `explain` : motifs des produits sans correspondance (rapport du dry-run)."""
+    today = now.date()
+    tracked = set(tracked)
+    cached: dict[Product, Identification] = {}
+    if cache is not None:
+        cached = {p: i for p in products if (i := cache.lookup(p, today)) is not None}
+    todo = [p for p in products if p not in cached]
+    final = (
+        {}
+        if cache is None
+        else {
+            i: v
+            for i, v in cache.games.items()
+            if v["verdict"] in FINAL_VERDICTS and i not in tracked
+        }
+    )
+    if todo or explain:
+        index = fetch_index(igdb)
+    else:
+        needed = {i.igdb_id for i in cached.values() if i.igdb_id} | tracked
+        index = fetch_index(igdb, only=needed - set(final))
+    log.info("Index IGDB : %d fiches, %d produits à identifier", len(index), len(todo))
+    matcher = Matcher(index) if todo or explain else None
+    identifications = {
+        p: cached[p] if p in cached or matcher is None else matcher.identify(p) for p in products
+    }
     unmatched: dict[str, list[tuple[Product, str]]] = defaultdict(list)
-    for product, ident in identifications.items():
+    for product in todo:
+        ident = identifications[product]
+        if cache is not None:
+            cache.store(product, ident, today)
         if ident.status == "ambiguous":
             log.info(
                 "Ambigu : %s %s → %s",
@@ -387,22 +519,33 @@ def discover(
                 product.url,
                 ", ".join(f"{i} {index[i].name}" for i in ident.candidates),
             )
-        elif ident.status == "unmatched":
-            reason, detail = matcher.explain(product)
-            unmatched[reason].append((product, detail))
+    if explain and matcher is not None:
+        for product, ident in identifications.items():
+            if ident.status == "unmatched":
+                reason, detail = matcher.explain(product)
+                unmatched[reason].append((product, detail))
     groups: dict[int, dict[Platform, list[Product]]] = defaultdict(lambda: defaultdict(list))
     for product, ident in identifications.items():
         if ident.igdb_id is not None:
             groups[ident.igdb_id][product.platform].append(product)
 
     curated_ids = {c.igdb_id for c in curated}
-    considered = set(groups) | set(tracked)
+    considered = set(groups) | tracked
     found_curated = considered & curated_ids
     excluded = considered & excluded_ids - found_curated
     wrong_type: Counter[str] = Counter()
     wrong_type_ids: set[int] = set()
+    pc_released: list[int] = []
     pending = []
     for igdb_id in sorted(considered - found_curated - excluded):
+        if igdb_id in final:
+            # Verdict définitif en cache : la fiche n'est pas redemandée.
+            if final[igdb_id]["verdict"] == "pc_released":
+                pc_released.append(igdb_id)
+            else:
+                wrong_type[final[igdb_id].get("type", "?")] += 1
+                wrong_type_ids.add(igdb_id)
+            continue
         indexed = index.get(igdb_id)
         game_type = (
             "hors index (plus sur une console cible)" if indexed is None else indexed.game_type
@@ -412,16 +555,26 @@ def discover(
         else:
             wrong_type[game_type] += 1
             wrong_type_ids.add(igdb_id)
+            if cache is not None and indexed is not None:
+                cache.games[igdb_id] = {
+                    "verdict": "wrong_type",
+                    "type": game_type,
+                    "checked": today.isoformat(),
+                }
 
     ctx = candidates.context(igdb, now)
     kept: list[Discovered] = []
-    pc_released: list[int] = []
     pc_listed: dict[int, str] = {}
     for rows, editions in _details(igdb, pending):
         for row in rows:
             evaluated = candidates.evaluate(row, editions.get(row["id"], []), ctx, True)
             if evaluated is None:
                 pc_released.append(row["id"])
+                if cache is not None:
+                    cache.games[row["id"]] = {
+                        "verdict": "pc_released",
+                        "checked": today.isoformat(),
+                    }
                 continue
             # Règle stricte des jeux découverts : le PC dans platforms suffit à écarter.
             where = candidates.pc_listed(row, ctx)
@@ -666,6 +819,7 @@ def refresh(
     excluded_ids: set[int],
     now: datetime,
     max_new: int = MAX_NEW,
+    cache: IdentifyCache | None = None,
 ) -> Refresh:
     """Nouvelle liste des jeux découverts : jeux en rayon retenus, jeux connus revérifiés.
 
@@ -678,7 +832,11 @@ def refresh(
     sources = {p.source for p in products}
     complete = all(s in sources and s not in scraper.fetcher.blocked for s in _harvested(scraper))
     by_id = {g.igdb_id: g for g in previous}
-    result = discover(igdb, products, rejected, curated, excluded_ids, now, tracked=by_id)
+    result = discover(
+        igdb, products, rejected, curated, excluded_ids, now, by_id, cache, explain=False
+    )
+    if cache is not None and complete:
+        cache.keep_only({p.url for p in products})
     kept = {g.igdb_id: g for g in result.kept}
     curated_slugs = {c.slug for c in curated}
     games: list[DiscoveredGame] = []

@@ -42,6 +42,7 @@ SOURCES_PATH = ROOT / "data" / "sources.config.yaml"
 REDIRECTS_PATH = ROOT / "data" / "redirects.yaml"
 DISCOVERED_GAMES_PATH = ROOT / "data" / "games.discovered.yaml"
 EXCLUDE_PATH = ROOT / "data" / "discovery.exclude.yaml"
+DISCOVERY_CACHE_PATH = ROOT / "data" / "discovery.cache.json"
 
 
 def load_catalog(
@@ -227,6 +228,7 @@ def run(
     discovered_games_path: Path | None = None,
     exclude_path: Path | None = None,
     max_new: int = discovery.MAX_NEW,
+    discovery_cache_path: Path | None = None,
 ) -> DataFile:
     """Build complet.
 
@@ -245,9 +247,10 @@ def run(
     discovered_games = discovery.load_discovered_games(discovered_games_path)
     bot = None if fetcher is None else scraper.Scraper(scraper.load_config(sources_path), fetcher)
     refreshed = None
+    cache = discovery.load_cache(discovery_cache_path)
     if bot is not None and igdb is not None and discovered_games_path is not None:
         refreshed = _refresh_discovered(
-            igdb, bot, curated, discovered_games, exclude_path, now, max_new
+            igdb, bot, curated, discovered_games, exclude_path, now, max_new, cache
         )
         if refreshed is not None:
             discovered_games = refreshed.games
@@ -325,6 +328,8 @@ def run(
         scraper.write_discovered(discovered_path, discovered)
     if refreshed is not None and discovered_games_path is not None:
         discovery.write_discovered_games(discovered_games_path, refreshed.games)
+        if discovery_cache_path is not None:
+            discovery.write_cache(discovery_cache_path, cache)
     if report is not None and report_path is not None:
         report_path.write_text(report.to_json() + "\n", encoding="utf-8")
     if igdb_results is not None and http is not None:
@@ -348,6 +353,7 @@ def _refresh_discovered(
     exclude_path: Path | None,
     now: datetime,
     max_new: int,
+    cache: discovery.IdentifyCache,
 ) -> discovery.Refresh | None:
     """Catalogue découvert mis à jour, ou None (liste précédente gardée) si IGDB échoue."""
     excluded = {e.igdb_id for e in discovery.load_exclusions(exclude_path, now.date())}
@@ -357,7 +363,7 @@ def _refresh_discovered(
         if g.igdb_id is not None
     ]
     try:
-        refreshed = discovery.refresh(igdb, bot, refs, previous, excluded, now, max_new)
+        refreshed = discovery.refresh(igdb, bot, refs, previous, excluded, now, max_new, cache)
     except (httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
         log.warning("Découverte impossible (%s) : catalogue découvert inchangé", exc)
         return None

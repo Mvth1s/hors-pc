@@ -1,7 +1,8 @@
 """Découverte du catalogue : récolte, index IGDB, identification stricte et filtre PC."""
 
+import re
 from collections import Counter
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import ClassVar
 
@@ -213,10 +214,11 @@ def igdb_games(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json=[])
     if "version_parent = null" in body:
         last = int(body.split("id > ")[1].split(";")[0])
-        return httpx.Response(
-            200, json=[r for r in INDEX if r["id"] > last][: discovery.PAGE_LIMIT]
-        )
-    if "where version_parent = (" in body:
+        only = re.search(r"& id = \(([\d,]+)\)", body)
+        wanted = None if only is None else {int(i) for i in only.group(1).split(",")}
+        rows = [r for r in INDEX if r["id"] > last and (wanted is None or r["id"] in wanted)]
+        return httpx.Response(200, json=rows[: discovery.PAGE_LIMIT])
+    if "version_parent = (" in body:
         return httpx.Response(200, json=[])
     ids = [int(i) for i in body.split("where id = (")[1].split(")")[0].split(",")]
     return httpx.Response(200, json=[DETAILS[i] for i in ids if i in DETAILS])
@@ -419,6 +421,85 @@ def test_fichier_genere_relu_a_l_identique(tmp_path: Path) -> None:
     assert discovery.load_discovered_games(path) == sorted(games, key=lambda g: g.slug)
     discovery.write_discovered_games(path, [])
     assert discovery.load_discovered_games(path) == []
+
+
+# --- Cache d'identification ----------------------------------------------------------------
+
+
+def game_bodies(api: respx.MockRouter) -> list[str]:
+    return [c.request.content.decode() for c in api.calls if c.request.url.path.endswith("/games")]
+
+
+def full_index(bodies: list[str]) -> bool:
+    return any("version_parent = null & id > 0" in b for b in bodies)
+
+
+def test_second_run_sans_reidentification_ni_index_complet(
+    igdb: IgdbClient, api: respx.MockRouter
+) -> None:
+    cache = discovery.IdentifyCache()
+    first = discovery.refresh(igdb, FakeScraper(), [], [], set(), NOW, cache=cache)
+    assert full_index(game_bodies(api))
+    leclerc = cache.products["https://www.e.leclerc/fp/astro-bot-1"]
+    assert (leclerc["status"], leclerc["igdb_id"], leclerc["checked"]) == (
+        "matched",
+        1,
+        TODAY.isoformat(),
+    )
+    assert cache.products["https://www.pixmania.com/fr/fr/saros-ps5-528089.html"]["status"] == (
+        "unmatched"
+    )
+    api.reset()
+    second = discovery.refresh(igdb, FakeScraper(), [], first.games, set(), NOW, cache=cache)
+    bodies = game_bodies(api)
+    assert not full_index(bodies)  # seules les fiches utiles sont lues
+    assert any("& id = (1)" in b for b in bodies)
+    assert [(g.slug, g.missed_runs, g.last_seen) for g in second.games] == [("astro-bot", 0, TODAY)]
+
+
+def test_verdict_pc_definitif_non_redemande(igdb: IgdbClient, api: respx.MockRouter) -> None:
+    cache = discovery.IdentifyCache()
+    products = [product("Death Stranding 2 PS5")]
+    discovery.discover(igdb, products, Counter(), [], set(), NOW, cache=cache, explain=False)
+    assert cache.games[2]["verdict"] == "pc_released"
+    api.reset()
+    result = discovery.discover(
+        igdb, products, Counter(), [], set(), NOW, cache=cache, explain=False
+    )
+    assert result.pc_released == [2]
+    bodies = game_bodies(api)
+    assert not any("where id = (" in b for b in bodies), bodies
+
+
+def test_produit_sans_correspondance_reessaye_apres_14_jours(
+    igdb: IgdbClient, api: respx.MockRouter
+) -> None:
+    cache = discovery.IdentifyCache()
+    saros = product("Saros PS5")
+    cache.store(saros, discovery.Identification("unmatched"), TODAY - timedelta(days=13))
+    assert cache.lookup(saros, TODAY) == discovery.Identification("unmatched")
+    cache.store(saros, discovery.Identification("unmatched"), TODAY - timedelta(days=14))
+    assert cache.lookup(saros, TODAY) is None
+    # Même URL vue pour une autre console : rattachement à refaire.
+    moved = Product("leclerc", "switch", saros.name, saros.url, None)
+    cache.store(saros, discovery.Identification("matched", 1, (), "Saros"), TODAY)
+    assert cache.lookup(moved, TODAY) is None
+
+
+def test_cache_relu_a_l_identique_et_produits_hors_rayon_oublies(tmp_path: Path) -> None:
+    path = tmp_path / "discovery.cache.json"
+    cache = discovery.IdentifyCache()
+    cache.store(
+        product("Astro Bot PS5"), discovery.Identification("matched", 1, (), "Astro"), TODAY
+    )
+    cache.store(product("Vieux PS5"), discovery.Identification("unmatched"), TODAY)
+    cache.games[2] = {"verdict": "pc_released", "checked": TODAY.isoformat()}
+    discovery.write_cache(path, cache)
+    assert discovery.load_cache(path) == cache
+    cache.keep_only({"https://x/Astro Bot PS5"})
+    assert list(cache.products) == ["https://x/Astro Bot PS5"]
+    path.write_text('{"schema": 99}', encoding="utf-8")
+    assert discovery.load_cache(path) == discovery.IdentifyCache()
 
 
 # --- Titre affiché et motifs d'échec --------------------------------------------------------

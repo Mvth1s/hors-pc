@@ -69,6 +69,7 @@ def cmd_build(args: argparse.Namespace) -> int:
                 discovered_games_path=args.discovered,
                 exclude_path=args.exclude,
                 max_new=args.max_new,
+                discovery_cache_path=build.DISCOVERY_CACHE_PATH,
             )
         except ValidationError as exc:
             print(f"Validation refusée, data.json non écrit :\n{exc}", file=sys.stderr)

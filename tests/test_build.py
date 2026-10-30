@@ -617,7 +617,7 @@ def test_build_complet_avec_decouverte(
     found = [discovered("ghost-of-yotei", 250634), discovered("en-attente", 152063)]
     calls = []
 
-    def fake_refresh(igdb, bot, curated, previous, excluded, now, max_new):
+    def fake_refresh(igdb, bot, curated, previous, excluded, now, max_new, cache):
         calls.append(([c.slug for c in curated], previous, excluded, max_new))
         result = discovery.Result([], Counter(), {}, set(), set(), Counter(), [], {}, [])
         result.curated_pc_listed = {"saros": "sur la fiche"}
