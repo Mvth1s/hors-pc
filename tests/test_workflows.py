@@ -110,7 +110,13 @@ def test_build_complet_et_commit_hors_push(event: str) -> None:
         'uv run python -m horspc build --scrape-report "$RUNNER_TEMP/scrape-report.json"'
     ]
     assert "data/prices.scraped.jsonl" in script and "data/discovered.json" in script
+    # Catalogue découvert et cache d'identification : versionnés comme les relevés.
+    assert "data/games.discovered.yaml" in script and "data/discovery.cache.json" in script
     assert runs(workflow()["jobs"]["freshness"].get("if"), event)
+
+
+def test_build_borne_dans_le_temps() -> None:
+    assert workflow()["jobs"]["build"]["timeout-minutes"] == 90
 
 
 @pytest.mark.parametrize("event", ["push", *FULL_EVENTS])

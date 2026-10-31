@@ -1,5 +1,6 @@
 import json
 import shutil
+from collections import Counter
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -9,12 +10,15 @@ import respx
 import yaml
 from pydantic import ValidationError
 
-from horspc import build
+from horspc import build, discovery
 from horspc.__main__ import main
 from horspc.http import HttpClient
 from horspc.igdb import API_URL, TOKEN_URL, IgdbClient, IgdbGame
-from horspc.models import Catalog, DataFile
+from horspc.models import Catalog, DataFile, DiscoveredGame, DiscoveredGames, ScrapedObservation
 from horspc.prices import Offer
+from horspc.prices.fetch import Fetcher
+from horspc.prices.scraper import write_history
+from horspc.robots import RobotsCache
 from tests.conftest import FIXTURES, NOW, load_fixture
 
 GAMES: list[dict[str, Any]] = [
@@ -68,7 +72,7 @@ ASTRO = IgdbGame(255340, "https://www.igdb.com/games/astro-bot", date(2024, 9, 6
 def test_schema_complet_et_offre() -> None:
     data = make(catalog(), {"astro-bot": ASTRO, "saros": None})
     dumped = data.model_dump(mode="json")
-    assert dumped["schema_version"] == 6
+    assert dumped["schema_version"] == 7
     assert dumped["generated_at"] == "2026-10-26T06:17:42Z"
     assert dumped["currency"] == "EUR"
     astro = dumped["games"][0]
@@ -289,6 +293,8 @@ def test_cli_validation_refusee_code_non_nul(workdir: Path, capsys) -> None:
             str(workdir / "prices.yaml"),
             "--output",
             str(workdir / "data.json"),
+            "--discovered",
+            str(workdir / "games.discovered.yaml"),
         ]
     )
     assert code == 1
@@ -365,7 +371,7 @@ def test_release_date_manuelle_precedente_non_reprise() -> None:
     assert (saros.release_date, saros.release_date_source) == (None, None)
 
 
-@pytest.mark.parametrize("version", [5, None, 7])
+@pytest.mark.parametrize("version", [5, None, 8])
 def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: int | None) -> None:
     raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
     if version is None:
@@ -373,7 +379,7 @@ def test_data_json_precedent_hors_schema_courant_refuse(workdir: Path, version: 
     else:
         raw["schema_version"] = version
     (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
-    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 6 attendu"):
+    with pytest.raises(build.PreviousDataError, match=f"schema_version {version!r}, 7 attendu"):
         run(workdir, None)
 
 
@@ -392,10 +398,12 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
             str(workdir / "prices.yaml"),
             "--output",
             str(workdir / "data.json"),
+            "--discovered",
+            str(workdir / "games.discovered.yaml"),
         ]
     )
     assert code == 1
-    assert "schema_version 2, 6 attendu" in capsys.readouterr().err
+    assert "schema_version 2, 7 attendu" in capsys.readouterr().err
     assert (workdir / "data.json").read_bytes() == before
 
 
@@ -404,7 +412,7 @@ def test_cli_data_json_ancien_schema_code_non_nul(workdir: Path, capsys) -> None
     [
         ("{pas du json", "n'est pas un JSON valide"),
         (
-            '{"schema_version": 6, "generated_at": "hier", "currency": "EUR", "games": []}',
+            '{"schema_version": 7, "generated_at": "hier", "currency": "EUR", "games": []}',
             "refusé par le modèle",
         ),
     ],
@@ -519,3 +527,190 @@ def test_offre_d_une_autre_edition_refusee() -> None:
                 "listed_physical": False,
             }
         )
+
+
+# --- Jeux découverts ---------------------------------------------------------------------
+
+
+def discovered(slug: str, igdb_id: int, missed: int = 0) -> DiscoveredGame:
+    return DiscoveredGame(
+        slug=slug,
+        title=slug.replace("-", " ").title(),
+        title_source="nom_igdb",
+        igdb_id=igdb_id,
+        editions=[{"platform": "ps5"}],
+        first_seen=date(2026, 10, 19),
+        last_seen=date(2026, 10, 19),
+        missed_runs=missed,
+    )
+
+
+def test_games_yaml_prioritaire_sur_les_jeux_decouverts(caplog: pytest.LogCaptureFixture) -> None:
+    caplog.set_level("INFO")
+    cat = build.merge_catalog(
+        GAMES,
+        [
+            discovered("astro-bot-bis", 255340),  # même igdb_id qu'un jeu curé
+            discovered("saros", 331215),  # même slug qu'un jeu curé
+            discovered("ghost-of-yotei", 250634),
+        ],
+        [],
+        NOW,
+    )
+    assert [g.slug for g in cat.games] == ["astro-bot", "saros", "ghost-of-yotei"]
+    assert cat.discovered == frozenset({"ghost-of-yotei"})
+    assert cat.games[2].launch_price is None and cat.games[2].pc_override is None
+    assert "astro-bot-bis ignoré" in caplog.text
+
+
+@pytest.mark.parametrize(
+    ("games", "message"),
+    [
+        ([discovered("a", 1), discovered("a", 2)], "slugs en double"),
+        ([discovered("a", 1), discovered("b", 1)], "igdb_id en double"),
+    ],
+)
+def test_fichier_decouvert_valide(games: list[DiscoveredGame], message: str) -> None:
+    with pytest.raises(ValidationError, match=message):
+        DiscoveredGames(games=games)
+
+
+def test_jeu_absent_quatre_runs_refuse_dans_le_fichier() -> None:
+    with pytest.raises(ValidationError, match="less than 4"):
+        discovered("a", 1, missed=4)
+
+
+def scraped(slug: str, observed_at: date) -> ScrapedObservation:
+    return ScrapedObservation(
+        slug=slug,
+        platform="ps5",
+        merchant="leclerc",
+        seller="E.Leclerc",
+        price=49.99,
+        shipping=None,
+        format="physical",
+        condition="new",
+        url=f"https://www.e.leclerc/fp/{slug}-0711719588611",
+        observed_at=observed_at,
+    )
+
+
+def test_jeu_decouvert_affiche_seulement_avec_une_offre_a_jour() -> None:
+    cat = build.merge_catalog(
+        GAMES,
+        [discovered("frais", 1), discovered("ancien", 2), discovered("sans-offre", 3)],
+        [],
+        NOW,
+    )
+    history = [scraped("frais", date(2026, 10, 20)), scraped("ancien", date(2026, 8, 1))]
+    shown = build._visible(cat, build.price_provider(cat, history), NOW.date())
+    # Les jeux curés restent affichés sans offre (saros) ; un jeu découvert attend une offre
+    # de moins de 30 jours.
+    assert [g.slug for g in shown.games] == ["astro-bot", "saros", "frais"]
+
+
+def test_build_complet_avec_decouverte(
+    workdir: Path, http: HttpClient, monkeypatch: pytest.MonkeyPatch, caplog
+) -> None:
+    (workdir / "sources.yaml").write_text("leclerc: {enabled: false}\n", encoding="utf-8")
+    write_history(workdir / "prices.scraped.jsonl", [scraped("ghost-of-yotei", date(2026, 10, 25))])
+    found = [discovered("ghost-of-yotei", 250634), discovered("en-attente", 152063)]
+    calls = []
+
+    def fake_refresh(igdb, bot, curated, previous, excluded, now, max_new, cache):
+        calls.append(([c.slug for c in curated], previous, excluded, max_new))
+        result = discovery.Result([], Counter(), {}, set(), set(), Counter(), [], {}, [])
+        result.suspects = {250634: ["Ghost of Yōtei Plus (igdb 9)"]}
+        return discovery.Refresh(found, ["ghost-of-yotei"], {}, 0, True, result)
+
+    monkeypatch.setattr(discovery, "refresh", fake_refresh)
+    (workdir / "exclude.yaml").write_text(
+        "- {igdb_id: 6, reason: test, date: 2026-10-20}\n", encoding="utf-8"
+    )
+    fetcher = Fetcher(http, RobotsCache(http))
+    with respx.mock:
+        respx.post(TOKEN_URL).respond(json=load_fixture("igdb_token.json"))
+        for endpoint, fixture in [
+            ("platforms", "igdb_platforms.json"),
+            ("release_date_regions", "igdb_release_regions.json"),
+            ("release_date_statuses", "igdb_release_statuses.json"),
+            ("game_types", "igdb_game_types.json"),
+        ]:
+            respx.post(f"{API_URL}/{endpoint}").respond(json=load_fixture(fixture))
+        respx.post(f"{API_URL}/games").respond(json=load_fixture("igdb_games.json"))
+        build.run(
+            now=NOW,
+            igdb=IgdbClient("id", "secret", http),
+            games_path=workdir / "games.yaml",
+            prices_path=workdir / "prices.yaml",
+            output_path=workdir / "data.json",
+            scraped_path=workdir / "prices.scraped.jsonl",
+            discovered_path=workdir / "discovered.json",
+            sources_path=workdir / "sources.yaml",
+            fetcher=fetcher,
+            discovered_games_path=workdir / "games.discovered.yaml",
+            exclude_path=workdir / "exclude.yaml",
+            max_new=7,
+        )
+    assert calls == [(["astro-bot"], [], {6}, 7)]  # saros n'a pas d'igdb_id
+    written = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
+    # en-attente : aucune offre relevée, absent de data.json mais gardé dans le fichier.
+    assert [g["slug"] for g in written["games"]] == ["astro-bot", "saros", "ghost-of-yotei"]
+    assert [g.slug for g in discovery.load_discovered_games(workdir / "games.discovered.yaml")] == [
+        "en-attente",
+        "ghost-of-yotei",
+    ]
+    # astro-bot (igdb 255340) : PC absent des plateformes, aucun avertissement. Ghost of Yōtei,
+    # renvoyé par le faux IGDB pour toute requête, n'est pas un jeu curé : ignoré.
+    assert "a le PC dans ses plateformes" not in caplog.text
+    assert (
+        "ghost-of-yotei a une variante sortie sur PC (Ghost of Yōtei Plus (igdb 9))" in caplog.text
+    )
+
+
+def test_data_json_v6_migre_en_v7(workdir: Path, caplog: pytest.LogCaptureFixture) -> None:
+    raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
+    raw["schema_version"] = 6
+    for game in raw["games"]:
+        del game["origin"]
+    (workdir / "data.json").write_text(json.dumps(raw), encoding="utf-8")
+    migrated = build.load_previous(workdir / "data.json")
+    assert migrated is not None and migrated.schema_version == 7
+    assert {g.origin for g in migrated.games} == {"curated"}
+    assert "migré en 7" in caplog.text
+    data = run(workdir, None)
+    assert data.schema_version == 7
+    written = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
+    assert written["schema_version"] == 7 and written["games"][0]["origin"] == "curated"
+
+
+def test_origine_des_jeux_dans_data_json() -> None:
+    cat = build.merge_catalog(GAMES, [discovered("ghost-of-yotei", 250634)], [], NOW)
+    data = build.build_data(cat, build.price_provider(cat), None, {}, NOW)
+    assert [(g.slug, g.origin) for g in data.games] == [
+        ("astro-bot", "curated"),
+        ("saros", "curated"),
+        ("ghost-of-yotei", "discovered"),
+    ]
+
+
+def test_avertissement_pc_pour_un_jeu_cure(http: HttpClient, caplog) -> None:
+    cat = build.merge_catalog(
+        [{"slug": "ghost", "title": "Ghost", "editions": [{"platform": "ps5"}], "igdb_id": 250634}],
+        [],
+        [],
+        NOW,
+    )
+    with respx.mock:
+        respx.post(TOKEN_URL).respond(json=load_fixture("igdb_token.json"))
+        for endpoint, fixture in [
+            ("platforms", "igdb_platforms.json"),
+            ("release_date_regions", "igdb_release_regions.json"),
+            ("release_date_statuses", "igdb_release_statuses.json"),
+            ("game_types", "igdb_game_types.json"),
+        ]:
+            respx.post(f"{API_URL}/{endpoint}").respond(json=load_fixture(fixture))
+        respx.post(f"{API_URL}/games").respond(json=load_fixture("igdb_games.json"))
+        build._warn_pc_listed(IgdbClient("id", "secret", http), cat)
+    assert "ghost a le PC dans ses plateformes (sur la fiche)" in caplog.text
+    assert [r.levelname for r in caplog.records] == ["WARNING"]

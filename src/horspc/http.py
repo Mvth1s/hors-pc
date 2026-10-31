@@ -17,7 +17,10 @@ RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
 
 
 class HttpClient:
-    """Enveloppe httpx : au plus une requête par `min_interval` secondes vers un même hôte."""
+    """Enveloppe httpx : au plus une requête par `min_interval` secondes vers un même hôte.
+
+    `host_intervals` fixe un intervalle propre à certains hôtes (api.igdb.com : 4 req/s).
+    """
 
     def __init__(
         self,
@@ -29,6 +32,7 @@ class HttpClient:
         sleep: Callable[[float], None] = time.sleep,
         clock: Callable[[], float] = time.monotonic,
         retry_statuses: frozenset[int] = RETRY_STATUSES,
+        host_intervals: dict[str, float] | None = None,
     ) -> None:
         self._client = httpx.Client(
             timeout=httpx.Timeout(timeout),
@@ -38,6 +42,7 @@ class HttpClient:
         self._max_retries = max_retries
         self._backoff = backoff
         self._min_interval = min_interval
+        self._host_intervals = host_intervals or {}
         self._sleep = sleep
         self._clock = clock
         self._last_request: dict[str, float] = {}
@@ -89,7 +94,8 @@ class HttpClient:
     def _throttle(self, host: str) -> None:
         last = self._last_request.get(host)
         if last is not None:
-            wait = self._min_interval - (self._clock() - last)
+            interval = self._host_intervals.get(host, self._min_interval)
+            wait = interval - (self._clock() - last)
             if wait > 0:
                 self._sleep(wait)
         self._last_request[host] = self._clock()

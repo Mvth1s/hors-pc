@@ -134,7 +134,7 @@ def platforms_in(words: list[str]) -> set[Platform]:
     return found
 
 
-def _platform_words(words: list[str]) -> set[int]:
+def platform_words(words: list[str]) -> set[int]:
     """Indices des mots qui désignent une plateforme (à retirer avant de comparer au titre)."""
     out: set[int] = set()
     for i, word in enumerate(words):
@@ -177,7 +177,7 @@ def title_matches(
     if named != {platform}:
         return False
     wanted = tokens(title)
-    platform_idx = _platform_words(words)
+    platform_idx = platform_words(words)
     rest = [w for i, w in enumerate(words) if i not in platform_idx]
     if not set(wanted) <= set(rest):
         return False

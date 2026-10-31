@@ -1,0 +1,17 @@
+# Faux positifs de la découverte automatique (`horspc discover`) : jeux IGDB à ne jamais
+# ajouter au catalogue découvert. Sans effet sur data/games.yaml.
+#
+# Champs :
+#   igdb_id  identifiant IGDB du jeu écarté (unique)
+#   reason   motif (produit mal rattaché, version PC non référencée par IGDB...)
+#   date     date de l'exclusion (AAAA-MM-JJ, pas dans le futur)
+- igdb_id: 217564
+  reason: >-
+    Tales of Symphonia Remastered : l'original est sorti sur PC (Steam, 2016), mais IGDB ne
+    renseigne pas parent_game
+  date: 2026-10-30
+- igdb_id: 183617
+  reason: >-
+    Master Detective Archives: Rain Code : la version Plus est sortie sur PC le 01/10/2024, fiche
+    IGDB distincte non reliée
+  date: 2026-10-31

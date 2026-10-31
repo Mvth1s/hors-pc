@@ -172,7 +172,7 @@ class Scraper:
         self._leclerc_cats: dict[Platform, str] | None = None
         self._gone: set[str] = set()
         self._pages: dict[str, src.ProductPage | None] = {}
-        self._companies: dict[str, list[str]] = {}
+        self.companies: dict[str, list[str]] = {}
 
     # --- Run complet -----------------------------------------------------------------
 
@@ -186,7 +186,7 @@ class Scraper:
     ) -> tuple[list[ScrapedObservation], Report]:
         """`names` : noms alternatifs IGDB ; `companies` : éditeurs et studios IGDB, tolérés
         dans les noms de produits (« Sony Interactive Entertainment SAROS »)."""
-        self._companies = companies or {}
+        self.companies = companies or {}
         observations: list[ScrapedObservation] = []
         for game in games:
             titles = [game.title, *names.get(game.slug, [])]
@@ -202,7 +202,7 @@ class Scraper:
                     url = entry["sources"].get(source)
                     if not url:
                         continue
-                    obs = self._scrape(game, platform, titles, source, url, entry, today)
+                    obs = self.scrape(game, platform, titles, source, url, entry, today)
                     if obs is not None:
                         observations.append(obs)
                     elif url in self._gone:
@@ -218,7 +218,7 @@ class Scraper:
 
     # --- Relevé d'une fiche ------------------------------------------------------------
 
-    def _scrape(
+    def scrape(
         self,
         game: GameEntry,
         platform: Platform,
@@ -331,7 +331,7 @@ class Scraper:
         """
         if page.eans & set(entry["eans"]):
             return True
-        extra = self._companies.get(game.slug, [])
+        extra = self.companies.get(game.slug, [])
         slug_platforms = url_platforms(url) if source == "pixmania" else None
         return any(title_matches(page.name, t, platform, extra, slug_platforms) for t in titles)
 
@@ -418,10 +418,10 @@ class Scraper:
     def _discover_leclerc_category(
         self, game: GameEntry, titles: list[str], platform: Platform, entry: dict[str, Any]
     ) -> None:
-        extra = self._companies.get(game.slug, [])
+        extra = self.companies.get(game.slug, [])
         candidates = [
             item
-            for item in self._leclerc_listing(platform)
+            for item in self.leclerc_listing(platform)
             if any(title_matches(item.name, t, platform, extra) for t in titles)
         ]
         # Physique avant boîte avec code ; une fiche avec offre avant une fiche en rupture,
@@ -441,7 +441,7 @@ class Scraper:
             entry["sources"]["leclerc"] = fallback.url
             log.info("Découverte : %s/%s → Leclerc %s", game.slug, platform, fallback.url)
 
-    def _leclerc_listing(self, platform: Platform) -> list[src.ListingItem]:
+    def leclerc_listing(self, platform: Platform) -> list[src.ListingItem]:
         """Produits d'une catégorie Leclerc, lue au plus une fois par run (?page=N jusqu'à une
         page vide). L'ordre n'est pas stable : un produit manqué l'est rarement deux fois."""
         key = f"leclerc:{platform}"
@@ -498,7 +498,7 @@ class Scraper:
     ) -> None:
         candidates = [
             loc
-            for loc in self._pixmania_sitemap()
+            for loc in self.pixmania_sitemap()
             if any(title_matches(src.pixmania_slug_name(loc), t, platform) for t in titles)
         ]
         for url in candidates[:MAX_CANDIDATES]:
@@ -512,7 +512,7 @@ class Scraper:
                 log.info("Découverte : %s/%s → Pixmania %s", game.slug, platform, url)
                 return
 
-    def _pixmania_sitemap(self) -> list[str]:
+    def pixmania_sitemap(self) -> list[str]:
         if self._pixmania_locs is None:
             locs: list[str] = []
             try:

@@ -184,6 +184,7 @@ def game(
     return {
         "slug": slug,
         "title": slug.replace("-", " ").title(),
+        "origin": "curated",
         "platforms": list(platforms),
         "editions": editions,
         "best_offer": best,
