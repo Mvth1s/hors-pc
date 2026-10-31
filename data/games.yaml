@@ -6,6 +6,8 @@
 #   title                titre affiché
 #   editions             une édition par console sans version PC :
 #                          [{platform: ps5 | switch | switch2 | xbox_series}]
+#                        aliases (optionnel, par édition) : noms commerciaux exacts de
+#                          cette édition seule, rapprochés avec la même règle stricte
 #   igdb_id              optionnel ; sinon recherche IGDB par titre et plateforme
 #   launch_price         prix de lancement conseillé en € TTC, ou null
 #   launch_price_source  URL de la source (obligatoire si launch_price est renseigné)
@@ -168,7 +170,10 @@
 
 - slug: super-mario-bros-wonder
   title: "Super Mario Bros. Wonder"
-  editions: [{platform: switch}, {platform: switch2}]
+  editions:
+    - {platform: switch}
+    - platform: switch2
+      aliases: ["Super Mario Bros. Wonder - Nintendo Switch 2 Edition + Rendez-vous au parc Bellabel"]
   igdb_id: 254339
   launch_price: null
 
@@ -314,7 +319,10 @@
 
 - slug: pikmin-4
   title: "Pikmin 4"
-  editions: [{platform: switch}, {platform: switch2}]
+  editions:
+    - {platform: switch}
+    - platform: switch2
+      aliases: ["Pikmin 4 - Nintendo Switch 2 Edition + Academie Dandori"]
   igdb_id: 59843
   launch_price: null
 

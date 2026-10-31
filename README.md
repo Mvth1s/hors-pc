@@ -61,18 +61,18 @@ Les commits du bot ne déclenchent pas la CI : après le build, `update.yml` rel
 
 ## Chiffres clés (31/10/2026)
 
-Mesurés sur les données du run manuel [41203373507](https://github.com/Mvth1s/hors-pc/actions/runs/41203373507) (`site/data.json`, `data/games.discovered.yaml`) et sur le dépôt le même jour.
+Mesurés sur les données du run manuel [41204737179](https://github.com/Mvth1s/hors-pc/actions/runs/41204737179) (`site/data.json`, `data/games.discovered.yaml`) et sur le dépôt le même jour.
 
 | Indicateur | Valeur |
 |---|---|
-| Jeux affichés | 147 : 50 curés (`games.yaml`) + 97 découverts |
+| Jeux affichés | 150 : 53 curés (`games.yaml`) + 97 découverts |
 | Jeux découverts en attente d'une offre à jour | 33 (sur 130 découverts) |
-| Éditions par console | 169 : Switch 114, PS5 31, Switch 2 17, Xbox Series 7 |
-| Jeux avec au moins une offre | 136 / 147 (149 éditions sur 169 ; 11 éditions en rupture affichée) |
-| Durée du dernier build manuel | 7 min 51 s (job `build`, découverte et relevé des prix compris) |
+| Éditions par console | 174 : Switch 117, PS5 31, Switch 2 19, Xbox Series 7 |
+| Jeux avec au moins une offre | 138 / 150 (151 éditions sur 174 ; 11 éditions en rupture affichée) |
+| Durée du dernier build manuel | 8 min 40 s (job `build`, découverte et relevé des prix compris) |
 | Sources de prix actives | E.Leclerc, Pixmania (Boulanger désactivé, voir [`docs/sources.md`](docs/sources.md)) |
-| Tests | 1 101 (pytest, réseau simulé avec respx, navigateur headless pour le consentement) |
-| Taille de `site/` | 25,1 Mo (616 fichiers) |
+| Tests | 1 127 (pytest, réseau simulé avec respx, navigateur headless pour le consentement) |
+| Taille de `site/` | 25,9 Mo (633 fichiers) |
 
 ## Documentation
 
@@ -246,6 +246,17 @@ La plupart des jeux arrivent seuls, par la [découverte automatique](#découvert
   release_date_override:          # optionnel, prioritaire sur IGDB (date future admise)
     date: 2026-04-30
     source_url: https://…
+```
+
+**Alias d'édition.** Une édition peut porter `aliases`, liste de noms commerciaux exacts de cette édition seule, recopiés du nom produit marchand (validés : chaînes non vides, sans espaces autour, sans doublon). Au relevé, un produit de l'édition correspond s'il passe `title_matches` contre le titre, les noms IGDB **ou** un alias, avec la même règle stricte : la plateforme de l'édition et elle seule, aucun mot en trop (un pack avec housse ou une édition collector restent refusés). Les mots de plateforme de l'alias (« Nintendo Switch 2 ») sont retirés avant la comparaison, comme ils le sont du nom du produit. Un alias ne sert qu'à son édition : ni aux autres éditions du jeu, ni aux autres jeux. Il sert aux éditions vendues sous un nom composé, que la règle générale refuse :
+
+```yaml
+- slug: pikmin-4
+  title: "Pikmin 4"
+  editions:
+    - {platform: switch}
+    - platform: switch2
+      aliases: ["Pikmin 4 - Nintendo Switch 2 Edition + Academie Dandori"]  # nom Leclerc
 ```
 
 Sans `igdb_id`, le build journalise l'identifiant trouvé (`IGDB : astro-bot → 255340`). Seule une correspondance exacte et unique du titre est retenue : sans correspondance exacte, ou avec plusieurs fiches au même titre, le jeu reste sans données IGDB et un WARNING invite à épingler l'`igdb_id` (aucun repli sur le premier résultat). Les fiches épinglées sont demandées par lots de 500 (limite d'IGDB par requête). Un jeu dont le `pc_status` passe à `released` reste dans `data.json` mais n'est plus affiché ; on peut ensuite le retirer de `games.yaml`.

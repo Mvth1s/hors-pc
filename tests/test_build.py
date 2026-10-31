@@ -14,7 +14,14 @@ from horspc import build, discovery
 from horspc.__main__ import main
 from horspc.http import HttpClient
 from horspc.igdb import API_URL, TOKEN_URL, IgdbClient, IgdbGame
-from horspc.models import Catalog, DataFile, DiscoveredGame, DiscoveredGames, ScrapedObservation
+from horspc.models import (
+    Catalog,
+    DataFile,
+    DiscoveredGame,
+    DiscoveredGames,
+    GameEntry,
+    ScrapedObservation,
+)
 from horspc.prices import Offer
 from horspc.prices.fetch import Fetcher
 from horspc.prices.scraper import write_history
@@ -201,6 +208,34 @@ def test_sold_by_merchant_obligatoire() -> None:
     obs = {k: v for k, v in OBSERVATION.items() if k != "sold_by_merchant"}
     with pytest.raises(ValidationError, match="sold_by_merchant"):
         catalog(observations=[obs])
+
+
+@pytest.mark.parametrize(
+    ("aliases", "message"),
+    [
+        ([""], "vide"),
+        (["  "], "vide"),
+        ([" Pikmin 4 Deluxe"], "espaces"),
+        (["Pikmin 4 Deluxe", "pikmin 4 deluxe"], "en double"),
+        ("Pikmin 4 Deluxe", "list"),
+    ],
+)
+def test_alias_d_edition_refuse(aliases: Any, message: str) -> None:
+    with pytest.raises(ValidationError, match=message):
+        GameEntry(
+            slug="pikmin-4",
+            title="Pikmin 4",
+            editions=[{"platform": "switch2", "aliases": aliases}],
+        )
+
+
+def test_alias_d_edition_facultatif() -> None:
+    game = GameEntry(
+        slug="pikmin-4",
+        title="Pikmin 4",
+        editions=[{"platform": "switch"}, {"platform": "switch2", "aliases": ["Pikmin 4 Bis"]}],
+    )
+    assert [e.aliases for e in game.editions] == [[], ["Pikmin 4 Bis"]]
 
 
 def test_observation_en_double_refusee() -> None:

@@ -10,14 +10,16 @@ import pytest
 import respx
 
 from horspc.http import HttpClient
-from horspc.models import GameEntry, PriceObservation, ScrapedObservation
+from horspc.models import Edition, GameEntry, Platform, PriceObservation, ScrapedObservation
 from horspc.prices import ManualPriceProvider, probe
 from horspc.prices import sources as src
 from horspc.prices.fetch import SERVER_ERRORS, Fetcher, SourceBlocked
+from horspc.prices.matching import title_matches
 from horspc.prices.scraper import (
     RETRY_DAYS,
     Report,
     Scraper,
+    alias_title,
     load_history,
     write_history,
 )
@@ -1013,6 +1015,89 @@ def test_decouverte_leclerc_par_categorie(fetcher: Fetcher) -> None:
         "sort" not in str(c.request.url) and "facet" not in str(c.request.url)
         for c in routes["leclerc_categories"].calls
     )
+
+
+# --- Alias d'édition (games.yaml) ---------------------------------------------------------
+
+BELLABEL = "Super Mario Bros. Wonder - Nintendo Switch 2 Edition + Rendez-vous au parc Bellabel"
+WONDER = GameEntry(
+    slug="super-mario-bros-wonder",
+    title="Super Mario Bros. Wonder",
+    editions=[{"platform": "switch"}, {"platform": "switch2", "aliases": [BELLABEL]}],
+)
+PIKMIN = GameEntry(
+    slug="pikmin-4", title="Pikmin 4", editions=[{"platform": "switch"}, {"platform": "switch2"}]
+)
+
+
+def test_alias_seulement_pour_son_edition(
+    fetcher: Fetcher, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    seen: dict[tuple[str, str], list[str]] = {}
+
+    def record(self, game, platform, titles, entry, today) -> None:
+        seen[game.slug, platform] = titles
+
+    monkeypatch.setattr(Scraper, "_discover", record)
+    names = {"super-mario-bros-wonder": ["Super Mario Bros. Wonder (IGDB)"]}
+    Scraper({}, fetcher).run([WONDER, PIKMIN], names, empty(), TODAY)
+    product = f"{BELLABEL} (NINTENDO SWITCH 2)"
+
+    def accepted(slug: str, platform: Platform) -> bool:
+        return any(title_matches(product, t, platform) for t in seen[slug, platform])
+
+    assert seen["super-mario-bros-wonder", "switch"] == [
+        "Super Mario Bros. Wonder",
+        "Super Mario Bros. Wonder (IGDB)",
+    ]
+    assert len(seen["super-mario-bros-wonder", "switch2"]) == 3  # titre, nom IGDB, alias
+    assert accepted("super-mario-bros-wonder", "switch2")
+    assert not accepted("super-mario-bros-wonder", "switch")  # autre édition du même jeu
+    assert not accepted("pikmin-4", "switch2")  # autre jeu
+
+
+@pytest.mark.parametrize(
+    ("product", "expected"),
+    [
+        (f"{BELLABEL} (NINTENDO SWITCH 2)", True),
+        # Même nom avec un mot de plus que l'alias : refusé (règle stricte inchangée).
+        (f"{BELLABEL} + Housse (NINTENDO SWITCH 2)", False),
+        (f"{BELLABEL} - Edition Collector (NINTENDO SWITCH 2)", False),
+        # Sans le bonus de l'alias : c'est le titre seul qui doit correspondre, pas l'alias.
+        ("Super Mario Bros. Wonder - Nintendo Switch 2 Edition (NINTENDO SWITCH 2)", False),
+        (f"{BELLABEL} (SWITCH)", False),  # plateforme de l'alias exigée
+        (f"{BELLABEL} (NINTENDO SWITCH 2 / PS5)", False),
+    ],
+)
+def test_alias_meme_regle_stricte(product: str, expected: bool) -> None:
+    assert title_matches(product, alias_title(BELLABEL), "switch2") is expected
+
+
+@respx.mock
+def test_alias_rattache_une_carte_leclerc_refusee_sans_lui(fetcher: Fetcher) -> None:
+    # La carte « Mario Kart World - Edition Collector » est refusée sur son nom (édition
+    # spéciale) ; un alias de l'édition switch2 la rattache, à elle seule.
+    mock_robots()
+    mock_leclerc_categories()
+    collector_fp = "https://www.e.leclerc/fp/mario-kart-world-edition-collector-nintendo-switch-2-0045496399999"
+    respx.get(collector_fp).respond(
+        text=page("leclerc.html")
+        .replace(EAN_LECLERC, "0045496399999")
+        .replace("Mario Kart World", "Mario Kart World - Edition Collector")
+    )
+    respx.get(url__regex=r".*/fp/(?!mario-kart-world-edition).*").respond(text="<html/>")
+    game = MKW.model_copy(
+        update={
+            "editions": [
+                Edition(platform="switch2", aliases=["Mario Kart World - Edition Collector"])
+            ]
+        }
+    )
+    discovered = empty()
+    observations, _ = Scraper({"leclerc": True}, fetcher).run([game], {}, discovered, TODAY)
+    entry = discovered["games"]["mario-kart-world"]["switch2"]
+    assert entry["sources"] == {"leclerc": collector_fp}
+    assert [str(o.url) for o in observations] == [collector_fp]
 
 
 @respx.mock

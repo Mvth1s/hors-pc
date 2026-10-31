@@ -173,6 +173,18 @@ class Edition(_Input):
     """Une édition d'un jeu : sa version pour une console (EAN, fiches et offres propres)."""
 
     platform: Platform
+    # Noms commerciaux exacts de cette édition seule (« Pikmin 4 - Nintendo Switch 2 Edition
+    # + Academie Dandori ») : au relevé, même règle stricte que le titre et les noms IGDB.
+    aliases: list[str] = Field(default_factory=list)
+
+    @field_validator("aliases")
+    @classmethod
+    def _clean_aliases(cls, value: list[str]) -> list[str]:
+        if any(not a.strip() or a != a.strip() for a in value):
+            raise ValueError("alias vide ou entouré d'espaces")
+        if len({a.casefold() for a in value}) != len(value):
+            raise ValueError("alias en double")
+        return value
 
 
 class GameEntry(_Input):
