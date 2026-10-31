@@ -57,6 +57,8 @@ flowchart LR
 
 Un push sur `main` qui touche `site/`, `src/` ou `data/` passe par les mêmes lint et tests, puis redéploie le site en mode hors ligne (sans IGDB ni relevé, sans commit).
 
+Les commits du bot ne déclenchent pas la CI : après le build, `update.yml` relance donc les tests qui lisent `site/` ou `data/` (marqueur pytest `donnees_generees`, `uv run pytest -m donnees_generees`) sur le site tout juste généré. S'ils échouent, rien n'est commité ni déployé, et le job `notify` prévient sur Discord pour un build planifié ou manuel. `tests/test_workflows.py` vérifie que tout fichier de test lisant `site/` ou `data/` porte ce marqueur.
+
 ## Chiffres clés (25/10/2026)
 
 | Indicateur | Valeur |
@@ -207,7 +209,9 @@ python3 -m http.server -d site 8000   # puis http://localhost:8000
 
 Les identifiants IGDB sont ceux d'une application Twitch (<https://dev.twitch.tv/console/apps>). Sans identifiants, `uv run python -m horspc build --offline` reprend les champs IGDB et le `generated_at` du `data.json` existant (ou l'heure courante s'il n'existe pas).
 
-Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent présent mais mal formé (JSON invalide, `schema_version` différent du schéma courant, ou contenu refusé par le modèle ; seul un fichier absent est toléré, et un fichier v6 est migré en v7 avec un WARNING) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
+Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent présent mais mal formé (JSON invalide, `schema_version` différent du schéma courant, ou contenu refusé par le modèle ; seul un fichier absent est toléré, et un fichier v6 est migré en v7 avec une ligne INFO) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
+
+Journalisation : le niveau WARNING est réservé à ce qui demande une action (source de prix bloquée, IGDB injoignable, variante PC suspecte, PC dans les plateformes IGDB d'un jeu de `games.yaml`, fiche IGDB introuvable ou date de sortie absente pour un jeu de `games.yaml`). Les offres refusées par le relevé (rupture, vendeur tiers, article non neuf, autre produit…) sont le fonctionnement normal : détail par fiche en DEBUG, une ligne INFO récapitulative par motif (`Offres refusées : 92 aucune offre en ligne, 8 vendeur tiers, 4 article non neuf`). Les nouveaux essais HTTP, images non téléchargées (gardées au run suivant), URL interdites par robots.txt et fiches retirées sont en INFO ; les fiches sans données structurées restent signalées dans le résumé du run et sur Discord.
 
 Tests et lint :
 
@@ -401,13 +405,13 @@ Montants en centimes (entiers), dates ISO 8601, horodatages UTC (`Z`). Le format
 }
 ```
 
-- `release_date` : plus ancienne sortie sur l'une des plateformes du jeu, parmi les dates IGDB en région `europe` ou `worldwide` et au statut « Full Release » ou sans statut (accès anticipé, Advanced Access, alpha, bêta, etc. sont écartés). Les ids de région et de statut sont lus par leur nom via `/release_date_regions` et `/release_date_statuses`. Si aucune date ne passe ces filtres, le build journalise un WARNING (slug, nombre de dates écartées par motif) : ajouter alors un `release_date_override`.
+- `release_date` : plus ancienne sortie sur l'une des plateformes du jeu, parmi les dates IGDB en région `europe` ou `worldwide` et au statut « Full Release » ou sans statut (accès anticipé, Advanced Access, alpha, bêta, etc. sont écartés). Les ids de région et de statut sont lus par leur nom via `/release_date_regions` et `/release_date_statuses`. Si aucune date ne passe ces filtres, le build journalise le slug et le nombre de dates écartées par motif : en WARNING pour un jeu de `games.yaml` (ajouter alors un `release_date_override`), en INFO pour un jeu découvert, qui n'en a pas.
 - `release_date_source` : `igdb`, `manual` (`release_date_override`) ou `null` si `release_date` est `null`. Ajouté en v2.
 - `pc_status` : déduit des `release_dates` PC d'IGDB (toutes régions), les lignes au statut Cancelled étant ignorées. `released` si une ligne Full Release, Early Access, Advanced Access, Offline ou sans statut a une date passée ; `announced` pour toute autre ligne retenue (date future ou absente, ou statut Alpha, Beta…) ; `none` si aucune ligne PC n'est retenue, même si le PC figure dans les plateformes du jeu. `pc_status_source` vaut `manual` quand `pc_override` est utilisé.
 - L'identifiant de la plateforme PC n'est pas codé en dur : il est lu via l'endpoint `platforms` d'IGDB (slug `win`).
 - Si IGDB est injoignable, les champs IGDB (dont `igdb_fetched_at`) sont repris du `data.json` précédent ; le build n'échoue pas.
 - `editions[].sold_digital` / `editions[].listed_physical` : preuves IGDB tirées d'`external_games` pour la plateforme de l'édition (vente sur un store officiel ou Amazon au format Digital ; entrée au format Physical). Le badge « Physique et numérique » n'est affiché que si `sold_digital` est vrai **et** qu'une preuve physique existe (`listed_physical`, ou une offre `physical` relevée ; une `code_box` ne compte pas). Aucun autre badge de format (jamais « Numérique uniquement » ni « Physique uniquement ») : l'absence d'une entrée IGDB ne prouve pas l'absence d'une édition. Champs ajoutés en v5 avec `false` par défaut.
-- `origin` (v7) : `curated` pour un jeu de `games.yaml`, `discovered` pour un jeu de la [découverte automatique](#découverte-automatique-du-catalogue). Un `data.json` précédent en v6 est migré à la lecture (`origin: curated`, tous ses jeux venant de `games.yaml`) avec un WARNING : le `data.json` versionné reste ainsi lisible par le build hors ligne du push jusqu'au build complet suivant. Toute autre version est refusée.
+- `origin` (v7) : `curated` pour un jeu de `games.yaml`, `discovered` pour un jeu de la [découverte automatique](#découverte-automatique-du-catalogue). Un `data.json` précédent en v6 est migré à la lecture (`origin: curated`, tous ses jeux venant de `games.yaml`), avec une ligne INFO : le `data.json` versionné reste ainsi lisible par le build hors ligne du push jusqu'au build complet suivant. Toute autre version est refusée.
 - `editions` (v6) : une par console, avec son offre (`null` sans relevé) et ses preuves de format ; `platforms` en est dérivé (filtres) ; `best_offer` est la meilleure offre toutes éditions, avec sa `platform` : à jour avant « Prix à vérifier », puis physique, boîte avec code, démat, puis prix port compris.
 - `offer.seller` : vendeur professionnel d'une place de marché (« ShopVite » sur Pixmania), `null` quand l'enseigne vend elle-même ; `offer.source` : `scraped` (relevé automatique) ou `manual` (correction d'urgence). Ajoutés en v5.
 - `cover_url` : chemin relatif `covers/<slug>.webp`, ou `null` sans jaquette ; `cover_image_id` : `image_id` IGDB de la jaquette présente sur disque. Ajoutés en v3. Le site ne charge jamais d'image depuis `images.igdb.com`.

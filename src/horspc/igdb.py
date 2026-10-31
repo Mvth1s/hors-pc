@@ -5,7 +5,7 @@ import re
 import time
 import unicodedata
 from collections import Counter
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Sequence, Set
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from typing import Any
@@ -111,14 +111,19 @@ class IgdbClient:
         self._platform_ids: dict[str, int] | None = None
         self._release_refs: ReleaseRefs | None = None
 
-    def fetch_games(self, games: Sequence[GameEntry], now: datetime) -> dict[str, IgdbGame | None]:
-        """Renvoie, pour chaque slug, la fiche IGDB trouvée ou None."""
+    def fetch_games(
+        self, games: Sequence[GameEntry], now: datetime, discovered: Set[str] = frozenset()
+    ) -> dict[str, IgdbGame | None]:
+        """Renvoie, pour chaque slug, la fiche IGDB trouvée ou None. `discovered` : slugs des
+        jeux découverts, signalés en INFO (games.yaml seul permet d'agir : WARNING)."""
         try:
-            return self._fetch_games(games, now)
+            return self._fetch_games(games, now, discovered)
         except (httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
             raise IgdbError(f"IGDB indisponible : {exc}") from exc
 
-    def _fetch_games(self, games: Sequence[GameEntry], now: datetime) -> dict[str, IgdbGame | None]:
+    def _fetch_games(
+        self, games: Sequence[GameEntry], now: datetime, discovered: Set[str]
+    ) -> dict[str, IgdbGame | None]:
         platform_ids = self.platform_ids()
         refs = self.release_refs()
         by_id: dict[int, dict[str, Any]] = {}
@@ -133,18 +138,19 @@ class IgdbClient:
 
         result: dict[str, IgdbGame | None] = {}
         for game in games:
+            level = logging.INFO if game.slug in discovered else logging.WARNING
             console_ids = {platform_ids[PLATFORM_SLUGS[p]] for p in game.platforms}
             if game.igdb_id is not None:
                 row = by_id.get(game.igdb_id)
             else:
                 row = self._search(game, console_ids)
             if row is None:
-                log.warning("IGDB : aucun résultat pour %s", game.slug)
+                log.log(level, "IGDB : aucun résultat pour %s", game.slug)
                 result[game.slug] = None
                 continue
             release, rejected = release_date(row, console_ids, refs)
             if release is None and game.release_date_override is None:
-                _warn_no_release_date(game.slug, rejected)
+                _log_no_release_date(level, game.slug, rejected)
             result[game.slug] = IgdbGame(
                 igdb_id=row["id"],
                 url=row.get("url"),
@@ -318,17 +324,14 @@ def release_date(
     return datetime.fromtimestamp(min(kept), UTC).date(), rejected
 
 
-def _warn_no_release_date(slug: str, rejected: Counter[str]) -> None:
+def _log_no_release_date(level: int, slug: str, rejected: Counter[str]) -> None:
     if rejected:
         detail = ", ".join(f"{n} {reason}" for reason, n in sorted(rejected.items()))
         why = f"{sum(rejected.values())} date(s) écartée(s) : {detail}"
     else:
         why = "aucune date pour ces plateformes"
-    log.warning(
-        "IGDB : %s, aucune date de sortie retenue (%s) ; ajouter un release_date_override",
-        slug,
-        why,
-    )
+    hint = " ; ajouter un release_date_override" if level >= logging.WARNING else ""
+    log.log(level, "IGDB : %s, aucune date de sortie retenue (%s)%s", slug, why, hint)
 
 
 def pc_status(row: dict[str, Any], pc_id: int, refs: ReleaseRefs, now: datetime) -> PcStatus:

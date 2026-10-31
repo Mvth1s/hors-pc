@@ -100,6 +100,11 @@ jobs:
       - name: Génère site/data.json (hors ligne, sans commit)
         if: github.event_name == 'push'
         run: uv run python -m horspc build --offline
+      # Les commits du bot ne déclenchent pas la CI : le site et les données tout juste générés
+      # sont testés ici. En cas d'échec, ni commit ni déploiement, et le job notify prévient
+      # sur Discord (build planifié ou manuel).
+      - name: Tests du site généré
+        run: uv run pytest -m donnees_generees
       - name: Commite le site et les relevés s'ils ont changé
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |

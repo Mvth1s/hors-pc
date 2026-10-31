@@ -13,7 +13,7 @@ from horspc.http import HttpClient
 from horspc.models import GameEntry, PriceObservation, ScrapedObservation
 from horspc.prices import ManualPriceProvider, probe
 from horspc.prices import sources as src
-from horspc.prices.fetch import SERVER_ERRORS, Fetcher
+from horspc.prices.fetch import SERVER_ERRORS, Fetcher, SourceBlocked
 from horspc.prices.scraper import (
     RETRY_DAYS,
     Report,
@@ -480,7 +480,10 @@ def test_json_ld_avec_entites_html_dans_les_chaines() -> None:
 
 
 @respx.mock
-def test_precommande_sans_offre_ecartee_sans_alerte(fetcher: Fetcher) -> None:
+def test_precommande_sans_offre_ecartee_sans_alerte(
+    fetcher: Fetcher, caplog: pytest.LogCaptureFixture
+) -> None:
+    caplog.set_level("DEBUG")
     mock_robots()
     no_offer = page("boulanger.html").replace('"offers"', '"offres"')
     mock_sites(boulanger=no_offer)
@@ -492,6 +495,43 @@ def test_precommande_sans_offre_ecartee_sans_alerte(fetcher: Fetcher) -> None:
     assert ("rejected", "aucune offre en ligne (rupture ou précommande pas encore ouverte)") in {
         (e["kind"], e["detail"]) for e in report.events
     }
+    # Offre refusée : détail en DEBUG, récapitulatif en INFO, jamais de WARNING.
+    levels = {r.getMessage(): r.levelname for r in caplog.records}
+    assert levels["Offres refusées : 1 aucune offre en ligne"] == "INFO"
+    assert "DEBUG" in {lvl for msg, lvl in levels.items() if "[rejected]" in msg}
+    assert "WARNING" not in levels.values()
+
+
+def test_offres_refusees_recapitulees_par_motif(caplog: pytest.LogCaptureFixture) -> None:
+    caplog.set_level("DEBUG")
+    fetcher = Fetcher(HttpClient(), RobotsCache(HttpClient()))
+    for i in range(3):
+        fetcher.record("leclerc", "rejected", f"https://x/{i}", "aucune offre en ligne (rupture)")
+    for seller in ("ShopVite", "Stock e-commerce"):
+        reason = f"vendeur tiers ({seller}) sur une place de marché non réservée aux pros"
+        fetcher.record("leclerc", "rejected", "https://x/v", reason)
+    fetcher.record("pixmania", "rejected", "https://x/r", "article non neuf (refurbished)")
+    fetcher.record("leclerc", "rejected", "https://x/a", "autre produit : Zelda", "autre produit")
+    fetcher.record("leclerc", "ok", "https://x/ok", "49.99 €")
+    caplog.clear()
+    fetcher.log_rejections()
+    assert [(r.levelname, r.getMessage()) for r in caplog.records] == [
+        (
+            "INFO",
+            "Offres refusées : 3 aucune offre en ligne, 2 vendeur tiers, "
+            "1 article non neuf, 1 autre produit",
+        )
+    ]
+
+
+def test_seule_une_source_bloquee_est_en_warning(caplog: pytest.LogCaptureFixture) -> None:
+    fetcher = Fetcher(HttpClient(), RobotsCache(HttpClient()))
+    for kind in ("ok", "rejected", "disallowed", "gone", "error", "broken"):
+        fetcher.record("leclerc", kind, "https://x/p", "d")
+    with pytest.raises(SourceBlocked):
+        fetcher._block("leclerc", "https://x/p", "HTTP 403")
+    warnings = [r.getMessage() for r in caplog.records if r.levelname == "WARNING"]
+    assert warnings == ["leclerc [blocked] /p : HTTP 403"]
 
 
 # --- Bilan et diagnostic -------------------------------------------------------------------------

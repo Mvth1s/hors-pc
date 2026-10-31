@@ -10,6 +10,9 @@ from pathlib import Path
 
 import pytest
 
+# Lit site/ ou data/ : relancé par update.yml sur le site tout juste généré.
+pytestmark = pytest.mark.donnees_generees
+
 playwright = pytest.importorskip("playwright.sync_api")
 
 SITE = Path(__file__).parents[1] / "site"

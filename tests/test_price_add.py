@@ -10,6 +10,9 @@ from horspc.models import Catalog
 from horspc.price_add import price_add
 from tests.conftest import TODAY
 
+# Lit site/ ou data/ : relancé par update.yml sur le site tout juste généré.
+pytestmark = pytest.mark.donnees_generees
+
 
 @pytest.fixture
 def files(tmp_path: Path) -> tuple[Path, Path]:

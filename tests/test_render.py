@@ -13,6 +13,9 @@ import pytest
 from horspc.models import DataFile
 from horspc.render import GAMES_DIR, SCHEMA_PLATFORMS, SITE_URL, external_links, render_site
 
+# Lit site/ ou data/ : relancé par update.yml sur le site tout juste généré.
+pytestmark = pytest.mark.donnees_generees
+
 SITE = Path(__file__).parents[1] / "site"
 VERIFICATION = (
     '<meta name="google-site-verification" content="Ab9vPVa0ebMxdxThZr2DukWFs8mVU9BNoJDm-ucitxA">'
@@ -70,7 +73,7 @@ def test_catalogue_lisible_sans_js() -> None:
     titles = re.findall(r'<h2 class="title"><a href="jeux/[^"]+/">([^<]+)</a></h2>', text)
     expected = [g["title"] for g in visible_games()]
     assert len(titles) == len(expected) >= 8
-    assert sorted(t.replace("&#x27;", "'") for t in titles) == sorted(expected)
+    assert sorted(html.unescape(t) for t in titles) == sorted(expected)
     assert f'<strong id="count">{len(expected)} jeux</strong>' in text
     assert "fetch(" not in (SITE / "app.js").read_text(encoding="utf-8")
 
