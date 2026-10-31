@@ -13,6 +13,9 @@ from horspc.http import HttpClient
 from horspc.prices.fetch import SERVER_ERRORS
 from tests.conftest import FIXTURES
 
+# Lit site/ ou data/ : relancé par update.yml sur le site tout juste généré.
+pytestmark = pytest.mark.donnees_generees
+
 TODAY = date(2026, 11, 1)
 LECLERC_FP = "https://www.e.leclerc/fp/mario-kart-world-nintendo-switch-2-0045496312336"
 CGV = "https://www.e.leclerc/i/conditions-generales-de-vente"

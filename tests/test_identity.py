@@ -5,6 +5,11 @@ import codecs
 import subprocess
 from pathlib import Path
 
+import pytest
+
+# Lit site/ ou data/ : relancé par update.yml sur le site tout juste généré.
+pytestmark = pytest.mark.donnees_generees
+
 ROOT = Path(__file__).resolve().parents[1]
 # Chaînes interdites, encodées en ROT13 pour que ce fichier ne les contienne pas lui-même
 # (`git grep` doit rester vide) : nom de famille, nom du site personnel, profil LinkedIn.

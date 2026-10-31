@@ -57,6 +57,8 @@ flowchart LR
 
 Un push sur `main` qui touche `site/`, `src/` ou `data/` passe par les mêmes lint et tests, puis redéploie le site en mode hors ligne (sans IGDB ni relevé, sans commit).
 
+Les commits du bot ne déclenchent pas la CI : après le build, `update.yml` relance donc les tests qui lisent `site/` ou `data/` (marqueur pytest `donnees_generees`, `uv run pytest -m donnees_generees`) sur le site tout juste généré. S'ils échouent, rien n'est commité ni déployé, et le job `notify` prévient sur Discord pour un build planifié ou manuel. `tests/test_workflows.py` vérifie que tout fichier de test lisant `site/` ou `data/` porte ce marqueur.
+
 ## Chiffres clés (25/10/2026)
 
 | Indicateur | Valeur |
@@ -207,7 +209,7 @@ python3 -m http.server -d site 8000   # puis http://localhost:8000
 
 Les identifiants IGDB sont ceux d'une application Twitch (<https://dev.twitch.tv/console/apps>). Sans identifiants, `uv run python -m horspc build --offline` reprend les champs IGDB et le `generated_at` du `data.json` existant (ou l'heure courante s'il n'existe pas).
 
-Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent présent mais mal formé (JSON invalide, `schema_version` différent du schéma courant, ou contenu refusé par le modèle ; seul un fichier absent est toléré, et un fichier v6 est migré en v7 avec un WARNING) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
+Codes de sortie du build : `0` OK, `1` validation refusée (entrées ou sortie) ou `data.json` précédent présent mais mal formé (JSON invalide, `schema_version` différent du schéma courant, ou contenu refusé par le modèle ; seul un fichier absent est toléré, et un fichier v6 est migré en v7 avec une ligne INFO) ; dans les deux cas `data.json` n'est pas modifié, `2` identifiants IGDB manquants.
 
 Journalisation : le niveau WARNING est réservé à ce qui demande une action (source de prix bloquée, IGDB injoignable, variante PC suspecte, PC dans les plateformes IGDB d'un jeu de `games.yaml`, fiche IGDB introuvable ou date de sortie absente pour un jeu de `games.yaml`). Les offres refusées par le relevé (rupture, vendeur tiers, article non neuf, autre produit…) sont le fonctionnement normal : détail par fiche en DEBUG, une ligne INFO récapitulative par motif (`Offres refusées : 92 aucune offre en ligne, 8 vendeur tiers, 4 article non neuf`). Les nouveaux essais HTTP, images non téléchargées (gardées au run suivant), URL interdites par robots.txt et fiches retirées sont en INFO ; les fiches sans données structurées restent signalées dans le résumé du run et sur Discord.
 

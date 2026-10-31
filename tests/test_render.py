@@ -13,6 +13,9 @@ import pytest
 from horspc.models import DataFile
 from horspc.render import GAMES_DIR, SCHEMA_PLATFORMS, SITE_URL, external_links, render_site
 
+# Lit site/ ou data/ : relancé par update.yml sur le site tout juste généré.
+pytestmark = pytest.mark.donnees_generees
+
 SITE = Path(__file__).parents[1] / "site"
 VERIFICATION = (
     '<meta name="google-site-verification" content="Ab9vPVa0ebMxdxThZr2DukWFs8mVU9BNoJDm-ucitxA">'

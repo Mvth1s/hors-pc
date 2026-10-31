@@ -130,6 +130,45 @@ def test_lint_et_tests_avant_le_build(event: str) -> None:
 
 
 @pytest.mark.parametrize("event", ["push", *FULL_EVENTS])
+def test_site_genere_teste_apres_le_build_avant_commit_et_deploiement(event: str) -> None:
+    steps = executed_steps(event)
+    script = commands(steps).splitlines()
+    check = script.index("uv run pytest -m donnees_generees")
+    builds = [i for i, line in enumerate(script) if "horspc build" in line]
+    assert builds and max(builds) < check
+    if event in FULL_EVENTS:
+        assert check < next(i for i, line in enumerate(script) if "git commit" in line)
+    (step,) = [s for s in steps if s.get("run") == "uv run pytest -m donnees_generees"]
+    # Étape bloquante, dans le job build : son échec saute l'upload et le déploiement.
+    assert "if" not in step and not step.get("continue-on-error")
+    upload = next(
+        i for i, s in enumerate(steps) if s.get("uses", "").startswith("actions/upload-pages")
+    )
+    assert steps.index(step) < upload
+    assert "build" in workflow()["jobs"]["deploy"]["needs"]
+    assert "build" in workflow()["jobs"]["notify"]["needs"]
+
+
+READS_GENERATED = re.compile(
+    r'parents\[1\] / "(?:site|data)"|from horspc\.build import .*_PATH|ls-files'
+)
+
+
+def test_tests_lisant_site_ou_data_marques() -> None:
+    """Tout test qui lit site/ ou data/ est relancé après le build (marqueur donnees_generees)."""
+    tests = WORKFLOW.parents[2] / "tests"
+    readers = [
+        p.name
+        for p in sorted(tests.glob("test_*.py"))
+        if READS_GENERATED.search(p.read_text(encoding="utf-8"))
+    ]
+    assert {"test_site.py", "test_render.py", "test_consent.py"} <= set(readers)
+    for name in readers:
+        text = (tests / name).read_text(encoding="utf-8")
+        assert "pytestmark = pytest.mark.donnees_generees" in text, name
+
+
+@pytest.mark.parametrize("event", ["push", *FULL_EVENTS])
 def test_notification_discord_seulement_en_cas_d_echec(event: str) -> None:
     job = workflow()["jobs"]["notify"]
     condition = job["if"]

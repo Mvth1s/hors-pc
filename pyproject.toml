@@ -38,3 +38,6 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+markers = [
+    "donnees_generees: lit site/ ou data/ ; relancé par update.yml après le build, avant commit et déploiement",
+]

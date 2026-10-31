@@ -8,6 +8,9 @@ from pathlib import Path
 
 import pytest
 
+# Lit site/ ou data/ : relancé par update.yml sur le site tout juste généré.
+pytestmark = pytest.mark.donnees_generees
+
 SITE = Path(__file__).parents[1] / "site"
 PAGES = sorted(SITE.glob("*.html"))
 # rel de <link> qui déclenchent un téléchargement (canonical, alternate… n'en déclenchent pas).
