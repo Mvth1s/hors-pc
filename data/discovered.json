@@ -420,6 +420,16 @@
         }
       }
     },
+    "clubhouse-games-51-worldwide-classics": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
     "cocomelon-play-with-jj": {
       "switch": {
         "checked": {
@@ -1711,6 +1721,20 @@
         }
       }
     },
+    "mario-rabbids-sparks-of-hope": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216210306"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-lapins-cretins-sparks-of-hope-switch-3307216210306"
+        }
+      }
+    },
     "mario-strikers-battle-league": {
       "switch": {
         "checked": {
@@ -1896,6 +1920,21 @@
         }
       }
     },
+    "new-super-mario-bros-u-deluxe": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496423759"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/new-super-mario-bros-u-switch-0045496423759",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-new-super-mario-bros-u-deluxe-nintendo-switch-231556.html"
+        }
+      }
+    },
     "nhl-27": {
       "ps5": {
         "checked": {
@@ -2008,6 +2047,14 @@
           "leclerc": "https://www.e.leclerc/fp/pikmin-4-switch-0045496479305",
           "pixmania": "https://www.pixmania.com/fr/fr/pikmin-4-switch-171084.html"
         }
+      },
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
       }
     },
     "pocoyo-party": {
@@ -2525,6 +2572,14 @@
           "leclerc": "https://www.e.leclerc/fp/super-mario-bros-wonder-switch-0045496479794",
           "pixmania": "https://www.pixmania.com/fr/fr/super-mario-bros-wonder-switch-197078.html"
         }
+      },
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
       }
     },
     "super-mario-maker-2": {

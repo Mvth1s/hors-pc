@@ -645,7 +645,7 @@
   - platform: switch
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
-  missed_runs: 1
+  missed_runs: 0
 - slug: lol-surprise-remix-we-rule-the-world
   title: 'L.O.L. Surprise! Remix Edition: We Rule The World'
   title_source: nom_leclerc
@@ -961,7 +961,7 @@
   - platform: switch
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
-  missed_runs: 1
+  missed_runs: 2
 - slug: star-fox
   title: Star Fox
   title_source: nom_igdb
