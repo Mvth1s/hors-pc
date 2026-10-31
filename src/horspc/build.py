@@ -369,6 +369,14 @@ def _refresh_discovered(
     except (httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
         log.warning("Découverte impossible (%s) : catalogue découvert inchangé", exc)
         return None
+    titles = {g.igdb_id: g.slug for g in refreshed.games}
+    for igdb_id, variants in refreshed.result.suspects.items():
+        log.warning(
+            "Découverte : %s a une variante sortie sur PC (%s) : à vérifier, "
+            "data/discovery.exclude.yaml si c'est le même jeu",
+            titles.get(igdb_id, f"igdb {igdb_id}"),
+            ", ".join(variants),
+        )
     return refreshed
 
 

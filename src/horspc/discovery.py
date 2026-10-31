@@ -27,7 +27,7 @@ from typing import Any, NamedTuple
 import yaml
 
 from horspc import candidates
-from horspc.igdb import PAGE_LIMIT, PLATFORM_SLUGS, IgdbClient
+from horspc.igdb import PAGE_LIMIT, PLATFORM_SLUGS, IgdbClient, pc_status
 from horspc.models import (
     MAX_MISSED_RUNS,
     DiscoveredGame,
@@ -150,6 +150,9 @@ class Result:
     curated_missing: list[dict[str, Any]] = field(default_factory=list)
     curated_pc_listed: dict[str, str] = field(default_factory=dict)  # slug → où (WARNING)
     wrong_type_ids: set[int] = field(default_factory=set)
+    # Jeu retenu → fiches IGDB distinctes au nom prolongé d'un suffixe (« Plus », « HD »...)
+    # sorties sur PC : signalées, jamais exclues automatiquement.
+    suspects: dict[int, list[str]] = field(default_factory=dict)
 
 
 # --- Récolte -----------------------------------------------------------------------------
@@ -600,6 +603,7 @@ def discover(
             )
     # Jeux de games.yaml : même détection, simple avertissement (le build l'émettra en WARNING).
     curated_pc_listed = curated_pc_warnings(igdb, curated, ctx.pc_id)
+    suspects = pc_variant_suspects(igdb, kept, ctx)
     localized = localized_titles(igdb, [g.igdb_id for g in kept])
     for game in kept:
         choice = display_title(
@@ -620,7 +624,68 @@ def discover(
         _curated_missing(curated, found_curated, index, identifications),
         curated_pc_listed,
         wrong_type_ids,
+        suspects,
     )
+
+
+# Suffixes d'une variante du même jeu (« Rain Code Plus », « X: Definitive Edition »...).
+VARIANT_SUFFIXES = frozenset(
+    {
+        "plus", "definitive", "deluxe", "complete", "hd", "remastered", "remaster", "edition",
+        "ultimate", "enhanced", "goty", "director", "directors", "redux", "anniversary",
+        "special", "gold", "premium", "collection", "reloaded", "dx",
+    }
+)  # fmt: skip
+NAMES_PER_QUERY = 10
+
+
+def pc_variant_suspects(
+    igdb: IgdbClient, kept: list[Discovered], ctx: candidates.Context
+) -> dict[int, list[str]]:
+    """Pour chaque jeu retenu, autres fiches IGDB sorties sur PC dont le nom est celui du jeu
+    (ou d'un nom alternatif) suivi d'un suffixe de variante, ou d'un « + ».
+
+    Fiches cherchées par préfixe de nom sur toute la base (une variante peut n'exister que
+    sur PC, hors de l'index des consoles), NAMES_PER_QUERY noms par requête.
+    """
+    owners: dict[str, set[int]] = defaultdict(set)  # nom cherché → jeux retenus
+    for game in kept:
+        for name in game.names or (game.name,):
+            if tokens(name):
+                owners[name.replace('"', "")].add(game.igdb_id)
+    names = sorted(owners)
+    found: dict[int, set[tuple[str, int]]] = defaultdict(set)
+    for start in range(0, len(names), NAMES_PER_QUERY):
+        chunk = names[start : start + NAMES_PER_QUERY]
+        where = " | ".join(f'name ~ "{n}"*' for n in chunk)
+        # Paginé (curseur sur l'id) : un nom court peut à lui seul dépasser PAGE_LIMIT fiches.
+        for row in _cursor(
+            igdb,
+            f"({where}) & platforms = ({ctx.pc_id})",
+            "name,release_dates.platform,release_dates.date,release_dates.status",
+        ):
+            if pc_status(row, ctx.pc_id, ctx.refs, ctx.now) != "released":
+                continue
+            for name in chunk:
+                for owner in owners[name]:
+                    if row["id"] != owner and _is_variant(row.get("name") or "", name):
+                        found[owner].add((row.get("name") or "", row["id"]))
+    for owner, rows in found.items():
+        log.info("Variante PC suspecte de %s : %s", owner, ", ".join(n for n, _ in sorted(rows)))
+    return {
+        owner: [f"{n} (igdb {i})" for n, i in sorted(rows)] for owner, rows in sorted(found.items())
+    }
+
+
+def _is_variant(candidate: str, name: str) -> bool:
+    """`candidate` = `name` + suffixe de variante (premier mot ajouté) ou « + »."""
+    base, words = tokens(name), tokens(candidate)
+    if words[: len(base)] != base:
+        return False
+    extra = words[len(base) :]
+    if extra:
+        return extra[0] in VARIANT_SUFFIXES
+    return "+" in candidate and "+" not in name
 
 
 def curated_pc_warnings(igdb: IgdbClient, curated: list[CuratedGame], pc_id: int) -> dict[str, str]:
@@ -1044,6 +1109,10 @@ def summary(
     }
     out["curated_missing"] = result.curated_missing
     out["curated_pc_listed"] = result.curated_pc_listed
+    titles = {g.igdb_id: g.title for g in kept}
+    out["suspects_pc_variant"] = [
+        f"{titles.get(i, i)} (igdb {i}) → {', '.join(v)}" for i, v in result.suspects.items()
+    ]
     out["pc_listed_examples"] = [
         f"{i} {where}" for i, where in sorted(result.pc_listed.items())[:EXAMPLES]
     ]

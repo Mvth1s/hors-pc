@@ -162,8 +162,29 @@ INDEX = [
     {"id": 8, "name": "Multi Game", "platforms": [PS5, PC], "game_type": {"type": "Main Game"}},
     {"id": 9, "name": "Remaster Y", "platforms": [PS5], "game_type": {"type": "Remaster"}},
     {"id": 10, "name": "Missing Game", "platforms": [PS5], "game_type": {"type": "Main Game"}},
+    {
+        "id": 11,
+        "name": "Master Detective Archives: Rain Code",
+        "platforms": [SWITCH],
+        "game_type": {"type": "Main Game"},
+    },
 ]
 PC_RELEASE = {"platform": PC, "date": PAST, "status": FULL_RELEASE}
+# Fiches cherchées par préfixe de nom (toute la base, sorties sur PC ou non).
+NAMED = [
+    # Même jeu, fiche distincte non reliée, sortie sur PC : suspecte.
+    {"id": 60, "name": "Master Detective Archives: Rain Code Plus", "release_dates": [PC_RELEASE]},
+    # Suffixe de variante mais pas encore sortie sur PC : ignorée.
+    {
+        "id": 61,
+        "name": "Master Detective Archives: Rain Code Deluxe",
+        "release_dates": [{"platform": PC, "status": FULL_RELEASE}],
+    },
+    # Suite d'un autre nom, ou mot ajouté qui n'est pas un suffixe de variante : ignorées.
+    {"id": 62, "name": "Master Detective Archives: Rain Codes", "release_dates": [PC_RELEASE]},
+    {"id": 63, "name": "Master Detective Archives: Rain Code 2", "release_dates": [PC_RELEASE]},
+    {"id": 64, "name": "Astro Bot + Friends", "release_dates": [PC_RELEASE]},
+]
 DETAILS = {
     1: {"id": 1, "name": "Astro Bot", "game_type": {"type": "Main Game"}, "release_dates": []},
     2: {
@@ -192,6 +213,13 @@ DETAILS = {
 
 
 DETAILS |= {
+    11: {
+        "id": 11,
+        "name": "Master Detective Archives: Rain Code",
+        "game_type": {"type": "Main Game"},
+        "platforms": [SWITCH],
+        "release_dates": [{"platform": SWITCH, "date": PAST, "status": FULL_RELEASE}],
+    },
     # PC dans platforms sans aucune date PC : écarté pour un jeu découvert.
     8: {"id": 8, "name": "Multi Game", "game_type": {"type": "Main Game"}, "platforms": [PS5, PC]},
     9: {
@@ -210,6 +238,10 @@ for _row in DETAILS.values():
 
 def igdb_games(request: httpx.Request) -> httpx.Response:
     body = request.content.decode()
+    if 'name ~ "' in body:
+        prefixes = [p.lower() for p in re.findall(r'name ~ "([^"]+)"\*', body)]
+        rows = [r for r in NAMED if any(r["name"].lower().startswith(p) for p in prefixes)]
+        return httpx.Response(200, json=rows)
     if "version_parent != null" in body:
         return httpx.Response(200, json=[])
     if "version_parent = null" in body:
@@ -253,7 +285,7 @@ def test_index_pagine_par_curseur(
 ) -> None:
     monkeypatch.setattr(discovery, "PAGE_LIMIT", 3)
     index = discovery.fetch_index(igdb)
-    assert sorted(index) == list(range(1, 11))
+    assert sorted(index) == list(range(1, 12))
     bodies = [
         c.request.content.decode()
         for c in api.calls
@@ -603,6 +635,44 @@ def test_motifs_des_produits_sans_correspondance(name: str, platform: str, reaso
     matcher = Matcher({1: game(1, "Astro Bot Galaxy", {"ps5"}, "Astro Bot")})
     assert matcher.identify(product(name, platform)).status == "unmatched"
     assert matcher.explain(product(name, platform))[0] == reason
+
+
+def test_variante_sortie_sur_pc_signalee_sans_exclusion(
+    igdb: IgdbClient, api: respx.MockRouter
+) -> None:
+    products = [
+        product("Master Detective Archives : Rain Code (SWITCH)", "switch"),
+        product("Astro Bot PS5"),
+    ]
+    result = discovery.discover(igdb, products, Counter(), [], set(), NOW)
+    # Toujours retenu : le signalement n'exclut jamais.
+    assert [g.igdb_id for g in result.kept] == [1, 11]
+    assert result.suspects == {11: ["Master Detective Archives: Rain Code Plus (igdb 60)"]}
+    assert discovery.summary(result)["suspects_pc_variant"] == [
+        "Master Detective Archives: Rain Code (igdb 11) → "
+        "Master Detective Archives: Rain Code Plus (igdb 60)"
+    ]
+    body = next(
+        c.request.content.decode() for c in api.calls if 'name ~ "' in c.request.content.decode()
+    )
+    assert 'name ~ "Astro Bot"* | name ~ "Master Detective Archives: Rain Code"*' in body
+    assert "platforms = (6)" in body
+
+
+@pytest.mark.parametrize(
+    ("name", "candidate", "variant"),
+    [
+        ("Master Detective Archives: Rain Code", "Master Detective Archives: Rain Code Plus", True),
+        ("Okami", "Okami HD", True),
+        ("Overcooked! 2", "Overcooked! 2 +", True),
+        ("Catherine", "Catherine: Full Body", False),  # « Full » n'est pas un suffixe
+        ("Final Fantasy X", "Final Fantasy X/X-2 HD Remaster", False),  # « X-2 » d'abord
+        ("Astro Bot", "Astro Bot", False),  # même nom
+        ("Astro Bot", "Astro Botanist", False),  # autre mot
+    ],
+)
+def test_suffixe_de_variante(name: str, candidate: str, variant: bool) -> None:
+    assert discovery._is_variant(candidate, name) is variant
 
 
 # --- Exclusions ----------------------------------------------------------------------------

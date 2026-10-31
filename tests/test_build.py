@@ -620,6 +620,7 @@ def test_build_complet_avec_decouverte(
     def fake_refresh(igdb, bot, curated, previous, excluded, now, max_new, cache):
         calls.append(([c.slug for c in curated], previous, excluded, max_new))
         result = discovery.Result([], Counter(), {}, set(), set(), Counter(), [], {}, [])
+        result.suspects = {250634: ["Ghost of Yōtei Plus (igdb 9)"]}
         return discovery.Refresh(found, ["ghost-of-yotei"], {}, 0, True, result)
 
     monkeypatch.setattr(discovery, "refresh", fake_refresh)
@@ -662,6 +663,9 @@ def test_build_complet_avec_decouverte(
     # astro-bot (igdb 255340) : PC absent des plateformes, aucun avertissement. Ghost of Yōtei,
     # renvoyé par le faux IGDB pour toute requête, n'est pas un jeu curé : ignoré.
     assert "a le PC dans ses plateformes" not in caplog.text
+    assert (
+        "ghost-of-yotei a une variante sortie sur PC (Ghost of Yōtei Plus (igdb 9))" in caplog.text
+    )
 
 
 def test_data_json_v6_migre_en_v7(workdir: Path, caplog: pytest.LogCaptureFixture) -> None:
