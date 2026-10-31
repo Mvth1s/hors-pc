@@ -59,14 +59,20 @@ Un push sur `main` qui touche `site/`, `src/` ou `data/` passe par les mêmes li
 
 Les commits du bot ne déclenchent pas la CI : après le build, `update.yml` relance donc les tests qui lisent `site/` ou `data/` (marqueur pytest `donnees_generees`, `uv run pytest -m donnees_generees`) sur le site tout juste généré. S'ils échouent, rien n'est commité ni déployé, et le job `notify` prévient sur Discord pour un build planifié ou manuel. `tests/test_workflows.py` vérifie que tout fichier de test lisant `site/` ou `data/` porte ce marqueur.
 
-## Chiffres clés (25/10/2026)
+## Chiffres clés (31/10/2026)
+
+Mesurés sur les données du run manuel [41203373507](https://github.com/Mvth1s/hors-pc/actions/runs/41203373507) (`site/data.json`, `data/games.discovered.yaml`) et sur le dépôt le même jour.
 
 | Indicateur | Valeur |
 |---|---|
-| Jeux au catalogue | 50 (57 éditions par console) |
-| Jeux avec au moins une offre | 39 / 50 (43 éditions sur 57 ; 8 éditions en rupture affichée) |
+| Jeux affichés | 147 : 50 curés (`games.yaml`) + 97 découverts |
+| Jeux découverts en attente d'une offre à jour | 33 (sur 130 découverts) |
+| Éditions par console | 169 : Switch 114, PS5 31, Switch 2 17, Xbox Series 7 |
+| Jeux avec au moins une offre | 136 / 147 (149 éditions sur 169 ; 11 éditions en rupture affichée) |
+| Durée du dernier build manuel | 7 min 51 s (job `build`, découverte et relevé des prix compris) |
 | Sources de prix actives | E.Leclerc, Pixmania (Boulanger désactivé, voir [`docs/sources.md`](docs/sources.md)) |
-| Tests | 636 (pytest, réseau simulé avec respx, navigateur headless pour le consentement) |
+| Tests | 1 101 (pytest, réseau simulé avec respx, navigateur headless pour le consentement) |
+| Taille de `site/` | 25,1 Mo (616 fichiers) |
 
 ## Documentation
 
@@ -138,7 +144,7 @@ hors-pc/
 │   ├── fonts/                 # polices auto-hébergées (OFL)
 │   ├── game.js                # page de jeu : retour, bande-annonce
 │   ├── index.html             # catalogue rendu au build
-│   ├── jeux/                  # 50 pages de jeu + 1 redirection, générées
+│   ├── jeux/                  # une page par jeu affiché + redirections, générées
 │   ├── mentions-legales.html  # mentions légales
 │   ├── methodologie.html      # méthodologie, gabarit des pages de jeu
 │   ├── og-image.png           # image de partage 1200 × 630

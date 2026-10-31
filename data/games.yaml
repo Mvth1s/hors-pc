@@ -168,7 +168,7 @@
 
 - slug: super-mario-bros-wonder
   title: "Super Mario Bros. Wonder"
-  editions: [{platform: switch}]
+  editions: [{platform: switch}, {platform: switch2}]
   igdb_id: 254339
   launch_price: null
 
@@ -202,6 +202,11 @@
   editions: [{platform: switch}]
   igdb_id: 28414
   launch_price: null
+
+- slug: mario-rabbids-sparks-of-hope
+  title: "Mario + Lapins Crétins : Sparks of Hope"
+  editions: [{platform: switch}]
+  igdb_id: 152201
 
 - slug: super-mario-party
   title: "Super Mario Party"
@@ -309,7 +314,7 @@
 
 - slug: pikmin-4
   title: "Pikmin 4"
-  editions: [{platform: switch}]
+  editions: [{platform: switch}, {platform: switch2}]
   igdb_id: 59843
   launch_price: null
 
@@ -330,3 +335,13 @@
   editions: [{platform: switch}]
   igdb_id: 37137
   launch_price: null
+
+- slug: new-super-mario-bros-u-deluxe
+  title: "New Super Mario Bros. U Deluxe"
+  editions: [{platform: switch}]
+  igdb_id: 109457
+
+- slug: clubhouse-games-51-worldwide-classics
+  title: "Clubhouse Games: 51 Worldwide Classics"
+  editions: [{platform: switch}]
+  igdb_id: 131961
