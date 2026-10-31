@@ -93,9 +93,9 @@ def test_adresse_de_contact_renseignee() -> None:
 
 def test_contact_encode_en_entites() -> None:
     text = (SITE / "mentions-legales.html").read_text(encoding="utf-8")
-    assert "mag.d3v+github@pm.me" not in text  # pas en clair dans la source
-    assert "mag.d3v+github@pm.me" in html.unescape(text)
-    assert "mailto:mag.d3v+github@pm.me" in html.unescape(text)
+    assert "mag.d3v+horspc@pm.me" not in text  # pas en clair dans la source
+    assert "mag.d3v+horspc@pm.me" in html.unescape(text)
+    assert "mailto:mag.d3v+horspc@pm.me" in html.unescape(text)
     assert "https://support.github.com/contact" in text
 
 

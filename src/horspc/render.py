@@ -30,10 +30,7 @@ GAMES_DIR = "jeux"
 AUTHOR = {
     "@type": "Person",
     "name": "Mvth1s",
-    "alternateName": "Mathis Aguado",
-    "url": "https://mathisaguado.vercel.app",
     "sameAs": [
-        "https://www.linkedin.com/in/mathis-aguado",
         "https://github.com/Mvth1s",
     ],
 }
