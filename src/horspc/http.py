@@ -70,12 +70,12 @@ class HttpClient:
                 if attempt == self._max_retries:
                     raise
                 delay = self._backoff * 2**attempt
-                log.warning("%s %s : %s, nouvel essai dans %.0f s", method, safe_url, exc, delay)
+                log.info("%s %s : %s, nouvel essai dans %.0f s", method, safe_url, exc, delay)
                 self._sleep(delay)
                 continue
             if response.status_code in self._retry_statuses and attempt < self._max_retries:
                 delay = _retry_after(response) or self._backoff * 2**attempt
-                log.warning(
+                log.info(
                     "%s %s : HTTP %d, nouvel essai dans %.0f s",
                     method,
                     safe_url,

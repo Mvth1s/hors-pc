@@ -9,6 +9,7 @@
 """
 
 import logging
+from collections import Counter
 from dataclasses import dataclass, field
 from urllib.parse import urlsplit
 
@@ -33,6 +34,7 @@ CHALLENGE_MARKERS = (
     "px-captcha",
     "Please enable JS and disable any ad blocker",
 )
+LEVELS = {"blocked": logging.WARNING, "rejected": logging.DEBUG}
 
 
 class SourceBlocked(Exception):
@@ -49,6 +51,10 @@ class Event:
     kind: str  # blocked | disallowed | broken | rejected | error | ok
     url: str
     detail: str
+    motif: str = ""  # détail sans la partie propre à la fiche, pour le récapitulatif
+
+    def __post_init__(self) -> None:
+        self.motif = self.motif or self.detail.split(" (")[0]
 
 
 @dataclass
@@ -92,10 +98,19 @@ class Fetcher:
             self._block(source, url, f"page de défi ({marker})")
         return response
 
-    def record(self, source: str, kind: str, url: str, detail: str) -> None:
-        self.events.append(Event(source, kind, url, detail))
-        level = logging.INFO if kind == "ok" else logging.WARNING
+    def record(self, source: str, kind: str, url: str, detail: str, motif: str = "") -> None:
+        self.events.append(Event(source, kind, url, detail, motif))
+        # WARNING réservé à ce qui demande une action (source bloquée) ; une offre refusée est
+        # le fonctionnement normal : détail en DEBUG, récapitulatif par motif en fin de relevé.
+        level = LEVELS.get(kind, logging.INFO)
         log.log(level, "%s [%s] %s : %s", source, kind, urlsplit(url).path, detail)
+
+    def log_rejections(self) -> None:
+        """Une ligne INFO : offres refusées par motif, du plus fréquent au plus rare."""
+        rejected = Counter(e.motif for e in self.events if e.kind == "rejected")
+        if rejected:
+            detail = ", ".join(f"{n} {motif}" for motif, n in rejected.most_common())
+            log.info("Offres refusées : %s", detail)
 
     def _block(self, source: str, url: str, reason: str) -> None:
         self.blocked[source] = reason

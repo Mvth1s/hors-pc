@@ -63,13 +63,13 @@ def fetch_cover(
 
 
 def _download(http: HttpClient, url: str, label: str) -> bytes | None:
-    """Télécharge une image WebP IGDB ; None (avec un avertissement) en cas d'échec."""
+    """Télécharge une image WebP IGDB ; None en cas d'échec (nouvel essai au run suivant)."""
     try:
         content = http.request("GET", url).content
         if content[:4] != b"RIFF" or content[8:12] != b"WEBP":
             raise ValueError("la réponse n'est pas une image WebP")
     except (httpx.HTTPError, ValueError) as exc:
-        log.warning("%s non téléchargée (%s) : %s", label, url.rsplit("/", 1)[-1], exc)
+        log.info("%s non téléchargée (%s) : %s", label, url.rsplit("/", 1)[-1], exc)
         return None
     return content
 

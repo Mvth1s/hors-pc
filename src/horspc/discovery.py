@@ -422,7 +422,7 @@ def load_cache(path: Path | None) -> IdentifyCache:
         return IdentifyCache()
     raw = json.loads(path.read_text(encoding="utf-8"))
     if raw.get("schema") != CACHE_SCHEMA:
-        log.warning("%s : schéma %r, cache ignoré", path, raw.get("schema"))
+        log.info("%s : schéma %r, cache ignoré", path, raw.get("schema"))
         return IdentifyCache()
     return IdentifyCache(
         products=raw.get("products", {}),
@@ -869,9 +869,7 @@ def sample_offers(
                 break
         with_offer += found
     rejected = Counter(
-        e.detail.split(" : ")[0]
-        for e in scraper.fetcher.events[first_event:]
-        if e.kind == "rejected"
+        e.motif for e in scraper.fetcher.events[first_event:] if e.kind == "rejected"
     )
     return {
         "games": len(chosen),

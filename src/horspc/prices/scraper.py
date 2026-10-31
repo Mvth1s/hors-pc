@@ -209,6 +209,7 @@ class Scraper:
                         del entry["sources"][source]
                         entry["checked"].pop(source, None)
                         entry.get("out_of_stock", {}).pop(source, None)
+        self.fetcher.log_rejections()
         events = [e.__dict__ for e in self.fetcher.events]
         broken = sorted(
             {f"{e.source} : {e.url}" for e in self.fetcher.events if e.kind == "broken"}
@@ -232,7 +233,9 @@ class Scraper:
         if page is None:
             return None
         if not self._same_game(page, titles, game, platform, entry, source, url):
-            self.fetcher.record(source, "rejected", url, f"autre produit : {page.name}")
+            self.fetcher.record(
+                source, "rejected", url, f"autre produit : {page.name}", "autre produit"
+            )
             return None
         if page.third_party_only:
             self.fetcher.record(source, "rejected", url, "offres de vendeurs tiers seulement")

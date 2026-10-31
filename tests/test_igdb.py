@@ -172,6 +172,23 @@ def test_release_date_europe_ou_monde_en_version_complete(
     ]
 
 
+def test_date_absente_d_un_jeu_decouvert_en_info(
+    igdb: IgdbClient, api: respx.MockRouter, caplog: pytest.LogCaptureFixture
+) -> None:
+    # Pas de release_date_override possible pour un jeu découvert : rien à faire, donc INFO.
+    caplog.set_level("INFO", logger="horspc.igdb")
+    api.post(GAMES_URL).respond(json=load_fixture("igdb_games.json"))
+    game = entry("sans-date", "Jeu sans date retenue", ["ps5"], 400001)
+    assert igdb.fetch_games([game], NOW, {"sans-date"})["sans-date"].release_date is None
+    assert [(r.levelname, r.getMessage()) for r in caplog.records if r.name == "horspc.igdb"] == [
+        (
+            "INFO",
+            "IGDB : sans-date, aucune date de sortie retenue (3 date(s) écartée(s) : "
+            "1 région, 1 sans date, 1 statut)",
+        )
+    ]
+
+
 def test_pas_d_avertissement_si_release_date_override(
     igdb: IgdbClient, api: respx.MockRouter, caplog: pytest.LogCaptureFixture
 ) -> None:

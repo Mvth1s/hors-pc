@@ -669,6 +669,7 @@ def test_build_complet_avec_decouverte(
 
 
 def test_data_json_v6_migre_en_v7(workdir: Path, caplog: pytest.LogCaptureFixture) -> None:
+    caplog.set_level("INFO")
     raw = json.loads((workdir / "data.json").read_text(encoding="utf-8"))
     raw["schema_version"] = 6
     for game in raw["games"]:
@@ -678,6 +679,7 @@ def test_data_json_v6_migre_en_v7(workdir: Path, caplog: pytest.LogCaptureFixtur
     assert migrated is not None and migrated.schema_version == 7
     assert {g.origin for g in migrated.games} == {"curated"}
     assert "migré en 7" in caplog.text
+    assert not [r for r in caplog.records if r.levelname == "WARNING"]  # aucune action requise
     data = run(workdir, None)
     assert data.schema_version == 7
     written = json.loads((workdir / "data.json").read_text(encoding="utf-8"))

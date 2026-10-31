@@ -70,7 +70,7 @@ def test_catalogue_lisible_sans_js() -> None:
     titles = re.findall(r'<h2 class="title"><a href="jeux/[^"]+/">([^<]+)</a></h2>', text)
     expected = [g["title"] for g in visible_games()]
     assert len(titles) == len(expected) >= 8
-    assert sorted(t.replace("&#x27;", "'") for t in titles) == sorted(expected)
+    assert sorted(html.unescape(t) for t in titles) == sorted(expected)
     assert f'<strong id="count">{len(expected)} jeux</strong>' in text
     assert "fetch(" not in (SITE / "app.js").read_text(encoding="utf-8")
 

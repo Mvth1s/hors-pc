@@ -110,7 +110,7 @@ def load_previous(path: Path) -> DataFile | None:
     if version == MIGRATABLE_VERSION and isinstance(raw.get("games"), list):
         raw = _migrate_v6(raw)
         version = expected
-        log.warning("%s en schema_version 6 : migré en %d (origin: curated)", path, expected)
+        log.info("%s en schema_version 6 : migré en %d (origin: curated)", path, expected)
     if version != expected:
         raise PreviousDataError(
             f"{path} est en schema_version {version!r}, {expected} attendu : "
@@ -260,13 +260,13 @@ def run(
     igdb_results = None
     generated_at = now
     if igdb is None:
-        log.warning("Mode hors ligne : champs IGDB et generated_at repris du data.json précédent")
+        log.info("Mode hors ligne : champs IGDB et generated_at repris du data.json précédent")
         # Un build hors ligne n'est pas une mise à jour : la fraîcheur affichée ne bouge pas.
         if previous_file is not None:
             generated_at = previous_file.generated_at
     else:
         try:
-            igdb_results = igdb.fetch_games(catalog.games, now)
+            igdb_results = igdb.fetch_games(catalog.games, now, catalog.discovered)
         except IgdbError as exc:
             log.warning("%s ; champs IGDB repris du data.json précédent", exc)
         else:
@@ -342,7 +342,7 @@ def run(
         redirects = _read_yaml_map(REDIRECTS_PATH)
         render.render_site(data, site_dir, redirects)
     elif render_html:
-        log.warning("Pas de gabarit index.html dans %s : rendu HTML ignoré", site_dir)
+        log.info("Pas de gabarit index.html dans %s : rendu HTML ignoré", site_dir)
     log.info("%s écrit : %d jeux", output_path, len(data.games))
     return data
 
