@@ -22,7 +22,7 @@ from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, NamedTuple
 
 import yaml
 
@@ -128,6 +128,7 @@ class Discovered:
     names: tuple[str, ...] = ()  # nom IGDB et noms alternatifs (correspondance au relevé)
     companies: tuple[str, ...] = ()  # éditeurs et studios, tolérés dans les noms marchands
     title_source: str = "nom_igdb"
+    title_skipped: tuple[str, ...] = ()  # noms alternatifs écartés du titre pour leur casse
     notes: list[str] = field(default_factory=list)
     igdb_slug: str = ""  # slug IGDB normalisé (slug du site à la première découverte)
     first_release: date | None = None
@@ -601,9 +602,10 @@ def discover(
     curated_pc_listed = curated_pc_warnings(igdb, curated, ctx.pc_id)
     localized = localized_titles(igdb, [g.igdb_id for g in kept])
     for game in kept:
-        game.title, game.title_source = display_title(
+        choice = display_title(
             game, localized.get(game.igdb_id), index[game.igdb_id], identifications
         )
+        game.title, game.title_source, game.title_skipped = choice
     return Result(
         products,
         harvest_rejected,
@@ -648,15 +650,25 @@ def _details(
         yield rows, candidates.editions_by_parent(igdb, chunk) if with_editions else {}
 
 
+class TitleChoice(NamedTuple):
+    title: str
+    source: str
+    skipped: tuple[str, ...] = ()  # noms alternatifs écartés pour leur casse
+
+
 def display_title(
     game: Discovered,
     localized: str | None,
     indexed: IndexedGame,
     identifications: dict[Product, Identification],
-) -> tuple[str, str]:
-    """Titre affiché et sa source, selon l'ordre de TITLE_SOURCES (jamais le nom marchand)."""
+) -> TitleChoice:
+    """Titre affiché et sa source, selon l'ordre de TITLE_SOURCES (jamais le nom marchand).
+
+    Un nom alternatif à la casse douteuse (tout en majuscules, « LIBéREZ ») sert au
+    rapprochement mais n'est jamais affiché : on passe à la source suivante.
+    """
     if localized:
-        return localized, "localisation_eu"
+        return TitleChoice(localized, "localisation_eu")
     main = frozenset(tokens(game.name))
     leclerc = Counter(
         ident.name
@@ -666,12 +678,31 @@ def display_title(
         and ident.name
         and frozenset(tokens(ident.name)) != main
     )
-    if leclerc:
+    skipped = tuple(
+        sorted({n for n in [*leclerc, *indexed.french_names] if not displayable_case(n)})
+    )
+    shown = {n: c for n, c in leclerc.items() if displayable_case(n)}
+    if shown:
         # Le nom le plus souvent rapproché, puis l'ordre alphabétique (résultat stable).
-        return min(leclerc, key=lambda n: (-leclerc[n], n)), "nom_leclerc"
-    if indexed.french_names:
-        return indexed.french_names[0], "titre_francais_igdb"
-    return game.name, "nom_igdb"
+        return TitleChoice(min(shown, key=lambda n: (-shown[n], n)), "nom_leclerc", skipped)
+    french = [n for n in indexed.french_names if displayable_case(n)]
+    if french:
+        return TitleChoice(french[0], "titre_francais_igdb", skipped)
+    return TitleChoice(game.name, "nom_igdb", skipped)
+
+
+def displayable_case(name: str) -> bool:
+    """Casse présentable : pas entièrement en majuscules (au moins 4 lettres) et aucun mot
+    mêlant au moins deux majuscules, des minuscules puis une majuscule (« LIBéREZ »).
+    « WarioWare », « NieR », « DX » ou « LEGO » dans un titre en minuscules restent admis."""
+    letters = [c for c in name if c.isalpha()]
+    if len(letters) >= 4 and all(c.isupper() for c in letters):
+        return False
+    for word in re.findall(r"[^\W\d_]+", name):
+        cases = "".join("U" if c.isupper() else "l" for c in word)
+        if re.search(r"^UU+l+U", cases):
+            return False
+    return True
 
 
 def _curated_missing(
@@ -987,6 +1018,9 @@ def summary(
         "kept_editions": editions,
         "kept_by_platform": dict(Counter(p for g in kept for p in g.products)),
         "title_sources": {s: sum(g.title_source == s for g in kept) for s in TITLE_SOURCES},
+        "titles_case_skipped": sorted(
+            f"{g.title} (écarté : {', '.join(g.title_skipped)})" for g in kept if g.title_skipped
+        ),
         "weekly_fiches": fiches,
         "first_run_images": images,
         "site_bytes_added": len(kept) * per_game,

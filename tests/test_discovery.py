@@ -518,12 +518,12 @@ def test_titre_par_priorite() -> None:
         }
 
     title = discovery.display_title
-    assert title(found, "Pokémon Bouclier (EU)", indexed, {}) == (
+    assert title(found, "Pokémon Bouclier (EU)", indexed, {})[:2] == (
         "Pokémon Bouclier (EU)",
         "localisation_eu",
     )
     # Nom alternatif rapproché d'un produit Leclerc, différent du nom principal.
-    assert title(found, None, indexed, ident("leclerc", "Pokémon Bouclier")) == (
+    assert title(found, None, indexed, ident("leclerc", "Pokémon Bouclier"))[:2] == (
         "Pokémon Bouclier",
         "nom_leclerc",
     )
@@ -535,7 +535,54 @@ def test_titre_par_priorite() -> None:
         "titre_francais_igdb"
     )
     indexed.french_names = ()
-    assert title(found, None, indexed, {}) == ("Pokémon Shield", "nom_igdb")
+    assert title(found, None, indexed, {}) == ("Pokémon Shield", "nom_igdb", ())
+
+
+def test_nom_alternatif_mal_casse_jamais_affiche() -> None:
+    indexed = game(
+        1, "Care Bears: Unlock the Magic", {"switch"}, "LES BISOUNOURS : LIBéREZ LA MAGIE"
+    )
+    indexed.french_names = (
+        "LES BISOUNOURS : LIBéREZ LA MAGIE",
+        "Les Bisounours : Libérez la magie",
+    )
+    found = discovery.Discovered(1, indexed.name, indexed.name, "Main Game", {})
+    ugly = "LES BISOUNOURS : LIBéREZ LA MAGIE"
+    leclerc = {
+        product("Les Bisounours Libérez la Magie Switch", "switch"): discovery.Identification(
+            "matched", 1, (), ugly
+        )
+    }
+    # Le nom a bien servi au rapprochement (source Leclerc) mais n'est pas affiché : on passe
+    # au « French title » suivant, correctement casé.
+    assert discovery.display_title(found, None, indexed, leclerc) == (
+        "Les Bisounours : Libérez la magie",
+        "titre_francais_igdb",
+        (ugly,),
+    )
+    indexed.french_names = (ugly,)
+    assert discovery.display_title(found, None, indexed, leclerc)[:2] == (
+        "Care Bears: Unlock the Magic",
+        "nom_igdb",
+    )
+
+
+@pytest.mark.parametrize(
+    ("name", "ok"),
+    [
+        ("LES BISOUNOURS : LIBéREZ LA MAGIE", False),
+        ("POKEMON BOUCLIER", False),
+        ("Les Bisounours : LIBéREZ la magie", False),
+        ("Pokémon Donjon Mystère : Équipe de Secours DX", True),
+        ("WarioWare: Get It Together!", True),
+        ("NieR Replicant", True),
+        ("LEGO Star Wars : La saga Skywalker", True),
+        ("ARMS", False),  # titre stylisé : le nom principal « Arms » sera affiché
+        ("DX", True),  # moins de 4 lettres
+    ],
+)
+def test_casse_presentable(name: str, ok: bool) -> None:
+    assert discovery.displayable_case(name) is ok
 
 
 @pytest.mark.parametrize(
