@@ -27,7 +27,13 @@ from pydantic import ValidationError
 from horspc.models import GameEntry, Platform, ScrapedObservation
 from horspc.prices import sources as src
 from horspc.prices.fetch import Disallowed, Fetcher, SourceBlocked
-from horspc.prices.matching import is_code_box, title_matches, url_platforms
+from horspc.prices.matching import (
+    is_code_box,
+    platform_words,
+    title_matches,
+    tokens,
+    url_platforms,
+)
 from horspc.prices.trust import rejection
 
 log = logging.getLogger(__name__)
@@ -163,6 +169,15 @@ class Report:
         return text + tail
 
 
+def alias_title(alias: str) -> str:
+    """Alias d'édition sans ses mots de plateforme : title_matches les retire déjà du nom du
+    produit avant de comparer (« Nintendo Switch 2 Edition » → « Edition »). La plateforme
+    reste exigée par title_matches, la règle stricte (aucun mot en trop) est inchangée."""
+    words = tokens(alias)
+    skip = platform_words(words)
+    return " ".join(w for i, w in enumerate(words) if i not in skip)
+
+
 class Scraper:
     def __init__(self, enabled: dict[str, bool], fetcher: Fetcher) -> None:
         self.enabled = [s for s in SOURCE_ORDER if enabled.get(s)]
@@ -189,9 +204,11 @@ class Scraper:
         self.companies = companies or {}
         observations: list[ScrapedObservation] = []
         for game in games:
-            titles = [game.title, *names.get(game.slug, [])]
+            base_titles = [game.title, *names.get(game.slug, [])]
             # Une édition par console : EAN, fiches et offres propres (cache slug → plateforme).
-            for platform in game.platforms:
+            for edition in game.editions:
+                platform = edition.platform
+                titles = [*base_titles, *map(alias_title, edition.aliases)]
                 entry = (
                     discovered["games"]
                     .setdefault(game.slug, {})
