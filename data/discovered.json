@@ -3060,6 +3060,18 @@
           "leclerc": "https://www.e.leclerc/fp/wild-west-shooter-ps5-5055377606626",
           "pixmania": "https://www.pixmania.com/fr/fr/wild-west-shooter-ps5-489645.html"
         }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5055377606602"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/wild-west-shooter-code-in-a-box-switch-5055377606602"
+        }
       }
     },
     "wildshade-unicorn-champions": {

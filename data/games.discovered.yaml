@@ -7,7 +7,9 @@
   igdb_id: 256202
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -17,7 +19,9 @@
   igdb_id: 297041
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -27,6 +31,7 @@
   igdb_id: 143059
   editions:
   - platform: ps5
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -36,7 +41,9 @@
   igdb_id: 356845
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -46,6 +53,7 @@
   igdb_id: 195520
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -55,7 +63,9 @@
   igdb_id: 198385
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -65,6 +75,7 @@
   igdb_id: 270311
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -74,7 +85,9 @@
   igdb_id: 279251
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -84,6 +97,7 @@
   igdb_id: 26759
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -93,6 +107,7 @@
   igdb_id: 135828
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -102,6 +117,7 @@
   igdb_id: 255335
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -111,6 +127,7 @@
   igdb_id: 76888
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -120,6 +137,7 @@
   igdb_id: 228528
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -129,6 +147,7 @@
   igdb_id: 401103
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -138,6 +157,7 @@
   igdb_id: 292144
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -147,6 +167,7 @@
   igdb_id: 116419
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -156,7 +177,9 @@
   igdb_id: 324758
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -166,6 +189,7 @@
   igdb_id: 300751
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -175,6 +199,7 @@
   igdb_id: 172426
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -184,6 +209,7 @@
   igdb_id: 216551
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -193,6 +219,7 @@
   igdb_id: 117934
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -202,6 +229,7 @@
   igdb_id: 143617
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -211,6 +239,7 @@
   igdb_id: 152206
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -220,6 +249,7 @@
   igdb_id: 128307
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -229,6 +259,7 @@
   igdb_id: 254851
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -238,6 +269,7 @@
   igdb_id: 306143
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -247,7 +279,9 @@
   igdb_id: 255901
   editions:
   - platform: ps5
+    aliases: []
   - platform: xbox_series
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -257,7 +291,9 @@
   igdb_id: 400095
   editions:
   - platform: ps5
+    aliases: []
   - platform: xbox_series
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -267,6 +303,7 @@
   igdb_id: 308052
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -276,6 +313,7 @@
   igdb_id: 287856
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -285,6 +323,7 @@
   igdb_id: 142814
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -294,6 +333,7 @@
   igdb_id: 146442
   editions:
   - platform: ps5
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -303,6 +343,7 @@
   igdb_id: 122237
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -312,6 +353,7 @@
   igdb_id: 287580
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -321,6 +363,7 @@
   igdb_id: 236659
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -330,6 +373,7 @@
   igdb_id: 217550
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -339,6 +383,7 @@
   igdb_id: 191396
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -348,6 +393,7 @@
   igdb_id: 138952
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -357,6 +403,7 @@
   igdb_id: 314941
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -366,6 +413,7 @@
   igdb_id: 266725
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -375,6 +423,7 @@
   igdb_id: 146762
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -384,6 +433,7 @@
   igdb_id: 55192
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -393,6 +443,7 @@
   igdb_id: 144940
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -402,6 +453,7 @@
   igdb_id: 404063
   editions:
   - platform: ps5
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -411,6 +463,7 @@
   igdb_id: 371418
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -420,6 +473,7 @@
   igdb_id: 282055
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -429,6 +483,7 @@
   igdb_id: 138343
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -438,6 +493,7 @@
   igdb_id: 338085
   editions:
   - platform: switch2
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -447,6 +503,7 @@
   igdb_id: 139570
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -456,7 +513,9 @@
   igdb_id: 195094
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -466,6 +525,7 @@
   igdb_id: 154788
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -475,6 +535,7 @@
   igdb_id: 139969
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -484,6 +545,7 @@
   igdb_id: 144207
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -493,6 +555,7 @@
   igdb_id: 163828
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -502,6 +565,7 @@
   igdb_id: 188163
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -511,6 +575,7 @@
   igdb_id: 37067
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -520,6 +585,7 @@
   igdb_id: 103315
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -529,7 +595,9 @@
   igdb_id: 137131
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -539,7 +607,9 @@
   igdb_id: 152199
   editions:
   - platform: ps5
+    aliases: []
   - platform: xbox_series
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -549,7 +619,9 @@
   igdb_id: 216318
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -559,6 +631,7 @@
   igdb_id: 252986
   editions:
   - platform: xbox_series
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -568,6 +641,7 @@
   igdb_id: 306150
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -577,6 +651,7 @@
   igdb_id: 409690
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -586,6 +661,7 @@
   igdb_id: 330227
   editions:
   - platform: ps5
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -595,7 +671,9 @@
   igdb_id: 261154
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -605,7 +683,9 @@
   igdb_id: 317888
   editions:
   - platform: ps5
+    aliases: []
   - platform: xbox_series
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -615,7 +695,9 @@
   igdb_id: 371252
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -625,6 +707,7 @@
   igdb_id: 211316
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -634,6 +717,7 @@
   igdb_id: 412641
   editions:
   - platform: switch2
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -643,15 +727,17 @@
   igdb_id: 163146
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
-  missed_runs: 0
+  missed_runs: 1
 - slug: lol-surprise-remix-we-rule-the-world
   title: 'L.O.L. Surprise! Remix Edition: We Rule The World'
   title_source: nom_leclerc
   igdb_id: 138983
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -661,6 +747,7 @@
   igdb_id: 271399
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -670,6 +757,7 @@
   igdb_id: 254328
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -679,6 +767,7 @@
   igdb_id: 306924
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -688,6 +777,7 @@
   igdb_id: 306137
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -697,6 +787,7 @@
   igdb_id: 143609
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -706,6 +797,7 @@
   igdb_id: 152354
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -715,6 +807,7 @@
   igdb_id: 191398
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -724,6 +817,7 @@
   igdb_id: 366880
   editions:
   - platform: switch2
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -733,6 +827,7 @@
   igdb_id: 266674
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -742,6 +837,7 @@
   igdb_id: 113109
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -751,6 +847,7 @@
   igdb_id: 408719
   editions:
   - platform: switch2
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -760,6 +857,7 @@
   igdb_id: 135142
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -769,6 +867,7 @@
   igdb_id: 274885
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -778,6 +877,7 @@
   igdb_id: 266690
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -787,6 +887,7 @@
   igdb_id: 353783
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -796,6 +897,7 @@
   igdb_id: 144821
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -805,6 +907,7 @@
   igdb_id: 144051
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -814,6 +917,7 @@
   igdb_id: 128069
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -823,6 +927,7 @@
   igdb_id: 366893
   editions:
   - platform: switch2
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -832,6 +937,7 @@
   igdb_id: 115653
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -841,6 +947,7 @@
   igdb_id: 144052
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -850,6 +957,7 @@
   igdb_id: 191930
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -859,6 +967,7 @@
   igdb_id: 248295
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -868,6 +977,7 @@
   igdb_id: 254340
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -877,6 +987,7 @@
   igdb_id: 175849
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -886,6 +997,7 @@
   igdb_id: 152214
   editions:
   - platform: ps5
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -895,6 +1007,7 @@
   igdb_id: 122338
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -904,6 +1017,7 @@
   igdb_id: 124953
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -913,7 +1027,9 @@
   igdb_id: 291538
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -923,6 +1039,7 @@
   igdb_id: 236658
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -932,6 +1049,7 @@
   igdb_id: 78754
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -941,6 +1059,7 @@
   igdb_id: 380652
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -950,6 +1069,7 @@
   igdb_id: 26761
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -959,15 +1079,17 @@
   igdb_id: 110057
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
-  missed_runs: 2
+  missed_runs: 3
 - slug: star-fox
   title: Star Fox
   title_source: nom_igdb
   igdb_id: 400709
   editions:
   - platform: switch2
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -977,6 +1099,7 @@
   igdb_id: 136076
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -986,6 +1109,7 @@
   igdb_id: 306148
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -995,6 +1119,7 @@
   igdb_id: 254327
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1004,6 +1129,7 @@
   igdb_id: 287854
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1013,6 +1139,7 @@
   igdb_id: 151652
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1022,6 +1149,7 @@
   igdb_id: 338087
   editions:
   - platform: switch2
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1031,6 +1159,7 @@
   igdb_id: 37179
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1040,6 +1169,7 @@
   igdb_id: 337030
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1049,6 +1179,7 @@
   igdb_id: 115282
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1058,6 +1189,7 @@
   igdb_id: 405460
   editions:
   - platform: switch2
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1067,6 +1199,7 @@
   igdb_id: 143614
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1076,6 +1209,7 @@
   igdb_id: 78111
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1085,6 +1219,7 @@
   igdb_id: 217556
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1094,6 +1229,7 @@
   igdb_id: 393050
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1103,6 +1239,7 @@
   igdb_id: 317554
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1112,6 +1249,7 @@
   igdb_id: 201784
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1121,6 +1259,7 @@
   igdb_id: 404058
   editions:
   - platform: ps5
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1130,6 +1269,7 @@
   igdb_id: 147480
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1139,6 +1279,7 @@
   igdb_id: 152358
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1148,6 +1289,7 @@
   igdb_id: 254341
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1157,6 +1299,9 @@
   igdb_id: 371137
   editions:
   - platform: ps5
+    aliases: []
+  - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1166,7 +1311,9 @@
   igdb_id: 258256
   editions:
   - platform: ps5
+    aliases: []
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1176,6 +1323,7 @@
   igdb_id: 191411
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
@@ -1185,6 +1333,7 @@
   igdb_id: 89550
   editions:
   - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
   missed_runs: 0
