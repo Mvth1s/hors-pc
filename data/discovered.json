@@ -1,5 +1,128 @@
 {
   "games": {
+    "30-sport-games-in-1": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "34-sports-games-world-edition": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5016488141642"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/34-sports-games-world-edition-ps5-5016488141642",
+          "pixmania": "https://www.pixmania.com/fr/fr/34-sports-games-world-edition-ps5-275095.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "3d-minigolf": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "40-sports-games-in-1": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664532936"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/40-sports-games-in-1-ps5-3700664532936",
+          "pixmania": "https://www.pixmania.com/fr/fr/40-sports-games-in-1-ps5-435544.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "60-in-1-game-collection": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664529486"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/60-in-1-game-collection-switch-3700664529486",
+          "pixmania": "https://www.pixmania.com/fr/fr/60-in-1-game-collection-nintendo-switch-139365.html"
+        }
+      }
+    },
+    "alice-gear-aegis-cs-concerto-of-simulatrix": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060690796596"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/alice-gear-aegis-cs-concerto-of-simulatrix-ps5-5060690796596",
+          "pixmania": "https://www.pixmania.com/fr/fr/alice-gear-aegis-cs-concerto-of-simulatrix-ps5-244217.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060690796558"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/alice-gear-aegis-cs-concerto-of-simulatrix-switch-5060690796558",
+          "pixmania": "https://www.pixmania.com/fr/fr/alice-gear-aegis-cs-concerto-of-simulatrix-nintendo-switch-168434.html"
+        }
+      }
+    },
     "animal-crossing-new-horizons": {
       "switch": {
         "checked": {
@@ -10,10 +133,72 @@
           "0045496425425"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/animal-crossing-new-horizons-switch-0045496425425"
+        }
+      }
+    },
+    "animal-hospital": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3665962021691"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/animal-hospital-switch-3665962021691"
+        }
+      }
+    },
+    "arcade-game-zone": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664531335"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/arcade-game-zone-ps5-3700664531335",
+          "pixmania": "https://www.pixmania.com/fr/fr/arcade-game-zone-ps5-244362.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664531304"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/arcade-game-zone-switch-3700664531304",
+          "pixmania": "https://www.pixmania.com/fr/fr/arcade-game-zone-nintendo-switch-244386.html"
+        }
+      }
+    },
+    "arms": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496420369"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-arms-switch-1014271-231438.html"
         }
       }
     },
@@ -27,7 +212,7 @@
           "0045496424688"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/astral-chain-switch-0045496424688",
@@ -52,11 +237,222 @@
         }
       }
     },
+    "bakugan-champions-of-vestroia": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "barbie-dreamhouse-adventures": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5056635604774"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/barbie-dreamhouse-adventures-switch-5056635604774",
+          "pixmania": "https://www.pixmania.com/fr/fr/barbie-dreamhouse-adventures-nintendo-switch-244479.html"
+        }
+      }
+    },
+    "bayonetta-3": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496478452"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/bayonetta-3-switch-0045496478452",
+          "pixmania": "https://www.pixmania.com/fr/fr/bayonetta-3-jeu-switch-140938.html"
+        }
+      }
+    },
+    "bayonetta-origins-cereza-and-the-lost-demon": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496479107"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/bayonetta-origins-cereza-and-the-lost-demon-switch-0045496479107",
+          "pixmania": "https://www.pixmania.com/fr/fr/bayonetta-origins-cereza-and-the-lost-demon-switch-165525.html"
+        }
+      }
+    },
+    "birushana-winds-of-fate": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5061077022062"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/birushana-winds-of-fate-jeu-nintendo-switch-5061077022062",
+          "pixmania": "https://www.pixmania.com/fr/fr/birushana-winds-of-fate-nintendo-switch-569731.html"
+        }
+      }
+    },
+    "boardwalk-arcade-2": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5056635608246"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/boardwalk-arcade-2-switch-5056635608246",
+          "pixmania": "https://www.pixmania.com/fr/fr/boardwalk-arcade-2-nintendo-switch-273154.html"
+        }
+      }
+    },
+    "cadence-of-hyrule-crypt-of-the-necrodancer-featuring-the-legend-of-zelda": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496426583"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/cadence-of-hyrule-crypt-of-the-necrodancer-featuring-the-legend-of-zelda-switch-0045496426583"
+        }
+      }
+    },
+    "care-bears-unlock-the-magic": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5016488142663"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/les-bisounours-liberez-la-magie-ps5-5016488142663",
+          "pixmania": "https://www.pixmania.com/fr/fr/les-bisounours-liberez-la-magie-ps5-386218.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5016488142670"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/les-bisounours-liberez-la-magie-switch-5016488142670",
+          "pixmania": "https://www.pixmania.com/fr/fr/les-bisounours-liberez-la-magie-nintendo-switch-384151.html"
+        }
+      }
+    },
+    "cat-rescue-story": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3665962036466"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/cat-rescue-story-code-in-a-box-switch-3665962036466"
+        }
+      }
+    },
+    "chocobo-gp": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496429430"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/chocobo-gp-switch-0045496429430",
+          "pixmania": "https://www.pixmania.com/fr/fr/chocobo-gp-jeu-nintendo-switch-92144.html"
+        }
+      }
+    },
+    "cocomelon-play-with-jj": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060528038904"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/cocomelon-play-with-jj-switch-5060528038904",
+          "pixmania": "https://www.pixmania.com/fr/fr/cocomelon-play-with-jj-nintendo-switch-139282.html"
+        }
+      }
+    },
     "code-violet": {
       "ps5": {
         "checked": {
           "leclerc": "2026-10-25",
           "pixmania": "2026-10-25"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "construction-machines-simulator": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
         },
         "eans": [],
         "sources": {}
@@ -72,6 +468,24 @@
         "sources": {}
       }
     },
+    "dc-super-hero-girls-teen-power": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496427573"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/dc-super-hero-girls-teen-power-switch-0045496427573",
+          "pixmania": "https://www.pixmania.com/fr/fr/dc-super-hero-girls-teen-power-jeu-nintendo-switch-90491.html"
+        }
+      }
+    },
     "demon-s-souls": {
       "ps5": {
         "checked": {
@@ -80,6 +494,56 @@
         },
         "eans": [],
         "sources": {}
+      }
+    },
+    "demon-throttle": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060760888770"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/demon-throttle-switch-5060760888770"
+        }
+      }
+    },
+    "detective-pikachu-returns": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496479633"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/le-retour-de-detective-pikachu-switch-0045496479633",
+          "pixmania": "https://www.pixmania.com/fr/fr/le-retour-de-detective-pikachu-switch-231725.html"
+        }
+      }
+    },
+    "dino-ranch-ride-to-the-rescue": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3701529506970"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/dino-ranch-mission-sauvetage-switch-3701529506970",
+          "pixmania": "https://www.pixmania.com/fr/fr/dino-ranch-mission-sauvetage-jeu-nintendo-switch-241761.html"
+        }
       }
     },
     "donkey-kong-bananza": {
@@ -92,10 +556,206 @@
         "eans": [
           "0045496312770"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
         "sources": {
           "boulanger": "https://www.boulanger.com/ref/1220888",
           "leclerc": "https://www.e.leclerc/fp/donkey-kong-bananza-nintendo-switch-2-0045496312770",
           "pixmania": "https://www.pixmania.com/fr/fr/donkey-kong-bananza-switch-2-397688.html"
+        }
+      }
+    },
+    "donkey-kong-country-returns-hd": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496512712"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/donkey-kong-country-returns-hd-switch-0045496512712",
+          "pixmania": "https://www.pixmania.com/fr/fr/donkey-kong-country-returns-hd-switch-290754.html"
+        }
+      }
+    },
+    "ea-sports-ufc-5": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      },
+      "xbox_series": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5030934125260"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/ea-sports-ufc-5-xbox-series-5030934125260"
+        }
+      }
+    },
+    "ea-sports-ufc-6": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5030943125466"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/ea-sports-ufc-6-ps5-5030943125466",
+          "pixmania": "https://www.pixmania.com/fr/fr/ea-sports-ufc-6-ps5-586972.html"
+        }
+      },
+      "xbox_series": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5030939125463"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/ea-sports-ufc-6-xbox-series-5030939125463"
+        }
+      }
+    },
+    "emio-the-smiling-man-famicom-detective-club": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496512255"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/emio-l-homme-au-sourire-famicom-detective-club-switch-0045496512255",
+          "pixmania": "https://www.pixmania.com/fr/fr/emio-l-homme-au-sourire-famicom-detective-club-switch-305179.html"
+        }
+      }
+    },
+    "endless-ocean-luminous": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "family-trainer": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "farmers-vs-zombies": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "8720256139584"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/farmers-vs-zombies-ps5-8720256139584"
+        }
+      }
+    },
+    "farming-simulator-20": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3512899122512"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/farming-simulator-20-switch-3512899122512",
+          "pixmania": "https://www.pixmania.com/fr/fr/farming-simulator-20-switch-514609.html"
+        }
+      }
+    },
+    "farming-simulator-kids": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4064635420295"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/farming-simulator-kids-code-in-a-box-switch-4064635420295",
+          "pixmania": "https://www.pixmania.com/fr/fr/farming-simulator-kids-jeu-nintendo-switch-code-dans-la-boite-316123.html"
+        }
+      }
+    },
+    "fashion-dreamer": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496511173"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/fashion-dreamer-switch-0045496511173",
+          "pixmania": "https://www.pixmania.com/fr/fr/fashion-dreamer-switch-243350.html"
+        }
+      }
+    },
+    "fire-emblem-engage": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496478568"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/fire-emblem-engage-switch-0045496478568"
         }
       }
     },
@@ -123,6 +783,123 @@
         "sources": {}
       }
     },
+    "fire-emblem-warriors-three-hopes": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496429959"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/fire-emblem-warriors-three-hopes-switch-0045496429959",
+          "pixmania": "https://www.pixmania.com/fr/fr/fire-emblem-warriors-three-hopes-switch-132045.html"
+        }
+      }
+    },
+    "fitness-boxing-2-rhythm-and-exercise": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496427184"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/fitness-boxing-2-switch-272073.html"
+        }
+      }
+    },
+    "fitness-boxing-3-your-personal-trainer": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496512804"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/fitness-boxing-3-your-personal-trainer-switch-0045496512804",
+          "pixmania": "https://www.pixmania.com/fr/fr/fitness-boxing-3-your-personal-trainer-jeu-nintendo-switch-345963.html"
+        }
+      }
+    },
+    "fitness-boxing-feat-hatsune-miku": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060941718209"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/fitness-boxing-feat-hatsune-miku-switch-305177.html"
+        }
+      }
+    },
+    "game-builder-garage": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496428952"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/l-atelier-du-jeu-video-switch-0045496428952",
+          "pixmania": "https://www.pixmania.com/fr/fr/latelier-du-jeu-video-jeu-switch-90473.html"
+        }
+      }
+    },
+    "gear-dot-club-unlimited": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3760156485522"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/gear-club-unlimited-code-in-a-box-switch-3760156485522"
+        }
+      }
+    },
+    "geminose-animal-popstars": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060760882693"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/geminose-animal-popstars-switch-5060760882693",
+          "pixmania": "https://www.pixmania.com/fr/fr/geminose-animal-popstars-nintendo-switch-97122.html"
+        }
+      }
+    },
     "ghost-of-yotei": {
       "ps5": {
         "checked": {
@@ -137,6 +914,20 @@
           "boulanger": "https://www.boulanger.com/ref/1222380",
           "leclerc": "https://www.e.leclerc/fp/ghost-of-yotei-ps5-0711719020240",
           "pixmania": "https://www.pixmania.com/fr/fr/ghost-of-yotei-ps5-443902.html"
+        }
+      }
+    },
+    "god-of-war-laufey": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0711719075660"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/god-of-war-laufey-ps5-0711719075660"
         }
       }
     },
@@ -195,6 +986,386 @@
         }
       }
     },
+    "hello-kitty-and-friends-freeze-tag-party": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "hidden-objects-collection-5-detective-stories": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5055377606329"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/hidden-objects-collection-5-detective-stories-switch-5055377606329",
+          "pixmania": "https://www.pixmania.com/fr/fr/hidden-objects-collection-5-detective-stories-nintendo-switch-273199.html"
+        }
+      }
+    },
+    "hyrule-warriors-age-of-calamity": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496427030"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/hyrule-warriors-l-ere-du-fleau-switch-0045496427030"
+        }
+      }
+    },
+    "hyrule-warriors-age-of-imprisonment": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496313517"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/hyrule-warriors-les-chroniques-du-sceau-nintendo-switch-2-0045496313517"
+        }
+      }
+    },
+    "instant-chef-party": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664527413",
+          "3700664529059"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/instant-chef-party-switch-3700664529059",
+          "pixmania": "https://www.pixmania.com/fr/fr/instant-chef-party-switch-139486.html"
+        }
+      }
+    },
+    "instant-sports-all-stars": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664530178"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/instant-sports-all-stars-ps5-3700664530178",
+          "pixmania": "https://www.pixmania.com/fr/fr/instant-sports-all-stars-jeu-ps5-127458.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664529875"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/instant-sports-all-stars-switch-3700664529875",
+          "pixmania": "https://www.pixmania.com/fr/fr/instant-sports-all-stars-jeu-switch-127109.html"
+        }
+      }
+    },
+    "instant-sports-paradise": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664529172"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/instant-sports-paradise-switch-3700664529172",
+          "pixmania": "https://www.pixmania.com/fr/fr/instant-sports-paradise-jeu-switch-99565.html"
+        }
+      }
+    },
+    "instant-sports-summer-games": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664527345"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/instant-sports-summer-games-switch-3700664527345",
+          "pixmania": "https://www.pixmania.com/fr/fr/instant-sports-summer-games-switch-147034.html"
+        }
+      }
+    },
+    "instant-sports-tennis": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "instant-sports-winter-games": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664529066"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/instant-sports-winter-games-switch-3700664529066",
+          "pixmania": "https://www.pixmania.com/fr/fr/instant-sports-winter-games-nintendo-switch-97150.html"
+        }
+      }
+    },
+    "junior-league-sports-3-in-1-collection": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3663110003896"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/junior-league-sports-3-in-1-collection-code-in-a-box-switch-3663110003896"
+        }
+      }
+    },
+    "just-dance-2018": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216018216"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2018-switch-3307216018216",
+          "pixmania": "https://www.pixmania.com/fr/fr/just-dance-2018-jeu-switch-108674.html"
+        }
+      }
+    },
+    "just-dance-2019": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216081258",
+          "3307216172499"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2019-code-in-a-box-switch-3307216172499",
+          "pixmania": "https://www.pixmania.com/fr/fr/just-dance-2019-jeu-switch-99540.html"
+        }
+      }
+    },
+    "just-dance-2021": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216176060"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2021-ps5-3307216176060",
+          "pixmania": "https://www.pixmania.com/fr/fr/just-dance-2021-jeu-ps5-90950.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216221067"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2021-code-in-a-box-switch-3307216221067"
+        }
+      }
+    },
+    "just-dance-2022": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216211020"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2022-ps5-3307216211020",
+          "pixmania": "https://www.pixmania.com/fr/fr/just-dance-2022-jeu-ps5-90726.html"
+        }
+      },
+      "xbox_series": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216210665"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2022-xbox-series-3307216210665"
+        }
+      }
+    },
+    "just-dance-2023-edition": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216248514"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2023-edition-code-in-a-box-ps5-3307216248514"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216247821"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2023-edition-code-in-a-box-switch-3307216247821",
+          "pixmania": "https://www.pixmania.com/fr/fr/just-dance-2023-edition-code-in-a-box-nintendo-switch-147782.html"
+        }
+      }
+    },
+    "just-dance-2024-edition": {
+      "xbox_series": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216270355"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2024-edition-code-in-a-box-xbox-series-3307216270355"
+        }
+      }
+    },
+    "just-dance-2025-edition": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216295716"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-2025-edition-code-in-a-box-switch-3307216295716"
+        }
+      }
+    },
+    "just-dance-decades-of-hits": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216314332"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/just-dance-decades-of-hits-code-in-a-box-switch-3307216314332",
+          "pixmania": "https://www.pixmania.com/fr/fr/just-dance-decades-of-hits-switch-646656.html"
+        }
+      }
+    },
+    "kingdom-of-asteborg": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0789993811304"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/kingdom-of-asteborg-playstation-5-271676.html"
+        }
+      }
+    },
     "kirby-air-riders": {
       "switch2": {
         "checked": {
@@ -235,11 +1406,179 @@
           "0045496421625"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/kirby-star-allies-switch-0045496421625",
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-kirby-star-allies-standard-nintendo-switch-231390.html"
+        }
+      }
+    },
+    "lets-sing-2024": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4020628611774"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-2024-ps5-4020628611774",
+          "pixmania": "https://www.pixmania.com/fr/fr/let-s-sing-2024-ps5-270763.html"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4020628611750"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-2024-switch-4020628611750"
+        }
+      }
+    },
+    "lets-sing-2025": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4020628582326"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-2025-ps5-4020628582326"
+        }
+      },
+      "xbox_series": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4020628582296"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-2025-xbox-series-4020628582296"
+        }
+      }
+    },
+    "lets-sing-2026": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4020628555078"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-2026-ps5-4020628555078"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4020628555054"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-2026-switch-4020628555054"
+        }
+      }
+    },
+    "lets-sing-abba": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4020628640569"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-presents-abba-switch-4020628640569",
+          "pixmania": "https://www.pixmania.com/fr/fr/let-s-sing-abba-nintendo-switch-140813.html"
+        }
+      }
+    },
+    "lets-sing-presents-abba": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "9120131605682"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-presents-abba-nintendo-switch-2-9120131605682"
+        }
+      }
+    },
+    "lol-surprise-movie-night": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060760884147"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/l-o-l-surprise-movie-night-switch-5060760884147"
+        }
+      }
+    },
+    "lol-surprise-remix-we-rule-the-world": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664529691"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/l-o-l-surprise-remix-edition-we-rule-the-world-switch-3700664529691"
+        }
+      }
+    },
+    "lol-surprise-roller-dreams-racing": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5056635605238"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/l-o-l-surprise-roller-dreams-racing-switch-5056635605238"
         }
       }
     },
@@ -254,6 +1593,74 @@
         ],
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/luigi-s-mansion-3-switch-0045496425258"
+        }
+      }
+    },
+    "luigis-mansion-2-hd": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496512156"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/luigi-s-mansion-2-hd-switch-0045496512156",
+          "pixmania": "https://www.pixmania.com/fr/fr/luigi-s-mansion-2-hd-switch-273428.html"
+        }
+      }
+    },
+    "maestro": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3701529517044"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/maestro-switch-3701529517044"
+        }
+      }
+    },
+    "mario-and-luigi-brothership": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496512514"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-luigi-l-epopee-fraternelle-switch-0045496512514"
+        }
+      }
+    },
+    "mario-golf-super-rush": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496427719",
+          "0045496427726"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-golf-super-rush-switch-0045496427726",
+          "pixmania": "https://www.pixmania.com/fr/fr/mario-golf-super-rush-jeu-nintendo-switch-90515.html"
         }
       }
     },
@@ -275,6 +1682,21 @@
         }
       }
     },
+    "mario-party-superstars": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496428662"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-party-superstars-switch-0045496428662",
+          "pixmania": "https://www.pixmania.com/fr/fr/mario-party-superstars-jeu-switch-90450.html"
+        }
+      }
+    },
     "mario-rabbids-kingdom-battle": {
       "switch": {
         "checked": {
@@ -289,6 +1711,23 @@
         }
       }
     },
+    "mario-strikers-battle-league": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496429720"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-strikers-battle-league-football-switch-0045496429720"
+        }
+      }
+    },
     "mario-tennis-aces": {
       "switch": {
         "checked": {
@@ -300,11 +1739,40 @@
           "0045496422011"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/mario-tennis-aces-switch-0045496421984",
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-mario-tennis-aces-standard-nintendo-switch-231540.html"
+        }
+      }
+    },
+    "mario-tennis-fever": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496313623"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-tennis-fever-nintendo-switch-2-0045496313623"
+        }
+      }
+    },
+    "mario-vs-donkey-kong": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496511531"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/mario-vs-donkey-kong-switch-0045496511531",
+          "pixmania": "https://www.pixmania.com/fr/fr/mario-vs-donkey-kong-switch-237712.html"
         }
       }
     },
@@ -322,6 +1790,20 @@
         }
       }
     },
+    "marvel-ultimate-alliance-3-the-black-order": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496423438"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-marvel-ultimate-alliance-3-the-black-order-standard-nintendo-switch-231500.html"
+        }
+      }
+    },
     "metroid-dread": {
       "switch": {
         "checked": {
@@ -332,7 +1814,7 @@
           "0045496428471"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/metroid-dread-switch-0045496428471",
@@ -378,10 +1860,39 @@
           "0045496478926"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/metroid-prime-remastered-switch-0045496478926"
+        }
+      }
+    },
+    "metroid-ravenous": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496315597"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/metroid-ravenous-nintendo-switch-2-0045496315597"
+        }
+      }
+    },
+    "new-pokemon-snap": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496427344"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/new-pokemon-snap-switch-0045496427344",
+          "pixmania": "https://www.pixmania.com/fr/fr/jeu-nintendo-switch-new-pokemon-snap-90433.html"
         }
       }
     },
@@ -421,6 +1932,20 @@
         }
       }
     },
+    "over-requiemz": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5061077022796"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/over-requiemz-nintendo-switch-588847.html"
+        }
+      }
+    },
     "paper-mario-the-origami-king": {
       "switch": {
         "checked": {
@@ -431,10 +1956,39 @@
           "0045496426422"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/paper-mario-the-origami-king-switch-0045496426422"
+        }
+      }
+    },
+    "paper-mario-the-thousand-year-door": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496511906"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/paper-mario-la-porte-millenaire-switch-0045496511906",
+          "pixmania": "https://www.pixmania.com/fr/fr/paper-mario-la-porte-millenaire-switch-273420.html"
+        }
+      }
+    },
+    "path-of-mystery-a-brush-with-death": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5061077021614"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/path-of-mystery-a-brush-with-death-nintendo-switch-558933.html"
         }
       }
     },
@@ -448,11 +2002,43 @@
           "0045496479305"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/pikmin-4-switch-0045496479305",
           "pixmania": "https://www.pixmania.com/fr/fr/pikmin-4-switch-171084.html"
+        }
+      }
+    },
+    "pocoyo-party": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "8437015294278"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pocoyo-party-switch-8437015294278"
+        }
+      }
+    },
+    "pokemon-brilliant-diamond": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496428082"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pokemon-diamant-etincelant-switch-0045496428082",
+          "pixmania": "https://www.pixmania.com/fr/fr/pokemon-diamant-etincelant-jeu-nintendo-switch-664099.html"
         }
       }
     },
@@ -483,7 +2069,7 @@
           "0045496428280"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/legendes-pokemon-arceus-switch-0045496428280",
@@ -531,6 +2117,73 @@
         }
       }
     },
+    "pokemon-mystery-dungeon-rescue-team-dx": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496425999",
+          "0045496426002"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pokemon-donjon-mystere-equipe-de-secours-dx-switch-0045496426002",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-pokemon-mystery-dungeon-rescue-team-dx-switch-standard-nintendo-switch-231402.html"
+        }
+      }
+    },
+    "pokemon-pokopia": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496313838"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pokemon-pokopia-nintendo-switch-2-0045496313838"
+        }
+      }
+    },
+    "pokemon-shield": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496424817",
+          "0045496424831"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pokemon-bouclier-switch-0045496424831",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-pokemon-shield-standard-nintendo-switch-231414.html"
+        }
+      }
+    },
+    "pokemon-shining-pearl": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496428181"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pokemon-perle-scintillante-switch-0045496428181",
+          "pixmania": "https://www.pixmania.com/fr/fr/pokemon-perle-scintillante-jeu-nintendo-switch-664104.html"
+        }
+      }
+    },
     "pokemon-sword": {
       "switch": {
         "checked": {
@@ -547,6 +2200,90 @@
         }
       }
     },
+    "pokemon-violet": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496510749",
+          "0045496510831"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pokemon-violet-switch-0045496510831",
+          "pixmania": "https://www.pixmania.com/fr/fr/pokemon-violet-nintendo-switch-141984.html"
+        }
+      }
+    },
+    "pretty-princess-magical-garden-island": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060997480105"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pretty-princess-magical-garden-island-switch-5060997480105",
+          "pixmania": "https://www.pixmania.com/fr/fr/pretty-princess-magical-garden-island-nintendo-switch-244183.html"
+        }
+      }
+    },
+    "princess-peach-showtime": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496511630"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/princess-peach-showtime-switch-0045496511630"
+        }
+      }
+    },
+    "pui-pui-molcar-lets-molcar-party": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5056635604859"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/pui-pui-molcar-let-s-molcar-party-switch-5056635604859",
+          "pixmania": "https://www.pixmania.com/fr/fr/pui-pui-molcar-lets-molcar-party-nintendo-switch-244359.html"
+        }
+      }
+    },
+    "puzzle-bobble-3d-vacation-odyssey": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "4260650744365"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/puzzle-bobble-3d-vacation-odyssey-ps5-4260650744365",
+          "pixmania": "https://www.pixmania.com/fr/fr/puzzle-bobble-3d-vacation-odyssey-ps5-138885.html"
+        }
+      }
+    },
     "rhythm-heaven-groove": {
       "switch": {
         "checked": {
@@ -557,10 +2294,86 @@
           "0045496513610"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/rhythm-paradise-groove-switch-0045496513610"
+        }
+      }
+    },
+    "ring-fit-adventure": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496424169"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/ring-fit-adventure-switch-0045496424169"
+        }
+      }
+    },
+    "root-film": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060690792130"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/root-film-switch-5060690792130",
+          "pixmania": "https://www.pixmania.com/fr/fr/root-film-switch-140545.html"
+        }
+      }
+    },
+    "rpg-maker-with": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0810100864330"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/rpg-maker-with-ps5-0810100864330"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0810100864170"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/rpg-maker-with-switch-313854.html"
+        }
+      }
+    },
+    "samba-de-amigo-party-central": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5055277051021"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/samba-de-amigo-party-central-switch-5055277051021",
+          "pixmania": "https://www.pixmania.com/fr/fr/samba-de-amigo-party-central-jeu-nintendo-switch-316111.html"
         }
       }
     },
@@ -578,6 +2391,50 @@
           "boulanger": "https://www.boulanger.com/ref/9000965678",
           "leclerc": "https://www.e.leclerc/fp/saros-ps5-0711719026990",
           "pixmania": "https://www.pixmania.com/fr/fr/saros-ps5-528089.html"
+        }
+      }
+    },
+    "scribblenauts-showdown": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5051889625179"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/scribblenauts-showdown-switch-5051889625179"
+        }
+      }
+    },
+    "sophias-animal-clinic-mission-wildlife-park": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "splatoon-2": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496420406"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/splatoon-2-switch-0045496420406"
         }
       }
     },
@@ -610,6 +2467,51 @@
         }
       }
     },
+    "sports-party": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3307216173236"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/sports-party-code-in-a-box-switch-3307216173236"
+        }
+      }
+    },
+    "star-fox": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496314224"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/star-fox-nintendo-switch-2-0045496314224"
+        }
+      }
+    },
+    "star-wars-pinball": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0884095206338"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/star-wars-pinball-code-in-a-box-switch-0884095206338"
+        }
+      }
+    },
     "super-mario-bros-wonder": {
       "switch": {
         "checked": {
@@ -619,9 +2521,6 @@
         "eans": [
           "0045496479794"
         ],
-        "out_of_stock": {
-          "leclerc": "2026-10-26"
-        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/super-mario-bros-wonder-switch-0045496479794",
           "pixmania": "https://www.pixmania.com/fr/fr/super-mario-bros-wonder-switch-197078.html"
@@ -638,7 +2537,7 @@
           "0045496424350"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/super-mario-maker-2-switch-0045496424350"
@@ -676,6 +2575,54 @@
         }
       }
     },
+    "super-mario-party-jamboree": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496512613"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-mario-party-jamboree-switch-0045496512613",
+          "pixmania": "https://www.pixmania.com/fr/fr/super-mario-party-jamboree-switch-290747.html"
+        }
+      }
+    },
+    "super-mario-rpg": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496479954"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-mario-rpg-switch-0045496479954",
+          "pixmania": "https://www.pixmania.com/fr/fr/super-mario-rpg-switch-197077.html"
+        }
+      }
+    },
+    "super-monkey-ball-banana-rumble": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496511999"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-monkey-ball-banana-rumble-switch-0045496511999",
+          "pixmania": "https://www.pixmania.com/fr/fr/super-monkey-ball-banana-rumble-jeu-nintendo-switch-316133.html"
+        }
+      }
+    },
     "super-smash-bros-ultimate": {
       "switch": {
         "checked": {
@@ -688,6 +2635,81 @@
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/super-smash-bros-ultimate-switch-0045496422868",
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-super-smash-bros-ultimate-switch-nintendo-switch-231600.html"
+        }
+      }
+    },
+    "super-zangyura": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3760328372704"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/super-zangyura-switch-3760328372704",
+          "pixmania": "https://www.pixmania.com/fr/fr/super-zangyura-nintendo-switch-244010.html"
+        }
+      }
+    },
+    "survival-kids": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [],
+        "sources": {}
+      }
+    },
+    "sushi-striker-the-way-of-sushido": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496422097"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/nintendo-sushi-striker-the-way-of-sushido-switch-standard-nintendo-switch-0045496422097",
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-sushi-striker-the-way-of-sushido-standard-nintendo-switch-231551.html"
+        }
+      }
+    },
+    "tamagotchi-plaza": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3391892033571"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/tamagotchi-plaza-switch-3391892033571",
+          "pixmania": "https://www.pixmania.com/fr/fr/tamagotchi-plaza-jeu-nintendo-switch-466851.html"
+        }
+      }
+    },
+    "tetris-99": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496425623"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/nintendo-tetris-99-switch-standard-nintendo-switch-231597.html"
         }
       }
     },
@@ -735,6 +2757,72 @@
         }
       }
     },
+    "the-legend-of-zelda-ocarina-of-time": {
+      "switch2": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496315481"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-ocarina-of-time-nintendo-switch-2-0045496315481"
+        }
+      }
+    },
+    "the-legend-of-zelda-skyward-sword-hd": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496427818"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-skyward-sword-hd-switch-0045496427818"
+        }
+      }
+    },
+    "the-princess-guide": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0810023032168"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/the-princess-guide-switch-0810023032168"
+        }
+      }
+    },
+    "theatrhythm-final-bar-line": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5021290095991"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/theatrhythm-final-bar-line-switch-5021290095991",
+          "pixmania": "https://www.pixmania.com/fr/fr/theatrhythm-final-bar-line-switch-159485.html"
+        }
+      }
+    },
     "tomodachi-life-living-the-dream": {
       "switch": {
         "checked": {
@@ -749,6 +2837,52 @@
         }
       }
     },
+    "top-cop-police-training": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5055957706920"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/top-cop-police-training-code-in-a-box-switch-5055957706920"
+        }
+      }
+    },
+    "turbo-boost-racing": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5055957707507"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/turbo-boost-racing-code-in-a-box-switch-5055957707507"
+        }
+      }
+    },
+    "ultra-mega-xtra-party-challenge": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3700664530338"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/ultra-mega-xtra-party-challenge-switch-3700664530338",
+          "pixmania": "https://www.pixmania.com/fr/fr/ultra-mega-xtra-party-challenge-nintendo-switch-140439.html"
+        }
+      }
+    },
     "unicorn-overlord": {
       "ps5": {
         "checked": {
@@ -759,7 +2893,7 @@
           "5055277052929"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-ps5-5055277052929",
@@ -775,7 +2909,7 @@
           "5055277052998"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-switch-5055277052998"
@@ -790,10 +2924,118 @@
           "5055277053063"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-26"
+          "leclerc": "2026-10-31"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-xbox-series-5055277053063"
+        }
+      }
+    },
+    "until-dawn-2": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0711719075257"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/until-dawn-2-ps5-0711719075257"
+        }
+      }
+    },
+    "virche-evermore-error-salvation": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060941713617"
+        ],
+        "sources": {
+          "pixmania": "https://www.pixmania.com/fr/fr/virche-evermore-error-salvation-standard-edition-switch-243367.html"
+        }
+      }
+    },
+    "warioware-get-it-together": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496428747"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/warioware-get-it-together-switch-0045496428747",
+          "pixmania": "https://www.pixmania.com/fr/fr/warioware-get-it-together-jeu-switch-90509.html"
+        }
+      }
+    },
+    "warioware-move-it": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496479886"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/warioware-move-it-switch-0045496479886",
+          "pixmania": "https://www.pixmania.com/fr/fr/warioware-move-it-switch-197079.html"
+        }
+      }
+    },
+    "wild-west-shooter": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5055377606626"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/wild-west-shooter-ps5-5055377606626",
+          "pixmania": "https://www.pixmania.com/fr/fr/wild-west-shooter-ps5-489645.html"
+        }
+      }
+    },
+    "wildshade-unicorn-champions": {
+      "ps5": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3665962023077"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/wildshade-unicorn-champions-ps5-3665962023077"
+        }
+      },
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "3665962032314"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/wildshade-unicorn-champions-code-in-a-box-switch-3665962032314"
         }
       }
     },
@@ -808,6 +3050,24 @@
         ],
         "sources": {
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-xenoblade-chronicles-2-standard-multilingue-nintendo-switch-155283.html"
+        }
+      }
+    },
+    "xenoblade-chronicles-3": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "0045496429812"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/xenoblade-chronicles-3-switch-0045496429812",
+          "pixmania": "https://www.pixmania.com/fr/fr/xenoblade-chronicles-3-jeu-nintendo-switch-132038.html"
         }
       }
     },
@@ -855,6 +3115,24 @@
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-tears-of-the-kingdom-nintendo-switch-2-edition-nintendo-switch-2-0045496312589",
           "pixmania": "https://www.pixmania.com/fr/fr/the-legend-of-zelda-tears-of-the-kingdom-switch-2-397668.html"
+        }
+      }
+    },
+    "zoids-wild-blast-unleashed": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-10-31",
+          "pixmania": "2026-10-31"
+        },
+        "eans": [
+          "5060528034067"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-10-31"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/zoids-wild-blast-unleashed-switch-5060528034067",
+          "pixmania": "https://www.pixmania.com/fr/fr/zoids-wild-blast-unleashed-switch-139670.html"
         }
       }
     }
