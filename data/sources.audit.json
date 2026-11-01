@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-25",
+  "checked_at": "2026-11-01",
   "schema": 1,
   "sources": {
     "amazon": {
@@ -220,8 +220,8 @@
       },
       "terms": {
         "https://www.ebay.fr/help/policies/member-behaviour-policies/user-agreement?id=4259": {
-          "clauses": 10,
-          "hash": "f1bb9ce09c7d2fb4",
+          "clauses": 0,
+          "hash": null,
           "status": 200
         }
       }
@@ -362,26 +362,26 @@
     },
     "ldlc": {
       "home": {
-        "blocked": null,
-        "status": "non demandé (bloqué)"
+        "blocked": false,
+        "status": 200
       },
       "robots": {
-        "rules": null,
-        "status": "erreur réseau",
+        "rules": "4b36035af3b60bf4",
+        "status": 200,
         "verdicts": {
-          "/recherche/x/": "non vérifiable"
+          "/recherche/x/": "interdit (Disallow: /recherche/)"
         }
       },
       "tdm": {
         "header": null,
         "meta": null,
-        "tdmrep": "non demandé"
+        "tdmrep": 404
       },
       "terms": {
         "https://www.ldlc.com/aide/58-nos-conditions-generales-de-vente/": {
-          "clauses": null,
+          "clauses": 0,
           "hash": null,
-          "status": "non demandé (bloqué)"
+          "status": 200
         }
       }
     },
@@ -619,26 +619,26 @@
     },
     "rueducommerce": {
       "home": {
-        "blocked": null,
-        "status": "non demandé (bloqué)"
+        "blocked": false,
+        "status": 200
       },
       "robots": {
-        "rules": null,
-        "status": "erreur réseau",
+        "rules": "6bfad0c3eae77f33",
+        "status": 200,
         "verdicts": {
-          "/recherche/x": "non vérifiable"
+          "/recherche/x": "interdit (Disallow: /recherche/)"
         }
       },
       "tdm": {
         "header": null,
         "meta": null,
-        "tdmrep": "non demandé"
+        "tdmrep": 404
       },
       "terms": {
         "https://www.rueducommerce.fr/aide/1044-nos-conditions-generales-de-vente/": {
-          "clauses": null,
+          "clauses": 0,
           "hash": null,
-          "status": "non demandé (bloqué)"
+          "status": 200
         }
       }
     },
