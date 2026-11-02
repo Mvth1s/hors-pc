@@ -28,7 +28,7 @@
           "5016488141642"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/34-sports-games-world-edition-ps5-5016488141642",
@@ -64,7 +64,7 @@
           "3700664532936"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/40-sports-games-in-1-ps5-3700664532936",
@@ -133,7 +133,7 @@
           "0045496425425"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/animal-crossing-new-horizons-switch-0045496425425"
@@ -150,7 +150,7 @@
           "3665962021691"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/animal-hospital-switch-3665962021691"
@@ -180,7 +180,7 @@
           "3700664531304"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/arcade-game-zone-switch-3700664531304",
@@ -212,7 +212,7 @@
           "0045496424688"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/astral-chain-switch-0045496424688",
@@ -257,7 +257,7 @@
           "5056635604774"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/barbie-dreamhouse-adventures-switch-5056635604774",
@@ -275,7 +275,7 @@
           "0045496478452"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/bayonetta-3-switch-0045496478452",
@@ -293,11 +293,28 @@
           "0045496479107"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/bayonetta-origins-cereza-and-the-lost-demon-switch-0045496479107",
           "pixmania": "https://www.pixmania.com/fr/fr/bayonetta-origins-cereza-and-the-lost-demon-switch-165525.html"
+        }
+      }
+    },
+    "big-brain-academy-brain-vs-brain": {
+      "switch": {
+        "checked": {
+          "leclerc": "2026-11-02",
+          "pixmania": "2026-11-02"
+        },
+        "eans": [
+          "0045496429195"
+        ],
+        "out_of_stock": {
+          "leclerc": "2026-11-02"
+        },
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/cerebrale-academie-bataille-de-meninges-switch-0045496429195"
         }
       }
     },
@@ -326,7 +343,7 @@
           "5056635608246"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/boardwalk-arcade-2-switch-5056635608246",
@@ -344,7 +361,7 @@
           "0045496426583"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/cadence-of-hyrule-crypt-of-the-necrodancer-featuring-the-legend-of-zelda-switch-0045496426583"
@@ -361,7 +378,7 @@
           "5016488142663"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/les-bisounours-liberez-la-magie-ps5-5016488142663",
@@ -377,7 +394,7 @@
           "5016488142670"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/les-bisounours-liberez-la-magie-switch-5016488142670",
@@ -395,7 +412,7 @@
           "3665962036466"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/cat-rescue-story-code-in-a-box-switch-3665962036466"
@@ -412,7 +429,7 @@
           "0045496429430"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/chocobo-gp-switch-0045496429430",
@@ -440,7 +457,7 @@
           "5060528038904"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/cocomelon-play-with-jj-switch-5060528038904",
@@ -488,7 +505,7 @@
           "0045496427573"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/dc-super-hero-girls-teen-power-switch-0045496427573",
@@ -516,7 +533,7 @@
           "5060760888770"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/demon-throttle-switch-5060760888770"
@@ -533,7 +550,7 @@
           "0045496479633"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/le-retour-de-detective-pikachu-switch-0045496479633",
@@ -567,7 +584,7 @@
           "0045496312770"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "boulanger": "https://www.boulanger.com/ref/1220888",
@@ -623,7 +640,7 @@
           "5030943125466"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/ea-sports-ufc-6-ps5-5030943125466",
@@ -653,7 +670,7 @@
           "0045496512255"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/emio-l-homme-au-sourire-famicom-detective-club-switch-0045496512255",
@@ -691,7 +708,7 @@
           "8720256139584"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/farmers-vs-zombies-ps5-8720256139584"
@@ -708,7 +725,7 @@
           "3512899122512"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/farming-simulator-20-switch-3512899122512",
@@ -726,7 +743,7 @@
           "4064635420295"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/farming-simulator-kids-code-in-a-box-switch-4064635420295",
@@ -744,7 +761,7 @@
           "0045496511173"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/fashion-dreamer-switch-0045496511173",
@@ -762,7 +779,7 @@
           "0045496478568"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/fire-emblem-engage-switch-0045496478568"
@@ -778,6 +795,9 @@
         "eans": [
           "0045496314637"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-11-02"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/fire-emblem-fortune-s-weave-nintendo-switch-2-0045496314637"
         }
@@ -803,7 +823,7 @@
           "0045496429959"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/fire-emblem-warriors-three-hopes-switch-0045496429959",
@@ -835,7 +855,7 @@
           "0045496512804"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/fitness-boxing-3-your-personal-trainer-switch-0045496512804",
@@ -867,7 +887,7 @@
           "0045496428952"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/l-atelier-du-jeu-video-switch-0045496428952",
@@ -885,7 +905,7 @@
           "3760156485522"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/gear-club-unlimited-code-in-a-box-switch-3760156485522"
@@ -902,7 +922,7 @@
           "5060760882693"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/geminose-animal-popstars-switch-5060760882693",
@@ -1016,7 +1036,7 @@
           "5055377606329"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/hidden-objects-collection-5-detective-stories-switch-5055377606329",
@@ -1034,7 +1054,7 @@
           "0045496427030"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/hyrule-warriors-l-ere-du-fleau-switch-0045496427030"
@@ -1066,7 +1086,7 @@
           "3700664529059"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/instant-chef-party-switch-3700664529059",
@@ -1084,7 +1104,7 @@
           "3700664530178"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/instant-sports-all-stars-ps5-3700664530178",
@@ -1100,7 +1120,7 @@
           "3700664529875"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/instant-sports-all-stars-switch-3700664529875",
@@ -1118,7 +1138,7 @@
           "3700664529172"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/instant-sports-paradise-switch-3700664529172",
@@ -1136,7 +1156,7 @@
           "3700664527345"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/instant-sports-summer-games-switch-3700664527345",
@@ -1164,7 +1184,7 @@
           "3700664529066"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/instant-sports-winter-games-switch-3700664529066",
@@ -1182,7 +1202,7 @@
           "3663110003896"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/junior-league-sports-3-in-1-collection-code-in-a-box-switch-3663110003896"
@@ -1215,7 +1235,7 @@
           "3307216172499"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/just-dance-2019-code-in-a-box-switch-3307216172499",
@@ -1233,7 +1253,7 @@
           "3307216176060"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/just-dance-2021-ps5-3307216176060",
@@ -1263,7 +1283,7 @@
           "3307216211020"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/just-dance-2022-ps5-3307216211020",
@@ -1279,7 +1299,7 @@
           "3307216210665"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/just-dance-2022-xbox-series-3307216210665"
@@ -1296,7 +1316,7 @@
           "3307216248514"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/just-dance-2023-edition-code-in-a-box-ps5-3307216248514"
@@ -1326,7 +1346,7 @@
           "3307216270355"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/just-dance-2024-edition-code-in-a-box-xbox-series-3307216270355"
@@ -1416,7 +1436,7 @@
           "0045496421625"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/kirby-star-allies-switch-0045496421625",
@@ -1434,7 +1454,7 @@
           "4020628611774"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/let-s-sing-2024-ps5-4020628611774",
@@ -1502,10 +1522,22 @@
           "4020628555054"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/let-s-sing-2026-switch-4020628555054"
+        }
+      },
+      "xbox_series": {
+        "checked": {
+          "leclerc": "2026-11-02",
+          "pixmania": "2026-11-02"
+        },
+        "eans": [
+          "4020628555061"
+        ],
+        "sources": {
+          "leclerc": "https://www.e.leclerc/fp/let-s-sing-2026-xbox-series-4020628555061"
         }
       }
     },
@@ -1519,7 +1551,7 @@
           "4020628640569"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/let-s-sing-presents-abba-switch-4020628640569",
@@ -1551,7 +1583,7 @@
           "5060760884147"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/l-o-l-surprise-movie-night-switch-5060760884147"
@@ -1568,7 +1600,7 @@
           "3700664529691"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/l-o-l-surprise-remix-edition-we-rule-the-world-switch-3700664529691"
@@ -1585,7 +1617,7 @@
           "5056635605238"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/l-o-l-surprise-roller-dreams-racing-switch-5056635605238"
@@ -1616,7 +1648,7 @@
           "0045496512156"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/luigi-s-mansion-2-hd-switch-0045496512156",
@@ -1648,7 +1680,7 @@
           "0045496512514"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/mario-luigi-l-epopee-fraternelle-switch-0045496512514"
@@ -1666,7 +1698,7 @@
           "0045496427726"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/mario-golf-super-rush-switch-0045496427726",
@@ -1745,7 +1777,7 @@
           "0045496429720"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/mario-strikers-battle-league-football-switch-0045496429720"
@@ -1763,7 +1795,7 @@
           "0045496422011"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/mario-tennis-aces-switch-0045496421984",
@@ -1823,6 +1855,9 @@
         "eans": [
           "0045496423438"
         ],
+        "out_of_stock": {
+          "pixmania": "2026-11-02"
+        },
         "sources": {
           "pixmania": "https://www.pixmania.com/fr/fr/nintendo-marvel-ultimate-alliance-3-the-black-order-standard-nintendo-switch-231500.html"
         }
@@ -1838,7 +1873,7 @@
           "0045496428471"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/metroid-dread-switch-0045496428471",
@@ -1884,7 +1919,7 @@
           "0045496478926"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/metroid-prime-remastered-switch-0045496478926"
@@ -1995,7 +2030,7 @@
           "0045496426422"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/paper-mario-the-origami-king-switch-0045496426422"
@@ -2041,7 +2076,7 @@
           "0045496479305"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/pikmin-4-switch-0045496479305",
@@ -2067,7 +2102,7 @@
           "8437015294278"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/pocoyo-party-switch-8437015294278"
@@ -2116,7 +2151,7 @@
           "0045496428280"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/legendes-pokemon-arceus-switch-0045496428280",
@@ -2175,7 +2210,7 @@
           "0045496426002"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/pokemon-donjon-mystere-equipe-de-secours-dx-switch-0045496426002",
@@ -2223,7 +2258,7 @@
           "0045496428181"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/pokemon-perle-scintillante-switch-0045496428181",
@@ -2273,7 +2308,7 @@
           "5060997480105"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/pretty-princess-magical-garden-island-switch-5060997480105",
@@ -2305,7 +2340,7 @@
           "5056635604859"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/pui-pui-molcar-let-s-molcar-party-switch-5056635604859",
@@ -2323,7 +2358,7 @@
           "4260650744365"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/puzzle-bobble-3d-vacation-odyssey-ps5-4260650744365",
@@ -2341,7 +2376,7 @@
           "0045496513610"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/rhythm-paradise-groove-switch-0045496513610"
@@ -2358,7 +2393,7 @@
           "0045496424169"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/ring-fit-adventure-switch-0045496424169"
@@ -2416,7 +2451,7 @@
           "5055277051021"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/samba-de-amigo-party-central-switch-5055277051021",
@@ -2451,7 +2486,7 @@
           "5051889625179"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/scribblenauts-showdown-switch-5051889625179"
@@ -2478,7 +2513,7 @@
           "0045496420406"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/splatoon-2-switch-0045496420406"
@@ -2552,7 +2587,7 @@
           "0884095206338"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/star-wars-pinball-code-in-a-box-switch-0884095206338"
@@ -2592,7 +2627,7 @@
           "0045496424350"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/super-mario-maker-2-switch-0045496424350"
@@ -2639,6 +2674,9 @@
         "eans": [
           "0045496512613"
         ],
+        "out_of_stock": {
+          "leclerc": "2026-11-02"
+        },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/super-mario-party-jamboree-switch-0045496512613",
           "pixmania": "https://www.pixmania.com/fr/fr/super-mario-party-jamboree-switch-290747.html"
@@ -2670,7 +2708,7 @@
           "0045496511999"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/super-monkey-ball-banana-rumble-switch-0045496511999",
@@ -2703,7 +2741,7 @@
           "3760328372704"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/super-zangyura-switch-3760328372704",
@@ -2746,7 +2784,7 @@
           "3391892033571"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/tamagotchi-plaza-switch-3391892033571",
@@ -2836,7 +2874,7 @@
           "0045496427818"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/the-legend-of-zelda-skyward-sword-hd-switch-0045496427818"
@@ -2853,7 +2891,7 @@
           "0810023032168"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/the-princess-guide-switch-0810023032168"
@@ -2870,7 +2908,7 @@
           "5021290095991"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/theatrhythm-final-bar-line-switch-5021290095991",
@@ -2930,7 +2968,7 @@
           "3700664530338"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/ultra-mega-xtra-party-challenge-switch-3700664530338",
@@ -2948,7 +2986,7 @@
           "5055277052929"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-ps5-5055277052929",
@@ -2964,7 +3002,7 @@
           "5055277052998"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-switch-5055277052998"
@@ -2979,7 +3017,7 @@
           "5055277053063"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/unicorn-overlord-xbox-series-5055277053063"
@@ -3024,7 +3062,7 @@
           "0045496428747"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/warioware-get-it-together-switch-0045496428747",
@@ -3084,7 +3122,7 @@
           "3665962023077"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/wildshade-unicorn-champions-ps5-3665962023077"
@@ -3099,7 +3137,7 @@
           "3665962032314"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/wildshade-unicorn-champions-code-in-a-box-switch-3665962032314"
@@ -3130,7 +3168,7 @@
           "0045496429812"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/xenoblade-chronicles-3-switch-0045496429812",
@@ -3195,7 +3233,7 @@
           "5060528034067"
         ],
         "out_of_stock": {
-          "leclerc": "2026-10-31"
+          "leclerc": "2026-11-02"
         },
         "sources": {
           "leclerc": "https://www.e.leclerc/fp/zoids-wild-blast-unleashed-switch-5060528034067",
