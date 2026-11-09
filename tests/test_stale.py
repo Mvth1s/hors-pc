@@ -5,6 +5,7 @@ from typing import Any
 import pytest
 import yaml
 
+from horspc import build
 from horspc.__main__ import main
 from horspc.models import Catalog
 from horspc.stale import format_report, stale_games
@@ -89,9 +90,12 @@ def test_rapport_lisible() -> None:
     assert "astro-bot-90" not in report  # remplacé par le relevé Amazon plus récent
 
 
-def test_cli_stale(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_cli_stale(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
+) -> None:
     (tmp_path / "games.yaml").write_text(yaml.safe_dump(GAMES), encoding="utf-8")
     (tmp_path / "prices.yaml").write_text("[]", encoding="utf-8")
+    monkeypatch.setattr(build, "DISCOVERED_GAMES_PATH", tmp_path / "games.discovered.yaml")
     code = main(
         [
             "stale",
