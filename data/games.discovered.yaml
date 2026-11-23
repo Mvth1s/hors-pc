@@ -11,7 +11,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: 34-sports-games-world-edition
   title: '34 Sports Games: World Edition'
@@ -23,7 +23,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: 3d-minigolf
   title: 3D MiniGolf
@@ -33,7 +33,7 @@
   - platform: ps5
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: 40-sports-games-in-1
   title: 40 Sports Games in 1
@@ -45,7 +45,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: 60-in-1-game-collection
   title: 60-in-1 Game Collection
@@ -55,7 +55,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: alice-gear-aegis-cs-concerto-of-simulatrix
   title: 'Alice Gear Aegis CS: Concerto of Simulatrix'
@@ -67,7 +67,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: animal-hospital
   title: Animal Hospital
@@ -78,7 +78,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
-  missed_runs: 2
+  missed_runs: 3
 - slug: arcade-game-zone
   title: Arcade Game Zone
   title_source: nom_igdb
@@ -89,7 +89,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: arms
   title: Arms
@@ -99,7 +99,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: bakugan-champions-of-vestroia
   title: 'Bakugan: Champions de Vestroia'
@@ -109,7 +109,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: barbie-dreamhouse-adventures
   title: Barbie Dreamhouse Adventures
@@ -119,7 +119,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: bayonetta-3
   title: Bayonetta 3
@@ -129,7 +129,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: bayonetta-origins-cereza-and-the-lost-demon
   title: 'Bayonetta Origins: Cereza and the Lost Demon'
@@ -139,7 +139,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: big-brain-academy-brain-vs-brain
   title: 'Cérébrale Académie : bataille de méninges'
@@ -150,7 +150,7 @@
     aliases: []
   first_seen: '2026-11-02'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: birushana-winds-of-fate
   title: 'Birushana: Winds of Fate'
   title_source: nom_igdb
@@ -159,7 +159,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: boardwalk-arcade-2
   title: Boardwalk Arcade 2
@@ -169,7 +169,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: bus-simulator-city-ride
   title: Bus Simulator City Ride
@@ -179,7 +179,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-11-16'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: cadence-of-hyrule-crypt-of-the-necrodancer-featuring-the-legend-of-zelda
   title: 'Cadence of Hyrule: Crypt of the NecroDancer Featuring the Legend of Zelda'
@@ -189,8 +189,8 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-02'
-  missed_runs: 1
+  last_seen: '2026-11-23'
+  missed_runs: 0
 - slug: care-bears-unlock-the-magic
   title: 'Care Bears: Unlock the Magic'
   title_source: nom_igdb
@@ -201,7 +201,17 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
+  missed_runs: 0
+- slug: cartoon-network-battle-crashers
+  title: 'Cartoon Network: Battle Crashers'
+  title_source: nom_igdb
+  igdb_id: 25795
+  editions:
+  - platform: switch
+    aliases: []
+  first_seen: '2026-11-23'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: cat-rescue-story
   title: Cat Rescue Story
@@ -212,7 +222,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: chocobo-gp
   title: Chocobo GP
   title_source: nom_igdb
@@ -221,7 +231,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: cocomelon-play-with-jj
   title: 'CoComelon: Play with JJ'
@@ -231,7 +241,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: construction-machines-simulator
   title: Construction Machines Simulator
@@ -241,7 +251,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: dc-super-hero-girls-teen-power
   title: 'DC Super Hero Girls: Teen Power'
@@ -251,7 +261,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: demon-throttle
   title: Demon Throttle
@@ -262,7 +272,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: destruction-allstars
   title: Destruction AllStars
   title_source: nom_igdb
@@ -271,7 +281,7 @@
   - platform: ps5
     aliases: []
   first_seen: '2026-11-16'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: detective-pikachu-returns
   title: Le retour de Détective Pikachu
@@ -281,7 +291,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: dino-ranch-ride-to-the-rescue
   title: 'Dino Ranch: Mission Sauvetage'
@@ -291,7 +301,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: donkey-kong-country-returns-hd
   title: Donkey Kong Country Returns HD
@@ -301,7 +311,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: ea-sports-ufc-5
   title: EA Sports UFC 5
@@ -313,7 +323,7 @@
   - platform: xbox_series
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: ea-sports-ufc-6
   title: EA Sports UFC 6
@@ -325,7 +335,7 @@
   - platform: xbox_series
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: emio-the-smiling-man-famicom-detective-club
   title: 'Emio – L''Homme au sourire : Famicom Detective Club'
@@ -335,7 +345,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: endless-ocean-luminous
   title: 'Endless Ocean: Luminous'
@@ -345,7 +355,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: family-trainer
   title: Family Trainer
@@ -355,7 +365,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: farmers-vs-zombies
   title: Farmers vs Zombies
@@ -364,8 +374,10 @@
   editions:
   - platform: ps5
     aliases: []
+  - platform: switch
+    aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: farming-simulator-20
   title: Farming Simulator 20
@@ -375,7 +387,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: farming-simulator-kids
   title: Farming Simulator Kids
@@ -385,7 +397,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: fashion-dreamer
   title: Fashion Dreamer
@@ -396,7 +408,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: fire-emblem-engage
   title: Fire Emblem Engage
   title_source: nom_igdb
@@ -405,7 +417,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: fire-emblem-warriors-three-hopes
   title: 'Fire Emblem Warriors: Three Hopes'
@@ -415,7 +427,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: fitness-boxing-2-rhythm-and-exercise
   title: 'Fitness Boxing 2: Rhythm & Exercise'
@@ -425,7 +437,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: fitness-boxing-3-your-personal-trainer
   title: 'Fitness Boxing 3: Your Personal Trainer'
@@ -435,7 +447,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: fitness-boxing-feat-hatsune-miku
   title: Fitness Boxing feat. Hatsune Miku
@@ -445,7 +457,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: game-builder-garage
   title: L’Atelier du jeu vidéo
@@ -455,7 +467,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: gear-dot-club-unlimited
   title: Gear.Club Unlimited
@@ -466,7 +478,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: geminose-animal-popstars
   title: 'Geminose: Animal Popstars'
   title_source: nom_igdb
@@ -475,7 +487,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: god-of-war-laufey
   title: God of War Laufey
@@ -486,7 +498,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: hello-kitty-and-friends-freeze-tag-party
   title: 'Hello Kitty and Friends: Freeze Tag Party'
   title_source: nom_igdb
@@ -495,7 +507,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: hidden-objects-collection-5-detective-stories
   title: 'Hidden Objects Collection 5: Detective Stories'
@@ -505,7 +517,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: hyrule-warriors-age-of-calamity
   title: 'Hyrule Warriors : L''Ère du Fléau'
@@ -515,7 +527,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: hyrule-warriors-age-of-imprisonment
   title: 'Hyrule Warriors : Les Chroniques du sceau'
@@ -525,7 +537,7 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: instant-chef-party
   title: Instant Chef Party
@@ -535,7 +547,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: instant-sports-all-stars
   title: 'Instant Sports: All-Stars'
@@ -547,7 +559,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: instant-sports-paradise
   title: Instant Sports Paradise
@@ -557,7 +569,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: instant-sports-summer-games
   title: Instant Sports Summer Games
@@ -567,7 +579,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: instant-sports-tennis
   title: Instant Sports Tennis
@@ -577,7 +589,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: instant-sports-winter-games
   title: Instant Sports Winter Games
@@ -587,7 +599,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: junior-league-sports-3-in-1-collection
   title: Junior League Sports 3-in-1 Collection
@@ -598,7 +610,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: just-dance-2018
   title: Just Dance 2018
   title_source: nom_igdb
@@ -608,7 +620,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: just-dance-2019
   title: Just Dance 2019
   title_source: nom_igdb
@@ -617,7 +629,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: just-dance-2021
   title: Just Dance 2021
@@ -629,7 +641,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: just-dance-2022
   title: Just Dance 2022
@@ -641,7 +653,7 @@
   - platform: xbox_series
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: just-dance-2023-edition
   title: Just Dance 2023 Edition
@@ -653,7 +665,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: just-dance-2024-edition
   title: Just Dance 2024 Edition
@@ -665,7 +677,7 @@
   - platform: xbox_series
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: just-dance-2025-edition
   title: Just Dance 2025 Edition
@@ -677,7 +689,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: just-dance-decades-of-hits
   title: 'Just Dance: Decades of Hits'
@@ -689,7 +701,7 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: kingdom-of-asteborg
   title: Kingdom of Asteborg
@@ -699,7 +711,7 @@
   - platform: ps5
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: lets-sing-2024
   title: Let's Sing 2024
@@ -711,7 +723,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: lets-sing-2025
   title: Let's Sing 2025
@@ -723,7 +735,7 @@
   - platform: xbox_series
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: lets-sing-2026
   title: Let's Sing 2026
@@ -737,7 +749,7 @@
   - platform: xbox_series
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: lets-sing-abba
   title: Let's Sing ABBA
@@ -748,7 +760,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: lets-sing-presents-abba
   title: 'Let''s Sing Presents: Abba'
   title_source: nom_igdb
@@ -757,18 +769,8 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
-- slug: lol-surprise-movie-night
-  title: L.O.L. Surprise! Movie Night
-  title_source: nom_igdb
-  igdb_id: 163146
-  editions:
-  - platform: switch
-    aliases: []
-  first_seen: '2026-10-31'
-  last_seen: '2026-10-31'
-  missed_runs: 3
 - slug: lol-surprise-remix-we-rule-the-world
   title: 'L.O.L. Surprise! Remix Edition: We Rule The World'
   title_source: nom_leclerc
@@ -778,7 +780,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
-  missed_runs: 2
+  missed_runs: 3
 - slug: lol-surprise-roller-dreams-racing
   title: L.O.L. Surprise! Roller Dreams Racing
   title_source: nom_igdb
@@ -788,7 +790,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: luigis-mansion-2-hd
   title: Luigi's Mansion 2 HD
   title_source: nom_igdb
@@ -797,7 +799,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: maestro
   title: Maestro
@@ -807,7 +809,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: mario-and-luigi-brothership
   title: 'Mario & Luigi : L''épopée fraternelle'
@@ -817,7 +819,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: mario-and-sonic-at-the-olympic-games-tokyo-2020
   title: Mario & Sonic aux Jeux Olympiques de Tokyo 2020
@@ -827,7 +829,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-11-16'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: mario-golf-super-rush
   title: 'Mario Golf: Super Rush'
@@ -837,7 +839,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: mario-party-superstars
   title: Mario Party Superstars
@@ -847,7 +849,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: mario-strikers-battle-league
   title: 'Mario Strikers: Battle League Football'
@@ -857,8 +859,8 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-02'
-  missed_runs: 1
+  last_seen: '2026-11-23'
+  missed_runs: 0
 - slug: mario-tennis-fever
   title: Mario Tennis Fever
   title_source: nom_igdb
@@ -867,7 +869,7 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: mario-vs-donkey-kong
   title: Mario vs. Donkey Kong
@@ -877,7 +879,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: marvel-ultimate-alliance-3-the-black-order
   title: 'Marvel Ultimate Alliance 3: The Black Order'
@@ -888,7 +890,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-10-31'
-  missed_runs: 2
+  missed_runs: 3
 - slug: metroid-ravenous
   title: Metroid Ravenous
   title_source: nom_igdb
@@ -897,7 +899,7 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: new-pokemon-snap
   title: New Pokémon Snap
@@ -907,7 +909,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: over-requiemz
   title: Over Requiemz
@@ -917,7 +919,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: paper-mario-the-thousand-year-door
   title: Paper Mario La Porte Millénaire
@@ -927,7 +929,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: path-of-mystery-a-brush-with-death
   title: 'Path of Mystery: A Brush with Death'
@@ -937,7 +939,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: pocoyo-party
   title: Pocoyo Party
@@ -948,7 +950,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: pokemon-brilliant-diamond
   title: Pokémon Diamant Étincelant
   title_source: nom_leclerc
@@ -957,7 +959,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: pokemon-mystery-dungeon-rescue-team-dx
   title: 'Pokémon Donjon Mystère : Équipe de Secours DX'
@@ -967,7 +969,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: pokemon-pokopia
   title: Pokémon Pokopia
@@ -977,7 +979,7 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: pokemon-shield
   title: Pokémon Bouclier
@@ -987,7 +989,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: pokemon-shining-pearl
   title: Pokémon Perle Scintillante
@@ -997,7 +999,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: pokemon-violet
   title: Pokémon Violet
@@ -1007,7 +1009,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: pretty-princess-magical-garden-island
   title: 'Pretty Princess: Magical Garden Island'
@@ -1017,7 +1019,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: princess-peach-showtime
   title: 'Princess Peach: Showtime!'
@@ -1027,7 +1029,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: pui-pui-molcar-lets-molcar-party
   title: Pui Pui Molcar Let's! Molcar Party!
@@ -1037,7 +1039,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: puzzle-bobble-3d-vacation-odyssey
   title: 'Puzzle Bobble 3D: Vacation Odyssey'
@@ -1047,7 +1049,7 @@
   - platform: ps5
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: ring-fit-adventure
   title: Ring Fit Adventure
@@ -1057,7 +1059,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: root-film
   title: Root Film
@@ -1067,7 +1069,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: rpg-maker-with
   title: RPG Maker With
@@ -1079,7 +1081,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: samba-de-amigo-party-central
   title: 'Samba de Amigo: Party Central'
@@ -1089,7 +1091,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: scribblenauts-showdown
   title: Scribblenauts Showdown
@@ -1100,7 +1102,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: sophias-animal-clinic-mission-wildlife-park
   title: 'Sophia’s Animal Clinic: Mission Wildlife Park'
   title_source: nom_igdb
@@ -1109,7 +1111,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: splatoon-2
   title: Splatoon 2
@@ -1119,7 +1121,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: sports-party
   title: Sports Party
@@ -1130,7 +1132,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: star-fox
   title: Star Fox
   title_source: nom_igdb
@@ -1139,7 +1141,7 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: star-wars-pinball
   title: Star Wars Pinball
@@ -1150,7 +1152,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: super-mario-party-jamboree
   title: Super Mario Party Jamboree
   title_source: nom_igdb
@@ -1159,7 +1161,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: super-mario-rpg
   title: Super Mario RPG
@@ -1169,7 +1171,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: super-monkey-ball-banana-rumble
   title: 'Super Monkey Ball: Banana Rumble'
@@ -1179,7 +1181,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: super-zangyura
   title: Super Zangyura
@@ -1189,7 +1191,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: survival-kids
   title: Survival Kids
@@ -1199,7 +1201,7 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: sushi-striker-the-way-of-sushido
   title: 'Sushi Striker: The Way of Sushido'
@@ -1209,7 +1211,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: tamagotchi-plaza
   title: Tamagotchi Plaza
@@ -1219,7 +1221,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: tetris-99
   title: Tetris 99
@@ -1230,7 +1232,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: the-legend-of-zelda-ocarina-of-time
   title: 'The Legend of Zelda: Ocarina of Time'
   title_source: nom_igdb
@@ -1239,7 +1241,7 @@
   - platform: switch2
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: the-legend-of-zelda-skyward-sword-hd
   title: 'The Legend of Zelda: Skyward Sword HD'
@@ -1249,7 +1251,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: the-princess-guide
   title: The Princess Guide
@@ -1260,7 +1262,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: theatrhythm-final-bar-line
   title: Theatrhythm Final Bar Line
   title_source: nom_igdb
@@ -1269,7 +1271,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: top-cop-police-training
   title: 'Top Cop: Police Training'
@@ -1280,7 +1282,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-16'
-  missed_runs: 0
+  missed_runs: 1
 - slug: turbo-boost-racing
   title: Turbo Boost Racing
   title_source: nom_igdb
@@ -1290,7 +1292,7 @@
     aliases: []
   first_seen: '2026-10-31'
   last_seen: '2026-11-02'
-  missed_runs: 1
+  missed_runs: 2
 - slug: ultra-mega-xtra-party-challenge
   title: Ultra Mega Xtra Party Challenge
   title_source: nom_igdb
@@ -1299,7 +1301,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: until-dawn-2
   title: Until Dawn 2
@@ -1309,7 +1311,7 @@
   - platform: ps5
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: virche-evermore-error-salvation
   title: 'Virche Evermore: ErroR:salvation'
@@ -1319,7 +1321,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: warioware-get-it-together
   title: 'WarioWare: Get It Together!'
@@ -1329,7 +1331,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: warioware-move-it
   title: 'WarioWare: Move It!'
@@ -1339,7 +1341,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: wild-west-shooter
   title: Wild West Shooter
@@ -1351,7 +1353,7 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: wildshade-unicorn-champions
   title: 'Wildshade: Unicorn Champions'
@@ -1363,8 +1365,8 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-02'
-  missed_runs: 1
+  last_seen: '2026-11-23'
+  missed_runs: 0
 - slug: xenoblade-chronicles-3
   title: Xenoblade Chronicles 3
   title_source: nom_igdb
@@ -1373,7 +1375,17 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
+  missed_runs: 0
+- slug: yoshis-crafted-world
+  title: Yoshi's Crafted World
+  title_source: nom_igdb
+  igdb_id: 37135
+  editions:
+  - platform: switch
+    aliases: []
+  first_seen: '2026-11-23'
+  last_seen: '2026-11-23'
   missed_runs: 0
 - slug: zoids-wild-blast-unleashed
   title: 'Zoids Wild: Blast Unleashed'
@@ -1383,5 +1395,5 @@
   - platform: switch
     aliases: []
   first_seen: '2026-10-31'
-  last_seen: '2026-11-16'
+  last_seen: '2026-11-23'
   missed_runs: 0
